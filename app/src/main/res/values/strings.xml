@@ -399,6 +399,8 @@
     <string name="settings_source_open">Open</string>
     <string name="settings_wiki" translatable="false">Wiki</string>
     <string name="settings_wiki_url" translatable="false">idlefantasy.tristinbaker.xyz</string>
+    <string name="settings_discord" translatable="false">Discord</string>
+    <string name="settings_discord_url" translatable="false">discord.gg/nZVZ67gyH</string>
     <string name="settings_exported_ok">Save exported</string>
     <string name="settings_imported_ok">Save imported successfully</string>
     <string name="settings_imported_fail">Failed to import — invalid file</string>
@@ -655,6 +657,7 @@
     <string name="farming_clear_patch">Clear Patch</string>
     <string name="farming_clear_desc">Remove the crop without any reward?</string>
     <string name="farming_harvest_and_plant">Harvest and Plant All</string>
+    <string name="farming_harvest_all_complete">All Patches Harvested!</string>
     <string name="farming_no_crops_ready">No crops ready to harvest</string>
     <string name="farming_no_empty_patches">No empty patches available</string>
     <!-- Translator note: %1$s = seed name -->
@@ -1651,10 +1654,10 @@
     <string name="settings_credit_banners_title">Seasonal Banners</string>
     <string name="settings_credit_banners_subtitle">Art by Wenrexa</string>
     <string name="settings_credit_skill_icons_title">Skill Icons</string>
-    <string name="settings_credit_skill_icons_subtitle">Shikashi\'s Fantasy Icons Pack</string>
+    <string name="settings_credit_skill_icons_subtitle" translatable="false">Shikashi\'s Fantasy Icons Pack</string>
     <string name="title_seasonal_champion_of">Champion of %1$s</string>
     <string name="title_seasonal_requirement">Complete the %1$s Seasonal Event</string>
     <string name="home_welcome_greeting">Welcome back,</string>
-    <string name="home_welcome_name">%1$s!</string>
+    <string name="home_welcome_name" translatable="false">%1$s!</string>
     <string name="home_welcome_title">The %1$s!</string>
 </resources>
