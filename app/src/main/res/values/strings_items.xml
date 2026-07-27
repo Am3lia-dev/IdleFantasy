@@ -790,7 +790,6 @@
     <string name="item_prayer_cape_name" translatable="false">Prayer Cape</string>
     <string name="item_prayer_guild_cape_name" translatable="false">Prayer Guild Cape</string>
     <string name="item_ranged_cape_name" translatable="false">Ranged Cape</string>
-    <string name="item_rat_meat_name" translatable="false">Cooked Rat Meat</string>
     <string name="item_ring_of_dragons_might_name" translatable="false">Ring Of Dragons Might</string>
     <string name="item_ring_of_flame_name" translatable="false">Ring Of Flame</string>
     <string name="item_ring_of_recoil_name" translatable="false">Ring Of Recoil</string>
