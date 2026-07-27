@@ -1368,7 +1368,7 @@
     <string name="carnival_redeemed">Eingelöst: %1$s!</string>
     <string name="carnival_not_enough_tickets">Nicht genug Lose.</string>
     <string name="carnival_lamp_redeemed">+%1$s EP in %2$s!</string>
-    <string name="carnival_shell_game">Hüttchenspiel</string>
+    <string name="carnival_shell_game">Hütchenspiel</string>
     <string name="carnival_active_shell_desc">Beobachtet genau, unter welchem Becher sich der Edelstein befindet!</string>
     <string name="carnival_shell_showing">Edelstein befindet sich unter Becher %1$d</string>
     <string name="carnival_shell_watch">Schaut genau hin…</string>
