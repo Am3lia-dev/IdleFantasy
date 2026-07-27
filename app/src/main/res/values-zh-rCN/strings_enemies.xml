@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== 敌人名称 ===== -->
+    <string name="enemy_giant_rat_name">巨鼠</string>
+    <string name="enemy_goblin_name">哥布林</string>
+    <string name="enemy_skeleton_name">骷髅</string>
+    <string name="enemy_zombie_name">僵尸</string>
+    <string name="enemy_bandit_name">强盗</string>
+    <string name="enemy_guard_name">守卫</string>
+    <string name="enemy_dark_wizard_name">暗黑法师</string>
+    <string name="enemy_orc_warrior_name">兽人战士</string>
+    <string name="enemy_spider_name">巨型蜘蛛</string>
+    <string name="enemy_wild_monkey_name">野猴</string>
+    <string name="enemy_rogue_name">盗贼</string>
+    <string name="enemy_knight_name">骑士</string>
+    <string name="enemy_hellhound_name">地狱犬</string>
+    <string name="enemy_troll_name">山岭巨魔</string>
+    <string name="enemy_demon_name">低阶恶魔</string>
+    <string name="enemy_dragon_name">绿龙</string>
+    <string name="enemy_imp_name">小鬼</string>
+    <string name="enemy_chicken_name">鸡</string>
+    <string name="enemy_sheep_name">羊</string>
+    <string name="enemy_cow_name">牛</string>
+
+    <!-- ===== 地下城名称和描述 ===== -->
+    <string name="dungeon_imp_cavern_name">小鬼洞穴</string>
+    <string name="dungeon_imp_cavern_desc">一个满是淘气小鬼的浅洞穴。非常适合新手入门！</string>
+    <string name="dungeon_goblin_cave_name">哥布林洞穴</string>
+    <string name="dungeon_goblin_cave_desc">一个被哥布林和巨鼠占据的黑暗洞穴。新冒险者练级的好去处。</string>
+    <string name="dungeon_spider_den_name">蜘蛛巢穴</string>
+    <string name="dungeon_spider_den_desc">一个蛛网密布、毒蜘蛛横行的洞穴。记得带解毒药！</string>
+    <string name="dungeon_bandit_camp_name">强盗营地</string>
+    <string name="dungeon_bandit_camp_desc">荒野中盗贼和流氓的藏身之处。看好你的钱袋！</string>
+    <string name="dungeon_undead_crypt_name">亡灵地穴</string>
+    <string name="dungeon_undead_crypt_desc">亡者拒绝安息的古老墓地。小心暗黑魔法！</string>
+    <string name="dungeon_fortress_ruins_name">要塞废墟</string>
+    <string name="dungeon_fortress_ruins_desc">一座古老城堡的残垣断壁，如今由骑士和士兵把守。</string>
+    <string name="dungeon_orc_stronghold_name">兽人堡垒</string>
+    <string name="dungeon_orc_stronghold_desc">深山中一座坚固的兽人营地。只有勇者才敢踏入。</string>
+    <string name="dungeon_volcanic_depths_name">火山深渊</string>
+    <string name="dungeon_volcanic_depths_desc">一个地狱犬和低阶恶魔栖息的灼热洞穴。酷热难耐！</string>
+    <string name="dungeon_dragon_lair_name">龙巢</string>
+    <string name="dungeon_dragon_lair_desc">绿龙传说中的栖息之地。只有大师级战士才能在此生还。</string>
+    <string name="dungeon_farm_name">农场</string>
+    <string name="dungeon_farm_desc">一座有家畜的宁静农场。非常适合新手收集食物！</string>
+    <string name="dungeon_infernal_stronghold_name">地狱要塞</string>
+    <string name="dungeon_infernal_stronghold_desc">一座烈火与硫磺的要塞，由恶魔和地狱犬统治。光是高温就能杀死毫无准备的人。</string>
+    <string name="dungeon_ancient_temple_name">远古神殿</string>
+    <string name="dungeon_ancient_temple_desc">一座由大陆最强生物把守的远古神殿。只有最强的战士才敢进入。</string>
+
+    <!-- ===== 单人首领名称（团本首领改为单人模式） ===== -->
+    <string name="boss_king_black_dragon_name">黑魔龙王</string>
+    <string name="boss_demon_lord_name">魔王</string>
+    <string name="boss_kraken_name">海妖</string>
+    <string name="boss_balrog_name">炎魔</string>
+
+    <!-- ===== 宠物名称和描述 ===== -->
+    <string name="pet_dragon_whelp_name">幼龙</string>
+    <string name="pet_dragon_whelp_desc">一条幼龙，能提升你的战斗经验值。</string>
+    <string name="pet_imp_pet_name">小鬼宠物</string>
+    <string name="pet_imp_pet_desc">一只淘气的小鬼，能增强你的祈祷训练效果。</string>
+    <string name="pet_baby_kraken_name">小海妖</string>
+    <string name="pet_baby_kraken_desc">一只小海妖，能提升你的烹饪经验值。</string>
+    <string name="pet_rock_golem_name">岩石魔像</string>
+    <string name="pet_rock_golem_desc">一个活化的岩石构造体，能提升你的采矿经验值。</string>
+    <string name="pet_ent_name">树人</string>
+    <string name="pet_ent_desc">一个古老的树灵，能提升你的伐木经验值。</string>
+    <string name="pet_tiny_templar_name">小圣骑士</string>
+    <string name="pet_tiny_templar_desc">一条小鱼伙伴，能提升你的钓鱼经验值。</string>
+    <string name="pet_tangleroot_name">缠根怪</string>
+    <string name="pet_tangleroot_desc">一种魔法植物生物，能提升你的种植经验值。</string>
+
+    <string name="dungeon_collapsed_mine_name">坍塌矿井</string>
+    <string name="dungeon_collapsed_mine_desc">铜矿下方的巨大洞穴。洞穴巨魔和岩石魔像出没于废墟之间，巨型蜘蛛在坍塌的矿道中织满蛛网。</string>
+    <string name="dungeon_shadow_den_name">暗影巢穴</string>
+    <string name="dungeon_shadow_den_desc">该地区盗贼公会使用的地下密室网络。盗贼、刺客和暗影生物潜伏在每个角落。</string>
+    <string name="dungeon_abyssal_ruins_name">深渊废墟</string>
+    <string name="dungeon_abyssal_ruins_desc">同时存在于凡间之上和之下的远古废墟。奇异的深渊生物在现实中时隐时现。</string>
+    <string name="dungeon_ancient_forest_ruins_name">远古森林废墟</string>
+    <string name="dungeon_ancient_forest_ruins_desc">被原始森林吞噬的石质废墟，如今被野性生物和德鲁伊的复仇之灵所占据。</string>
+    <string name="dungeon_ancient_forge_name">远古锻造厂</string>
+    <string name="dungeon_ancient_forge_desc">一座燃烧了数百年未曾熄灭的巨大矮人锻造厂。火焰元素和锻造守卫守护着它的秘密。</string>
+    <string name="dungeon_arcane_ruins_name">奥术废墟</string>
+    <string name="dungeon_arcane_ruins_desc">一座被摧毁的法师塔中仍在运作的地下密室。魔法构装体和附魔守卫仍在其中巡逻。</string>
+    <string name="dungeon_corrupted_sanctum_name">腐化圣所</string>
+    <string name="dungeon_corrupted_sanctum_desc">位于腐化林冠深处的阴暗圣所。暗黑祭司和腐化野兽守护着一个远古邪物。</string>
+    <string name="dungeon_drowned_temple_name">沉没神殿</string>
+    <string name="dungeon_drowned_temple_desc">海窟下方一座沉入海底的神殿，殿堂中灌满了海水，海洋生物已将其据为家园。</string>
+</resources>

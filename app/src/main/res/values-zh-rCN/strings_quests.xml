@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== Quest names and objectives ===== -->
+    <!-- Translator note: quest names are short titles; objectives are action sentences. -->
+
+    <!-- Mining -->
+    <string name="quest_mining_1_name">采矿 I</string>
+    <string name="quest_mining_1_objective">开采500个铜矿石</string>
+    <string name="quest_mining_2_name">采矿 II</string>
+    <string name="quest_mining_2_objective">开采750个铁矿石</string>
+    <string name="quest_mining_3_name">采矿 III</string>
+    <string name="quest_mining_3_objective">开采1100个煤炭</string>
+    <string name="quest_mining_4_name">采矿 IV</string>
+    <string name="quest_mining_4_objective">开采1650个秘银矿石</string>
+    <string name="quest_mining_5_name">采矿 V</string>
+    <string name="quest_mining_5_objective">开采2450个精金矿石</string>
+    <string name="quest_mining_6_name">采矿 VI</string>
+    <string name="quest_mining_6_objective">开采3650个符文矿石</string>
+
+    <!-- Woodcutting -->
+    <string name="quest_woodcutting_1_name">伐木 I</string>
+    <string name="quest_woodcutting_1_objective">砍伐500根原木</string>
+    <string name="quest_woodcutting_2_name">伐木 II</string>
+    <string name="quest_woodcutting_2_objective">砍伐750根橡木</string>
+    <string name="quest_woodcutting_3_name">伐木 III</string>
+    <string name="quest_woodcutting_3_objective">砍伐1100根柳木</string>
+    <string name="quest_woodcutting_4_name">伐木 IV</string>
+    <string name="quest_woodcutting_4_objective">砍伐1650根枫木</string>
+    <string name="quest_woodcutting_5_name">伐木 V</string>
+    <string name="quest_woodcutting_5_objective">砍伐2450根紫杉木</string>
+    <string name="quest_woodcutting_6_name">伐木 VI</string>
+    <string name="quest_woodcutting_6_objective">砍伐3650根魔法木</string>
+
+    <!-- Fishing -->
+    <string name="quest_fishing_1_name">钓鱼 I</string>
+    <string name="quest_fishing_1_objective">捕获500条鱼</string>
+    <string name="quest_fishing_2_name">钓鱼 II</string>
+    <string name="quest_fishing_2_objective">捕获750条鱼</string>
+    <string name="quest_fishing_3_name">钓鱼 III</string>
+    <string name="quest_fishing_3_objective">捕获1100条鱼</string>
+    <string name="quest_fishing_4_name">钓鱼 IV</string>
+    <string name="quest_fishing_4_objective">捕获1650条鱼</string>
+    <string name="quest_fishing_5_name">钓鱼 V</string>
+    <string name="quest_fishing_5_objective">捕获2450条鱼</string>
+    <string name="quest_fishing_6_name">钓鱼 VI</string>
+    <string name="quest_fishing_6_objective">捕获3650条鱼</string>
+
+    <!-- Smithing -->
+    <string name="quest_smithing_1_name">锻造 I</string>
+    <string name="quest_smithing_1_objective">熔炼500根青铜锭</string>
+    <string name="quest_smithing_2_name">锻造 II</string>
+    <string name="quest_smithing_2_objective">熔炼750根铁锭</string>
+    <string name="quest_smithing_3_name">锻造 III</string>
+    <string name="quest_smithing_3_objective">熔炼1100根钢锭</string>
+    <string name="quest_smithing_4_name">锻造 IV</string>
+    <string name="quest_smithing_4_objective">熔炼1650根秘银锭</string>
+    <string name="quest_smithing_5_name">锻造 V</string>
+    <string name="quest_smithing_5_objective">熔炼2450根精金锭</string>
+    <string name="quest_smithing_6_name">锻造 VI</string>
+    <string name="quest_smithing_6_objective">熔炼3650根符文锭</string>
+
+    <!-- Cooking - Fish -->
+    <string name="quest_cooking_fish_1_name">烹饪 — 鱼类 I</string>
+    <string name="quest_cooking_fish_1_objective">烹饪500条鱼</string>
+    <string name="quest_cooking_fish_2_name">烹饪 — 鱼类 II</string>
+    <string name="quest_cooking_fish_2_objective">烹饪750条鱼</string>
+    <string name="quest_cooking_fish_3_name">烹饪 — 鱼类 III</string>
+    <string name="quest_cooking_fish_3_objective">烹饪1100条鱼</string>
+    <string name="quest_cooking_fish_4_name">烹饪 — 鱼类 IV</string>
+    <string name="quest_cooking_fish_4_objective">烹饪1650条鱼</string>
+    <string name="quest_cooking_fish_5_name">烹饪 — 鱼类 V</string>
+    <string name="quest_cooking_fish_5_objective">烹饪2450条鱼</string>
+    <string name="quest_cooking_fish_6_name">烹饪 — 鱼类 VI</string>
+    <string name="quest_cooking_fish_6_objective">烹饪3650条鱼</string>
+
+    <!-- Cooking - Beef -->
+    <string name="quest_cooking_beef_1_name">烹饪 — 牛肉 I</string>
+    <string name="quest_cooking_beef_1_objective">烹饪100份牛肉</string>
+    <string name="quest_cooking_beef_2_name">烹饪 — 牛肉 II</string>
+    <string name="quest_cooking_beef_2_objective">烹饪250份牛肉</string>
+    <string name="quest_cooking_beef_3_name">烹饪 — 牛肉 III</string>
+    <string name="quest_cooking_beef_3_objective">烹饪500份牛肉</string>
+
+    <!-- Cooking - Chicken -->
+    <string name="quest_cooking_chicken_1_name">烹饪 — 鸡肉 I</string>
+    <string name="quest_cooking_chicken_1_objective">烹饪100份鸡肉</string>
+    <string name="quest_cooking_chicken_2_name">烹饪 — 鸡肉 II</string>
+    <string name="quest_cooking_chicken_2_objective">烹饪250份鸡肉</string>
+    <string name="quest_cooking_chicken_3_name">烹饪 — 鸡肉 III</string>
+    <string name="quest_cooking_chicken_3_objective">烹饪500份鸡肉</string>
+
+    <!-- Cooking - Mutton -->
+    <string name="quest_cooking_mutton_1_name">烹饪 — 羊肉 I</string>
+    <string name="quest_cooking_mutton_1_objective">烹饪100份羊肉</string>
+    <string name="quest_cooking_mutton_2_name">烹饪 — 羊肉 II</string>
+    <string name="quest_cooking_mutton_2_objective">烹饪250份羊肉</string>
+    <string name="quest_cooking_mutton_3_name">烹饪 — 羊肉 III</string>
+    <string name="quest_cooking_mutton_3_objective">烹饪500份羊肉</string>
+
+    <!-- Fletching -->
+    <string name="quest_fletching_1_name">制箭 I</string>
+    <string name="quest_fletching_1_objective">制作500支青铜箭</string>
+    <string name="quest_fletching_2_name">制箭 II</string>
+    <string name="quest_fletching_2_objective">制作750支铁箭</string>
+    <string name="quest_fletching_3_name">制箭 III</string>
+    <string name="quest_fletching_3_objective">制作1100支钢箭</string>
+    <string name="quest_fletching_4_name">制箭 IV</string>
+    <string name="quest_fletching_4_objective">制作1650支秘银箭</string>
+    <string name="quest_fletching_5_name">制箭 V</string>
+    <string name="quest_fletching_5_objective">制作2450支精金箭</string>
+    <string name="quest_fletching_6_name">制箭 VI</string>
+    <string name="quest_fletching_6_objective">制作3650支符文箭</string>
+
+    <!-- Prayer -->
+    <string name="quest_prayer_1_name">祈祷 I</string>
+    <string name="quest_prayer_1_objective">埋葬500根骨头</string>
+    <string name="quest_prayer_2_name">祈祷 II</string>
+    <string name="quest_prayer_2_objective">埋葬750根骨头</string>
+    <string name="quest_prayer_3_name">祈祷 III</string>
+    <string name="quest_prayer_3_objective">埋葬1100根骨头</string>
+    <string name="quest_prayer_4_name">祈祷 IV</string>
+    <string name="quest_prayer_4_objective">埋葬1650根骨头</string>
+    <string name="quest_prayer_5_name">祈祷 V</string>
+    <string name="quest_prayer_5_objective">埋葬2450根骨头</string>
+    <string name="quest_prayer_6_name">祈祷 VI</string>
+    <string name="quest_prayer_6_objective">埋葬3650根骨头</string>
+
+    <!-- Slayer -->
+    <string name="quest_combat_kills_1_name">怪物猎人 I</string>
+    <string name="quest_combat_kills_1_objective">击败100个敌人</string>
+    <string name="quest_combat_kills_2_name">怪物猎人 II</string>
+    <string name="quest_combat_kills_2_objective">击败150个敌人</string>
+    <string name="quest_combat_kills_3_name">怪物猎人 III</string>
+    <string name="quest_combat_kills_3_objective">击败200个敌人</string>
+    <string name="quest_combat_kills_4_name">怪物猎人 IV</string>
+    <string name="quest_combat_kills_4_objective">击败300个敌人</string>
+    <string name="quest_combat_kills_5_name">怪物猎人 V</string>
+    <string name="quest_combat_kills_5_objective">击败450个敌人</string>
+    <string name="quest_combat_kills_6_name">怪物猎人 VI</string>
+    <string name="quest_combat_kills_6_objective">击败650个敌人</string>
+
+    <!-- Dungeon exploration -->
+    <string name="quest_dungeon_farm_1_name">地牢探索者 I</string>
+    <string name="quest_dungeon_farm_1_objective">完成农场副本5次</string>
+    <string name="quest_dungeon_goblin_1_name">地牢探索者 II</string>
+    <string name="quest_dungeon_goblin_1_objective">完成哥布林洞穴5次</string>
+    <string name="quest_dungeon_spider_1_name">地牢探索者 III</string>
+    <string name="quest_dungeon_spider_1_objective">完成蜘蛛巢穴5次</string>
+    <string name="quest_dungeon_bandit_1_name">地牢探索者 IV</string>
+    <string name="quest_dungeon_bandit_1_objective">完成山贼营地5次</string>
+    <string name="quest_dungeon_undead_1_name">地牢探索者 V</string>
+    <string name="quest_dungeon_undead_1_objective">完成亡灵墓穴5次</string>
+    <string name="quest_dungeon_fortress_1_name">地牢探索者 VI</string>
+    <string name="quest_dungeon_fortress_1_objective">完成要塞废墟5次</string>
+    <string name="quest_dungeon_orc_1_name">地牢大师 I</string>
+    <string name="quest_dungeon_orc_1_objective">完成兽人堡垒5次</string>
+    <string name="quest_dungeon_volcanic_1_name">地牢大师 II</string>
+    <string name="quest_dungeon_volcanic_1_objective">完成火山深渊5次</string>
+    <string name="quest_dungeon_dragon_1_name">地牢大师 III</string>
+    <string name="quest_dungeon_dragon_1_objective">完成龙巢5次</string>
+
+    <!-- Crafting -->
+    <string name="quest_crafting_1_name">工艺制作 I</string>
+    <string name="quest_crafting_1_objective">制作100枚银戒指</string>
+    <string name="quest_crafting_2_name">工艺制作 II</string>
+    <string name="quest_crafting_2_objective">制作250枚金戒指</string>
+    <string name="quest_crafting_3_name">工艺制作 III</string>
+    <string name="quest_crafting_3_objective">制作500枚铂金戒指</string>
+    <string name="quest_crafting_4_name">工艺制作 IV</string>
+    <string name="quest_crafting_4_objective">制作750枚银蓝宝石戒指</string>
+    <string name="quest_crafting_5_name">工艺制作 V</string>
+    <string name="quest_crafting_5_objective">制作1000枚金蓝宝石戒指</string>
+    <string name="quest_crafting_6_name">工艺制作 VI</string>
+    <string name="quest_crafting_6_objective">制作1500枚铂金钻石戒指</string>
+
+    <!-- Monster slayer chains -->
+    <string name="quest_goblin_slayer_1_name">哥布林猎杀者 I</string>
+    <string name="quest_goblin_slayer_1_objective">击败50个哥布林</string>
+    <string name="quest_goblin_slayer_2_name">哥布林猎杀者 II</string>
+    <string name="quest_goblin_slayer_2_objective">击败100个哥布林</string>
+    <string name="quest_spider_slayer_1_name">蜘蛛猎杀者 I</string>
+    <string name="quest_spider_slayer_1_objective">击败40只巨型蜘蛛</string>
+    <string name="quest_spider_slayer_2_name">蜘蛛猎杀者 II</string>
+    <string name="quest_spider_slayer_2_objective">击败80只巨型蜘蛛</string>
+    <string name="quest_skeleton_slayer_1_name">骷髅猎杀者 I</string>
+    <string name="quest_skeleton_slayer_1_objective">击败35个骷髅</string>
+    <string name="quest_skeleton_slayer_2_name">骷髅猎杀者 II</string>
+    <string name="quest_skeleton_slayer_2_objective">击败70个骷髅</string>
+    <string name="quest_bandit_hunter_1_name">山贼猎人 I</string>
+    <string name="quest_bandit_hunter_1_objective">击败30个山贼</string>
+    <string name="quest_bandit_hunter_2_name">山贼猎人 II</string>
+    <string name="quest_bandit_hunter_2_objective">击败60个山贼</string>
+    <string name="quest_orc_slayer_1_name">兽人猎杀者 I</string>
+    <string name="quest_orc_slayer_1_objective">击败25个兽人战士</string>
+    <string name="quest_orc_slayer_2_name">兽人猎杀者 II</string>
+    <string name="quest_orc_slayer_2_objective">击败50个兽人战士</string>
+    <string name="quest_demon_slayer_1_name">恶魔猎杀者 I</string>
+    <string name="quest_demon_slayer_1_objective">击败恶魔领主</string>
+    <string name="quest_demon_slayer_2_name">恶魔猎杀者 II</string>
+    <string name="quest_demon_slayer_2_objective">击败恶魔领主5次</string>
+    <string name="quest_demon_slayer_3_name">恶魔猎杀者 III</string>
+    <string name="quest_demon_slayer_3_objective">击败恶魔领主25次</string>
+    <string name="quest_dragon_slayer_1_name">猎龙者 I</string>
+    <string name="quest_dragon_slayer_1_objective">击败10条绿龙</string>
+    <string name="quest_dragon_slayer_2_name">猎龙者 II</string>
+    <string name="quest_dragon_slayer_2_objective">击败25条绿龙</string>
+
+    <!-- Combat style challenges -->
+    <string name="quest_melee_warrior_1_name">近战勇士 I</string>
+    <string name="quest_melee_warrior_1_objective">仅使用近战武器通关哥布林洞穴</string>
+    <string name="quest_melee_warrior_2_name">近战勇士 II</string>
+    <string name="quest_melee_warrior_2_objective">仅使用近战武器通关山贼营地</string>
+    <string name="quest_melee_warrior_3_name">近战勇士 III</string>
+    <string name="quest_melee_warrior_3_objective">仅使用近战武器通关要塞废墟</string>
+    <string name="quest_ranger_elite_1_name">精英游侠 I</string>
+    <string name="quest_ranger_elite_1_objective">仅使用远程武器通关哥布林洞穴</string>
+    <string name="quest_ranger_elite_2_name">精英游侠 II</string>
+    <string name="quest_ranger_elite_2_objective">仅使用远程武器通关山贼营地</string>
+    <string name="quest_ranger_elite_3_name">精英游侠 III</string>
+    <string name="quest_ranger_elite_3_objective">仅使用远程武器通关要塞废墟</string>
+    <string name="quest_mage_master_1_name">大法师 I</string>
+    <string name="quest_mage_master_1_objective">仅使用魔法通关哥布林洞穴</string>
+    <string name="quest_mage_master_2_name">大法师 II</string>
+    <string name="quest_mage_master_2_objective">仅使用魔法通关山贼营地</string>
+    <string name="quest_mage_master_3_name">大法师 III</string>
+    <string name="quest_mage_master_3_objective">仅使用魔法通关要塞废墟</string>
+
+    <!-- Iron Stomach (no food) challenges -->
+    <string name="quest_iron_stomach_1_name">铁胃勇士 I</string>
+    <string name="quest_iron_stomach_1_objective">不使用食物通关蜘蛛巢穴</string>
+    <string name="quest_iron_stomach_2_name">铁胃勇士 II</string>
+    <string name="quest_iron_stomach_2_objective">不使用食物通关亡灵墓穴</string>
+    <string name="quest_iron_stomach_3_name">铁胃勇士 III</string>
+    <string name="quest_iron_stomach_3_objective">不使用食物通关兽人堡垒</string>
+    <string name="quest_iron_stomach_4_name">铁胃勇士 IV</string>
+    <string name="quest_iron_stomach_4_objective">不使用食物通关龙巢</string>
+
+    <!-- Treasure Hunter -->
+    <string name="quest_treasure_hunter_1_name">宝藏猎人 I</string>
+    <string name="quest_treasure_hunter_1_objective">从战斗中收集20份蛛丝</string>
+    <string name="quest_treasure_hunter_2_name">宝藏猎人 II</string>
+    <string name="quest_treasure_hunter_2_objective">从战斗中收集10件哥布林锁甲</string>
+    <string name="quest_treasure_hunter_3_name">宝藏猎人 III</string>
+    <string name="quest_treasure_hunter_3_objective">从战斗中收集5根恶魔之角</string>
+    <string name="quest_treasure_hunter_4_name">宝藏猎人 IV</string>
+    <string name="quest_treasure_hunter_4_objective">从战斗中收集3片龙鳞</string>
+
+    <!-- Firemaking -->
+    <string name="quest_firemaking_1_name">生火 I</string>
+    <string name="quest_firemaking_1_objective">焚烧500根原木</string>
+    <string name="quest_firemaking_2_name">生火 II</string>
+    <string name="quest_firemaking_2_objective">焚烧750根橡木</string>
+    <string name="quest_firemaking_3_name">生火 III</string>
+    <string name="quest_firemaking_3_objective">焚烧1100根柳木</string>
+    <string name="quest_firemaking_4_name">生火 IV</string>
+    <string name="quest_firemaking_4_objective">焚烧1650根枫木</string>
+    <string name="quest_firemaking_5_name">生火 V</string>
+    <string name="quest_firemaking_5_objective">焚烧2450根紫杉木</string>
+    <string name="quest_firemaking_6_name">生火 VI</string>
+    <string name="quest_firemaking_6_objective">焚烧3650根魔法木</string>
+
+    <!-- Runecrafting -->
+    <string name="quest_runecrafting_1_name">符文制作 I</string>
+    <string name="quest_runecrafting_1_objective">制作500枚风之符文</string>
+    <string name="quest_runecrafting_2_name">符文制作 II</string>
+    <string name="quest_runecrafting_2_objective">制作750枚水之符文</string>
+    <string name="quest_runecrafting_3_name">符文制作 III</string>
+    <string name="quest_runecrafting_3_objective">制作1100枚地之符文</string>
+    <string name="quest_runecrafting_4_name">符文制作 IV</string>
+    <string name="quest_runecrafting_4_objective">制作1650枚火之符文</string>
+    <string name="quest_runecrafting_5_name">符文制作 V</string>
+    <string name="quest_runecrafting_5_objective">制作2450枚心灵符文</string>
+    <string name="quest_runecrafting_6_name">符文制作 VI</string>
+    <string name="quest_runecrafting_6_objective">制作3650枚混沌符文</string>
+
+    <!-- Herblore -->
+    <string name="quest_herblore_1_name">草药学 I</string>
+    <string name="quest_herblore_1_objective">调制100瓶攻击药水</string>
+    <string name="quest_herblore_2_name">草药学 II</string>
+    <string name="quest_herblore_2_objective">调制250瓶防御药水</string>
+    <string name="quest_herblore_3_name">草药学 III</string>
+    <string name="quest_herblore_3_objective">调制500瓶力量药水</string>
+    <string name="quest_herblore_4_name">草药学 IV</string>
+    <string name="quest_herblore_4_objective">调制750瓶远程药水</string>
+    <string name="quest_herblore_5_name">草药学 V</string>
+    <string name="quest_herblore_5_objective">调制1000瓶魔法药水</string>
+    <string name="quest_herblore_6_name">草药学 VI</string>
+    <string name="quest_herblore_6_objective">调制1500瓶超级力量药水</string>
+
+    <!-- Slayer extended -->
+    <string name="quest_combat_kills_7_name">怪物猎人 VII</string>
+    <string name="quest_combat_kills_7_objective">击败1000个敌人</string>
+    <string name="quest_combat_kills_8_name">怪物猎人 VIII</string>
+    <string name="quest_combat_kills_8_objective">击败1500个敌人</string>
+    <string name="quest_combat_kills_9_name">怪物猎人 IX</string>
+    <string name="quest_combat_kills_9_objective">击败2250个敌人</string>
+    <string name="quest_combat_kills_10_name">怪物猎人 X</string>
+    <string name="quest_combat_kills_10_objective">击败3400个敌人</string>
+    <string name="quest_combat_kills_11_name">怪物猎人 XI</string>
+    <string name="quest_combat_kills_11_objective">击败5100个敌人</string>
+    <string name="quest_combat_kills_12_name">怪物猎人 XII</string>
+    <string name="quest_combat_kills_12_objective">击败7650个敌人</string>
+
+    <!-- New monster slayer chains -->
+    <string name="quest_zombie_slayer_1_name">丧尸猎杀者 I</string>
+    <string name="quest_zombie_slayer_1_objective">击败35个丧尸</string>
+    <string name="quest_zombie_slayer_2_name">丧尸猎杀者 II</string>
+    <string name="quest_zombie_slayer_2_objective">击败70个丧尸</string>
+    <string name="quest_hellhound_slayer_1_name">地狱犬猎杀者 I</string>
+    <string name="quest_hellhound_slayer_1_objective">击败25只地狱犬</string>
+    <string name="quest_hellhound_slayer_2_name">地狱犬猎杀者 II</string>
+    <string name="quest_hellhound_slayer_2_objective">击败50只地狱犬</string>
+    <string name="quest_troll_slayer_1_name">巨魔猎杀者 I</string>
+    <string name="quest_troll_slayer_1_objective">击败20个山地巨魔</string>
+    <string name="quest_troll_slayer_2_name">巨魔猎杀者 II</string>
+    <string name="quest_troll_slayer_2_objective">击败40个山地巨魔</string>
+    <string name="quest_fire_giant_slayer_1_name">火焰巨人猎杀者 I</string>
+    <string name="quest_fire_giant_slayer_1_objective">击败15个火焰巨人</string>
+    <string name="quest_fire_giant_slayer_2_name">火焰巨人猎杀者 II</string>
+    <string name="quest_fire_giant_slayer_2_objective">击败30个火焰巨人</string>
+    <string name="quest_ancient_guardian_slayer_1_name">远古守卫猎杀者 I</string>
+    <string name="quest_ancient_guardian_slayer_1_objective">击败10个远古守卫</string>
+    <string name="quest_ancient_guardian_slayer_2_name">远古守卫猎杀者 II</string>
+    <string name="quest_ancient_guardian_slayer_2_objective">击败20个远古守卫</string>
+    <string name="quest_lich_slayer_1_name">巫妖猎杀者 I</string>
+    <string name="quest_lich_slayer_1_objective">击败10个巫妖</string>
+    <string name="quest_lich_slayer_2_name">巫妖猎杀者 II</string>
+    <string name="quest_lich_slayer_2_objective">击败20个巫妖</string>
+
+    <!-- Dungeon exploration extended -->
+    <string name="quest_dungeon_imp_1_name">地牢探索者 VII</string>
+    <string name="quest_dungeon_imp_1_objective">完成小鬼洞穴5次</string>
+    <string name="quest_dungeon_infernal_1_name">地牢大师 IV</string>
+    <string name="quest_dungeon_infernal_1_objective">完成地狱堡垒5次</string>
+    <string name="quest_dungeon_ancient_1_name">地牢大师 V</string>
+    <string name="quest_dungeon_ancient_1_objective">完成远古神殿5次</string>
+
+    <!-- Boss extended -->
+    <string name="quest_kbd_slayer_1_objective">击败黑龙之王</string>
+    <string name="quest_kbd_slayer_2_objective">击败黑龙之王5次</string>
+    <string name="quest_kbd_slayer_3_objective">击败黑龙之王25次</string>
+    <string name="quest_kbd_slayer_4_name">黑龙之王猎杀者 IV</string>
+    <string name="quest_kbd_slayer_4_objective">击败黑龙之王50次</string>
+    <string name="quest_demon_slayer_4_name">恶魔猎杀者 IV</string>
+    <string name="quest_demon_slayer_4_objective">击败恶魔领主50次</string>
+    <string name="quest_kraken_killer_1_name">海妖猎杀者 I</string>
+    <string name="quest_kraken_killer_1_objective">击败海妖</string>
+    <string name="quest_kraken_killer_2_name">海妖猎杀者 II</string>
+    <string name="quest_kraken_killer_2_objective">击败海妖5次</string>
+    <string name="quest_kraken_killer_3_name">海妖猎杀者 III</string>
+    <string name="quest_kraken_killer_3_objective">击败海妖25次</string>
+    <string name="quest_kraken_killer_4_name">海妖猎杀者 IV</string>
+    <string name="quest_kraken_killer_4_objective">击败海妖50次</string>
+    <string name="quest_balrog_bane_1_name">炎魔克星 I</string>
+    <string name="quest_balrog_bane_1_objective">击败炎魔</string>
+    <string name="quest_balrog_bane_2_name">炎魔克星 II</string>
+    <string name="quest_balrog_bane_2_objective">击败炎魔5次</string>
+    <string name="quest_balrog_bane_3_name">炎魔克星 III</string>
+    <string name="quest_balrog_bane_3_objective">击败炎魔25次</string>
+    <string name="quest_balrog_bane_4_name">炎魔克星 IV</string>
+    <string name="quest_balrog_bane_4_objective">击败炎魔50次</string>
+
+    <!-- Combat style challenges extended -->
+    <string name="quest_melee_warrior_4_name">近战勇士 IV</string>
+    <string name="quest_melee_warrior_4_objective">仅使用近战武器通关兽人堡垒</string>
+    <string name="quest_melee_warrior_5_name">近战勇士 V</string>
+    <string name="quest_melee_warrior_5_objective">仅使用近战武器通关龙巢</string>
+    <string name="quest_ranger_elite_4_name">精英游侠 IV</string>
+    <string name="quest_ranger_elite_4_objective">仅使用远程武器通关兽人堡垒</string>
+    <string name="quest_ranger_elite_5_name">精英游侠 V</string>
+    <string name="quest_ranger_elite_5_objective">仅使用远程武器通关龙巢</string>
+    <string name="quest_mage_master_4_name">大法师 IV</string>
+    <string name="quest_mage_master_4_objective">仅使用魔法通关兽人堡垒</string>
+    <string name="quest_mage_master_5_name">大法师 V</string>
+    <string name="quest_mage_master_5_objective">仅使用魔法通关龙巢</string>
+
+    <!-- Iron Stomach extended -->
+    <string name="quest_iron_stomach_5_name">铁胃勇士 V</string>
+    <string name="quest_iron_stomach_5_objective">不使用食物通关地狱堡垒</string>
+    <string name="quest_iron_stomach_6_name">铁胃勇士 VI</string>
+    <string name="quest_iron_stomach_6_objective">不使用食物通关远古神殿</string>
+
+    <!-- Treasure Hunter extended -->
+    <string name="quest_treasure_hunter_5_name">宝藏猎人 V</string>
+    <string name="quest_treasure_hunter_5_objective">从战斗中收集10颗地狱犬獠牙</string>
+    <string name="quest_treasure_hunter_6_name">宝藏猎人 VI</string>
+    <string name="quest_treasure_hunter_6_objective">从战斗中收集15根巨魔骨</string>
+
+    <!-- Daily quest verbs -->
+    <string name="daily_verb_mining">开采</string>
+    <string name="daily_verb_fishing">捕获</string>
+    <string name="daily_verb_woodcutting">砍伐</string>
+    <string name="daily_verb_smithing">锻造</string>
+    <string name="daily_verb_cooking">烹饪</string>
+    <string name="daily_verb_combat">击败</string>
+
+    <!-- Daily quest names -->
+    <string name="quest_daily_mine_iron_name">铁矿矿工</string>
+    <string name="quest_daily_mine_coal_name">煤炭搬运工</string>
+    <string name="quest_daily_mine_mithril_name">秘银探矿者</string>
+    <string name="quest_daily_mine_runite_name">符文矿冲刺</string>
+    <string name="quest_daily_fish_salmon_name">三文鱼季</string>
+    <string name="quest_daily_fish_lobster_name">龙虾丰收</string>
+    <string name="quest_daily_fish_swordfish_name">剑鱼猎手</string>
+    <string name="quest_daily_fish_shark_name">鲨鱼驯服者</string>
+    <string name="quest_daily_wc_oak_name">橡木伐工</string>
+    <string name="quest_daily_wc_willow_name">柳木工者</string>
+    <string name="quest_daily_wc_yew_name">紫杉伐木工</string>
+    <string name="quest_daily_wc_magic_name">魔法伐木人</string>
+    <string name="quest_daily_smith_iron_name">铁匠</string>
+    <string name="quest_daily_smith_mithril_name">秘银锻造师</string>
+    <string name="quest_daily_smith_adamantite_name">精金匠师</string>
+    <string name="quest_daily_smith_runite_name">符文冶炼师</string>
+    <string name="quest_daily_cook_trout_name">鳟鱼厨师</string>
+    <string name="quest_daily_cook_salmon_name">三文鱼烧烤师</string>
+    <string name="quest_daily_cook_lobster_name">龙虾厨师</string>
+    <string name="quest_daily_cook_swordfish_name">剑鱼厨师</string>
+    <string name="quest_daily_kill_goblin_name">哥布林猎杀者</string>
+    <string name="quest_daily_kill_bandit_name">山贼克星</string>
+    <string name="quest_daily_kill_demon_name">恶魔猎人</string>
+    <string name="quest_daily_kill_dragon_name">猎龙者</string>
+
+    <!-- Quest objective verb strings for craft skills -->
+    <string name="daily_verb_crafting">制作</string>
+    <string name="daily_verb_firemaking">焚烧</string>
+    <string name="daily_verb_fletching">制作</string>
+    <string name="daily_verb_herblore">调制</string>
+    <string name="daily_verb_runecrafting">制作</string>
+    <string name="daily_verb_prayer">埋葬</string>
+    <string name="daily_verb_construction">建造</string>
+    <string name="daily_verb_farming">收获</string>
+
+    <!-- Quest objective format strings -->
+    <string name="quest_obj_gather">%1$s %2$d %3$s</string>
+    <string name="quest_obj_craft">%1$s %2$d %3$s</string>
+    <string name="quest_obj_prayer">埋葬%1$d根任意类型骨头</string>
+    <string name="quest_obj_kill">击败%1$d个敌人</string>
+    <string name="quest_obj_kill_enemy">击败%1$d个%2$s</string>
+    <string name="quest_obj_dungeon">完成%1$s %2$d次</string>
+    <string name="quest_obj_dungeon_once">完成%1$s</string>
+    <string name="quest_obj_boss">击败%1$s %2$d次</string>
+    <string name="quest_obj_boss_once">击败%1$s</string>
+    <string name="quest_obj_dungeon_melee_only">仅使用近战武器通关%1$s</string>
+    <string name="quest_obj_dungeon_ranged_only">仅使用远程武器通关%1$s</string>
+    <string name="quest_obj_dungeon_magic_only">仅使用魔法通关%1$s</string>
+    <string name="quest_obj_dungeon_no_food">不使用任何食物通关%1$s</string>
+    <string name="quest_obj_collect">从战斗中收集%1$d个%2$s</string>
+    <string name="quest_obj_slayer_task">完成%1$d个杀戮任务</string>
+
+</resources>

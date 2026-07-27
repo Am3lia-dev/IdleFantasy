@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== 升级消息 ===== -->
+    <!-- 翻译说明: %1$d = 新等级数字, %2$s = 技能显示名称 -->
+    <string name="game_level_up">升级了！%1$s 达到了 %2$d 级！</string>
+    <!-- 翻译说明: %1$s = 技能显示名称, %2$d = 新等级数字 -->
+    <string name="game_level_up_short">%1$s → %2$d</string>
+    <string name="game_max_level">已达到最高等级！</string>
+
+    <!-- ===== 活动结果摘要 ===== -->
+    <string name="game_session_results_title">活动结果</string>
+    <!-- 翻译说明: %1$s = 技能显示名称 -->
+    <string name="game_session_summary_header">%1$s 活动完成</string>
+    <!-- 翻译说明: %1$s = 格式化的经验值（例如 "1,234"） -->
+    <string name="game_session_xp_total">+%1$s 经验值</string>
+    <string name="game_session_no_items">未收集到物品</string>
+    <string name="game_session_no_level_ups">本次活动未升级</string>
+    <!-- 翻译说明: %1$d = 升级次数 -->
+    <string name="game_session_level_up_count">%1$d 次升级！</string>
+
+    <!-- ===== 战斗消息 ===== -->
+    <!-- 翻译说明: %1$s = 玩家或敌人名称, %2$d = 伤害数值 -->
+    <string name="game_combat_hit">%1$s 造成 %2$d 点伤害。</string>
+    <string name="game_combat_miss">%1$s 未命中！</string>
+    <!-- 翻译说明: %1$s = 敌人显示名称 -->
+    <string name="game_combat_enemy_defeated">%1$s 被击败了！</string>
+    <!-- 翻译说明: %1$d = 恢复的生命值 -->
+    <string name="game_combat_food_eaten">食用了食物——恢复了 %1$d 点生命值。</string>
+    <string name="game_combat_player_died">你被击败了。</string>
+    <string name="game_dungeon_cleared">地下城通关！</string>
+    <!-- 翻译说明: %1$s = 地下城显示名称 -->
+    <string name="game_dungeon_summary">%1$s 通关完成。</string>
+
+    <!-- ===== 种植消息 ===== -->
+    <!-- 翻译说明: %1$s = 作物显示名称 -->
+    <string name="game_farming_planted">已种植 %1$s。</string>
+    <!-- 翻译说明: %1$s = 作物显示名称, %2$d = 收获数量 -->
+    <string name="game_farming_harvested">收获了 %2$d 个 %1$s。</string>
+    <string name="game_farming_all_harvested">所有成熟的地块已收获完毕。</string>
+    <string name="game_farming_patch_cleared">地块已清理。</string>
+    <string name="game_farming_not_ready">这株作物还未成熟。</string>
+    <!-- 翻译说明: %1$s = 作物显示名称, %2$s = 剩余时间 -->
+    <string name="game_farming_ready_in">%1$s 将在 %2$s 后成熟。</string>
+
+    <!-- ===== 制作消息 ===== -->
+    <!-- 翻译说明: %1$d = 制作数量, %2$s = 物品显示名称 -->
+    <string name="game_crafted">制作了 %1$d 个 %2$s。</string>
+    <!-- 翻译说明: %1$s = 物品显示名称 -->
+    <string name="game_missing_ingredient">缺少材料：%1$s。</string>
+
+    <!-- ===== 商店消息 ===== -->
+    <!-- 翻译说明: %1$d = 数量, %2$s = 物品显示名称, %3$d = 总花费 -->
+    <string name="game_shop_purchased">花费 %3$d 金币购买了 %1$d 个 %2$s。</string>
+    <!-- 翻译说明: %1$d = 数量, %2$s = 物品显示名称, %3$d = 获得的金币 -->
+    <string name="game_shop_sold">出售了 %1$d 个 %2$s，获得 %3$d 金币。</string>
+
+    <!-- ===== 祈祷 / 埋骨 ===== -->
+    <!-- 翻译说明: %1$s = 骨头显示名称, %2$s = 获得的经验值 -->
+    <string name="game_bones_buried">埋葬了 %1$s——+%2$s 祈祷经验值。</string>
+
+    <!-- ===== 任务消息 ===== -->
+    <!-- 翻译说明: %1$s = 任务显示名称 -->
+    <string name="game_quest_started">任务开始：%1$s</string>
+    <string name="game_quest_completed">任务完成：%1$s</string>
+    <string name="game_quest_abandoned">任务已放弃。</string>
+    <!-- 翻译说明: %1$d = 当前进度, %2$d = 目标数量 -->
+    <string name="game_quest_progress">进度：%1$d / %2$d</string>
+
+    <!-- ===== 经验值获取消息（在活动日志中显示） ===== -->
+    <!-- 翻译说明: %1$s = 本分钟获得的经验值 -->
+    <string name="game_xp_gained">+%1$s 经验值</string>
+    <!-- 翻译说明: %1$s = 物品显示名称, %2$d = 数量 -->
+    <string name="game_item_received">+%2$d %1$s</string>
+
+    <!-- ===== 竞技场消息 ===== -->
+    <!-- 翻译说明: %1$s = 对手显示名称 -->
+    <string name="game_arena_challenged">%1$s 向你发起挑战！</string>
+    <string name="game_arena_victory">胜利！</string>
+    <string name="game_arena_defeat">战败。</string>
+    <!-- 翻译说明: %1$d = 赢得的金币 -->
+    <string name="game_arena_coins_won">赢得 %1$d 金币。</string>
+
+    <!-- ===== 彩蛋 / 挖掘 ===== -->
+    <string name="game_dig_you_dig">你向地面挖去……</string>
+    <string name="game_dig_nothing">你除了泥土什么也没找到。</string>
+    <!-- 翻译说明: %1$s = 物品显示名称 -->
+    <string name="game_dig_found">你挖出了 %1$s！</string>
+    <!-- 翻译说明: %1$d = 当前洞的深度（米） -->
+    <string name="game_dig_depth">这个洞已经有 %1$d 米深了。</string>
+    <string name="game_dig_cooldown">你今天已经挖过了，明天再来吧。</string>
+
+    <!-- ===== 装备槽位名称 ===== -->
+    <string name="equip_slot_weapon_atk">武器（攻击）</string>
+    <string name="equip_slot_weapon_str">武器（力量）</string>
+    <string name="equip_slot_weapon_ranged">武器（远程）</string>
+    <string name="equip_slot_weapon_magic">武器（魔法）</string>
+    <string name="equip_slot_head">头部</string>
+    <string name="equip_slot_body">身体</string>
+    <string name="equip_slot_legs">腿部</string>
+    <string name="equip_slot_boots">鞋子</string>
+    <string name="equip_slot_cape">披风</string>
+    <string name="equip_slot_ring">戒指</string>
+    <string name="equip_slot_necklace">项链</string>
+    <string name="equip_slot_shield">盾牌</string>
+    <string name="equip_slot_pickaxe">镐</string>
+    <string name="equip_slot_axe">斧头</string>
+    <string name="equip_slot_fishing_rod">鱼竿</string>
+    <string name="equip_slot_hoe">锄头</string>
+    <string name="equip_slot_frying_pan">煎锅</string>
+    <string name="equip_slot_grappling_hook">抓钩</string>
+    <string name="equip_slot_hammer">铁锤</string>
+    <string name="equip_slot_tinderbox">火绒盒</string>
+    <string name="equip_slot_lockpick">开锁器</string>
+</resources>

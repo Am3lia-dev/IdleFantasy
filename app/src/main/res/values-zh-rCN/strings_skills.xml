@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== 技能名称和描述 ===== -->
+
+    <!-- 采集技能 -->
+    <string name="skill_mining_name">采矿</string>
+    <string name="skill_mining_desc">从大地中开采珍贵的矿石与宝石。</string>
+    <string name="skill_fishing_name">钓鱼</string>
+    <string name="skill_fishing_desc">从水域中捕获鱼类与水生珍宝。</string>
+    <string name="skill_woodcutting_name">伐木</string>
+    <string name="skill_woodcutting_desc">砍伐树木并收集各种木材。</string>
+    <string name="skill_farming_name">种植</string>
+    <string name="skill_farming_desc">在你的农田中种植和收获作物。</string>
+    <string name="skill_firemaking_name">生火</string>
+    <string name="skill_firemaking_desc">焚烧背包中的原木以获得生火经验值。焚烧每根原木还会产生灰烬，可在祈祷技能中撒播以获得额外的祈祷经验值。</string>
+    <string name="skill_agility_name">敏捷</string>
+    <string name="skill_agility_desc">训练敏捷可缩短所有技能的活动时间。99级时每小时减少20分钟（60分钟→40分钟），随等级提升线性递减。</string>
+
+    <!-- 制作技能 -->
+    <string name="skill_smithing_name">锻造</string>
+    <string name="skill_smithing_desc">将矿石冶炼成金属锭，并锻造强大的金属装备。</string>
+    <string name="skill_cooking_name">烹饪</string>
+    <string name="skill_cooking_desc">将生食材烹饪为食物，在战斗中恢复生命值。</string>
+    <string name="skill_fletching_name">制箭</string>
+    <string name="skill_fletching_desc">用木材和金属部件制作弓箭。</string>
+    <string name="skill_crafting_name">制作</string>
+    <string name="skill_crafting_desc">用珍贵材料制作珠宝及其他手工物品。</string>
+    <string name="skill_runecrafting_name">符文制作</string>
+    <string name="skill_runecrafting_desc">用符文精华制作魔法符文，用于施放法术。</string>
+    <string name="skill_herblore_name">草药学</string>
+    <string name="skill_herblore_desc">用种植的草药和地下城材料酿造药剂，提升你的战斗属性。</string>
+
+    <!-- 战斗技能 -->
+    <string name="skill_attack_name">攻击</string>
+    <string name="skill_attack_desc">提高你的近战命中率，增加命中敌人的几率。</string>
+    <string name="skill_strength_name">力量</string>
+    <string name="skill_strength_desc">提高你的每次近战最大伤害。</string>
+    <string name="skill_defense_name">防御</string>
+    <string name="skill_defense_desc">减少你受到的敌人攻击伤害。</string>
+    <string name="skill_ranged_name">远程</string>
+    <string name="skill_ranged_desc">使用弓箭在安全距离外攻击敌人。</string>
+    <string name="skill_magic_name">魔法</string>
+    <string name="skill_magic_desc">使用符文施放强大的法术。更高等级可解锁更强的法术。</string>
+    <string name="skill_hitpoints_name">生命值</string>
+    <string name="skill_hitpoints_desc">你的总生命值。更高等级让你在战斗中存活更久。</string>
+    <string name="skill_prayer_name">祈祷</string>
+    <string name="skill_prayer_desc">埋葬战斗中掉落的骨头以获得祈祷经验值。更高等级可提升你的战斗等级。</string>
+
+    <!-- ===== 技能解锁面板标签 ===== -->
+    <string name="label_lv">等级 %1$d</string>
+    <string name="skills_agility_course_detail">等级 %1$d  •  %2$d 经验/圈</string>
+    <string name="label_hp_passive">被动 — 提高最大生命值</string>
+    <string name="label_hp_scales">最大生命值随等级提升</string>
+    <string name="label_hp_max">最大生命值：%1$d</string>
+    <string name="label_xp_per_bone">%1$s（%2$d 经验/块）</string>
+    <string name="label_xp_per_kill">%1$s（%2$d 经验/击杀）</string>
+
+    <!-- ===== 敏捷训练场名称和描述 ===== -->
+    <string name="agility_beginner_course_name">初级训练场</string>
+    <string name="agility_beginner_course_desc">适合刚开始敏捷训练的新手的简单障碍跑道。</string>
+    <string name="agility_novice_course_name">新手训练场</string>
+    <string name="agility_novice_course_desc">略具挑战性的基础障碍跑道。</string>
+    <string name="agility_apprentice_course_name">学徒训练场</string>
+    <string name="agility_apprentice_course_desc">需要一定技巧才能通过的中级障碍跑道。</string>
+    <string name="agility_intermediate_course_name">进阶训练场</string>
+    <string name="agility_intermediate_course_desc">具有一定难度的复杂障碍跑道。</string>
+    <string name="agility_advanced_course_name">高级训练场</string>
+    <string name="agility_advanced_course_desc">考验你敏捷实力的挑战性跑道。</string>
+    <string name="agility_expert_course_name">专家训练场</string>
+    <string name="agility_expert_course_desc">布满危险障碍的专家级跑道。</string>
+    <string name="agility_elite_course_name">精英训练场</string>
+    <string name="agility_elite_course_desc">只有最敏捷的人才能征服这条精英跑道。</string>
+    <string name="agility_master_course_name">大师训练场</string>
+    <string name="agility_master_course_desc">充满极限障碍的大师级跑道。</string>
+    <string name="agility_veteran_course_name">老兵训练场</string>
+    <string name="agility_veteran_course_desc">老战士的训练场，充满严酷的挑战。</string>
+    <string name="agility_champion_course_name">冠军训练场</string>
+    <string name="agility_champion_course_desc">挑战你极限的冠军级跑道。</string>
+    <string name="agility_heroic_course_name">英雄训练场</string>
+    <string name="agility_heroic_course_desc">只有最强者才敢踏足的英雄级跑道。</string>
+    <string name="agility_legendary_course_name">传奇训练场</string>
+    <string name="agility_legendary_course_desc">在敏捷精英中被低声传颂的传奇跑道。</string>
+    <string name="agility_mythic_course_name">神话训练场</string>
+    <string name="agility_mythic_course_desc">超越物理法则的神话级跑道。</string>
+    <string name="agility_divine_course_name">神域训练场</string>
+    <string name="agility_divine_course_desc">受敏捷之神祝福的神圣跑道。</string>
+    <string name="agility_transcendent_course_name">超越训练场</string>
+    <string name="agility_transcendent_course_desc">超越凡人极限的终极敏捷考验。</string>
+
+    <!-- ===== 活动技能类型标签 ===== -->
+    <string name="skill_expedition_name">探险</string>
+    <string name="skill_boss_name">首领</string>
+    <string name="skill_mercantile_name">贸易</string>
+</resources>

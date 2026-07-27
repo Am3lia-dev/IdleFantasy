@@ -1,0 +1,857 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ===== 矿石 ===== -->
+    <string name="item_copper_ore_name">铜矿石</string>
+    <string name="item_copper_ore_desc">常见矿石。与锡矿石一起冶炼青铜锭。</string>
+    <string name="item_tin_ore_name">锡矿石</string>
+    <string name="item_tin_ore_desc">常见矿石。与铜矿石一起冶炼青铜锭。</string>
+    <string name="item_iron_ore_name">铁矿石</string>
+    <string name="item_iron_ore_desc">用途广泛的矿石，可冶炼铁锭和钢锭。</string>
+    <string name="item_coal_name">煤炭</string>
+    <string name="item_coal_desc">冶炼钢锭及以上等级金属锭时使用的燃料。</string>
+    <string name="item_silver_ore_name">银矿石</string>
+    <string name="item_silver_ore_desc">珍贵矿石，可用于锻造银锭和珠宝。</string>
+    <string name="item_gold_ore_name">金矿石</string>
+    <string name="item_gold_ore_desc">珍贵矿石，可用于锻造金锭和珠宝。</string>
+    <string name="item_mithril_ore_name">秘银矿石</string>
+    <string name="item_mithril_ore_desc">蕴含魔力的稀有矿石。</string>
+    <string name="item_adamantite_ore_name">精金矿石</string>
+    <string name="item_adamantite_ore_desc">极为坚硬且非常稀有的矿石。</string>
+    <string name="item_runite_ore_name">符文矿石</string>
+    <string name="item_runite_ore_desc">最稀有的可开采矿石，用于打造最强装备。</string>
+    <string name="item_rune_essence_name">符文精华</string>
+    <string name="item_rune_essence_desc">蕴含魔力的原石，可用于制作各种符文。</string>
+
+    <!-- ===== 金属锭 ===== -->
+    <string name="item_bronze_bar_name">青铜锭</string>
+    <string name="item_bronze_bar_desc">由铜矿石和锡矿石冶炼而成。最基本的金属锭。</string>
+    <string name="item_iron_bar_name">铁锭</string>
+    <string name="item_iron_bar_desc">坚固的铁锭，用于锻造铁制装备。</string>
+    <string name="item_silver_bar_name">银锭</string>
+    <string name="item_silver_bar_desc">精炼银锭，用于制作珠宝。</string>
+    <string name="item_steel_bar_name">钢锭</string>
+    <string name="item_steel_bar_desc">比铁更坚固。用于锻造钢制装备。</string>
+    <string name="item_gold_bar_name">金锭</string>
+    <string name="item_gold_bar_desc">精炼金锭，用于制作珠宝和黄金装备。</string>
+    <string name="item_mithril_bar_name">秘银锭</string>
+    <string name="item_mithril_bar_desc">轻便的魔法金属锭。</string>
+    <string name="item_adamantite_bar_name">精金锭</string>
+    <string name="item_adamantite_bar_desc">极为坚硬的金属锭。</string>
+    <string name="item_platinum_bar_name">铂金锭</string>
+    <string name="item_platinum_bar_desc">稀有而富有光泽的铂金锭，用于高级珠宝制作。</string>
+    <string name="item_runite_bar_name">符文锭</string>
+    <string name="item_runite_bar_desc">最强的可冶炼金属锭。</string>
+
+    <!-- ===== 宝石 ===== -->
+    <string name="item_sapphire_name">蓝宝石</string>
+    <string name="item_sapphire_desc">蓝色宝石，可用于珠宝制作。</string>
+    <string name="item_emerald_name">祖母绿</string>
+    <string name="item_emerald_desc">较为稀有的绿色宝石。</string>
+    <string name="item_ruby_name">红宝石</string>
+    <string name="item_ruby_desc">红色宝石。稀有且珍贵。</string>
+    <string name="item_diamond_name">钻石</string>
+    <string name="item_diamond_desc">最稀有、最珍贵的宝石。</string>
+
+    <!-- ===== 原木 ===== -->
+    <string name="item_log_name">原木</string>
+    <string name="item_log_desc">普通树木的基本原木。用于生火和制箭技能。</string>
+    <string name="item_oak_log_name">橡木</string>
+    <string name="item_oak_log_desc">来自橡树的原木。</string>
+    <string name="item_willow_log_name">柳木</string>
+    <string name="item_willow_log_desc">来自柳树的轻便原木。</string>
+    <string name="item_maple_log_name">枫木</string>
+    <string name="item_maple_log_desc">来自枫树的致密原木。</string>
+    <string name="item_yew_log_name">紫杉木</string>
+    <string name="item_yew_log_desc">来自古老紫杉树的原木。</string>
+    <string name="item_magic_log_name">魔法原木</string>
+    <string name="item_magic_log_desc">来自稀有魔法树的蕴含魔力的原木。</string>
+    <string name="item_redwood_log_name">红杉木</string>
+    <string name="item_redwood_log_desc">来自参天红杉树的粗大原木。</string>
+
+    <!-- ===== 生鱼 ===== -->
+    <string name="item_raw_shrimp_name">生虾</string>
+    <string name="item_raw_shrimp_desc">生虾。烹饪后食用。</string>
+    <string name="item_raw_sardine_name">生沙丁鱼</string>
+    <string name="item_raw_sardine_desc">生沙丁鱼。烹饪后食用。</string>
+    <string name="item_raw_herring_name">生鲱鱼</string>
+    <string name="item_raw_herring_desc">生鲱鱼。烹饪后食用。</string>
+    <string name="item_raw_mackerel_name">生鲭鱼</string>
+    <string name="item_raw_mackerel_desc">生鲭鱼。烹饪后食用。</string>
+    <string name="item_raw_trout_name">生鳟鱼</string>
+    <string name="item_raw_trout_desc">生鳟鱼。烹饪后食用。</string>
+    <string name="item_raw_salmon_name">生三文鱼</string>
+    <string name="item_raw_salmon_desc">生三文鱼。烹饪后食用。</string>
+    <string name="item_raw_tuna_name">生金枪鱼</string>
+    <string name="item_raw_tuna_desc">生金枪鱼。烹饪后食用。</string>
+    <string name="item_raw_lobster_name">生龙虾</string>
+    <string name="item_raw_lobster_desc">生龙虾。烹饪后食用。</string>
+    <string name="item_raw_swordfish_name">生旗鱼</string>
+    <string name="item_raw_swordfish_desc">生旗鱼。烹饪后食用。</string>
+    <string name="item_raw_monkfish_name">生 Monkfish</string>
+    <string name="item_raw_monkfish_desc">生 Monkfish。烹饪后食用。</string>
+    <string name="item_raw_shark_name">生鲨鱼</string>
+    <string name="item_raw_shark_desc">生鲨鱼。烹饪后食用。</string>
+    <string name="item_raw_sea_turtle_name">生海龟肉</string>
+    <string name="item_raw_sea_turtle_desc">生海龟肉。烹饪后食用。</string>
+    <string name="item_raw_manta_ray_name">生蝠鲼</string>
+    <string name="item_raw_manta_ray_desc">生蝠鲼。烹饪后食用。</string>
+
+    <!-- ===== 熟鱼 ===== -->
+    <string name="item_shrimp_name">虾</string>
+    <string name="item_shrimp_desc">烹熟的虾。恢复少量生命值。</string>
+    <string name="item_sardine_name">沙丁鱼</string>
+    <string name="item_sardine_desc">烹熟的沙丁鱼。食用后恢复生命值。</string>
+    <string name="item_herring_name">鲱鱼</string>
+    <string name="item_herring_desc">烹熟的鲱鱼。食用后恢复生命值。</string>
+    <string name="item_mackerel_name">鲭鱼</string>
+    <string name="item_mackerel_desc">烹熟的鲭鱼。食用后恢复生命值。</string>
+    <string name="item_trout_name">鳟鱼</string>
+    <string name="item_trout_desc">烹熟的鳟鱼。食用后恢复生命值。</string>
+    <string name="item_salmon_name">三文鱼</string>
+    <string name="item_salmon_desc">烹熟的三文鱼。食用后恢复生命值。</string>
+    <string name="item_tuna_name">金枪鱼</string>
+    <string name="item_tuna_desc">烹熟的金枪鱼。食用后恢复生命值。</string>
+    <string name="item_lobster_name">龙虾</string>
+    <string name="item_lobster_desc">烹熟的龙虾。恢复可观的生命值。</string>
+    <string name="item_swordfish_name">旗鱼</string>
+    <string name="item_swordfish_desc">烹熟的旗鱼。恢复大量生命值。</string>
+    <string name="item_monkfish_name">Monkfish</string>
+    <string name="item_monkfish_desc">烹熟的 Monkfish。恢复相当多的生命值。</string>
+    <string name="item_shark_name">鲨鱼</string>
+    <string name="item_shark_desc">烹熟的鲨鱼。恢复大量生命值。</string>
+    <string name="item_sea_turtle_name">海龟肉</string>
+    <string name="item_sea_turtle_desc">烹熟的海龟肉。恢复极多的生命值。</string>
+    <string name="item_manta_ray_name">蝠鲼</string>
+    <string name="item_manta_ray_desc">烹熟的蝠鲼。最好的食物之一。</string>
+
+    <!-- ===== 生肉 ===== -->
+    <string name="item_raw_rat_meat_name">生鼠肉</string>
+    <string name="item_raw_rat_meat_desc">生鼠肉。烹饪后食用。</string>
+    <string name="item_raw_chicken_name">生鸡肉</string>
+    <string name="item_raw_chicken_desc">生鸡肉。烹饪后食用。</string>
+    <string name="item_raw_mutton_name">生羊肉</string>
+    <string name="item_raw_mutton_desc">生羊肉。烹饪后食用。</string>
+    <string name="item_raw_beef_name">生牛肉</string>
+    <string name="item_raw_beef_desc">生牛肉。烹饪后食用。</string>
+    <string name="item_raw_meat_name">生肉</string>
+    <string name="item_raw_meat_desc">来历不明的生肉。烹饪后食用。</string>
+
+    <!-- ===== 熟肉 ===== -->
+    <string name="item_cooked_rat_meat_name">鼠肉</string>
+    <string name="item_cooked_rat_meat_desc">烹熟的鼠肉。勉强能吃，恢复极少的生命值。</string>
+    <string name="item_cooked_chicken_name">熟鸡肉</string>
+    <string name="item_cooked_chicken_desc">烹熟的鸡肉。食用后恢复生命值。</string>
+    <string name="item_cooked_mutton_name">熟羊肉</string>
+    <string name="item_cooked_mutton_desc">烹熟的羊肉。食用后恢复生命值。</string>
+    <string name="item_cooked_beef_name">熟牛肉</string>
+    <string name="item_cooked_beef_desc">烹熟的牛肉。食用后恢复生命值。</string>
+
+    <!-- ===== 近战武器 — 青铜 ===== -->
+    <string name="item_bronze_sword_name">青铜剑</string>
+    <string name="item_bronze_sword_desc">基础的单手青铜剑。</string>
+    <string name="item_bronze_scimitar_name">青铜弯刀</string>
+    <string name="item_bronze_scimitar_desc">弯曲的单手青铜刀，力量加成较高。</string>
+    <string name="item_bronze_2h_sword_name">青铜双手剑</string>
+    <string name="item_bronze_2h_sword_desc">青铜双手剑。伤害高，攻速慢。</string>
+    <string name="item_bronze_warhammer_name">青铜战锤</string>
+    <string name="item_bronze_warhammer_desc">沉重的单手青铜锤。</string>
+    <string name="item_bronze_battleaxe_name">青铜战斧</string>
+    <string name="item_bronze_battleaxe_desc">威猛的单手青铜斧。</string>
+    <string name="item_bronze_dagger_name">青铜匕首</string>
+    <string name="item_bronze_dagger_desc">轻便快速的青铜匕首。</string>
+
+    <!-- 近战武器 — 铁 -->
+    <string name="item_iron_sword_name">铁剑</string>
+    <string name="item_iron_sword_desc">单手铁剑。</string>
+    <string name="item_iron_scimitar_name">铁弯刀</string>
+    <string name="item_iron_scimitar_desc">弯曲的单手铁刀，力量加成较高。</string>
+    <string name="item_iron_2h_sword_name">铁双手剑</string>
+    <string name="item_iron_2h_sword_desc">铁制双手剑。</string>
+    <string name="item_iron_warhammer_name">铁战锤</string>
+    <string name="item_iron_warhammer_desc">沉重的单手铁锤。</string>
+    <string name="item_iron_battleaxe_name">铁战斧</string>
+    <string name="item_iron_battleaxe_desc">威猛的单手铁斧。</string>
+    <string name="item_iron_dagger_name">铁匕首</string>
+    <string name="item_iron_dagger_desc">轻便快速的铁匕首。</string>
+
+    <!-- 近战武器 — 钢 -->
+    <string name="item_steel_sword_name">钢剑</string>
+    <string name="item_steel_sword_desc">单手钢剑。</string>
+    <string name="item_steel_scimitar_name">钢弯刀</string>
+    <string name="item_steel_scimitar_desc">弯曲的单手钢刀，力量加成较高。</string>
+    <string name="item_steel_2h_sword_name">钢双手剑</string>
+    <string name="item_steel_2h_sword_desc">钢制双手剑。</string>
+    <string name="item_steel_warhammer_name">钢战锤</string>
+    <string name="item_steel_warhammer_desc">沉重的单手钢锤。</string>
+    <string name="item_steel_battleaxe_name">钢战斧</string>
+    <string name="item_steel_battleaxe_desc">威猛的单手钢斧。</string>
+
+    <!-- 近战武器 — 秘银 -->
+    <string name="item_mithril_sword_name">秘银剑</string>
+    <string name="item_mithril_sword_desc">轻便的魔法单手剑。</string>
+    <string name="item_mithril_scimitar_name">秘银弯刀</string>
+    <string name="item_mithril_scimitar_desc">弯曲的秘银刀刃，锋利异常。</string>
+    <string name="item_mithril_2h_sword_name">秘银双手剑</string>
+    <string name="item_mithril_2h_sword_desc">秘银制双手剑。</string>
+    <string name="item_mithril_warhammer_name">秘银战锤</string>
+    <string name="item_mithril_warhammer_desc">轻便的魔法战锤。</string>
+    <string name="item_mithril_battleaxe_name">秘银战斧</string>
+    <string name="item_mithril_battleaxe_desc">品质卓越的秘银战斧。</string>
+
+    <!-- 近战武器 — 精金 -->
+    <string name="item_adamantite_sword_name">精金剑</string>
+    <string name="item_adamantite_sword_desc">极为坚硬的单手剑。</string>
+    <string name="item_adamantite_scimitar_name">精金弯刀</string>
+    <string name="item_adamantite_scimitar_desc">无比坚硬的弯曲刀刃，力量加成极佳。</string>
+    <string name="item_adamantite_2h_sword_name">精金双手剑</string>
+    <string name="item_adamantite_2h_sword_desc">由精金锻造的双手剑。</string>
+    <string name="item_adamantite_warhammer_name">精金战锤</string>
+    <string name="item_adamantite_warhammer_desc">极为沉重坚硬的战锤。</string>
+    <string name="item_adamantite_battleaxe_name">精金战斧</string>
+    <string name="item_adamantite_battleaxe_desc">威力惊人的精金战斧。</string>
+
+    <!-- 近战武器 — 符文 -->
+    <string name="item_runite_sword_name">符文剑</string>
+    <string name="item_runite_sword_desc">可用的最精良单手剑。</string>
+    <string name="item_runite_scimitar_name">符文弯刀</string>
+    <string name="item_runite_scimitar_desc">可用的最精良弯刀，力量加成卓越。</string>
+    <string name="item_runite_2h_sword_name">符文双手剑</string>
+    <string name="item_runite_2h_sword_desc">可用的最精良双手剑。</string>
+    <string name="item_runite_warhammer_name">符文战锤</string>
+    <string name="item_runite_warhammer_desc">可用的最精良战锤。</string>
+    <string name="item_runite_battleaxe_name">符文战斧</string>
+    <string name="item_runite_battleaxe_desc">可用的最精良战斧。</string>
+
+    <!-- ===== 远程武器 ===== -->
+    <string name="item_wooden_bow_name">木弓</string>
+    <string name="item_wooden_bow_desc">简易的木弓。适合练习远程技能。</string>
+    <string name="item_oak_bow_name">橡木弓</string>
+    <string name="item_oak_bow_desc">用橡木制作的可靠弓。</string>
+
+    <!-- ===== 魔法武器 ===== -->
+    <string name="item_basic_staff_name">基础法杖</string>
+    <string name="item_basic_staff_desc">适合学徒法师的简易魔法杖。</string>
+    <string name="item_apprentice_staff_name">学徒法杖</string>
+    <string name="item_apprentice_staff_desc">适合成长中的法师使用的进阶法杖。</string>
+    <string name="item_staff_of_air_name">风之法杖</string>
+    <string name="item_staff_of_air_desc">蕴含风之力的元素法杖。</string>
+    <string name="item_staff_of_water_name">水之法杖</string>
+    <string name="item_staff_of_water_desc">蕴含水之力的元素法杖。</string>
+    <string name="item_staff_of_earth_name">地之法杖</string>
+    <string name="item_staff_of_earth_desc">蕴含地之力的元素法杖。</string>
+    <string name="item_staff_of_fire_name">火之法杖</string>
+    <string name="item_staff_of_fire_desc">蕴含火之力的元素法杖。</string>
+    <string name="item_staff_of_mind_name">心灵法杖</string>
+    <string name="item_staff_of_mind_desc">蕴含心灵能量的法杖。</string>
+    <string name="item_staff_of_chaos_name">混沌法杖</string>
+    <string name="item_staff_of_chaos_desc">脉动着狂野魔法能量的混沌法杖。</string>
+    <string name="item_staff_of_death_name">死亡法杖</string>
+    <string name="item_staff_of_death_desc">笼罩着死亡之力的黑暗法杖。</string>
+    <string name="item_staff_of_blood_name">血之法杖</string>
+    <string name="item_staff_of_blood_desc">以血魔法驱动的强大法杖。</string>
+
+    <!-- ===== 护甲 — 青铜 ===== -->
+    <string name="item_bronze_helmet_name">青铜头盔</string>
+    <string name="item_bronze_helmet_desc">基础的青铜头部护具。</string>
+    <string name="item_bronze_platebody_name">青铜铠甲</string>
+    <string name="item_bronze_platebody_desc">基础的青铜身体护甲。</string>
+    <string name="item_bronze_platelegs_name">青铜护腿</string>
+    <string name="item_bronze_platelegs_desc">基础的青铜腿部护具。</string>
+    <string name="item_bronze_shield_name">青铜盾</string>
+    <string name="item_bronze_shield_desc">基础的青铜盾牌。</string>
+
+    <!-- 护甲 — 铁 -->
+    <string name="item_iron_helmet_name">铁头盔</string>
+    <string name="item_iron_helmet_desc">铁制头部护具。</string>
+    <string name="item_iron_platebody_name">铁铠甲</string>
+    <string name="item_iron_platebody_desc">铁制身体护甲。</string>
+    <string name="item_iron_platelegs_name">铁护腿</string>
+    <string name="item_iron_platelegs_desc">铁制腿部护具。</string>
+    <string name="item_iron_shield_name">铁盾</string>
+    <string name="item_iron_shield_desc">铁制盾牌。</string>
+
+    <!-- 护甲 — 钢 -->
+    <string name="item_steel_helmet_name">钢头盔</string>
+    <string name="item_steel_helmet_desc">坚固的钢制头部护具。</string>
+    <string name="item_steel_platebody_name">钢铠甲</string>
+    <string name="item_steel_platebody_desc">坚固的钢制身体护甲。</string>
+    <string name="item_steel_platelegs_name">钢护腿</string>
+    <string name="item_steel_platelegs_desc">坚固的钢制腿部护具。</string>
+    <string name="item_steel_shield_name">钢盾</string>
+    <string name="item_steel_shield_desc">坚固的钢制盾牌。</string>
+
+    <!-- 护甲 — 秘银 -->
+    <string name="item_mithril_helmet_name">秘银头盔</string>
+    <string name="item_mithril_helmet_desc">轻便的魔法头部护具。</string>
+    <string name="item_mithril_platebody_name">秘银铠甲</string>
+    <string name="item_mithril_platebody_desc">轻便的魔法身体护甲。</string>
+    <string name="item_mithril_platelegs_name">秘银护腿</string>
+    <string name="item_mithril_platelegs_desc">轻便的魔法腿部护具。</string>
+    <string name="item_mithril_shield_name">秘银盾</string>
+    <string name="item_mithril_shield_desc">轻便的魔法盾牌。</string>
+
+    <!-- 护甲 — 精金 -->
+    <string name="item_adamantite_helmet_name">精金头盔</string>
+    <string name="item_adamantite_helmet_desc">极为坚硬的头部护具。</string>
+    <string name="item_adamantite_platebody_name">精金铠甲</string>
+    <string name="item_adamantite_platebody_desc">极为坚硬的身体护甲。</string>
+    <string name="item_adamantite_platelegs_name">精金护腿</string>
+    <string name="item_adamantite_platelegs_desc">极为坚硬的腿部护具。</string>
+    <string name="item_adamantite_shield_name">精金盾</string>
+    <string name="item_adamantite_shield_desc">极为坚硬的盾牌。</string>
+
+    <!-- 护甲 — 符文 -->
+    <string name="item_runite_helmet_name">符文头盔</string>
+    <string name="item_runite_helmet_desc">可用的最精良头部护具。</string>
+    <string name="item_runite_platebody_name">符文铠甲</string>
+    <string name="item_runite_platebody_desc">可用的最精良身体护甲。</string>
+    <string name="item_runite_platelegs_name">符文护腿</string>
+    <string name="item_runite_platelegs_desc">可用的最精良腿部护具。</string>
+    <string name="item_runite_shield_name">符文盾</string>
+    <string name="item_runite_shield_desc">可用的最精良盾牌。</string>
+
+    <!-- ===== 工具 — 镐 ===== -->
+    <string name="item_bronze_pickaxe_name">青铜镐</string>
+    <string name="item_bronze_pickaxe_desc">基础的采矿镐。</string>
+    <string name="item_iron_pickaxe_name">铁镐</string>
+    <string name="item_iron_pickaxe_desc">可靠的采矿镐。</string>
+    <string name="item_steel_pickaxe_name">钢镐</string>
+    <string name="item_steel_pickaxe_desc">坚固的采矿镐。</string>
+    <string name="item_mithril_pickaxe_name">秘银镐</string>
+    <string name="item_mithril_pickaxe_desc">轻便的魔法采矿镐。</string>
+    <string name="item_adamantite_pickaxe_name">精金镐</string>
+    <string name="item_adamantite_pickaxe_desc">极为坚硬的采矿镐。</string>
+    <string name="item_runite_pickaxe_name">符文镐</string>
+    <string name="item_runite_pickaxe_desc">可用的最精良采矿镐。</string>
+
+    <!-- 工具 — 斧头 -->
+    <string name="item_bronze_axe_name">青铜斧</string>
+    <string name="item_bronze_axe_desc">基础的伐木斧。</string>
+    <string name="item_iron_axe_name">铁斧</string>
+    <string name="item_iron_axe_desc">可靠的伐木斧。</string>
+    <string name="item_steel_axe_name">钢斧</string>
+    <string name="item_steel_axe_desc">坚固的伐木斧。</string>
+    <string name="item_mithril_axe_name">秘银斧</string>
+    <string name="item_mithril_axe_desc">轻便的魔法伐木斧。</string>
+    <string name="item_adamantite_axe_name">精金斧</string>
+    <string name="item_adamantite_axe_desc">极为坚硬的伐木斧。</string>
+    <string name="item_runite_axe_name">符文斧</string>
+    <string name="item_runite_axe_desc">可用的最精良伐木斧。</string>
+
+    <!-- 工具 — 鱼竿 -->
+    <string name="item_bronze_fishing_rod_name">青铜鱼竿</string>
+    <string name="item_bronze_fishing_rod_desc">基础的鱼竿。</string>
+    <string name="item_iron_fishing_rod_name">铁鱼竿</string>
+    <string name="item_iron_fishing_rod_desc">可靠的鱼竿。</string>
+    <string name="item_steel_fishing_rod_name">钢鱼竿</string>
+    <string name="item_steel_fishing_rod_desc">坚固的鱼竿。</string>
+    <string name="item_mithril_fishing_rod_name">秘银鱼竿</string>
+    <string name="item_mithril_fishing_rod_desc">轻便的魔法鱼竿。</string>
+    <string name="item_adamantite_fishing_rod_name">精金鱼竿</string>
+    <string name="item_adamantite_fishing_rod_desc">极为耐用的鱼竿。</string>
+    <string name="item_runite_fishing_rod_name">符文鱼竿</string>
+    <string name="item_runite_fishing_rod_desc">可用的最精良鱼竿。</string>
+
+    <!-- ===== 箭矢 ===== -->
+    <string name="item_bronze_arrow_name">青铜箭</string>
+    <string name="item_bronze_arrow_desc">基础的远程战斗箭矢。</string>
+    <string name="item_iron_arrow_name">铁箭</string>
+    <string name="item_iron_arrow_desc">铁制远程战斗箭矢。</string>
+    <string name="item_steel_arrow_name">钢箭</string>
+    <string name="item_steel_arrow_desc">钢制远程战斗箭矢。</string>
+    <string name="item_mithril_arrow_name">秘银箭</string>
+    <string name="item_mithril_arrow_desc">秘银远程战斗箭矢。</string>
+    <string name="item_adamantite_arrow_name">精金箭</string>
+    <string name="item_adamantite_arrow_desc">精金远程战斗箭矢。</string>
+    <string name="item_runite_arrow_name">符文箭</string>
+    <string name="item_runite_arrow_desc">可用的最精良箭矢。</string>
+
+    <!-- 箭矢组件 -->
+    <string name="item_arrow_shaft_name">箭杆</string>
+    <string name="item_arrow_shaft_desc">用于制作箭矢的木杆。</string>
+    <string name="item_bronze_arrow_tips_name">青铜箭头</string>
+    <string name="item_bronze_arrow_tips_desc">用于制作青铜箭的箭头。</string>
+    <string name="item_iron_arrow_tips_name">铁箭头</string>
+    <string name="item_iron_arrow_tips_desc">用于制作铁箭的箭头。</string>
+    <string name="item_steel_arrow_tips_name">钢箭头</string>
+    <string name="item_steel_arrow_tips_desc">用于制作钢箭的箭头。</string>
+    <string name="item_mithril_arrow_tips_name">秘银箭头</string>
+    <string name="item_mithril_arrow_tips_desc">用于制作秘银箭的箭头。</string>
+    <string name="item_adamantite_arrow_tips_name">精金箭头</string>
+    <string name="item_adamantite_arrow_tips_desc">用于制作精金箭的箭头。</string>
+    <string name="item_runite_arrow_tips_name">符文箭头</string>
+    <string name="item_runite_arrow_tips_desc">用于制作符文箭的箭头。</string>
+
+    <!-- ===== 珠宝 — 素圈 ===== -->
+    <string name="item_silver_ring_name">银戒指</string>
+    <string name="item_silver_ring_desc">朴素的银戒指。</string>
+    <string name="item_silver_necklace_name">银项链</string>
+    <string name="item_silver_necklace_desc">朴素的银项链。</string>
+    <string name="item_gold_ring_name">金戒指</string>
+    <string name="item_gold_ring_desc">朴素的金戒指。</string>
+    <string name="item_gold_necklace_name">金项链</string>
+    <string name="item_gold_necklace_desc">朴素的金项链。</string>
+    <string name="item_platinum_ring_name">铂金戒指</string>
+    <string name="item_platinum_ring_desc">朴素的铂金戒指。</string>
+    <string name="item_platinum_necklace_name">铂金项链</string>
+    <string name="item_platinum_necklace_desc">朴素的铂金项链。</string>
+
+    <!-- 珠宝 — 蓝宝石 -->
+    <string name="item_silver_sapphire_ring_name">银蓝宝石戒指</string>
+    <string name="item_silver_sapphire_ring_desc">镶嵌蓝宝石的银戒指。</string>
+    <string name="item_silver_sapphire_necklace_name">银蓝宝石项链</string>
+    <string name="item_silver_sapphire_necklace_desc">镶嵌蓝宝石的银项链。</string>
+    <string name="item_gold_sapphire_ring_name">金蓝宝石戒指</string>
+    <string name="item_gold_sapphire_ring_desc">镶嵌蓝宝石的金戒指。</string>
+    <string name="item_gold_sapphire_necklace_name">金蓝宝石项链</string>
+    <string name="item_gold_sapphire_necklace_desc">镶嵌蓝宝石的金项链。</string>
+    <string name="item_platinum_sapphire_ring_name">铂金蓝宝石戒指</string>
+    <string name="item_platinum_sapphire_ring_desc">镶嵌蓝宝石的铂金戒指。</string>
+    <string name="item_platinum_sapphire_necklace_name">铂金蓝宝石项链</string>
+    <string name="item_platinum_sapphire_necklace_desc">镶嵌蓝宝石的铂金项链。</string>
+
+    <!-- 珠宝 — 祖母绿 -->
+    <string name="item_gold_emerald_ring_name">金祖母绿戒指</string>
+    <string name="item_gold_emerald_ring_desc">镶嵌祖母绿的金戒指。</string>
+    <string name="item_gold_emerald_necklace_name">金祖母绿项链</string>
+    <string name="item_gold_emerald_necklace_desc">镶嵌祖母绿的金项链。</string>
+    <string name="item_platinum_emerald_ring_name">铂金祖母绿戒指</string>
+    <string name="item_platinum_emerald_ring_desc">镶嵌祖母绿的铂金戒指。</string>
+    <string name="item_platinum_emerald_necklace_name">铂金祖母绿项链</string>
+    <string name="item_platinum_emerald_necklace_desc">镶嵌祖母绿的铂金项链。</string>
+
+    <!-- 珠宝 — 红宝石 -->
+    <string name="item_gold_ruby_ring_name">金红宝石戒指</string>
+    <string name="item_gold_ruby_ring_desc">镶嵌红宝石的金戒指。</string>
+    <string name="item_gold_ruby_necklace_name">金红宝石项链</string>
+    <string name="item_gold_ruby_necklace_desc">镶嵌红宝石的金项链。</string>
+    <string name="item_platinum_ruby_ring_name">铂金红宝石戒指</string>
+    <string name="item_platinum_ruby_ring_desc">镶嵌红宝石的铂金戒指。</string>
+    <string name="item_platinum_ruby_necklace_name">铂金红宝石项链</string>
+    <string name="item_platinum_ruby_necklace_desc">镶嵌红宝石的铂金项链。</string>
+
+    <!-- 珠宝 — 钻石 -->
+    <string name="item_gold_diamond_ring_name">金钻石戒指</string>
+    <string name="item_gold_diamond_ring_desc">镶嵌钻石的金戒指。</string>
+    <string name="item_gold_diamond_necklace_name">金钻石项链</string>
+    <string name="item_gold_diamond_necklace_desc">镶嵌钻石的金项链。</string>
+    <string name="item_platinum_diamond_ring_name">铂金钻石戒指</string>
+    <string name="item_platinum_diamond_ring_desc">镶嵌钻石的铂金戒指。</string>
+    <string name="item_platinum_diamond_necklace_name">铂金钻石项链</string>
+    <string name="item_platinum_diamond_necklace_desc">镶嵌钻石的铂金项链。</string>
+
+    <!-- ===== 杂项掉落 ===== -->
+    <string name="item_ashes_name">灰烬</string>
+    <string name="item_ashes_desc">普通原木燃烧后的残留物。可在祈祷技能中撒散以获得额外祈祷经验。</string>
+    <string name="item_oak_ashes_name">橡木灰烬</string>
+    <string name="item_oak_ashes_desc">橡木燃烧后的残留物。撒散可获得比普通灰烬更多的祈祷经验。</string>
+    <string name="item_willow_ashes_name">柳木灰烬</string>
+    <string name="item_willow_ashes_desc">柳木燃烧后的残留物。撒散可获得祈祷经验。</string>
+    <string name="item_maple_ashes_name">枫木灰烬</string>
+    <string name="item_maple_ashes_desc">枫木燃烧后的残留物。撒散可获得祈祷经验。</string>
+    <string name="item_yew_ashes_name">紫杉木灰烬</string>
+    <string name="item_yew_ashes_desc">紫杉木燃烧后的残留物。撒散可获得大量祈祷经验。</string>
+    <string name="item_magic_ashes_name">魔法灰烬</string>
+    <string name="item_magic_ashes_desc">魔法原木燃烧后的残留物。撒散可获得丰厚的祈祷经验。</string>
+    <string name="item_redwood_ashes_name">红杉木灰烬</string>
+    <string name="item_redwood_ashes_desc">红杉木燃烧后的残留物。撒散可获得所有灰烬中最多的祈祷经验。</string>
+    <string name="item_bones_name">骨头</string>
+    <string name="item_bones_desc">小型生物的骨头。埋葬可获得祈祷经验。</string>
+    <string name="item_big_bones_name">大骨头</string>
+    <string name="item_big_bones_desc">较大的骨头。埋葬可获得更多祈祷经验。</string>
+    <string name="item_giant_bones_name">巨型骨头</string>
+    <string name="item_giant_bones_desc">来自强大敌人的巨大骨头。埋葬可获得大量祈祷经验。</string>
+    <string name="item_dragon_bone_name">龙骨</string>
+    <string name="item_dragon_bone_desc">远古龙骨。埋葬可获得最多的祈祷经验。</string>
+    <string name="item_dragon_scale_name">龙鳞</string>
+    <string name="item_dragon_scale_desc">来自绿龙的坚硬鳞片。稀有且珍贵。</string>
+    <string name="item_coins_name">金币</string>
+    <string name="item_coins_desc">王国的通用货币。可在商店中使用。</string>
+    <string name="item_goblin_mail_name">哥布林铠甲</string>
+    <string name="item_goblin_mail_desc">哥布林掉落的破旧铠甲。可以卖个好价钱。</string>
+    <string name="item_imp_hide_name">小鬼皮</string>
+    <string name="item_imp_hide_desc">来自小鬼的坚韧皮革。</string>
+    <string name="item_spider_silk_name">蜘蛛丝</string>
+    <string name="item_spider_silk_desc">巨型蜘蛛吐出的细丝。对工匠很有价值。</string>
+    <string name="item_spider_fang_name">蜘蛛毒牙</string>
+    <string name="item_spider_fang_desc">来自巨型蜘蛛的带毒尖牙。</string>
+    <string name="item_cowhide_name">牛皮</string>
+    <string name="item_cowhide_desc">来自牛的粗糙皮革。用于皮革制作。</string>
+    <string name="item_wool_name">羊毛</string>
+    <string name="item_wool_desc">来自绵羊的柔软羊毛。</string>
+    <string name="item_feather_name">羽毛</string>
+    <string name="item_feather_desc">用于制作箭矢的羽毛。</string>
+    <string name="item_rotten_flesh_name">腐肉</string>
+    <string name="item_rotten_flesh_desc">来自亡灵生物的腐烂肉块。气味难闻。</string>
+    <string name="item_lockpick_name">开锁器</string>
+    <string name="item_lockpick_desc">盗贼掉落的开锁器。</string>
+    <string name="item_magic_bean_name">魔豆</string>
+    <string name="item_magic_bean_desc">具有神秘特性的魔法豆子。</string>
+    <string name="item_hellhound_fang_name">地狱犬之牙</string>
+    <string name="item_hellhound_fang_desc">来自地狱犬的烧焦尖牙。</string>
+    <string name="item_demon_horn_name">恶魔之角</string>
+    <string name="item_demon_horn_desc">从低级恶魔身上撕下的锯齿状犄角。</string>
+    <string name="item_troll_bone_name">巨魔骨</string>
+    <string name="item_troll_bone_desc">来自山地巨魔的粗大扭曲骨头。</string>
+
+    <!-- ===== 符文 ===== -->
+    <string name="item_air_rune_name">风符文</string>
+    <string name="item_air_rune_desc">蕴含风之力的符文。用于风系法术。</string>
+    <string name="item_water_rune_name">水符文</string>
+    <string name="item_water_rune_desc">蕴含水之力的符文。</string>
+    <string name="item_earth_rune_name">地符文</string>
+    <string name="item_earth_rune_desc">蕴含地之力的符文。</string>
+    <string name="item_fire_rune_name">火符文</string>
+    <string name="item_fire_rune_desc">蕴含火之力的符文。</string>
+    <string name="item_mind_rune_name">心灵符文</string>
+    <string name="item_mind_rune_desc">引导心灵能量的符文。</string>
+    <string name="item_chaos_rune_name">混沌符文</string>
+    <string name="item_chaos_rune_desc">蕴含狂野混沌魔法的符文。</string>
+    <string name="item_death_rune_name">死亡符文</string>
+    <string name="item_death_rune_desc">注入死亡之力的符文。</string>
+    <string name="item_blood_rune_name">血符文</string>
+    <string name="item_blood_rune_desc">以血魔法驱动的稀有符文。</string>
+
+    <!-- ===== 农作物 ===== -->
+    <string name="crop_potato_name">土豆</string>
+    <string name="crop_onion_name">洋葱</string>
+    <string name="crop_cabbage_name">卷心菜</string>
+    <string name="crop_carrot_name">胡萝卜</string>
+    <string name="crop_tomato_name">番茄</string>
+    <string name="crop_corn_name">玉米</string>
+    <string name="crop_pumpkin_name">南瓜</string>
+    <string name="crop_watermelon_name">西瓜</string>
+    <string name="crop_strawberry_name">草莓</string>
+    <string name="crop_magic_herb_name">魔法草药</string>
+    <string name="crop_dragon_fruit_name">火龙果</string>
+    <string name="crop_golden_wheat_name">黄金麦</string>
+    <string name="crop_spirit_herb_name">灵草</string>
+    <string name="crop_celestial_bloom_name">天界之花</string>
+    <string name="crop_starfruit_name">杨桃</string>
+    <string name="crop_void_lotus_name">虚空莲</string>
+
+    <!-- ===== 法术 ===== -->
+    <string name="spell_wind_strike_name">风之打击</string>
+    <string name="spell_wind_bolt_name">风之箭</string>
+    <string name="spell_wind_blast_name">风之爆裂</string>
+    <string name="spell_wind_wave_name">风之波浪</string>
+    <string name="spell_water_strike_name">水之打击</string>
+    <string name="spell_water_bolt_name">水之箭</string>
+    <string name="spell_water_blast_name">水之爆裂</string>
+    <string name="spell_water_wave_name">水之波浪</string>
+    <string name="spell_earth_strike_name">地之打击</string>
+    <string name="spell_earth_bolt_name">地之箭</string>
+    <string name="spell_earth_blast_name">地之爆裂</string>
+    <string name="spell_earth_wave_name">地之波浪</string>
+    <string name="spell_fire_strike_name">火之打击</string>
+    <string name="spell_fire_bolt_name">火之箭</string>
+    <string name="spell_fire_blast_name">火之爆裂</string>
+    <string name="spell_fire_wave_name">火之波浪</string>
+    <string name="spell_mind_strike_name">心灵打击</string>
+    <string name="spell_mind_bolt_name">心灵之箭</string>
+    <string name="spell_mind_blast_name">心灵爆裂</string>
+    <string name="spell_mind_wave_name">心灵波浪</string>
+    <string name="spell_chaos_strike_name">混沌打击</string>
+    <string name="spell_chaos_bolt_name">混沌之箭</string>
+    <string name="spell_chaos_blast_name">混沌爆裂</string>
+    <string name="spell_chaos_wave_name">混沌波浪</string>
+    <string name="spell_death_strike_name">死亡打击</string>
+    <string name="spell_death_bolt_name">死亡之箭</string>
+    <string name="spell_death_blast_name">死亡爆裂</string>
+    <string name="spell_death_wave_name">死亡波浪</string>
+    <string name="spell_blood_strike_name">血之打击</string>
+    <string name="spell_blood_bolt_name">血之箭</string>
+    <string name="spell_blood_blast_name">血之爆裂</string>
+    <string name="spell_blood_wave_name">血之波浪</string>
+
+    <!-- ===== 锄头 ===== -->
+    <string name="item_bronze_hoe_name">青铜锄</string>
+    <string name="item_iron_hoe_name">铁锄</string>
+    <string name="item_steel_hoe_name">钢锄</string>
+    <string name="item_mithril_hoe_name">秘银锄</string>
+    <string name="item_adamantite_hoe_name">精金锄</string>
+    <string name="item_runite_hoe_name">符文锄</string>
+
+    <!-- ===== 开锁器 ===== -->
+    <string name="item_bronze_lockpick_name">青铜开锁器</string>
+    <string name="item_iron_lockpick_name">铁开锁器</string>
+    <string name="item_steel_lockpick_name">钢开锁器</string>
+    <string name="item_mithril_lockpick_name">秘银开锁器</string>
+    <string name="item_adamantite_lockpick_name">精金开锁器</string>
+    <string name="item_runite_lockpick_name">符文开锁器</string>
+
+    <!-- 药剂 -->
+    <string name="item_attack_brew_name">攻击药剂</string>
+    <string name="item_defense_brew_name">防御药剂</string>
+    <string name="item_attack_potion_name">攻击药水</string>
+    <string name="item_defense_potion_name">防御药水</string>
+    <string name="item_onion_brew_name">洋葱药剂</string>
+    <string name="item_carrot_brew_name">胡萝卜药剂</string>
+    <string name="item_strength_brew_name">力量药剂</string>
+    <string name="item_strength_potion_name">力量药水</string>
+    <string name="item_ranging_potion_name">远程药水</string>
+    <string name="item_magic_potion_name">魔法药水</string>
+    <string name="item_super_strength_potion_name">超级力量药水</string>
+    <string name="item_super_attack_potion_name">超级攻击药水</string>
+    <string name="item_super_defense_potion_name">超级防御药水</string>
+    <string name="item_super_ranging_potion_name">超级远程药水</string>
+    <string name="item_super_magic_potion_name">超级魔法药水</string>
+    <string name="item_overload_potion_name">超载药水</string>
+
+    <!-- 强化药剂 -->
+    <string name="item_enhanced_attack_brew_name">强化攻击药剂</string>
+    <string name="item_enhanced_defense_brew_name">强化防御药剂</string>
+    <string name="item_enhanced_attack_potion_name">强化攻击药水</string>
+    <string name="item_enhanced_defense_potion_name">强化防御药水</string>
+    <string name="item_enhanced_onion_brew_name">强化洋葱药剂</string>
+    <string name="item_enhanced_carrot_brew_name">强化胡萝卜药剂</string>
+    <string name="item_enhanced_strength_brew_name">强化力量药剂</string>
+    <string name="item_enhanced_strength_potion_name">强化力量药水</string>
+    <string name="item_enhanced_ranging_potion_name">强化远程药水</string>
+    <string name="item_enhanced_magic_potion_name">强化魔法药水</string>
+    <string name="item_enhanced_super_strength_potion_name">强化超级力量药水</string>
+    <string name="item_enhanced_super_attack_potion_name">强化超级攻击药水</string>
+    <string name="item_enhanced_super_defense_potion_name">强化超级防御药水</string>
+    <string name="item_enhanced_super_ranging_potion_name">强化超级远程药水</string>
+    <string name="item_enhanced_super_magic_potion_name">强化超级魔法药水</string>
+    <string name="item_enhanced_overload_potion_name">强化超载药水</string>
+
+    <string name="item_any_fish_name">鱼（任意种类）</string>
+
+
+    <!-- ===== 种子名称 ===== -->
+    <string name="item_potato_seed_name">土豆种子</string>
+    <string name="item_onion_seed_name">洋葱种子</string>
+    <string name="item_cabbage_seed_name">卷心菜种子</string>
+    <string name="item_carrot_seed_name">胡萝卜种子</string>
+    <string name="item_tomato_seed_name">番茄种子</string>
+    <string name="item_corn_seed_name">玉米种子</string>
+    <string name="item_pumpkin_seed_name">南瓜种子</string>
+    <string name="item_watermelon_seed_name">西瓜种子</string>
+    <string name="item_strawberry_seed_name">草莓种子</string>
+    <string name="item_magic_herb_seed_name">魔法草药种子</string>
+    <string name="item_dragon_fruit_seed_name">火龙果种子</string>
+    <string name="item_golden_wheat_seed_name">黄金麦种子</string>
+    <string name="item_spirit_seed_name">灵草种子</string>
+    <string name="item_celestial_bloom_seed_name">天界之花种子</string>
+    <string name="item_starfruit_seed_name">杨桃种子</string>
+    <string name="item_void_lotus_seed_name">虚空莲种子</string>
+
+
+    <!-- Additional item/boss/food names (English placeholders) -->
+    <string name="boss_void_sovereign_name" translatable="false">The Void Sovereign</string>
+    <string name="item_abyssal_rod_name" translatable="false">Abyssal Rod</string>
+    <string name="item_adamantite_arrow_tip_name" translatable="false">Adamantite Arrow Tips</string>
+    <string name="item_adamantite_boots_name" translatable="false">Adamantite Boots</string>
+    <string name="item_adamantite_chainbody_name" translatable="false">Adamantite Chainbody</string>
+    <string name="item_adamantite_dagger_name" translatable="false">Adamantite Dagger</string>
+    <string name="item_adamantite_full_helmet_name" translatable="false">Adamantite Full Helmet</string>
+    <string name="item_adamantite_kiteshield_name" translatable="false">Adamantite Kiteshield</string>
+    <string name="item_adamantite_longsword_name" translatable="false">Adamantite Longsword</string>
+    <string name="item_adamantite_med_helmet_name" translatable="false">Adamantite Med Helmet</string>
+    <string name="item_adamantite_plateskirt_name" translatable="false">Adamantite Plateskirt</string>
+    <string name="item_adamantite_square_shield_name" translatable="false">Adamantite Square Shield</string>
+    <string name="item_agility_cape_name" translatable="false">Agility Cape</string>
+    <string name="item_agility_guild_cape_name" translatable="false">Agility Guild Cape</string>
+    <string name="item_amulet_of_fury_name" translatable="false">Amulet Of Fury</string>
+    <string name="item_amulet_of_strength_name" translatable="false">Amulet Of Strength</string>
+    <string name="item_amulet_of_the_kraken_name" translatable="false">Amulet Of The Kraken</string>
+    <string name="item_arcane_grappling_hook_name">奥术抓钩</string>
+    <string name="item_arcane_staff_name" translatable="false">Arcane Staff</string>
+    <string name="item_archers_guild_cape_name" translatable="false">Archers Guild Cape</string>
+    <string name="item_archers_ring_name" translatable="false">Archers Ring</string>
+    <string name="item_attack_cape_name" translatable="false">Attack Cape</string>
+    <string name="item_baby_kraken_name" translatable="false">Baby Kraken</string>
+    <string name="item_balrog_name" translatable="false">Balrog, Ancient Flame of Udûn</string>
+    <string name="item_balrog_whip_name" translatable="false">Balrog Whip</string>
+    <string name="item_balrog_wings_name" translatable="false">Balrog Wings</string>
+    <string name="item_beef_name" translatable="false">Cooked Beef</string>
+    <string name="item_berserker_ring_name" translatable="false">Berserker Ring</string>
+    <string name="item_blessed_fishing_rod_name" translatable="false">Blessed Fishing Rod</string>
+    <string name="item_blood_blast_name" translatable="false">Blood Blast</string>
+    <string name="item_blood_bolt_name" translatable="false">Blood Bolt</string>
+    <string name="item_blood_strike_name" translatable="false">Blood Strike</string>
+    <string name="item_blood_wave_name" translatable="false">Blood Wave</string>
+    <string name="item_bronze_arrow_tip_name" translatable="false">Bronze Arrow Tips</string>
+    <string name="item_bronze_boots_name" translatable="false">Bronze Boots</string>
+    <string name="item_bronze_chainbody_name" translatable="false">Bronze Chainbody</string>
+    <string name="item_bronze_full_helmet_name" translatable="false">Bronze Full Helmet</string>
+    <string name="item_bronze_kiteshield_name" translatable="false">Bronze Kiteshield</string>
+    <string name="item_bronze_longsword_name" translatable="false">Bronze Longsword</string>
+    <string name="item_bronze_med_helmet_name" translatable="false">Bronze Med Helmet</string>
+    <string name="item_bronze_plateskirt_name" translatable="false">Bronze Plateskirt</string>
+    <string name="item_bronze_square_shield_name" translatable="false">Bronze Square Shield</string>
+    <string name="item_chaos_blast_name" translatable="false">Chaos Blast</string>
+    <string name="item_chaos_bolt_name" translatable="false">Chaos Bolt</string>
+    <string name="item_chaos_strike_name" translatable="false">Chaos Strike</string>
+    <string name="item_chaos_wave_name" translatable="false">Chaos Wave</string>
+    <string name="item_chicken_name" translatable="false">Cooked Chicken</string>
+    <string name="item_cooking_cape_name" translatable="false">Cooking Cape</string>
+    <string name="item_cooking_guild_cape_name" translatable="false">Cooking Guild Cape</string>
+    <string name="item_crafting_cape_name" translatable="false">Crafting Cape</string>
+    <string name="item_crafting_guild_cape_name" translatable="false">Crafting Guild Cape</string>
+    <string name="item_death_blast_name" translatable="false">Death Blast</string>
+    <string name="item_death_bolt_name" translatable="false">Death Bolt</string>
+    <string name="item_death_strike_name" translatable="false">Death Strike</string>
+    <string name="item_death_wave_name" translatable="false">Death Wave</string>
+    <string name="item_deep_iron_pickaxe_name" translatable="false">Deep Iron Pickaxe</string>
+    <string name="item_defense_cape_name" translatable="false">Defense Cape</string>
+    <string name="item_demon_lord_name" translatable="false">Demon Lord</string>
+    <string name="item_divine_frying_pan_name">神圣煎锅</string>
+    <string name="item_divine_grappling_hook_name">神圣抓钩</string>
+    <string name="item_divine_hammer_name">神圣之锤</string>
+    <string name="item_divine_hoe_name">神圣锄</string>
+    <string name="item_divine_lockpick_name">神圣开锁器</string>
+    <string name="item_divine_tinderbox_name">神圣火绒盒</string>
+    <string name="item_dragon_amulet_name" translatable="false">Dragon Amulet</string>
+    <string name="item_dragon_boots_name" translatable="false">Dragon Boots</string>
+    <string name="item_dragon_longsword_name" translatable="false">Dragon Longsword</string>
+    <string name="item_dragon_scimitar_name" translatable="false">Dragon Scimitar</string>
+    <string name="item_dragon_whelp_name" translatable="false">Dragon Whelp</string>
+    <string name="item_dwarven_axe_name" translatable="false">Dwarven Axe</string>
+    <string name="item_dwarven_boots_name" translatable="false">Dwarven Boots</string>
+    <string name="item_dwarven_fishing_rod_name" translatable="false">Dwarven Fishing Rod</string>
+    <string name="item_dwarven_frying_pan_name">矮人煎锅</string>
+    <string name="item_dwarven_grappling_hook_name">矮人抓钩</string>
+    <string name="item_dwarven_hammer_name">矮人之锤</string>
+    <string name="item_dwarven_helm_name" translatable="false">Dwarven Helm</string>
+    <string name="item_dwarven_hoe_name" translatable="false">Dwarven Hoe</string>
+    <string name="item_dwarven_lockpick_name">矮人开锁器</string>
+    <string name="item_dwarven_pickaxe_name" translatable="false">Dwarven Pickaxe</string>
+    <string name="item_dwarven_platebody_name" translatable="false">Dwarven Platebody</string>
+    <string name="item_dwarven_platelegs_name" translatable="false">Dwarven Platelegs</string>
+    <string name="item_dwarven_scimitar_name" translatable="false">Dwarven Scimitar</string>
+    <string name="item_dwarven_shield_name" translatable="false">Dwarven Shield</string>
+    <string name="item_dwarven_sword_name" translatable="false">Dwarven Sword</string>
+    <string name="item_dwarven_tinderbox_name">矮人火绒盒</string>
+    <string name="item_dwarven_warhammer_name" translatable="false">Dwarven Warhammer</string>
+    <string name="item_earth_blast_name" translatable="false">Earth Blast</string>
+    <string name="item_earth_bolt_name" translatable="false">Earth Bolt</string>
+    <string name="item_earth_strike_name" translatable="false">Earth Strike</string>
+    <string name="item_earth_wave_name" translatable="false">Earth Wave</string>
+    <string name="item_ent_name" translatable="false">Ent</string>
+    <string name="item_farming_cape_name" translatable="false">Farming Cape</string>
+    <string name="item_farming_guild_cape_name" translatable="false">Farming Guild Cape</string>
+    <string name="item_fire_blast_name" translatable="false">Fire Blast</string>
+    <string name="item_fire_bolt_name" translatable="false">Fire Bolt</string>
+    <string name="item_fire_strike_name" translatable="false">Fire Strike</string>
+    <string name="item_fire_wave_name" translatable="false">Fire Wave</string>
+    <string name="item_firemaking_cape_name" translatable="false">Firemaking Cape</string>
+    <string name="item_firemaking_guild_cape_name" translatable="false">Firemaking Guild Cape</string>
+    <string name="item_fishing_cape_name" translatable="false">Fishing Cape</string>
+    <string name="item_fishing_guild_cape_name" translatable="false">Fishing Guild Cape</string>
+    <string name="item_flame_heart_amulet_name" translatable="false">Flame Heart Amulet</string>
+    <string name="item_fletching_cape_name" translatable="false">Fletching Cape</string>
+    <string name="item_fletching_guild_cape_name" translatable="false">Fletching Guild Cape</string>
+    <string name="item_forge_pickaxe_name" translatable="false">Forge Pickaxe</string>
+    <string name="item_hellfire_staff_name" translatable="false">Hellfire Staff</string>
+    <string name="item_herblore_guild_cape_name" translatable="false">Herblore Guild Cape</string>
+    <string name="item_hp_cape_name" translatable="false">Hp Cape</string>
+    <string name="item_imp_pet_name" translatable="false">Imp Pet</string>
+    <string name="item_iron_arrow_tip_name" translatable="false">Iron Arrow Tips</string>
+    <string name="item_iron_boots_name" translatable="false">Iron Boots</string>
+    <string name="item_iron_chainbody_name" translatable="false">Iron Chainbody</string>
+    <string name="item_iron_full_helmet_name" translatable="false">Iron Full Helmet</string>
+    <string name="item_iron_kiteshield_name" translatable="false">Iron Kiteshield</string>
+    <string name="item_iron_longsword_name" translatable="false">Iron Longsword</string>
+    <string name="item_iron_med_helmet_name" translatable="false">Iron Med Helmet</string>
+    <string name="item_iron_plateskirt_name" translatable="false">Iron Plateskirt</string>
+    <string name="item_iron_square_shield_name" translatable="false">Iron Square Shield</string>
+    <string name="item_ironwood_axe_name" translatable="false">Ironwood Axe</string>
+    <string name="item_king_black_dragon_name" translatable="false">King Black Dragon</string>
+    <string name="item_kraken_name" translatable="false">Kraken</string>
+    <string name="item_kraken_tentacle_name" translatable="false">Kraken Tentacle</string>
+    <string name="item_mages_guild_cape_name" translatable="false">Mages Guild Cape</string>
+    <string name="item_magic_cape_name" translatable="false">Magic Cape</string>
+    <string name="item_magic_longbow_name" translatable="false">Magic Longbow</string>
+    <string name="item_magic_shortbow_name" translatable="false">Magic Shortbow</string>
+    <string name="item_maple_shortbow_name" translatable="false">Maple Shortbow</string>
+    <string name="item_mercantile_guild_cape_name" translatable="false">Mercantile Guild Cape</string>
+    <string name="item_mind_blast_name" translatable="false">Mind Blast</string>
+    <string name="item_mind_bolt_name" translatable="false">Mind Bolt</string>
+    <string name="item_mind_strike_name" translatable="false">Mind Strike</string>
+    <string name="item_mind_wave_name" translatable="false">Mind Wave</string>
+    <string name="item_mining_cape_name" translatable="false">Mining Cape</string>
+    <string name="item_mining_guild_cape_name" translatable="false">Mining Guild Cape</string>
+    <string name="item_mithril_arrow_tip_name" translatable="false">Mithril Arrow Tips</string>
+    <string name="item_mithril_boots_name" translatable="false">Mithril Boots</string>
+    <string name="item_mithril_chainbody_name" translatable="false">Mithril Chainbody</string>
+    <string name="item_mithril_dagger_name" translatable="false">Mithril Dagger</string>
+    <string name="item_mithril_full_helmet_name" translatable="false">Mithril Full Helmet</string>
+    <string name="item_mithril_kiteshield_name" translatable="false">Mithril Kiteshield</string>
+    <string name="item_mithril_longsword_name" translatable="false">Mithril Longsword</string>
+    <string name="item_mithril_med_helmet_name" translatable="false">Mithril Med Helmet</string>
+    <string name="item_mithril_plateskirt_name" translatable="false">Mithril Plateskirt</string>
+    <string name="item_mithril_square_shield_name" translatable="false">Mithril Square Shield</string>
+    <string name="item_mutton_name" translatable="false">Cooked Mutton</string>
+    <string name="item_necklace_of_anguish_name" translatable="false">Necklace Of Anguish</string>
+    <string name="item_oak_shortbow_name" translatable="false">Oak Shortbow</string>
+    <string name="item_platinum_ore_name" translatable="false">Platinum Ore</string>
+    <string name="item_prayer_cape_name" translatable="false">Prayer Cape</string>
+    <string name="item_prayer_guild_cape_name" translatable="false">Prayer Guild Cape</string>
+    <string name="item_ranged_cape_name" translatable="false">Ranged Cape</string>
+    <string name="item_rat_meat_name" translatable="false">Cooked Rat Meat</string>
+    <string name="item_ring_of_dragons_might_name" translatable="false">Ring Of Dragons Might</string>
+    <string name="item_ring_of_flame_name" translatable="false">Ring Of Flame</string>
+    <string name="item_ring_of_recoil_name" translatable="false">Ring Of Recoil</string>
+    <string name="item_ring_of_suffering_name" translatable="false">Ring Of Suffering</string>
+    <string name="item_ring_of_the_seas_name" translatable="false">Ring Of The Seas</string>
+    <string name="item_ring_of_wealth_name" translatable="false">Ring Of Wealth</string>
+    <string name="item_rock_golem_name" translatable="false">Rock Golem</string>
+    <string name="item_rogues_lockpick_name">盗贼的开锁器</string>
+    <string name="item_runecrafting_cape_name" translatable="false">Runecrafting Cape</string>
+    <string name="item_runecrafting_guild_cape_name" translatable="false">Runecrafting Guild Cape</string>
+    <string name="item_runite_arrow_tip_name" translatable="false">Runite Arrow Tips</string>
+    <string name="item_runite_boots_name" translatable="false">Runite Boots</string>
+    <string name="item_runite_chainbody_name" translatable="false">Runite Chainbody</string>
+    <string name="item_runite_dagger_name" translatable="false">Runite Dagger</string>
+    <string name="item_runite_full_helmet_name" translatable="false">Runite Full Helmet</string>
+    <string name="item_runite_kiteshield_name" translatable="false">Runite Kiteshield</string>
+    <string name="item_runite_longsword_name" translatable="false">Runite Longsword</string>
+    <string name="item_runite_med_helmet_name" translatable="false">Runite Med Helmet</string>
+    <string name="item_runite_plateskirt_name" translatable="false">Runite Plateskirt</string>
+    <string name="item_runite_square_shield_name" translatable="false">Runite Square Shield</string>
+    <string name="item_sanctum_axe_name" translatable="false">Sanctum Axe</string>
+    <string name="item_seers_ring_name" translatable="false">Seers Ring</string>
+    <string name="item_shadow_dagger_name" translatable="false">Shadow Dagger</string>
+    <string name="item_shadow_grappling_hook_name">暗影抓钩</string>
+    <string name="item_shadow_lockpick_name">暗影开锁器</string>
+    <string name="item_shortbow_name" translatable="false">Shortbow</string>
+    <string name="item_silver_diamond_necklace_name" translatable="false">Silver Diamond Necklace</string>
+    <string name="item_silver_diamond_ring_name" translatable="false">Silver Diamond Ring</string>
+    <string name="item_silver_emerald_necklace_name" translatable="false">Silver Emerald Necklace</string>
+    <string name="item_silver_emerald_ring_name" translatable="false">Silver Emerald Ring</string>
+    <string name="item_silver_ruby_necklace_name" translatable="false">Silver Ruby Necklace</string>
+    <string name="item_silver_ruby_ring_name" translatable="false">Silver Ruby Ring</string>
+    <string name="item_smithing_cape_name" translatable="false">Smithing Cape</string>
+    <string name="item_smithing_guild_cape_name" translatable="false">Smithing Guild Cape</string>
+    <string name="item_steel_arrow_tip_name" translatable="false">Steel Arrow Tips</string>
+    <string name="item_steel_boots_name" translatable="false">Steel Boots</string>
+    <string name="item_steel_chainbody_name" translatable="false">Steel Chainbody</string>
+    <string name="item_steel_dagger_name" translatable="false">Steel Dagger</string>
+    <string name="item_steel_full_helmet_name" translatable="false">Steel Full Helmet</string>
+    <string name="item_steel_kiteshield_name" translatable="false">Steel Kiteshield</string>
+    <string name="item_steel_longsword_name" translatable="false">Steel Longsword</string>
+    <string name="item_steel_med_helmet_name" translatable="false">Steel Med Helmet</string>
+    <string name="item_steel_plateskirt_name" translatable="false">Steel Plateskirt</string>
+    <string name="item_steel_square_shield_name" translatable="false">Steel Square Shield</string>
+    <string name="item_strength_cape_name" translatable="false">Strength Cape</string>
+    <string name="item_tangleroot_name" translatable="false">Tangleroot</string>
+    <string name="item_tiny_templar_name" translatable="false">Tiny Templar</string>
+    <string name="item_tormented_necklace_name" translatable="false">Tormented Necklace</string>
+    <string name="item_trident_of_the_seas_name" translatable="false">Trident Of The Seas</string>
+    <string name="item_warriors_guild_cape_name" translatable="false">Warriors Guild Cape</string>
+    <string name="item_water_blast_name" translatable="false">Water Blast</string>
+    <string name="item_water_bolt_name" translatable="false">Water Bolt</string>
+    <string name="item_water_strike_name" translatable="false">Water Strike</string>
+    <string name="item_water_wave_name" translatable="false">Water Wave</string>
+    <string name="item_willow_shortbow_name" translatable="false">Willow Shortbow</string>
+    <string name="item_wind_blast_name" translatable="false">Wind Blast</string>
+    <string name="item_wind_bolt_name" translatable="false">Wind Bolt</string>
+    <string name="item_wind_strike_name" translatable="false">Wind Strike</string>
+    <string name="item_wind_wave_name" translatable="false">Wind Wave</string>
+    <string name="item_woodcutting_cape_name" translatable="false">Woodcutting Cape</string>
+    <string name="item_woodcutting_guild_cape_name" translatable="false">Woodcutting Guild Cape</string>
+    <string name="item_yew_longbow_name" translatable="false">Yew Longbow</string>
+    <string name="item_yew_shortbow_name" translatable="false">Yew Shortbow</string>
+</resources>
