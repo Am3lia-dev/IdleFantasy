@@ -408,7 +408,7 @@
     <string name="title_seasonal_requirement">Críochnaigh an Imeacht Shéasúrach an %1$s</string>
     <string name="home_welcome_greeting">Fáilte ar ais,</string>
     <string name="home_welcome_title">An %1$s!</string>
-    <string name="error_no_player">Could not load player data. Please restart the app. Níor féidir an sonraí imreora a lódáil. Atosaigh an feidhmchlár más é do thoil é.</string>
+    <string name="error_no_player">Níor féidir an sonraí imreora a lódáil. Atosaigh an feidhmchlár más é do thoil é.</string>
     <string name="error_session_already_active">Tá seisiún agatsa cheana féin. Críochnaigh no fág sé ar dtús.</string>
     <string name="error_patch_occupied">Tá an ceapach seo plandaithe cheana féin.</string>
     <string name="error_patch_empty">Tá an ceapach seo folamh.</string>
