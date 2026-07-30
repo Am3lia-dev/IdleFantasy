@@ -11,7 +11,7 @@
     <string name="nav_profile">Profile</string>
 
     <!-- ===== Common buttons ===== -->
-    <string name="btn_start" translatable="false">Start</string>
+    <string name="btn_start">Start</string>
     <string name="btn_start_session">Start Session</string>
     <string name="btn_abandon_session">Abandon Session</string>
     <string name="btn_collect_results">Collect Results</string>
@@ -44,7 +44,7 @@
     <string name="btn_save">Save</string>
 
     <!-- ===== Common labels ===== -->
-    <string name="label_level" translatable="false">Level</string>
+    <string name="label_level">Level</string>
     <string name="label_xp">XP</string>
     <string name="label_coins">Coins</string>
     <string name="label_hp">HP</string>
@@ -162,7 +162,7 @@
     <string name="label_personal_best">Personal Best</string>
     <string name="label_daily_dig">Daily Dig</string>
     <string name="label_dig_depth">Hole Depth</string>
-    <string name="label_version" translatable="false">Version</string>
+    <string name="label_version">Version</string>
     <string name="label_open_source" translatable="false">Open Source</string>
 
     <!-- ===== Format strings — all use positional args for Weblate ===== -->
@@ -187,7 +187,7 @@
     <!-- Translator note: %1$d = wins, %2$d = losses -->
     <string name="format_arena_record">%1$d wins / %2$d losses</string>
     <!-- Translator note: %1$s = skill display name, %2$d = level number -->
-    <string name="format_skill_level" translatable="false">%1$s: Level %2$d</string>
+    <string name="format_skill_level">%1$s: Level %2$d</string>
     <!-- Translator note: %1$d = boost percentage -->
     <string name="format_xp_boost_percent">+%1$d%% XP</string>
     <!-- Translator note: %1$s = item/resource name, %2$d = quantity drop amount -->
@@ -195,7 +195,7 @@
     <!-- Translator note: %1$d = minutes remaining -->
     <string name="format_minutes_remaining">%1$d min remaining</string>
     <!-- Translator note: %1$s = version string (e.g. "0.1.0") -->
-    <string name="format_version" translatable="false">Version %1$s</string>
+    <string name="format_version">Version %1$s</string>
 
     <!-- ===== Plurals ===== -->
     <plurals name="plural_level_ups">
@@ -365,11 +365,11 @@
     <string name="settings_theme_desc">Choose your preferred colour scheme</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_light">Light</string>
-    <string name="settings_theme_system" translatable="false">System</string>
+    <string name="settings_theme_system">System</string>
     <string name="settings_font_size">Font Size</string>
     <string name="settings_font_tiny">Tiny</string>
     <string name="settings_font_small">Small</string>
-    <string name="settings_font_normal" translatable="false">Normal</string>
+    <string name="settings_font_normal">Normal</string>
     <string name="settings_font_large">Large</string>
     <string name="settings_font_huge">Huge</string>
     <string name="settings_language_desc">Override the app display language</string>
@@ -387,7 +387,7 @@
     <string name="settings_lang_japanese" translatable="false">日本語</string>
     <string name="settings_lang_irish" translatable="false">Gaeilge</string>
     <string name="settings_lang_czech" translatable="false">Čeština</string>
-    <string name="settings_lang_system" translatable="false">System</string>
+    <string name="settings_lang_system">System</string>
     <string name="settings_save_data">Save Data</string>
     <string name="settings_export">Export Save</string>
     <string name="settings_export_desc">Save your progress to a file</string>
@@ -633,7 +633,7 @@
     <!-- ===== CraftingScreen ===== -->
     <string name="crafting_no_mats">No mats</string>
     <!-- Translator note: %1$d = total quantity, %2$s = item name -->
-    <string name="crafting_produces" translatable="false">= %1$d %2$s</string>
+    <string name="crafting_produces">= %1$d %2$s</string>
     <string name="crafting_effects">Effects</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="crafting_xp_total">+%1$d XP total</string>
@@ -680,7 +680,7 @@
     <string name="character_gender_custom_hint">Describe your gender</string>
     <string name="character_race">Race</string>
     <string name="character_race_human">Human</string>
-    <string name="character_race_elf" translatable="false">Elf</string>
+    <string name="character_race_elf">Elf</string>
     <string name="character_race_dwarf">Dwarf</string>
     <string name="character_race_orc">Orc</string>
     <string name="character_race_halfling" translatable="false">Halfling</string>
@@ -786,7 +786,7 @@
     <string name="achievement_total_100_desc">Reach total level 100</string>
     <string name="achievement_total_250_name">Seasoned</string>
     <string name="achievement_total_250_desc">Reach total level 250</string>
-    <string name="achievement_total_500_name" translatable="false">Veteran</string>
+    <string name="achievement_total_500_name">Veteran</string>
     <string name="achievement_total_500_desc">Reach total level 500</string>
     <string name="achievement_total_750_name">Master</string>
     <string name="achievement_total_750_desc">Reach total level 750</string>
@@ -805,7 +805,7 @@
     <string name="achievement_combat_30_desc">Reach combat level 30</string>
     <string name="achievement_combat_50_name">Champion</string>
     <string name="achievement_combat_50_desc">Reach combat level 50</string>
-    <string name="achievement_combat_75_name" translatable="false">Elite</string>
+    <string name="achievement_combat_75_name">Elite</string>
     <string name="achievement_combat_75_desc">Reach combat level 75</string>
     <string name="achievement_combat_99_name">Champion</string>
     <string name="achievement_combat_99_desc">Reach combat level 99</string>
@@ -847,7 +847,7 @@
     <string name="guild_hall_title">Guild Hall</string>
     <string name="guild_hall_desc">Join guilds and complete daily requests to rank up</string>
     <string name="guild_hall_intro">Guilds reward you for activities you already do. Complete quests and daily requests to earn cross-skill materials, coins, and XP, so specialists can still access resources from skills they don\'t train.</string>
-    <string name="guild_level_label" translatable="false">Level %1$d</string>
+    <string name="guild_level_label">Level %1$d</string>
     <string name="guild_level_max">Level 10 (Max)</string>
     <string name="guild_tab_quests">Quests</string>
     <string name="guild_tab_dailies">Daily Requests</string>
@@ -996,7 +996,7 @@
     <string name="slayer_title">Slayer Master</string>
     <string name="slayer_card_desc">Tasks and rewards for slayers</string>
     <string name="slayer_desc">Complete tasks to earn Slayer XP and points. Spend points in the shop for exclusive gear.</string>
-    <string name="slayer_level_label" translatable="false">Level %1$d</string>
+    <string name="slayer_level_label">Level %1$d</string>
     <string name="slayer_xp_label">%1$s XP</string>
     <string name="slayer_points">%1$d pts</string>
     <string name="slayer_active_task">Active Task</string>
@@ -1111,12 +1111,12 @@
     <!-- Crafting tier filter chips -->
     <string name="crafting_tier_adamantite">Adamantite</string>
     <string name="crafting_tier_arrow">Arrow</string>
-    <string name="crafting_tier_bronze" translatable="false">Bronze</string>
-    <string name="crafting_tier_gold" translatable="false">Gold</string>
+    <string name="crafting_tier_bronze">Bronze</string>
+    <string name="crafting_tier_gold">Gold</string>
     <string name="crafting_tier_iron">Iron</string>
     <string name="crafting_tier_magic">Magic</string>
     <string name="crafting_tier_maple">Maple</string>
-    <string name="crafting_tier_mithril" translatable="false">Mithril</string>
+    <string name="crafting_tier_mithril">Mithril</string>
     <string name="crafting_tier_oak">Oak</string>
     <string name="crafting_tier_platinum">Platinum</string>
     <string name="crafting_tier_runite">Runite</string>
