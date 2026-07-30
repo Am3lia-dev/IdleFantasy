@@ -782,7 +782,7 @@
     <string name="achievement_total_750_desc">Erreicht Gesamtlevel 750</string>
     <string name="achievement_total_1000_name">Legende</string>
     <string name="achievement_total_1000_desc">Erreicht Gesamtlevel 1000</string>
-    <string name="achievement_total_1500_name">Champion</string>
+    <string name="achievement_total_1500_name">Meister</string>
     <string name="achievement_total_1500_desc">Erreicht Gesamtlevel 1500</string>
     <string name="achievement_skill_99_name">Erste Meisterung</string>
     <string name="achievement_skill_99_desc">Erreicht Level 99 in einer beliebigen Fähigkeit</string>
@@ -792,11 +792,11 @@
     <string name="achievement_combat_10_desc">Erreicht Kampflevel 10</string>
     <string name="achievement_combat_30_name">Krieger</string>
     <string name="achievement_combat_30_desc">Erreicht Kampflevel 30</string>
-    <string name="achievement_combat_50_name">Champion</string>
+    <string name="achievement_combat_50_name">Meister</string>
     <string name="achievement_combat_50_desc">Erreicht Kampflevel 50</string>
     <string name="achievement_combat_75_name">Elite</string>
     <string name="achievement_combat_75_desc">Erreicht Kampflevel 75</string>
-    <string name="achievement_combat_99_name">Champion</string>
+    <string name="achievement_combat_99_name">Meister</string>
     <string name="achievement_combat_99_desc">Erreicht Kampflevel 99</string>
     <string name="achievement_combat_113_name">Höchstes Kampflevel</string>
     <string name="achievement_combat_113_desc">Erreicht das maximale Kampflevel von 113</string>
@@ -1640,7 +1640,7 @@
     <string name="home_welcome_greeting">Willkommen zurück,</string>
     <string name="home_welcome_name">%1$s!</string>
     <string name="home_welcome_title">Der %1$s!</string>
-    <string name="town_building_cape_rack_name">Cape Rack</string>
+    <string name="town_building_cape_rack_name">Mützenhalter</string>
     <string name="town_cape_rack_no_bonus">Upgrade to passively apply owned skill/guild cape yield and XP bonuses</string>
     <string name="town_cape_rack_t1_bonus">Passive bonuses from Tier 1 (Gathering) capes are active</string>
     <string name="town_cape_rack_t2_bonus">Passive Boni von Tier-1- &amp; Tier-2-Umhängen (Sammeln, Handwerk) sind aktiv.</string>
