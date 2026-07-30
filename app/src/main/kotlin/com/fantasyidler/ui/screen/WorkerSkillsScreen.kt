@@ -76,6 +76,7 @@ import com.fantasyidler.ui.viewmodel.xpProgressFraction
 import com.fantasyidler.ui.viewmodel.nextLevelThreshold
 import com.fantasyidler.ui.viewmodel.xpToNextLevel
 import com.fantasyidler.ui.viewmodel.levelDisplay
+import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatDurationMs
 import com.fantasyidler.util.formatXp
@@ -95,7 +96,7 @@ fun WorkerSkillsScreen(
 
     LaunchedEffect(Unit) { viewModel.setSelectedSlot(initialSlot) }
 
-    ToastMessageEffect(state.snackbarMessage, viewModel::snackbarConsumed)
+    AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
     val tierLabel = when (state.currentWorker?.tier) {
         WorkerTier.LONG_LABORER -> stringResource(R.string.worker_long_laborer)
@@ -256,6 +257,7 @@ fun WorkerSkillsScreen(
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             // For workers: always pass hasActiveSession=true so button says "Add to Queue",
             // and isQueueFull=state.workerQueueFull.
             val isQueueFull = state.workerQueueFull
@@ -358,6 +360,7 @@ fun WorkerSkillsScreen(
                     onSelect          = { viewModel.startThievingSession(it) },
                 )
                 SheetState.ComingSoon -> ComingSoonSheet()
+            }
             }
         }
     }
@@ -649,7 +652,17 @@ private fun WorkerCraftRecipeRow(
                 style = MaterialTheme.typography.bodySmall,
                 color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else dim,
             )
+            // Ash-catalyst brews produce enhanced_* variants; count them too, same as
+            // quest/guild/event tallies (issue #1201).
+            val ownedQty = (state.inventory[recipe.outputKey] ?: 0) +
+                (state.inventory["enhanced_${recipe.outputKey}"] ?: 0)
+            Text(
+                text  = stringResource(R.string.crafting_owned, ownedQty),
+                style = MaterialTheme.typography.labelSmall,
+                color = if (ownedQty > 0) GoldPrimary else dim,
+            )
             recipe.outputCombatStyle?.let { style ->
+
                 Text(
                     text  = "${context.getString(R.string.label_combat_style)}: ${style.replaceFirstChar { it.uppercase() }}",
                     style = MaterialTheme.typography.labelSmall,
@@ -750,7 +763,14 @@ private fun WorkerCraftQuantityContent(
             style      = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
         )
+        val ownedQty = state.inventory[recipe.outputKey] ?: 0
+        Text(
+            text  = stringResource(R.string.crafting_owned_detail, ownedQty),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
         Spacer(Modifier.height(12.dp))
+
 
         Text(
             text  = stringResource(R.string.label_ingredients),

@@ -329,7 +329,8 @@
     <string name="weekly_bonus_title">Tygodniowy bonus!</string>
     <string name="weekly_bonus_claim">Odbierz tygodniowy bonus</string>
     <string name="label_daily_info">Każde zadanie dzienne nagradza monetami. Każde zadanie ma też szansę 1 na 100 na zrzucenie elementu krasnoludzkiego wyposażenia.</string>
-    <string name="label_weekly_info">Każde tygodniowe wyzwanie nagradza monetami w zależności od wymaganego poziomu. Ukończ wszystkie 5, aby zdobyć bonus: 100 000 monet lub szansę 1 na 26 na element boskiego wyposażenia.</string>
+    <string name="label_weekly_info">Każde tygodniowe wyzwanie nagradza monetami w zależności od wymaganego poziomu. Ukończ wszystkie 5, aby zdobyć bonus: 100 000 monet lub szansę %1$s na element boskiego wyposażenia.</string>
+    <string name="label_weekly_info_complete">Każde tygodniowe wyzwanie nagradza monetami w zależności od wymaganego poziomu. Ukończ wszystkie 5, aby zdobyć bonus: 100 000 monet. Posiadasz już cały boski ekwipunek!</string>
     <string name="label_daily_reward">2000 monet (1/100: krasnoludzkie wyposażenie)</string>
     <string name="msg_daily_claimed_coins">Zadanie dzienne ukończone! +2000 monet.</string>
     <string name="msg_daily_claimed_dwarven">Zadanie dzienne ukończone! Znalazłeś %1$s!</string>
@@ -412,6 +413,8 @@
     <string name="settings_source_open">Otwórz</string>
     <string name="settings_wiki">Wiki</string>
     <string name="settings_wiki_url" translatable="false">idlefantasy.tristinbaker.xyz</string>
+    <string name="settings_discord">Discord</string>
+    <string name="settings_discord_url">discord.gg/nZVZ67gyH</string>
     <string name="settings_exported_ok">Zapis wyeksportowany</string>
     <string name="settings_imported_ok">Zapis zaimportowany pomyślnie</string>
     <string name="settings_imported_fail">Nie udało się zaimportować — nieprawidłowy plik</string>
@@ -497,6 +500,7 @@
     <string name="combat_best_arrow">Najlepsza strzała</string>
     <string name="combat_arrow_auto">Auto (najlepsza dostępna)</string>
     <string name="combat_label_arrow">Strzała</string>
+    <string name="combat_select_loadout">Wybierz zestaw ekwipunku</string>
     <string name="combat_enemies">Wrogowie</string>
     <string name="combat_no_spells">Brak dostępnych zaklęć na Twoim poziomie magii.</string>
     <string name="combat_only_castable">Tylko możliwe do rzucenia</string>
@@ -508,6 +512,12 @@
     <string name="combat_duration">Czas trwania</string>
     <!-- Translator note: %1$d = minutes -->
     <string name="combat_duration_min">%1$d min</string>
+    <string name="combat_fight_count_label">Liczba walk</string>
+    <string name="combat_fight_count_suffix">×%1$d walk</string>
+    <string name="combat_fight_progress">Walka %1$d/%2$d</string>
+    <string name="combat_run_count_label">Liczba przebiegów</string>
+    <string name="combat_run_count_suffix">×%1$d przebiegów</string>
+    <string name="combat_run_progress">Przebieg %1$d/%2$d</string>
     <string name="combat_xp_on_victory">XP za zwycięstwo</string>
     <string name="combat_you_died">Zginąłeś!</string>
     <string name="combat_died_reward" formatted="false">Otrzymałeś 10% nagród.</string>
@@ -541,6 +551,8 @@
     <string name="profile_gathering_tools">Narzędzia do zbieractwa</string>
     <string name="profile_food_dungeon">Jedzenie (loch)</string>
     <string name="profile_no_food">Brak ugotowanego jedzenia w ekwipunku</string>
+    <string name="profile_food_threshold">Zacznij jeść przy</string>
+    <string name="profile_combat_style">Styl walki</string>
     <!-- Translator note: %1$d = quantity, %2$d = heal value -->
     <string name="profile_food_desc">×%1$d  •  leczy %2$d HP</string>
     <!-- Translator note: %1$s = slot display name (e.g. "Weapon") -->
@@ -652,6 +664,7 @@
     <string name="farming_clear_patch">Wyczyść grządkę</string>
     <string name="farming_clear_desc">Usunąć uprawę bez żadnej nagrody?</string>
     <string name="farming_harvest_and_plant">Zbierz i zasadź wszystko</string>
+    <string name="farming_harvest_all_complete">Zebrano wszystkie poletka!</string>
     <string name="farming_no_crops_ready">Brak upraw gotowych do zbioru</string>
     <string name="farming_no_empty_patches">Brak dostępnych pustych grządek</string>
     <!-- Translator note: %1$s = seed name -->
@@ -741,7 +754,7 @@
     <string name="inn_long_laborer_desc">Jedno zlecenie na wynajęcie, zwalniany po odbiorze. 8 godz. zbieractwa, wydajność 0,5x, nielimitowana ilość wytwarzania. Jest powolny, ale zrobi wszystko.</string>
     <string name="inn_apprentice_desc">Jedno zlecenie na zatrudnienie, zwolniony po odebraniu. 8 godz. zbieractwa, wydajność 1x. Wytwarzanie, modlitwa i tworzenie run ograniczone do 480 przedmiotów na sesję.</string>
     <string name="inn_journeyman_desc">Jedno zlecenie na zatrudnienie, zwolniony po odebraniu. 6 godz. zbieractwa, wydajność 1,5x. Wytwarzanie, modlitwa i tworzenie run ograniczone do 540 przedmiotów na sesję.</string>
-    <string name="inn_master_desc">Jedno zlecenie na zatrudnienie, zwolniony po odebraniu. 4 godz. zbieractwa, wydajność 2x. Wytwarzanie, modlitwa i tworzenie run ograniczone do 480 przedmiotów na sesję.</string>
+    <string name="inn_master_desc">Jedno zlecenie na zatrudnienie, zwolniony po odebraniu. 4 godz. zbieractwa, wydajność 2,5x. Wytwarzanie, modlitwa i tworzenie run ograniczone do 600 przedmiotów na sesję.</string>
     <string name="inn_gathering_note">Zbieractwo: godziny sesji × mnożnik wydajności zastosowany do łupów i XP</string>
     <string name="inn_crafting_note">Wytwarzanie/modlitwa/tworzenie run: ilość ograniczona wg poziomu; Wytrwały robotnik nie ma limitu</string>
     <string name="worker_skills_title">Pracownik: %1$s</string>
@@ -1238,11 +1251,11 @@
     <string name="achievement_town_first_upgrade_name">Pierwszy remont</string>
     <string name="achievement_town_first_upgrade_desc">Ulepsz dowolny budynek miasta po raz pierwszy</string>
     <string name="achievement_town_all_tier1_name">Ulepszacz miasta</string>
-    <string name="achievement_town_all_tier1_desc">Ulepsz wszystkie sześć budynków miasta do co najmniej poziomu 1</string>
+    <string name="achievement_town_all_tier1_desc">Ulepsz wszystkie siedem budynków miasta do co najmniej poziomu 1</string>
     <string name="achievement_town_one_maxed_name">Mistrz budowniczy</string>
     <string name="achievement_town_one_maxed_desc">Ulepsz dowolny pojedynczy budynek miasta do maksymalnego poziomu</string>
     <string name="achievement_town_all_maxed_name">Miasto legendy</string>
-    <string name="achievement_town_all_maxed_desc">Ulepsz wszystkie sześć budynków miasta do maksymalnego poziomu</string>
+    <string name="achievement_town_all_maxed_desc">Ulepsz wszystkie siedem budynków miasta do maksymalnego poziomu</string>
     <string name="achievement_tower_first_floor_name">Pierwszy krok</string>
     <string name="achievement_tower_first_floor_desc">Ukończ swoje pierwsze piętro Nieskończonej Wieży</string>
     <string name="achievement_tower_floor_10_name">Adept Wieży</string>
@@ -1449,6 +1462,9 @@
     <string name="armory_source_drop_chance">Zrzucane przez %1$s (%2$s)</string>
     <string name="armory_source_drop">Zrzucane przez %1$s</string>
     <string name="armory_source_shop">Sklep</string>
+    <string name="armory_source_daily_bonus">Rzadka nagroda za ukończenie wszystkich Zadań Dziennych</string>
+    <string name="armory_source_weekly_bonus">Rzadka nagroda za ukończenie wszystkich Zadań Tygodniowych</string>
+    <string name="armory_source_skill_cape">Osiągnij 99 poziom w %1$s</string>
 
     <!-- Komunikaty sesji / kolejki (issue #596) -->
     <string name="skill_no_logs">Brak drewna w ekwipunku</string>
@@ -1486,6 +1502,7 @@
     <string name="home_found_pet">Znalazłeś zwierzaka: %1$s!</string>
     <string name="pet_found_title">Nowy zwierzak!</string>
     <string name="home_congratulations_received">Gratulacje! Otrzymujesz: %1$s</string>
+    <string name="home_session_voided">Sesja unieważniona — surowce zwrócone</string>
     <string name="home_not_enough_coins_repeat">Za mało monet, by powtórzyć %1$s.</string>
     <string name="home_not_enough_materials_repeat">Za mało materiałów, by powtórzyć %1$s.</string>
     <string name="combat_no_food_title">Brak założonego jedzenia</string>
@@ -1497,9 +1514,9 @@
     <string name="bonus_section_skills">Bonusy umiejętności</string>
     <string name="bonus_combat_stat_boost">Wzmacnia statystyki bojowe</string>
     <string name="bonus_combined_xp">Łączne XP</string>
-    <string name="bonus_yield">wydajność</string>
+    <string name="bonus_yield">+%1$d%% wydajność</string>
     <string name="bonus_session_shorter">%1$d min krótsze sesje</string>
-    <string name="bonus_coin_return">zwrot monet</string>
+    <string name="bonus_coin_return">+%1$d%% zwrot monet</string>
     <string name="snackbar_added_to_queue">Dodano do kolejki: %1$s.</string>
     <string name="snackbar_queue_full">Kolejka jest pełna.</string>
     <string name="combat_start_failed">Nie udało się rozpocząć: %1$s</string>
@@ -1524,7 +1541,7 @@
     <string name="tower_milestones">Kamienie milowe</string>
     <string name="tower_floor_cleared">Piętro %d ukończone!</string>
     <string name="tower_new_best">Nowy rekord: piętro %d!</string>
-    <string name="tower_death_reset">Zginąłeś na piętrze %d. Powrót do piętra 1.</string>
+    <string name="tower_death_reset">Zginąłeś na piętrze %1$d. Powrót do piętra %2$d.</string>
     <string name="tower_not_enough_runes">Za mało %1$s na ataki z maksymalnym potencjałem.</string>
     <string name="tower_milestone_claim">Odbierz</string>
     <string name="tower_milestone_claimed">Odebrano</string>
@@ -1639,4 +1656,9 @@
     <string name="home_welcome_greeting">Witaj z powrotem,</string>
     <string name="home_welcome_name">%1$s!</string>
     <string name="home_welcome_title">%1$s!</string>
+    <string name="town_building_cape_rack_name">Cape Rack</string>
+    <string name="town_cape_rack_no_bonus">Upgrade to passively apply owned skill/guild cape yield and XP bonuses</string>
+    <string name="town_cape_rack_t1_bonus">Passive bonuses from Tier 1 (Gathering) capes are active</string>
+    <string name="town_cape_rack_t2_bonus">Passive bonuses from Tier 1 &amp; 2 (Gathering, Artisan) capes are active</string>
+    <string name="town_cape_rack_t3_bonus">Passive bonuses from all owned capes (Gathering, Artisan, Combat &amp; Guild) are active</string>
 </resources>

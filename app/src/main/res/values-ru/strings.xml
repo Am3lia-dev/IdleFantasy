@@ -329,7 +329,8 @@
     <string name="weekly_bonus_title">Недельный бонус!</string>
     <string name="weekly_bonus_claim">Получить недельный бонус</string>
     <string name="label_daily_info">За каждый ежедневный квест вы получаете монеты. В каждом квесте также есть вероятность 1 из 100, что выпадет часть гномьего снаряжения.</string>
-    <string name="label_weekly_info">За каждое еженедельное испытание выдаются монеты в зависимости от требуемого уровня. Выполните все 5, чтобы получить бонус: 100 000 монет или шанс 1 из 26 получить часть Божественного снаряжения..</string>
+    <string name="label_weekly_info">За каждое еженедельное испытание выдаются монеты в зависимости от требуемого уровня. Выполните все 5, чтобы получить бонус: 100 000 монет или шанс %1$s получить часть Божественного снаряжения.</string>
+    <string name="label_weekly_info_complete">За каждое еженедельное испытание выдаются монеты в зависимости от требуемого уровня. Выполните все 5, чтобы получить бонус: 100 000 монет. У вас уже есть всё Божественное снаряжение!</string>
     <string name="label_daily_reward">2 000 монет (1/100: дварфское снаряжение)</string>
     <string name="msg_daily_claimed_coins">Ежедневный квест выполнен! +2 000 монет.</string>
     <string name="msg_daily_claimed_dwarven">Ежедневный квест выполнен! Вы нашли %1$s!</string>
@@ -493,6 +494,7 @@
     <string name="combat_best_arrow">Лучшая стрела</string>
     <string name="combat_arrow_auto">Авто (лучшая доступная)</string>
     <string name="combat_label_arrow">Стрела</string>
+    <string name="combat_select_loadout">Выбрать комплект</string>
     <string name="combat_enemies">Враги</string>
     <string name="combat_no_spells">Нет доступных заклинаний на вашем уровне магии.</string>
     <string name="combat_only_castable">Только доступные</string>
@@ -504,6 +506,12 @@
     <string name="combat_duration">Длительность</string>
     <!-- Translator note: %1$d = minutes -->
     <string name="combat_duration_min">%1$d мин</string>
+    <string name="combat_fight_count_label">Количество боёв</string>
+    <string name="combat_fight_count_suffix">×%1$d боёв</string>
+    <string name="combat_fight_progress">Бой %1$d/%2$d</string>
+    <string name="combat_run_count_label">Количество заходов</string>
+    <string name="combat_run_count_suffix">×%1$d заходов</string>
+    <string name="combat_run_progress">Заход %1$d/%2$d</string>
     <string name="combat_xp_on_victory">Опыт за победу</string>
     <string name="combat_you_died">Вы погибли!</string>
     <string name="combat_died_reward">Вы получили 10% наград.</string>
@@ -525,6 +533,8 @@
     <string name="profile_gathering_tools">Инструменты добычи</string>
     <string name="profile_food_dungeon">Еда (подземелье)</string>
     <string name="profile_no_food">Нет приготовленной еды в инвентаре</string>
+    <string name="profile_food_threshold">Начинать есть при</string>
+    <string name="profile_combat_style">Стиль боя</string>
     <!-- Translator note: %1$d = quantity, %2$d = heal value -->
     <string name="profile_food_desc">×%1$d  •  лечит %2$d здоровья</string>
     <!-- Translator note: %1$s = slot display name (e.g. "Weapon") -->
@@ -634,6 +644,7 @@
     <string name="farming_clear_patch">Очистить участок</string>
     <string name="farming_clear_desc">Удалить культуру без награды?</string>
     <string name="farming_harvest_and_plant">Собрать и посадить всё</string>
+    <string name="farming_harvest_all_complete">Все грядки собраны!</string>
     <string name="farming_no_crops_ready">Нет готовых к сбору культур</string>
     <string name="farming_no_empty_patches">Нет свободных участков</string>
     <!-- Translator note: %1$s = seed name -->
@@ -723,7 +734,7 @@
     <string name="inn_long_laborer_desc">Одна работа за найм, увольняется после сбора. 8ч добыча, ×0,5 эффективность, без ограничений на крафт. Он медленный, но сделает что угодно.</string>
     <string name="inn_apprentice_desc">Одна работа за найм, увольняется после сбора. 8ч добыча, ×1 эффективность. Крафт, молитва и руническое ремесло — лимит 480 предметов за сессию.</string>
     <string name="inn_journeyman_desc">Одна работа за найм, увольняется после сбора. 6ч добыча, ×1.5 эффективность. Крафт, молитва и руническое ремесло — лимит 540 предметов за сессию.</string>
-    <string name="inn_master_desc">Одна работа за найм, увольняется после сбора. 4ч добыча, ×2 эффективность. Крафт, молитва и руническое ремесло — лимит 480 предметов за сессию.</string>
+    <string name="inn_master_desc">Одна работа за найм, увольняется после сбора. 4ч добыча, ×2.5 эффективность. Крафт, молитва и руническое ремесло — лимит 600 предметов за сессию.</string>
     <string name="inn_gathering_note">Добыча: часы сессии × множитель эффективности применяется к луту и опыту</string>
     <string name="inn_crafting_note">Крафт/молитва/руническое ремесло: количество ограничено по уровню; у Долгого чернорабочего нет лимита</string>
     <string name="worker_skills_title">Работник: %1$s</string>
@@ -1205,12 +1216,12 @@
     <string name="achievement_town_first_upgrade_name">Первая Реновация</string>
     <string name="achievement_town_first_upgrade_desc">Улучшите любое здание города впервые</string>
     <string name="achievement_town_all_tier1_name">Улучшатель Города</string>
-    <string name="achievement_town_all_tier1_desc">Улучшите все шесть зданий минимум до 1-го уровня</string>
+    <string name="achievement_town_all_tier1_desc">Улучшите все семь зданий минимум до 1-го уровня</string>
     <string name="skill_mining_qty_estimate">~%1$d руды/сессия</string>
     <string name="achievement_town_one_maxed_name">Мастер Строитель</string>
     <string name="achievement_town_one_maxed_desc">Улучшите любое здание до максимального уровня</string>
     <string name="achievement_town_all_maxed_name">Легендарный Город</string>
-    <string name="achievement_town_all_maxed_desc">Улучшите все шесть зданий до максимального уровня</string>
+    <string name="achievement_town_all_maxed_desc">Улучшите все семь зданий до максимального уровня</string>
     <string name="achievement_tower_first_floor_name">Первый шаг</string>
     <string name="achievement_tower_first_floor_desc">Пройдите свой первый этаж Бесконечной Башни</string>
     <string name="achievement_tower_floor_10_name">Посетить башню</string>
@@ -1372,9 +1383,9 @@
     <string name="bonus_section_skills">Бонусы навыков</string>
     <string name="bonus_combat_stat_boost">Boosts combat stats</string>
     <string name="bonus_combined_xp">Суммарный XP</string>
-    <string name="bonus_yield">выход</string>
+    <string name="bonus_yield">+%1$d%% выход</string>
     <string name="bonus_session_shorter">На %1$d мин короче сессии</string>
-    <string name="bonus_coin_return">возврат монет</string>
+    <string name="bonus_coin_return">+%1$d%% возврат монет</string>
     <string name="snackbar_added_to_queue">Добавлено в очередь: %1$s.</string>
     <string name="snackbar_queue_full">Очередь заполнена.</string>
     <string name="home_not_enough_coins_repeat">Недостаточно монет для повтора %1$s.</string>
@@ -1427,6 +1438,9 @@
     <string name="armory_source_drop_chance">Выпало от %1$s (%2$s)</string>
     <string name="armory_source_drop">Выпало от %1$s</string>
     <string name="armory_source_shop">Магазин</string>
+    <string name="armory_source_daily_bonus">Редкая награда за выполнение всех ежедневных заданий</string>
+    <string name="armory_source_weekly_bonus">Редкая награда за выполнение всех еженедельных заданий</string>
+    <string name="armory_source_skill_cape">Достигните 99 уровня в навыке %1$s</string>
 
     <!-- Session / queue messages (issue #596) -->
     <string name="skill_no_logs">Нет брёвен в инвентаре</string>
@@ -1464,6 +1478,7 @@
     <string name="home_found_pet">Вы нашли питомца: %1$s!</string>
     <string name="pet_found_title">Новый питомец!</string>
     <string name="home_congratulations_received">Поздравляем! Вы получили: %1$s</string>
+    <string name="home_session_voided">Сессия аннулирована — материалы возвращены</string>
     <string name="combat_no_food_title">Еда не экипирована</string>
     <string name="combat_no_food_body">У вас нет еды. Без еды вы можете быстро погибнуть и потерять большинство наград. Всё равно начать?</string>
     <string name="combat_start_anyway">Начать всё равно</string>
@@ -1486,7 +1501,7 @@
     <string name="tower_milestones">Milestones</string>
     <string name="tower_floor_cleared">Этаж %d пройден!</string>
     <string name="tower_new_best">Новый рекорд: этаж %d!</string>
-    <string name="tower_death_reset">Вы проиграли на этаже %d. Возращение на этаж 1.</string>
+    <string name="tower_death_reset">Вы проиграли на этаже %1$d. Возвращение на этаж %2$d.</string>
     <string name="tower_not_enough_runes">Недостаточно %1$s для максимального количества атак.</string>
     <string name="tower_milestone_claim">Получить</string>
     <string name="tower_milestone_claimed">Получено</string>
@@ -1603,6 +1618,8 @@
     <string name="home_welcome_title">%1$s!</string>
     <!-- ===== translatable="false" + synced from values/ ===== -->
     <string name="settings_wiki_url" translatable="false">idlefantasy.tristinbaker.xyz</string>
+    <string name="settings_discord">Discord</string>
+    <string name="settings_discord_url">discord.gg/nZVZ67gyH</string>
     <string-array name="profile_pet_happy_messages">
         <item>%1$s радуется!</item>
         <item>%1$s виляет хвостом!</item>
@@ -1615,4 +1632,9 @@
         <item>%1$s любит внимание!</item>
         <item>%1$s обещает и дальше усердно работать на вас.</item>
     </string-array>
+    <string name="town_building_cape_rack_name">Cape Rack</string>
+    <string name="town_cape_rack_no_bonus">Upgrade to passively apply owned skill/guild cape yield and XP bonuses</string>
+    <string name="town_cape_rack_t1_bonus">Passive bonuses from Tier 1 (Gathering) capes are active</string>
+    <string name="town_cape_rack_t2_bonus">Passive bonuses from Tier 1 &amp; 2 (Gathering, Artisan) capes are active</string>
+    <string name="town_cape_rack_t3_bonus">Passive bonuses from all owned capes (Gathering, Artisan, Combat &amp; Guild) are active</string>
 </resources>

@@ -315,7 +315,8 @@
     <string name="weekly_bonus_title">ウィークリーボーナス！</string>
     <string name="weekly_bonus_claim">ウィークリーボーナスを受け取る</string>
     <string name="label_daily_info">デイリークエストをクリアするとコインを獲得できます。また、各クエストには 1/100 の確率で「ドワーフ装備」がドロップするチャンスがあります。</string>
-    <string name="label_weekly_info">ウィークリーチャレンジをクリアすると、必要レベルに応じたコインを獲得できます。5つすべてクリアすると、ボーナスとして100,000コイン、または 1/26 の確率で「ディバイン装備」を獲得できます。</string>
+    <string name="label_weekly_info">ウィークリーチャレンジをクリアすると、必要レベルに応じたコインを獲得できます。5つすべてクリアすると、ボーナスとして100,000コイン、または %1$s の確率で「ディバイン装備」を獲得できます。</string>
+    <string name="label_weekly_info_complete">ウィークリーチャレンジをクリアすると、必要レベルに応じたコインを獲得できます。5つすべてクリアすると、ボーナスとして100,000コインを獲得できます。ディバイン装備はすべて入手済みです!</string>
     <string name="label_daily_reward">2,000コイン（1/100：ドワーフ装備）</string>
     <string name="msg_daily_claimed_coins">デイリークエスト完了！ +2,000コイン。</string>
     <string name="msg_daily_claimed_dwarven">デイリークエスト完了！ %1$s を見つけました！</string>
@@ -399,6 +400,8 @@
     <string name="settings_source_open">開く</string>
     <string name="settings_wiki">Wiki</string>
     <string name="settings_wiki_url" translatable="false">idlefantasy.tristinbaker.xyz</string>
+    <string name="settings_discord">Discord</string>
+    <string name="settings_discord_url">discord.gg/nZVZ67gyH</string>
     <string name="settings_exported_ok">セーブデータを書き出しました</string>
     <string name="settings_imported_ok">セーブデータの読み込みに成功しました</string>
     <string name="settings_imported_fail">読み込みに失敗しました — 無効なファイルです</string>
@@ -479,6 +482,7 @@
     <string name="combat_best_arrow">最良の矢</string>
     <string name="combat_arrow_auto">自動 (使用可能な最良の矢)</string>
     <string name="combat_label_arrow">矢</string>
+    <string name="combat_select_loadout">装備セットを選択</string>
     <string name="combat_enemies">敵</string>
     <string name="combat_no_spells">あなたの魔法レベルでは使用できるスペルがありません。</string>
     <string name="combat_only_castable">詠唱可能のみ</string>
@@ -490,6 +494,12 @@
     <string name="combat_duration">所要時間</string>
     <!-- Translator note: %1$d = minutes -->
     <string name="combat_duration_min">%1$d 分</string>
+    <string name="combat_fight_count_label">戦闘回数</string>
+    <string name="combat_fight_count_suffix">×%1$d 戦</string>
+    <string name="combat_fight_progress">戦闘 %1$d/%2$d</string>
+    <string name="combat_run_count_label">周回数</string>
+    <string name="combat_run_count_suffix">×%1$d 周</string>
+    <string name="combat_run_progress">周回 %1$d/%2$d</string>
     <string name="combat_xp_on_victory">勝利時の獲得経験値</string>
     <string name="combat_you_died">死亡しました！</string>
     <string name="combat_died_reward" formatted="false">You received 10% of the rewards.</string>
@@ -523,6 +533,8 @@
     <string name="profile_gathering_tools">採集道具</string>
     <string name="profile_food_dungeon">料理 (ダンジョン)</string>
     <string name="profile_no_food">インベントリに調理済みの料理がありません</string>
+    <string name="profile_food_threshold">食事を始めるHP</string>
+    <string name="profile_combat_style">戦闘スタイル</string>
     <!-- Translator note: %1$d = quantity, %2$d = heal value -->
     <string name="profile_food_desc">×%1$d  •  HPを %2$d 回復</string>
     <!-- Translator note: %1$s = slot display name (e.g. "Weapon") -->
@@ -634,6 +646,7 @@
     <string name="farming_clear_patch">畑をクリア</string>
     <string name="farming_clear_desc">報酬なしで作物を撤去しますか？</string>
     <string name="farming_harvest_and_plant">すべて収穫して植える</string>
+    <string name="farming_harvest_all_complete">すべての畑を収穫しました！</string>
     <string name="farming_no_crops_ready">収穫可能な作物はまだありません</string>
     <string name="farming_no_empty_patches">空いている畑はありません</string>
     <!-- Translator note: %1$s = seed name -->
@@ -725,7 +738,7 @@
     <string name="inn_long_laborer_desc">1契約につき1回の仕事、回収後に解雇。8時間の採集、効率0.5倍、クラフト数量無制限。動作は遅いですが、何でもこなします。</string>
     <string name="inn_apprentice_desc">1契約につき1回の仕事、回収後に解雇。8時間の採集、効率1.0倍。クラフト、祈り、ルーン作成は1セッションあたり480個までに制限。</string>
     <string name="inn_journeyman_desc">1契約につき1回の仕事、回収後に解雇. 6時間の採集、効率1.5倍。クラフト、祈り、ルーン作成は1セッションあたり540個までに制限。</string>
-    <string name="inn_master_desc">1契約につき1回の仕事、回収後に解雇。4時間の採集、効率2.0倍。クラフト、祈り、ルーン作成は1セッションあたり480個までに制限。</string>
+    <string name="inn_master_desc">1契約につき1回の仕事、回収後に解雇。4時間の採集、効率2.5倍。クラフト、祈り、ルーン作成は1セッションあたり600個までに制限。</string>
     <string name="inn_gathering_note">採集: セッション時間 × 効率倍率が獲得アイテムと経験値に適用されます</string>
     <string name="inn_crafting_note">生産/祈り/ルーン作成: 各ランクごとに上限あり。雑用係には制限がありません</string>
     <string name="worker_skills_title">労働者: %1$s</string>
@@ -1218,11 +1231,11 @@
     <string name="achievement_town_first_upgrade_name">最初の改築</string>
     <string name="achievement_town_first_upgrade_desc">初めて街の建物をアップグレードする</string>
     <string name="achievement_town_all_tier1_name">街の発展者</string>
-    <string name="achievement_town_all_tier1_desc">街の6つの建物をすべてティア1以上にする</string>
+    <string name="achievement_town_all_tier1_desc">街の7つの建物をすべてティア1以上にする</string>
     <string name="achievement_town_one_maxed_name">マスタービルダー</string>
     <string name="achievement_town_one_maxed_desc">いずれか1つの建物を最大ティアまでアップグレードする</string>
     <string name="achievement_town_all_maxed_name">伝説の街</string>
-    <string name="achievement_town_all_maxed_desc">街の6つの建物をすべて最大ティアまでアップグレードする</string>
+    <string name="achievement_town_all_maxed_desc">街の7つの建物をすべて最大ティアまでアップグレードする</string>
     <string name="achievement_tower_first_floor_name">第一歩</string>
     <string name="achievement_tower_first_floor_desc">無限の塔の最初の階層をクリアする</string>
     <string name="achievement_tower_floor_10_name">塔の初心者</string>
@@ -1428,6 +1441,9 @@
     <string name="armory_source_drop_chance">%1$s からドロップ (%2$s)</string>
     <string name="armory_source_drop">%1$s からドロップ</string>
     <string name="armory_source_shop">ショップ</string>
+    <string name="armory_source_daily_bonus">デイリークエストを全て達成したときのレア報酬</string>
+    <string name="armory_source_weekly_bonus">ウィークリークエストを全て達成したときのレア報酬</string>
+    <string name="armory_source_skill_cape">%1$s のレベル99に到達する</string>
 
     <!-- Session / queue messages (issue #596) -->
     <string name="skill_no_logs">インベントリに原木がありません</string>
@@ -1465,6 +1481,7 @@
     <string name="home_found_pet">ペットを発見しました: %1$s！</string>
     <string name="pet_found_title">新しいペット！</string>
     <string name="home_congratulations_received">おめでとうございます！ %1$s を獲得しました</string>
+    <string name="home_session_voided">セッションが無効になりました — 素材は返還されました</string>
     <string name="home_not_enough_coins_repeat">%1$s を繰り返すためのコインが足りません。</string>
     <string name="home_not_enough_materials_repeat">%1$s を繰り返すための素材が足りません。</string>
     <string name="combat_no_food_title">料理が装備されていません</string>
@@ -1476,9 +1493,9 @@
     <string name="bonus_section_skills">スキルボーナス</string>
     <string name="bonus_combat_stat_boost">戦闘ステータス向上</string>
     <string name="bonus_combined_xp">経験値合算</string>
-    <string name="bonus_yield">収穫量</string>
+    <string name="bonus_yield">+%1$d%% 収穫量</string>
     <string name="bonus_session_shorter">セッション時間を %1$d 分短縮</string>
-    <string name="bonus_coin_return">コイン獲得</string>
+    <string name="bonus_coin_return">+%1$d%% コイン獲得</string>
     <string name="snackbar_added_to_queue">キューに追加: %1$s</string>
     <string name="snackbar_queue_full">キューが満杯です。</string>
     <string name="combat_start_failed">開始できませんでした: %1$s</string>
@@ -1503,7 +1520,7 @@
     <string name="tower_milestones">マイルストーン</string>
     <string name="tower_floor_cleared">%d 階をクリア！</string>
     <string name="tower_new_best">自己ベスト更新: %d 階！</string>
-    <string name="tower_death_reset">%d 階で倒れました。1階にリセットされます。</string>
+    <string name="tower_death_reset">%1$d 階で倒れました。%2$d 階にリセットされます。</string>
     <string name="tower_not_enough_runes">%1$s が不足しているため、最大数での攻撃が行えません。</string>
     <string name="tower_milestone_claim">回収</string>
     <string name="tower_milestone_claimed">回収済み</string>
@@ -1618,4 +1635,9 @@
     <string name="home_welcome_greeting">おかえりなさい、</string>
     <string name="home_welcome_name">%1$s！</string>
     <string name="home_welcome_title">%1$s！</string>
+    <string name="town_building_cape_rack_name">Cape Rack</string>
+    <string name="town_cape_rack_no_bonus">Upgrade to passively apply owned skill/guild cape yield and XP bonuses</string>
+    <string name="town_cape_rack_t1_bonus">Passive bonuses from Tier 1 (Gathering) capes are active</string>
+    <string name="town_cape_rack_t2_bonus">Passive bonuses from Tier 1 &amp; 2 (Gathering, Artisan) capes are active</string>
+    <string name="town_cape_rack_t3_bonus">Passive bonuses from all owned capes (Gathering, Artisan, Combat &amp; Guild) are active</string>
 </resources>

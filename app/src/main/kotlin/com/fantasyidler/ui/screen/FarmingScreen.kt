@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -69,6 +68,7 @@ import com.fantasyidler.data.model.FarmingPatch
 import com.fantasyidler.repository.FarmingRepository
 import com.fantasyidler.simulator.XpTable
 import com.fantasyidler.ui.theme.GoldPrimary
+import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.viewmodel.FarmingUiState
 import com.fantasyidler.ui.viewmodel.FarmingViewModel
 import com.fantasyidler.ui.viewmodel.remainingMs
@@ -85,7 +85,7 @@ fun FarmingScreen(
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    ToastMessageEffect(state.snackbarMessage, viewModel::snackbarConsumed)
+    AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
@@ -155,6 +155,7 @@ fun FarmingScreen(
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             PlantSheet(
                 crops          = state.availableCrops,
                 inventory      = state.inventory,
@@ -162,6 +163,7 @@ fun FarmingScreen(
                 onDismiss      = viewModel::closePlantSheet,
                 initialAshKey  = state.lastFertilizerKey,
             )
+            }
         }
     }
 
@@ -169,7 +171,12 @@ fun FarmingScreen(
     state.harvestResult?.let { result ->
         AlertDialog(
             onDismissRequest = viewModel::harvestResultConsumed,
-            title = { Text(stringResource(R.string.farming_harvested, result.cropName)) },
+            title = {
+                Text(
+                    if (result.isBulk) stringResource(R.string.farming_harvest_all_complete)
+                    else stringResource(R.string.farming_harvested, result.cropName)
+                )
+            },
             text = {
                 Column {
                     Text(
@@ -211,9 +218,9 @@ fun FarmingSheetContent(
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    ToastMessageEffect(state.snackbarMessage, viewModel::snackbarConsumed)
+    AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
-    Box(Modifier.fillMaxWidth().fillMaxHeight(0.85f)) {
+    Box(Modifier.fillMaxWidth()) {
         if (state.isLoading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         } else LazyColumn(
@@ -253,6 +260,7 @@ fun FarmingSheetContent(
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             PlantSheet(
                 crops          = state.availableCrops,
                 inventory      = state.inventory,
@@ -260,13 +268,19 @@ fun FarmingSheetContent(
                 onDismiss      = viewModel::closePlantSheet,
                 initialAshKey  = state.lastFertilizerKey,
             )
+            }
         }
     }
 
     state.harvestResult?.let { result ->
         AlertDialog(
             onDismissRequest = viewModel::harvestResultConsumed,
-            title = { Text(stringResource(R.string.farming_harvested, result.cropName)) },
+            title = {
+                Text(
+                    if (result.isBulk) stringResource(R.string.farming_harvest_all_complete)
+                    else stringResource(R.string.farming_harvested, result.cropName)
+                )
+            },
             text = {
                 Column {
                     Text(

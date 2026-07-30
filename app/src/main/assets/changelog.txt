@@ -1,3 +1,78 @@
+v1.12.11
+• Boss fights now end right after the killing blow instead of hanging at 0 HP for up to a minute
+• Final hits of a fight play at normal speed instead of slowing to one hit every 10+ seconds
+• Combat log lines now appear one at a time instead of clumping up every couple of seconds
+• Kill announcements and the defeated-so-far count now show at the moment the kill happens
+• Your character no longer keeps attacking after dropping to 0 HP in a dungeon
+• Dying during a queued dungeon repeat now ends the run at the death instead of waiting out the full timer
+• The Infinite Tower's enemy strength chip is hidden until stat scaling actually begins past floor 100
+• Cooking session labels for rat meat, chicken, mutton, and beef are now translatable and translated in all languages
+• Removed 32 unused duplicate spell name strings so translators no longer see them
+• Herblore recipe lists now count enhanced potions in the Owned tally instead of showing 0
+• Dismiss Worker is hidden while a finished session awaits collection, so rewards can't be discarded by accident
+• Worker card buttons now wrap onto a second line at large font sizes instead of being squashed
+• Ashes no longer show prayer quest targets or quest markers, since only bones count toward those quests
+• The back button works again while a notification banner is on screen instead of being blocked for a few seconds
+• Prestiging Strength now grants a bronze warhammer as the fallback weapon instead of an attack-style scimitar
+• Equip Best now scores ranged and magic weapons by their own stats and factors in attack speed
+• Combat loadouts no longer bleed into each other when switching styles; each style now remembers its full armor set
+
+v1.12.10
+• Fixed the Infinite Tower queue flickering/jumping around when a floor finished while others were still queued behind it
+• Infinite Tower now keeps climbing automatically after each floor you win, instead of stopping to wait for you to collect the reward first
+• Fixed dying in the Infinite Tower and collecting from the home screen resetting you all the way to floor 1 instead of your last checkpoint
+• Fixed the Ranged Cape, Archers Guild Cape, Magic Cape, and Mages Guild Cape not granting their intended ranged/magic combat bonuses (the ranged and archers capes were silently giving unused melee stats instead, and the magic capes were missing their accuracy bonus)
+• Fixed Equip Best Gear still favoring high-defense armor over your combat style's actual offensive stats (e.g. equipping the Defense Cape for an Attack or Strength loadout instead of the Attack/Strength Cape)
+• Fixed Repeat Action always queuing a single boss fight or dungeon run instead of matching the original session's fight/run count
+• Fixed a long chain of repeated boss fights or dungeon runs stalling in the background and only crediting a fraction of the wins toward quests, instead of catching up on all of them when you reopen the app
+• Fixed Mercantile session results showing an inflated coin blessing bonus that was never actually added to your coin balance
+• Fixed the "Queue ends in..." timer on the home screen undercounting queued boss fights and dungeon runs that had a repeat count above 1
+• Fixed the home screen stats bar and the Shop's Sell tab breaking into vertical, one-character-per-line text when using a larger system font size
+• Fixed the Master worker tier's efficiency being too low to beat the Journeyman tier, tying it with the cheaper Apprentice tier instead of being the best; Master's efficiency is now 2.5x and its crafting cap is 600 items per session
+• Added a pity system to the weekly quest Divine gear drop: missing it increases next week's odds by 50%, resetting after a drop; the Quests screen now shows your current odds, and you can never get a duplicate piece
+• Fixed starting a boss or dungeon fight sometimes requiring you to reselect a spell or potion even though it was already remembered from last time
+• Fixed the "Added to queue" message shown by Repeat Action only naming the skill (e.g. "Fishing") instead of the specific activity like the normal queue message does (e.g. "Fishing — Raw Salmon")
+• Fixed two Town achievement descriptions still referencing 6 town buildings instead of 7
+• Fixed the Shop showing a nonsensical "x0 in inventory" line under the 2x XP Boost, which isn't a stockable item
+• Fixed Equip Best Gear for Ranged and Magic loadouts still undervaluing damage-boosting gear in favor of accuracy-only gear that's actually weaker in practice
+
+v1.12.9
+• Fixed swipe-down-to-close not working on the Skills, Farming, and Mercantile sheets when the list didn't need scrolling or you swiped past the top/bottom; a second swipe once you're at the top now consistently closes the sheet
+• Fixed the "Harvest and Plant All" result popup in Farming showing a garbled title instead of a proper "All Patches Harvested!" message
+• Reworked the dungeon safety rating (Likely/Risky/Unlikely to survive) to run many randomized combat simulations instead of a single fixed run, so rare but dangerous enemies and bad-luck streaks are no longer hidden from the rating
+• Fixed the "Start eating at" HP percentage setting being ignored, causing food to be eaten far earlier than the configured threshold
+• Fixed Equip Best Gear favoring higher-defense armor over higher-strength armor when using a Strength combat style loadout
+• Fixed pet XP bonuses not being applied to Smithing, Cooking, Fletching, Crafting, Herblore, and Construction sessions
+• Added a Discord link to Settings > About
+
+v1.12.8
+• Added a run count picker to dungeons, so you can queue up to 24 runs against the same dungeon as a single queue slot, with live "Run 12/24" progress shown while it runs
+• Added per-combat-style gear loadouts (Combat tab, Gear): each style now automatically remembers its own weapon, armor, ranged arrow, and magic spell, so tapping a style chip instantly re-equips whatever you last used with it instead of leaving ranged/magic rings and necklaces on whatever a different style left behind; also added a configurable "start eating" HP percentage instead of the fixed 50% threshold, and Equip Best Gear now picks ranged/magic-appropriate armor instead of always favoring strength
+• Added checkpoints to the Infinite Tower every 25 floors, so dying now drops you back to your last checkpoint instead of all the way to floor 1
+• Fixed the Ring Toss minigame's timing bar never actually changing color inside the target zone (it was swapping between two colors that turned out to be identical); the bar now turns red while inside the target zone, matching Hammer Strike
+
+v1.12.7
+• Added owned item quantity display in skill crafting windows (Smithing, Cooking, Fletching, Crafting, Herblore, Construction, Runecrafting, Firemaking, and Worker Crafting)
+• Fixed collecting a large number of piled-up sessions (e.g. after queueing many boss fights) being slow and unresponsive, and fixed tapping Collect repeatedly during that time awarding the same rewards more than once
+
+• Fixed the Armory's "How to obtain" info showing an item's flavor text instead of how to get it for Dwarven gear, Divine gear, skill capes, and several dungeon-exclusive items (Shadow/Arcane Grappling Hook, Rogue's Lockpick, and others)
+• Fixed prestiging a combat skill (Attack, Strength, Defense, Ranged, Magic, Hitpoints, or Prayer) during an active fight leaving that fight to run on stale stats, which could later void it and wrongly show "Defeated by" the boss/dungeon even if you were never actually beaten; prestiging now properly ends the fight and refunds it, and a voided session can no longer show a misleading defeat message
+• Fixed a long queue of repeated boss fights losing track of how many fights had run (and undercounting the total) if a second queued item was waiting behind it and a fight's completion was delayed in the background
+
+v1.12.6
+• The custom notification banner can now be dismissed early with a tap, instead of blocking buttons underneath it until it times out
+• Added a fight count picker to boss battles, so you can queue up to 100 fights against the same boss as a single queue slot, with live "Fight 34/100" progress shown while it runs
+• Boss fight weapon, potion, arrow, and spell selection are now dropdowns instead of long lists, with potion effects, arrow counts, and spell rune costs still shown for each option
+• Fixed the Farming patches sheet stopping partway down the screen instead of filling it, cutting off patches near the bottom
+
+v1.12.5
+• Fixed the action queue getting stuck instead of automatically starting the next queued Infinite Tower floor after collecting one
+• Added many more daily guild quest variants so most guilds no longer repeat the exact same set of dailies every day
+• Replaced the app's queue/action notifications with a new custom themed banner, fixing messages sometimes cancelling each other out instead of showing in order, no longer blocking scrolling/swiping while shown, and no longer cutting off long messages
+• Fixed skill activity sheets (Smithing, Cooking, Mining, etc.) closing accidentally when scrolling their list too far
+• Fixed the Text Size setting barely affecting text inside trays/bottom sheets while scaling the rest of the UI correctly
+• Fixed the Ring Toss target zone marker not showing (and not matching Hard mode's narrower 52%-57% window)
+
 v1.12.4
 • Fixed Firemakers Guild quests describing burning logs as "burning ashes" instead of naming the actual wood being burned
 • Boss fights on the Home screen now show that boss's own icon instead of a generic gamepad icon; the Infinite Tower now shows a dedicated tower icon too

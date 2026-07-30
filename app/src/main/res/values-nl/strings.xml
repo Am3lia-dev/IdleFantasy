@@ -315,7 +315,8 @@
     <string name="weekly_bonus_title">Weekly Bonus!</string>
     <string name="weekly_bonus_claim">Claim Weekly Bonus</string>
     <string name="label_daily_info">Each daily quest rewards coins. Every quest also has a 1 in 100 chance to drop a piece of Dwarven gear.</string>
-    <string name="label_weekly_info">Each weekly challenge rewards coins based on its level requirement. Complete all 5 to earn a bonus: 100,000 coins, or a 1 in 26 chance at a piece of Divine gear.</string>
+    <string name="label_weekly_info">Each weekly challenge rewards coins based on its level requirement. Complete all 5 to earn a bonus: 100,000 coins, or a %1$s chance at a piece of Divine gear.</string>
+    <string name="label_weekly_info_complete">Each weekly challenge rewards coins based on its level requirement. Complete all 5 to earn a bonus: 100,000 coins. You already own every piece of Divine gear!</string>
     <string name="label_daily_reward">2000 ducaten (1/100: Dwergenuitrusting)</string>
     <string name="msg_daily_claimed_coins">Dagelijkse quest voltooid! +2000 ducaten.</string>
     <string name="msg_daily_claimed_dwarven">Dagelijkse quest voltooid! Je hebt %1$s gevonden!</string>
@@ -394,6 +395,8 @@
     <string name="settings_source_url" translatable="false">github.com/tristinbaker/IdleFantasy</string>
     <string name="settings_source_open">Open</string>
     <string name="settings_wiki">Wiki</string>
+    <string name="settings_discord">Discord</string>
+    <string name="settings_discord_url">discord.gg/nZVZ67gyH</string>
     <string name="settings_exported_ok">Opslag geëxporteerd</string>
     <string name="settings_imported_ok">Opslag succesvol geïmporteerd</string>
     <string name="settings_imported_fail">Importeren mislukt — ongeldig bestand</string>
@@ -480,6 +483,12 @@
     <string name="combat_duration">Duur</string>
     <!-- Translator note: %1$d = minutes -->
     <string name="combat_duration_min">%1$d min</string>
+    <string name="combat_fight_count_label">Aantal gevechten</string>
+    <string name="combat_fight_count_suffix">×%1$d gevechten</string>
+    <string name="combat_fight_progress">Gevecht %1$d/%2$d</string>
+    <string name="combat_run_count_label">Aantal runs</string>
+    <string name="combat_run_count_suffix">×%1$d runs</string>
+    <string name="combat_run_progress">Run %1$d/%2$d</string>
     <string name="combat_xp_on_victory">XP bij overwinning</string>
     <string name="combat_you_died">Je bent dood!</string>
     <string name="combat_died_reward">Je ontvangt 10% van de beloningen.</string>
@@ -512,6 +521,8 @@
     <string name="profile_gathering_tools">Gereedschap</string>
     <string name="profile_food_dungeon">Eten (Dungeons)</string>
     <string name="profile_no_food">Geen gekookt voedsel in inventaris</string>
+    <string name="profile_food_threshold">Begin met eten bij</string>
+    <string name="profile_combat_style">Gevechtsstijl</string>
     <!-- Translator note: %1$d = quantity, %2$d = heal value -->
     <string name="profile_food_desc">×%1$d  •  heelt %2$d HP</string>
     <!-- Translator note: %1$s = slot display name (e.g. "Weapon") -->
@@ -622,6 +633,7 @@
     <string name="farming_clear_patch">Verwijder Perceel</string>
     <string name="farming_clear_desc">Verwijder het gewas zonder beloning?</string>
     <string name="farming_harvest_and_plant">Oogst en Plant Alles</string>
+    <string name="farming_harvest_all_complete">Alle percelen geoogst!</string>
     <string name="farming_no_crops_ready">Geen gewassen klaar om te oogsten</string>
     <string name="farming_no_empty_patches">Geen lege percelen beschikbaar</string>
     <!-- Translator note: %1$s = seed name -->
@@ -711,7 +723,7 @@
     <string name="inn_long_laborer_desc">Één klus per inhuur, ontslagen na het ophalen. 8u verzamelen, 0,5x efficiëntie, onbeperkte ambachtshoeveelheid. Hij is traag, maar hij doet alles.</string>
     <string name="inn_apprentice_desc">Eén klus per aanwerving, ontslagen na het verzamelen. 8u verzamelen, 1x efficiëntie. Juwelier, Gebed en Runen maken beperkt tot 480 items per sessie.</string>
     <string name="inn_journeyman_desc">Eén klus per aanwerving, ontslagen na het verzamelen. 6u verzamelen, 1,5x efficiëntie. Juwelier, Gebed en Runen maken beperkt tot 540 items per sessie.</string>
-    <string name="inn_master_desc">Eén klus per aanwerving, ontslagen na het verzamelen. 4u verzamelen, 2x efficiëntie. Juwelier, Gebed en Runen maken beperkt tot 480 items per sessie.</string>
+    <string name="inn_master_desc">Eén klus per aanwerving, ontslagen na het verzamelen. 4u verzamelen, 2,5x efficiëntie. Juwelier, Gebed en Runen maken beperkt tot 600 items per sessie.</string>
     <string name="inn_gathering_note">Verzamelen: sessie-uren x efficiëntiemultiplicator toegepast op buit en XP</string>
     <string name="inn_crafting_note">Juwelier/Gebed/Runen maken: hoeveelheid beperkt per level; Langdurige werknemer heeft geen limiet</string>
     <string name="worker_skills_title">Werknemer: %1$s</string>
@@ -1136,11 +1148,11 @@
     <string name="achievement_town_first_upgrade_name">Eerste Renovatie</string>
     <string name="achievement_town_first_upgrade_desc">Verbeter een stadsgebouw voor de eerste keer</string>
     <string name="achievement_town_all_tier1_name">Stadsverbeteraar</string>
-    <string name="achievement_town_all_tier1_desc">Verbeter alle zes stadsgebouwen naar minimaal Rang 1</string>
+    <string name="achievement_town_all_tier1_desc">Verbeter alle zeven stadsgebouwen naar minimaal Rang 1</string>
     <string name="achievement_town_one_maxed_name">Meesterbouwer</string>
     <string name="achievement_town_one_maxed_desc">Verbeter een stadsgebouw naar het maximum</string>
     <string name="achievement_town_all_maxed_name">Legendarische Stad</string>
-    <string name="achievement_town_all_maxed_desc">Verbeter alle zes stadsgebouwen naar het maximum</string>
+    <string name="achievement_town_all_maxed_desc">Verbeter alle zeven stadsgebouwen naar het maximum</string>
     <string name="achievement_tower_first_floor_name">First Step</string>
     <string name="achievement_tower_first_floor_desc">Clear your first Infinite Tower floor</string>
     <string name="achievement_tower_floor_10_name">Tower Initiate</string>
@@ -1304,9 +1316,9 @@
     <string name="bonus_section_skills">Skill Bonuses</string>
     <string name="bonus_combat_stat_boost">Boosts combat stats</string>
     <string name="bonus_combined_xp">Gecombineerde XP</string>
-    <string name="bonus_yield">opbrengst</string>
+    <string name="bonus_yield">+%1$d%% opbrengst</string>
     <string name="bonus_session_shorter">%1$d min kortere sessies</string>
-    <string name="bonus_coin_return">muntteruggave</string>
+    <string name="bonus_coin_return">+%1$d%% muntteruggave</string>
     <string name="snackbar_added_to_queue">Toegevoegd aan wachtrij: %1$s.</string>
     <string name="snackbar_queue_full">Wachtrij is vol.</string>
     <string name="home_not_enough_coins_repeat">Niet genoeg munten om %1$s te herhalen.</string>
@@ -1359,10 +1371,14 @@
     <string name="armory_source_drop_chance">Gevallen van %1$s (%2$s)</string>
     <string name="armory_source_drop">Gevallen van %1$s</string>
     <string name="armory_source_shop">Winkel</string>
+    <string name="armory_source_daily_bonus">Zeldzame beloning voor het voltooien van alle Dagelijkse Taken</string>
+    <string name="armory_source_weekly_bonus">Zeldzame beloning voor het voltooien van alle Wekelijkse Taken</string>
+    <string name="armory_source_skill_cape">Bereik niveau 99 in %1$s</string>
 
     <!-- ===== Combat arrows ===== -->
     <string name="combat_arrow_auto">Automatisch (beste beschikbare)</string>
     <string name="combat_label_arrow">Pijl</string>
+    <string name="combat_select_loadout">Uitrusting kiezen</string>
 
     <!-- ===== Guild ===== -->
     <string name="guild_quest_gate_blocked">Voltooi quests om je rang te verhogen</string>
@@ -1466,6 +1482,7 @@
     <string name="home_found_pet">Je hebt een huisdier gevonden: %1$s!</string>
     <string name="pet_found_title">Nieuw huisdier!</string>
     <string name="home_congratulations_received">Gefeliciteerd! Je hebt ontvangen: %1$s</string>
+    <string name="home_session_voided">Sessie ongeldig — materialen terugbetaald</string>
     <string name="combat_no_food_title">Geen voedsel uitgerust</string>
     <string name="combat_no_food_body">Je hebt geen voedsel uitgerust. Zonder voedsel kun je snel sterven en de meeste beloningen verliezen. Toch starten?</string>
     <string name="combat_start_anyway">Toch starten</string>
@@ -1488,7 +1505,7 @@
     <string name="tower_milestones">Milestones</string>
     <string name="tower_floor_cleared">Floor %d cleared!</string>
     <string name="tower_new_best">New best: Floor %d!</string>
-    <string name="tower_death_reset">You fell on floor %d. Resetting to floor 1.</string>
+    <string name="tower_death_reset">Je bent gevallen op verdieping %1$d. Terug naar verdieping %2$d.</string>
     <string name="tower_not_enough_runes">Niet genoeg %1$s voor het maximale aantal aanvallen.</string>
     <string name="tower_milestone_claim">Claim</string>
     <string name="tower_milestone_claimed">Claimed</string>
@@ -1603,4 +1620,9 @@
     <string name="home_welcome_greeting">Welkom terug,</string>
     <string name="home_welcome_name">%1$s!</string>
     <string name="home_welcome_title">De %1$s!</string>
+    <string name="town_building_cape_rack_name">Cape Rack</string>
+    <string name="town_cape_rack_no_bonus">Upgrade to passively apply owned skill/guild cape yield and XP bonuses</string>
+    <string name="town_cape_rack_t1_bonus">Passive bonuses from Tier 1 (Gathering) capes are active</string>
+    <string name="town_cape_rack_t2_bonus">Passive bonuses from Tier 1 &amp; 2 (Gathering, Artisan) capes are active</string>
+    <string name="town_cape_rack_t3_bonus">Passive bonuses from all owned capes (Gathering, Artisan, Combat &amp; Guild) are active</string>
 </resources>

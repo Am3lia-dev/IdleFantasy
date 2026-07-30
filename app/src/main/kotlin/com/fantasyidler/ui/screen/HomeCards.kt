@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -119,6 +121,8 @@ internal fun HomeSessionCard(
     sessionXpGain: Long,
     showEndTime: Boolean = true,
     bossEmoji: String? = null,
+    repeatIndex: Int = 0,
+    repeatTotal: Int = 0,
     onRepeat: () -> Unit,
     onAbandon: () -> Unit,
     onDebugFinish: () -> Unit,
@@ -189,6 +193,17 @@ internal fun HomeSessionCard(
                     style      = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color      = titleColor,
+                )
+            }
+
+            if ((session.skillName == "boss" || session.skillName == "combat") && repeatTotal > 1) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text       = if (session.skillName == "boss") stringResource(R.string.combat_fight_progress, repeatIndex.coerceAtLeast(1), repeatTotal)
+                                 else stringResource(R.string.combat_run_progress, repeatIndex.coerceAtLeast(1), repeatTotal),
+                    style      = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color      = GoldPrimary,
                 )
             }
 
@@ -370,13 +385,20 @@ internal fun QueueCard(
                                 val style = action.weaponSlot
                                     ?.let { EquipSlot.combatStyleForSlot(it) }
                                     ?: "attack"
-                                when (style) {
+                                val styleLabel = when (style) {
                                     "attack"   -> stringResource(R.string.label_attack)
                                     "strength" -> stringResource(R.string.label_strength)
                                     "ranged"   -> stringResource(R.string.label_ranged)
                                     "magic"    -> stringResource(R.string.label_magic)
                                     else       -> null
                                 }
+                                if (action.repeatCount > 1) {
+                                    val countLabel = if (action.skillName == "boss")
+                                        stringResource(R.string.combat_fight_count_suffix, action.repeatCount)
+                                    else
+                                        stringResource(R.string.combat_run_count_suffix, action.repeatCount)
+                                    if (styleLabel != null) "$styleLabel • $countLabel" else countLabel
+                                } else styleLabel
                             }
                             action.outputQty > 0 -> stringResource(R.string.queue_item_qty_with_output, action.qty, action.outputQty)
                             action.qty > 0 -> stringResource(R.string.queue_item_qty, action.qty)
@@ -460,6 +482,7 @@ internal fun QueueCard(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun WorkerSessionCard(
     slot: Int,
@@ -642,7 +665,10 @@ internal fun WorkerSessionCard(
             Spacer(Modifier.height(12.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
             Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement   = Arrangement.spacedBy(4.dp),
+            ) {
                 if (isDone) {
                     Button(onClick = onCollect) {
                         Text(stringResource(R.string.worker_collect_btn))
@@ -653,8 +679,12 @@ internal fun WorkerSessionCard(
                         Text(stringResource(R.string.worker_add_sessions))
                     }
                 }
-                OutlinedButton(onClick = { showDismissConfirm = true }) {
-                    Text(stringResource(R.string.worker_dismiss_btn))
+                // Hidden while a finished session awaits collection: dismissing there
+                // abandons the uncollected rewards on a single confirm (issue #1202).
+                if (!isDone) {
+                    OutlinedButton(onClick = { showDismissConfirm = true }) {
+                        Text(stringResource(R.string.worker_dismiss_btn))
+                    }
                 }
                 if (BuildConfig.DEBUG && session != null && !isDone) {
                     TextButton(onClick = onDebugFinish) {

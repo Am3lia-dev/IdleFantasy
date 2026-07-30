@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -53,8 +55,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -87,6 +87,7 @@ import com.fantasyidler.data.model.WorkerTier
 import com.fantasyidler.data.json.BlessingType
 import com.fantasyidler.repository.ChurchRepository
 import com.fantasyidler.ui.theme.GoldPrimary
+import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.viewmodel.HomeViewModel
 import com.fantasyidler.ui.viewmodel.SessionSummary
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
@@ -106,7 +107,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
     onNavigateToSettings: () -> Unit = {},
@@ -122,16 +123,10 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state            by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
     var showRecentLog by remember { mutableStateOf(false) }
     val context           = LocalContext.current
 
-    LaunchedEffect(state.snackbarMessage) {
-        state.snackbarMessage?.let { msg ->
-            try { snackbarHostState.showSnackbar(msg) }
-            finally { viewModel.snackbarConsumed() }
-        }
-    }
+    AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
     state.petFoundName?.let { petName ->
         AlertDialog(
@@ -484,10 +479,12 @@ fun HomeScreen(
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             RecentSessionsSheet(
                 sessions  = state.recentSessions,
                 onDismiss = { showRecentLog = false },
             )
+            }
         }
     }
 
@@ -498,6 +495,7 @@ fun HomeScreen(
             sheetState       = journalSheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             JournalSheet(
                 notes  = state.playerNotes,
                 onSave = { text ->
@@ -505,6 +503,7 @@ fun HomeScreen(
                     viewModel.dismissJournal()
                 },
             )
+            }
         }
     }
 
@@ -530,7 +529,6 @@ fun HomeScreen(
                 },
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         if (state.isLoading) {
             Column(
@@ -599,10 +597,10 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp)) {
-                        Row(
+                        FlowRow(
                             modifier              = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment     = Alignment.CenterVertically,
+                            verticalArrangement   = Arrangement.spacedBy(4.dp),
                         ) {
                             StatInline(
                                 label = stringResource(R.string.label_combat_level),
@@ -801,6 +799,8 @@ fun HomeScreen(
                     sessionXpGain  = state.activeSessionXpGain,
                     showEndTime    = state.showSessionEndTime,
                     bossEmoji      = if (session.skillName == "boss") viewModel.bossEmoji(session.activityKey) else null,
+                    repeatIndex    = if (session.skillName == "boss") state.activeBossRepeatIndex else state.activeDungeonRepeatIndex,
+                    repeatTotal    = if (session.skillName == "boss") state.activeBossRepeatTotal else state.activeDungeonRepeatTotal,
                     onRepeat       = viewModel::repeatActiveSession,
                     onAbandon      = viewModel::abandonSession,
                     onDebugFinish  = viewModel::debugFinishSession,
@@ -833,9 +833,17 @@ fun HomeScreen(
                 val n = state.pendingCollectCount
                 Button(
                     onClick  = viewModel::collectSession,
+                    enabled  = !state.isCollecting,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    Text(pluralStringResource(R.plurals.plural_collect_sessions, n, n))
+                    if (state.isCollecting) {
+                        CircularProgressIndicator(
+                            modifier    = Modifier.height(20.dp).width(20.dp),
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        Text(pluralStringResource(R.plurals.plural_collect_sessions, n, n))
+                    }
                 }
             }
 

@@ -27,14 +27,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -42,6 +42,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -65,6 +68,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -89,6 +93,7 @@ import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.ui.theme.GoldPrimary
+import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.theme.SuccessGreen
 import com.fantasyidler.ui.viewmodel.CombatViewModel
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
@@ -116,22 +121,15 @@ fun CombatScreen(
     val state            by viewModel.uiState.collectAsState()
     val invState         by inventoryVm.uiState.collectAsState()
     val context           = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
     val visibleDungeons   = remember(state.unlockedDungeons) {
         viewModel.dungeonList.filter { !it.loreUnlockOnly || it.name in state.unlockedDungeons }
     }
-
     LaunchedEffect(initialDungeonKey, initialBossKey) {
         initialDungeonKey?.let { key -> viewModel.dungeonList.firstOrNull { it.name == key }?.let(viewModel::selectDungeon) }
         initialBossKey?.let { key -> viewModel.bossList.firstOrNull { it.id == key }?.let(viewModel::selectBoss) }
     }
 
-    LaunchedEffect(state.snackbarMessage) {
-        state.snackbarMessage?.let { msg ->
-            try { snackbarHostState.showSnackbar(msg) }
-            finally { viewModel.snackbarConsumed() }
-        }
-    }
+    AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
     state.petFoundName?.let { petName ->
         AlertDialog(
@@ -164,7 +162,6 @@ fun CombatScreen(
                 },
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
         if (state.isLoading) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -220,6 +217,8 @@ fun CombatScreen(
                             equippedFood   = state.equippedFood,
                             foodHealValues = viewModel.foodHealValues,
                             showEndTime    = state.showSessionEndTime,
+                            repeatIndex    = if (combatSession.skillName == "boss") state.activeBossRepeatIndex else state.activeDungeonRepeatIndex,
+                            repeatTotal    = if (combatSession.skillName == "boss") state.activeBossRepeatTotal else state.activeDungeonRepeatTotal,
                             onAbandon      = viewModel::abandonSession,
                             onDebugFinish  = viewModel::debugFinishSession,
                         )
@@ -245,11 +244,20 @@ fun CombatScreen(
                             cookingRecipes = inventoryVm.cookingRecipes,
                             allEquipment   = inventoryVm.allEquipment,
                             context        = context,
+                            activeWeaponSlot    = state.selectedWeaponSlot,
+                            foodEatThresholdPct = invState.foodEatThresholdPct,
+                            availableSpells  = viewModel.availableSpells(state.skillLevels),
+                            selectedArrowKey = state.selectedArrowKey,
+                            selectedSpell    = state.selectedSpell,
                             onSlotTap      = inventoryVm::openSlotPicker,
                             onUnequip      = inventoryVm::unequip,
                             onEquipBest    = inventoryVm::equipBestGear,
                             onEquipFood    = inventoryVm::equipFood,
                             onUnequipFood  = inventoryVm::unequipFood,
+                            onSelectStyle  = viewModel::selectWeaponSlot,
+                            onArrowSelected = viewModel::selectArrow,
+                            onSpellSelected = viewModel::selectSpell,
+                            onFoodThresholdChanged = inventoryVm::setFoodEatThresholdPct,
                         )
                         else -> CombatSkillsTab(
                             skillLevels        = state.skillLevels,
@@ -313,11 +321,20 @@ fun CombatScreen(
                             cookingRecipes = inventoryVm.cookingRecipes,
                             allEquipment   = inventoryVm.allEquipment,
                             context        = context,
+                            activeWeaponSlot    = state.selectedWeaponSlot,
+                            foodEatThresholdPct = invState.foodEatThresholdPct,
+                            availableSpells  = viewModel.availableSpells(state.skillLevels),
+                            selectedArrowKey = state.selectedArrowKey,
+                            selectedSpell    = state.selectedSpell,
                             onSlotTap      = inventoryVm::openSlotPicker,
                             onUnequip      = inventoryVm::unequip,
                             onEquipBest    = inventoryVm::equipBestGear,
                             onEquipFood    = inventoryVm::equipFood,
                             onUnequipFood  = inventoryVm::unequipFood,
+                            onSelectStyle  = viewModel::selectWeaponSlot,
+                            onArrowSelected = viewModel::selectArrow,
+                            onSpellSelected = viewModel::selectSpell,
+                            onFoodThresholdChanged = inventoryVm::setFoodEatThresholdPct,
                         )
                         else -> CombatSkillsTab(
                             skillLevels        = state.skillLevels,
@@ -342,6 +359,7 @@ fun CombatScreen(
             sheetState       = gearSheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             EquipPickerSheet(
                 slot       = slot,
                 candidates = invState.candidatesFor(slot, inventoryVm.allEquipment),
@@ -349,8 +367,10 @@ fun CombatScreen(
                 onEquip    = { itemKey -> inventoryVm.equip(itemKey, slot) },
                 onDismiss  = inventoryVm::dismissSlotPicker,
             )
+            }
         }
     }
+
 
     // Boss info / confirm sheet
     state.selectedBoss?.let { boss ->
@@ -360,27 +380,26 @@ fun CombatScreen(
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             BossInfoSheet(
                 boss                 = boss,
                 skillLevels          = state.skillLevels,
                 equippedWeapon       = state.equippedWeapon,
                 equippedWeapons      = state.equippedWeapons,
                 selectedWeaponSlot   = state.selectedWeaponSlot,
-                inventory            = state.inventory,
-                availableSpells      = viewModel.availableSpells(state.skillLevels),
                 selectedSpell        = state.selectedSpell,
                 availablePotions     = state.availablePotions,
                 potionEffects        = viewModel.potionEffects,
                 selectedPotionKey    = state.selectedPotionKey,
-                selectedArrowKey     = state.selectedArrowKey,
                 isStarting           = state.startingSession,
+                repeatCount          = state.selectedBossRepeatCount,
                 onWeaponSlotSelected = viewModel::selectWeaponSlot,
-                onSpellSelected      = viewModel::selectSpell,
-                onArrowSelected      = viewModel::selectArrow,
                 onPotionSelected     = viewModel::selectPotion,
+                onRepeatCountChanged = viewModel::selectBossRepeatCount,
                 onStart              = { viewModel.startBossSession(boss.id) },
                 onDismiss            = { viewModel.selectBoss(null) },
             )
+            }
         }
     }
 
@@ -392,28 +411,27 @@ fun CombatScreen(
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            ScaledSheetContent {
             DungeonInfoSheet(
                 dungeon              = dungeon,
                 skillLevels          = state.skillLevels,
                 equippedWeapon       = state.equippedWeapon,
                 equippedWeapons      = state.equippedWeapons,
                 selectedWeaponSlot   = state.selectedWeaponSlot,
-                inventory            = state.inventory,
-                availableSpells      = viewModel.availableSpells(state.skillLevels),
                 selectedSpell        = state.selectedSpell,
                 availablePotions     = state.availablePotions,
                 potionEffects        = viewModel.potionEffects,
                 selectedPotionKey    = state.selectedPotionKey,
-                selectedArrowKey     = state.selectedArrowKey,
                 isStarting           = state.startingSession,
+                repeatCount          = state.selectedDungeonRepeatCount,
                 enemies              = viewModel.enemyMap,
                 onWeaponSlotSelected = viewModel::selectWeaponSlot,
-                onSpellSelected      = viewModel::selectSpell,
                 onPotionSelected     = viewModel::selectPotion,
-                onArrowSelected      = viewModel::selectArrow,
+                onRepeatCountChanged = viewModel::selectDungeonRepeatCount,
                 onStart              = { viewModel.startDungeonSession(dungeon.name) },
                 onDismiss            = { viewModel.selectDungeon(null) },
             )
+            }
         }
     }
 
@@ -497,6 +515,7 @@ private fun CombatSelectionList(
 // Combat gear tab
 // ---------------------------------------------------------------------------
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CombatGearTab(
     equipped: Map<String, String?>,
@@ -506,11 +525,20 @@ private fun CombatGearTab(
     cookingRecipes: Map<String, CookingRecipe>,
     allEquipment: Map<String, EquipmentData>,
     context: android.content.Context,
+    activeWeaponSlot: String?,
+    foodEatThresholdPct: Int,
+    availableSpells: List<SpellData>,
+    selectedArrowKey: String?,
+    selectedSpell: SpellData?,
     onSlotTap: (String) -> Unit,
     onUnequip: (String) -> Unit,
     onEquipBest: () -> Unit,
     onEquipFood: (String) -> Unit,
     onUnequipFood: (String) -> Unit,
+    onSelectStyle: (String) -> Unit,
+    onArrowSelected: (String?) -> Unit,
+    onSpellSelected: (SpellData?) -> Unit,
+    onFoodThresholdChanged: (Int) -> Unit,
 ) {
     val cookedItemKeys = remember(cookingRecipes) {
         cookingRecipes.values.map { it.cookedItem }.toSet()
@@ -520,6 +548,76 @@ private fun CombatGearTab(
     }
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
+        item { SlotSectionHeader(stringResource(R.string.profile_combat_style)) }
+        item {
+            FlowRow(
+                modifier              = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                EquipSlot.WEAPON_SLOTS.forEach { slot ->
+                    val style = EquipSlot.combatStyleForSlot(slot)!!
+                    FilterChip(
+                        selected = activeWeaponSlot == slot,
+                        onClick  = { onSelectStyle(slot) },
+                        label    = { Text(GameStrings.skillName(context, style)) },
+                    )
+                }
+            }
+        }
+        // Only the active style's own weapon is shown/selectable here — never another
+        // style's weapon, since each style has its own separate weapon slot.
+        item {
+            val weaponSlot = activeWeaponSlot ?: EquipSlot.WEAPON_ATK
+            EquipSlotRow(
+                slotName  = slotDisplayName(context, weaponSlot),
+                itemKey   = equipped[weaponSlot],
+                xpLabel   = weaponXpLabel(allEquipment[equipped[weaponSlot]]?.combatStyle, context),
+                equipment = allEquipment[equipped[weaponSlot]],
+                onTap     = { onSlotTap(weaponSlot) },
+                onUnequip = { onUnequip(weaponSlot) },
+            )
+        }
+        if (EquipSlot.combatStyleForSlot(activeWeaponSlot ?: "") == "ranged") {
+            item {
+                ArrowLoadoutPicker(
+                    selectedArrowKey = selectedArrowKey,
+                    inventory        = inventory,
+                    context          = context,
+                    onArrowSelected  = onArrowSelected,
+                )
+            }
+        }
+        if (EquipSlot.combatStyleForSlot(activeWeaponSlot ?: "") == "magic") {
+            item {
+                val weaponSlot = activeWeaponSlot ?: EquipSlot.WEAPON_ATK
+                SpellLoadoutPicker(
+                    selectedSpell   = selectedSpell,
+                    availableSpells = availableSpells,
+                    inventory       = inventory,
+                    equippedWeapon  = allEquipment[equipped[weaponSlot]],
+                    context         = context,
+                    onSpellSelected = onSpellSelected,
+                )
+            }
+        }
+        item { SlotSectionHeader(stringResource(R.string.profile_combat_gear)) }
+        items(EquipSlot.ARMOR_SLOTS) { slot ->
+            EquipSlotRow(
+                slotName  = slotDisplayName(context, slot),
+                itemKey   = equipped[slot],
+                equipment = allEquipment[equipped[slot]],
+                onTap     = { onSlotTap(slot) },
+                onUnequip = { onUnequip(slot) },
+            )
+        }
+        item {
+            Button(
+                onClick  = onEquipBest,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            ) {
+                Text(stringResource(R.string.profile_equip_best))
+            }
+        }
         item { SlotSectionHeader(stringResource(R.string.profile_food_dungeon)) }
         if (foodInInventory.isEmpty()) {
             item {
@@ -543,34 +641,26 @@ private fun CombatGearTab(
                 )
             }
         }
+        item { SlotSectionHeader(stringResource(R.string.profile_food_threshold)) }
         item {
-            Button(
-                onClick  = onEquipBest,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier          = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
             ) {
-                Text(stringResource(R.string.profile_equip_best))
+                IconButton(onClick = { onFoodThresholdChanged(foodEatThresholdPct - 10) }) {
+                    Icon(Icons.Filled.Remove, contentDescription = null)
+                }
+                Text(
+                    text      = "$foodEatThresholdPct%",
+                    style     = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    modifier  = Modifier.width(56.dp),
+                )
+                IconButton(onClick = { onFoodThresholdChanged(foodEatThresholdPct + 10) }) {
+                    Icon(Icons.Filled.Add, contentDescription = null)
+                }
             }
-        }
-        item { SlotSectionHeader(stringResource(R.string.profile_weapons)) }
-        items(EquipSlot.WEAPON_SLOTS) { slot ->
-            EquipSlotRow(
-                slotName  = slotDisplayName(context, slot),
-                itemKey   = equipped[slot],
-                xpLabel   = weaponXpLabel(allEquipment[equipped[slot]]?.combatStyle, context),
-                equipment = allEquipment[equipped[slot]],
-                onTap     = { onSlotTap(slot) },
-                onUnequip = { onUnequip(slot) },
-            )
-        }
-        item { SlotSectionHeader(stringResource(R.string.profile_combat_gear)) }
-        items(EquipSlot.ARMOR_SLOTS) { slot ->
-            EquipSlotRow(
-                slotName  = slotDisplayName(context, slot),
-                itemKey   = equipped[slot],
-                equipment = allEquipment[equipped[slot]],
-                onTap     = { onSlotTap(slot) },
-                onUnequip = { onUnequip(slot) },
-            )
         }
         item { Spacer(Modifier.height(16.dp)) }
     }

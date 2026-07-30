@@ -36,7 +36,7 @@ fun BuilderScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    ToastMessageEffect(state.snackbarMessage, viewModel::snackbarConsumed)
+    AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
@@ -128,6 +128,19 @@ fun BuilderScreen(
                     coins             = state.coins,
                     inventory         = state.inventory,
                     onUpgrade         = { viewModel.upgrade("queue_master") },
+                )
+            }
+            item {
+                Spacer(Modifier.height(16.dp))
+                BuildingUpgradeCard(
+                    buildingKey       = "cape_rack",
+                    currentTier       = state.capeRackTier,
+                    buildingDef       = viewModel.gameData.townBuildings["cape_rack"],
+                    townRepository    = viewModel.townRepo,
+                    constructionLevel = state.constructionLevel,
+                    coins             = state.coins,
+                    inventory         = state.inventory,
+                    onUpgrade         = { viewModel.upgrade("cape_rack") },
                 )
                 Spacer(Modifier.height(16.dp))
             }

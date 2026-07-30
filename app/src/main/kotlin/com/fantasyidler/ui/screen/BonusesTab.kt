@@ -29,6 +29,9 @@ import com.fantasyidler.data.model.Skills
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
+import com.fantasyidler.repository.resolveCapeMultiplier
+import com.fantasyidler.repository.isGuildCapeForSkill
+import com.fantasyidler.repository.resolveOwnedCapeKeysForSkill
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatDurationMs
 import com.fantasyidler.util.stringByName
@@ -74,34 +77,69 @@ internal fun BonusesTab(
     val allPetBoostPct     = bonusPets.filter { it.boostedSkill == "all" }.sumOf { it.boostPercent }
     val specificBonusPets  = bonusPets.filter { it.boostedSkill != "all" && it.boostedSkill.isNotEmpty() }
 
+    val activeCapeSkills = Skills.ALL.filter { skillKey ->
+        val mult = resolveCapeMultiplier(
+            skillName = skillKey,
+            equippedCape = cape,
+            inventoryKeys = state.inventory.keys,
+            townBuildingTiers = state.townBuildingTiers,
+            skillPrestige = state.skillPrestige,
+            allEquipment = allEquipment
+        )
+        mult > 1.0f
+    }
+
     val specificSkillKeys = buildSet<String> {
-        if (isGatheringCape) cape?.capeSkill?.let { add(it) }
+        addAll(activeCapeSkills)
         specificBonusPets.forEach { add(it.boostedSkill) }
         prestigeEntries.forEach { add(it.key) }
     }
 
     val skillEntries: List<SkillBonusEntry> = specificSkillKeys.sorted().map { skillKey ->
         val capePrestige   = state.skillPrestige[skillKey] ?: 0
-        val capePct        = if (isGatheringCape && cape?.capeSkill == skillKey) (cape.capeBonus * (capePrestige + 1) * 100 + 0.5f).toInt() else 0
+        val capeMult = resolveCapeMultiplier(
+            skillName = skillKey,
+            equippedCape = cape,
+            inventoryKeys = state.inventory.keys,
+            townBuildingTiers = state.townBuildingTiers,
+            skillPrestige = state.skillPrestige,
+            allEquipment = allEquipment
+        )
+        val isCombatStat = skillKey in COMBAT_STAT_SKILLS
+        val yieldPct = if (!isCombatStat && skillKey != "slayer") ((capeMult - 1f) * 100 + 0.5f).toInt() else 0
+        val capeXpPct = if (isCombatStat || skillKey == "slayer") ((capeMult - 1f) * 100 + 0.5f).toInt() else 0
+
         val specificPetPct = specificBonusPets.filter { it.boostedSkill == skillKey }.sumOf { it.boostPercent }
         val totalPetPct    = specificPetPct + allPetBoostPct
         val prestigeLevel  = state.skillPrestige[skillKey] ?: 0
-        val isCombatStat   = skillKey in COMBAT_STAT_SKILLS
         val prestigePct    = if (isCombatStat) 0 else prestigeLevel * 10
         val statBonus      = if (isCombatStat) prestigeLevel * 5 else 0
+
+        val activeCapeName = run {
+            if (capeMult <= 1.0f) return@run null
+            val equippedCapeSkill = cape?.capeSkill
+            if (equippedCapeSkill != null && (equippedCapeSkill == skillKey || isGuildCapeForSkill(equippedCapeSkill, skillKey))) {
+                return@run cape.displayName
+            }
+            val candidateKeys = resolveOwnedCapeKeysForSkill(skillKey)
+            val bestCapeKey = candidateKeys.filter { state.inventory.containsKey(it) }
+                .maxByOrNull { allEquipment[it]?.capeBonus ?: 0f }
+            bestCapeKey?.let { allEquipment[it]?.displayName }
+        }
 
         val xpSources = buildList {
             if (totalPetPct > 0)  add(context.getString(R.string.label_pets) to totalPetPct)
             if (prestigePct > 0)  add(context.getString(R.string.prestige) to prestigePct)
+            if (capeXpPct > 0)    add((activeCapeName ?: "Cape") to capeXpPct)
         }
         SkillBonusEntry(
             skillKey    = skillKey,
             skillName   = GameStrings.skillName(context, skillKey),
-            xpPct       = totalPetPct + prestigePct,
-            yieldPct    = capePct,
+            xpPct       = totalPetPct + prestigePct + capeXpPct,
+            yieldPct    = yieldPct,
             statBonus   = statBonus,
             xpSources   = xpSources,
-            yieldSource = if (capePct > 0) cape!!.displayName else null,
+            yieldSource = if (yieldPct > 0) activeCapeName else null,
         )
     }
 
@@ -198,7 +236,7 @@ internal fun BonusesTab(
                     val xpDetail = entry.xpSources.joinToString(" • ") { (label, pct) -> "$label +$pct%" }
                     BonusRow(
                         name   = entry.skillName,
-                        pct    = "+${entry.xpPct}% XP",
+                        pct    = stringResource(R.string.bonus_xp, entry.xpPct),
                         scope  = "",
                         detail = xpDetail.ifEmpty { null },
                     )
@@ -206,7 +244,7 @@ internal fun BonusesTab(
                 if (entry.yieldPct > 0) {
                     BonusRow(
                         name   = entry.skillName,
-                        pct    = "+${entry.yieldPct}% ${stringResource(R.string.bonus_yield)}",
+                        pct    = stringResource(R.string.bonus_yield, entry.yieldPct),
                         scope  = "",
                         detail = entry.yieldSource,
                     )
@@ -238,7 +276,7 @@ internal fun BonusesTab(
                 item {
                     BonusRow(
                         name  = GameStrings.skillName(context, Skills.MERCANTILE),
-                        pct   = "+${mercantilePrestige * 10}% ${stringResource(R.string.bonus_coin_return)}",
+                        pct   = stringResource(R.string.bonus_coin_return, mercantilePrestige * 10),
                         scope = "",
                     )
                 }

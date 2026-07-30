@@ -86,6 +86,18 @@ data class CombatUiState(
     val towerBestFloor: Int = 0,
     val showSessionEndTime: Boolean = true,
     val bossKillCounts: Map<String, Int> = emptyMap(),
+    /** Fight count chosen in the boss confirm sheet before starting/queueing. 1 = no repeat. */
+    val selectedBossRepeatCount: Int = 1,
+    /** 1-based index of the boss fight currently running within a multi-fight repeat request. 0 = not repeating. */
+    val activeBossRepeatIndex: Int = 0,
+    /** Total fights requested for the current boss repeat run. */
+    val activeBossRepeatTotal: Int = 0,
+    /** Run count chosen in the dungeon confirm sheet before starting/queueing. 1 = no repeat. */
+    val selectedDungeonRepeatCount: Int = 1,
+    /** 1-based index of the dungeon run currently running within a multi-run repeat request. 0 = not repeating. */
+    val activeDungeonRepeatIndex: Int = 0,
+    /** Total runs requested for the current dungeon repeat run. */
+    val activeDungeonRepeatTotal: Int = 0,
 )
 
 // ---------------------------------------------------------------------------
@@ -107,6 +119,14 @@ class CombatViewModel @Inject constructor(
 ) : ViewModel() {
 
     val potionEffects: Map<String, Map<String, Int>> = gameData.potionEffects
+
+    companion object {
+        const val MAX_BOSS_REPEAT_COUNT = 100
+        const val MAX_DUNGEON_REPEAT_COUNT = 24
+
+        /** Randomized runs per dungeon for the safety rating, rated by survival percentage rather than a single fixed-seed pass. */
+        const val SURVIVAL_SIM_RUNS = 30
+    }
 
     private val _extra = MutableStateFlow(CombatUiState())
     private val _simulatedRatings = MutableStateFlow<Map<String, CombatSimulator.SurvivalRating>>(emptyMap())
@@ -216,6 +236,10 @@ class CombatViewModel @Inject constructor(
                 bossKillCounts          = flags.enemyKills,
                 selectedSpell           = if (extra.selectedSpell == null) flags.activeSpell?.let { gameData.spells[it] } else extra.selectedSpell,
                 selectedPotionKey       = if (extra.selectedPotionKey == null) flags.activePotionKey?.takeIf { (inventory[it] ?: 0) > 0 } else extra.selectedPotionKey,
+                activeBossRepeatIndex   = flags.activeBossRepeatIndex,
+                activeBossRepeatTotal   = flags.activeBossRepeatTotal,
+                activeDungeonRepeatIndex = flags.activeDungeonRepeatIndex,
+                activeDungeonRepeatTotal = flags.activeDungeonRepeatTotal,
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CombatUiState())
@@ -263,10 +287,16 @@ class CombatViewModel @Inject constructor(
     // ------------------------------------------------------------------
 
     fun selectDungeon(dungeon: DungeonData?) =
-        _extra.update { it.copy(selectedDungeon = dungeon) }
+        _extra.update { it.copy(selectedDungeon = dungeon, selectedDungeonRepeatCount = 1) }
+
+    fun selectDungeonRepeatCount(count: Int) =
+        _extra.update { it.copy(selectedDungeonRepeatCount = count.coerceIn(1, MAX_DUNGEON_REPEAT_COUNT)) }
 
     fun selectBoss(boss: BossData?) =
-        _extra.update { it.copy(selectedBoss = boss) }
+        _extra.update { it.copy(selectedBoss = boss, selectedBossRepeatCount = 1) }
+
+    fun selectBossRepeatCount(count: Int) =
+        _extra.update { it.copy(selectedBossRepeatCount = count.coerceIn(1, MAX_BOSS_REPEAT_COUNT)) }
 
     fun selectWeaponSlot(slot: String) {
         _extra.update { it.copy(selectedWeaponSlot = slot) }
@@ -274,6 +304,7 @@ class CombatViewModel @Inject constructor(
             val player = playerRepo.getOrCreatePlayer()
             val flags: PlayerFlags = try { json.decodeFromString(player.flags) } catch (_: Exception) { PlayerFlags() }
             playerRepo.updateFlags(flags.copy(activeWeaponSlot = slot))
+            EquipSlot.combatStyleForSlot(slot)?.let { style -> playerRepo.applyLoadout(style, gameData.equipment) }
         }
     }
 
@@ -282,7 +313,11 @@ class CombatViewModel @Inject constructor(
         viewModelScope.launch {
             val player = playerRepo.getOrCreatePlayer()
             val flags: PlayerFlags = try { json.decodeFromString(player.flags) } catch (_: Exception) { PlayerFlags() }
-            playerRepo.updateFlags(flags.copy(activeSpell = spell?.name))
+            val activeStyle = EquipSlot.combatStyleForSlot(_extra.value.selectedWeaponSlot ?: flags.activeWeaponSlot ?: "")
+            playerRepo.updateFlags(flags.copy(
+                activeSpell = spell?.name,
+                magicLoadoutSpellName = if (activeStyle == "magic") spell?.name else flags.magicLoadoutSpellName,
+            ))
         }
     }
 
@@ -291,7 +326,11 @@ class CombatViewModel @Inject constructor(
         viewModelScope.launch {
             val player = playerRepo.getOrCreatePlayer()
             val flags: PlayerFlags = try { json.decodeFromString(player.flags) } catch (_: Exception) { PlayerFlags() }
-            playerRepo.updateFlags(flags.copy(equippedArrows = key))
+            val activeStyle = EquipSlot.combatStyleForSlot(_extra.value.selectedWeaponSlot ?: flags.activeWeaponSlot ?: "")
+            playerRepo.updateFlags(flags.copy(
+                equippedArrows = key,
+                rangedLoadoutArrowKey = if (activeStyle == "ranged") key else flags.rangedLoadoutArrowKey,
+            ))
         }
     }
 
@@ -318,19 +357,24 @@ class CombatViewModel @Inject constructor(
 
     fun startDungeonSession(dungeonKey: String, bypassFoodWarning: Boolean = false) {
         viewModelScope.launch {
+            val repeatCount = _extra.value.selectedDungeonRepeatCount.coerceIn(1, MAX_DUNGEON_REPEAT_COUNT)
             if (sessionRepo.getActiveSession() != null) {
                 val dungeonName = gameData.dungeons[dungeonKey]?.displayName ?: dungeonKey
                 val player      = playerRepo.getOrCreatePlayer()
                 val queuedLevels: Map<String, Int> = json.decodeFromString(player.skillLevels)
                 val agility     = queuedLevels[Skills.AGILITY] ?: 1
                 val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
+                val inventory: Map<String, Int> = json.decodeFromString(player.inventory)
                 val dungeonFlags: PlayerFlags = json.decodeFromString(player.flags)
                 val queuedWeaponSlot = _extra.value.selectedWeaponSlot
                     ?: dungeonFlags.activeWeaponSlot
                     ?: EquipSlot.WEAPON_SLOTS.firstOrNull { equipped[it] != null }
                     ?: EquipSlot.WEAPON
-                val queuedSpell = _extra.value.selectedSpell
-                val queuedPotionKey = _extra.value.selectedPotionKey
+                // Falls back to the remembered spell/potion the same way the picker's displayed
+                // selection does (see uiState combine block) -- otherwise the picker shows a
+                // remembered choice as selected while starting silently ignores it (issue #1186).
+                val queuedSpell = _extra.value.selectedSpell ?: dungeonFlags.activeSpell?.let { gameData.spells[it] }
+                val queuedPotionKey = _extra.value.selectedPotionKey ?: dungeonFlags.activePotionKey?.takeIf { (inventory[it] ?: 0) > 0 }
                 val previewXp = estimateDungeonPreviewXp(
                     dungeonKey    = dungeonKey,
                     weaponSlot    = queuedWeaponSlot,
@@ -353,6 +397,7 @@ class CombatViewModel @Inject constructor(
                         spellName           = queuedSpell?.name ?: dungeonFlags.activeSpell,
                         potionKey           = queuedPotionKey,
                         weaponSlot          = queuedWeaponSlot,
+                        repeatCount         = repeatCount,
                     )
                 )
                 if (enqueued) queuedSessionStarter.startNextQueued()
@@ -362,6 +407,7 @@ class CombatViewModel @Inject constructor(
                         selectedDungeon    = null,
                         selectedArrowKey   = null,
                         selectedPotionKey  = null,
+                        selectedDungeonRepeatCount = 1,
                     )
                 }
                 return@launch
@@ -377,7 +423,7 @@ class CombatViewModel @Inject constructor(
                 }
             }
 
-            _extra.update { it.copy(startingSession = true, selectedDungeon = null) }
+            _extra.update { it.copy(startingSession = true, selectedDungeon = null, selectedDungeonRepeatCount = 1) }
             try {
                 val dungeon   = gameData.dungeons[dungeonKey] ?: error("Unknown dungeon: $dungeonKey")
                 val player    = playerRepo.getOrCreatePlayer()
@@ -423,8 +469,9 @@ class CombatViewModel @Inject constructor(
                 // Ranged: use player's chosen arrow if available, else fall back to best in inventory
                 val preferredArrow = _extra.value.selectedArrowKey?.takeIf { (inventory[it] ?: 0) > 0 }
 
-                // Magic: validate spell selection and level
-                val selectedSpell = _extra.value.selectedSpell
+                // Magic: validate spell selection and level. Falls back to the remembered spell,
+                // same as the picker's displayed selection (issue #1186).
+                val selectedSpell = _extra.value.selectedSpell ?: flags.activeSpell?.let { gameData.spells[it] }
                 if (combatStyle == "magic") {
                     if (selectedSpell == null) {
                         _extra.update {
@@ -464,8 +511,9 @@ class CombatViewModel @Inject constructor(
                 val simulatorRuneKey  = if (combatStyle == "magic" && selectedSpell != null && !staffCoversRune) selectedSpell.runeType else null
                 val simulatorRuneCost = selectedSpell?.runeCost ?: 1
 
-                // Potion: consume immediately on dungeon start, pass bonuses to simulator
-                val potionKey     = _extra.value.selectedPotionKey
+                // Potion: consume immediately on dungeon start, pass bonuses to simulator. Falls
+                // back to the remembered potion, same as the picker's displayed selection (issue #1186).
+                val potionKey     = _extra.value.selectedPotionKey ?: flags.activePotionKey?.takeIf { (inventory[it] ?: 0) > 0 }
                 val potionBonuses = if (potionKey != null && (inventory[potionKey] ?: 0) > 0) {
                     playerRepo.consumeItems(mapOf(potionKey to 1))
                     gameData.potionEffects[potionKey] ?: emptyMap()
@@ -499,17 +547,14 @@ class CombatViewModel @Inject constructor(
                     runeCostPerAttack   = simulatorRuneCost,
                     availableRunes      = if (simulatorRuneKey != null) inventory[simulatorRuneKey] ?: 0 else Int.MAX_VALUE,
                     attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
+                    eatThresholdPct     = flags.foodEatThresholdPct,
                 )
 
                 val framesJson = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),
                     result.frames,
                 )
-                val deathFrameIdx = result.frames.indexOfFirst { it.died }
-                val alarmOffsetMs = if (deathFrameIdx >= 0) {
-                    val perFrameMs = result.durationMs / 60L
-                    perFrameMs * (deathFrameIdx + 1)
-                } else null
+                val alarmOffsetMs = CombatSimulator.deathAlarmOffsetMs(result.frames, result.durationMs / 60L)
                 sessionRepo.startSession(
                     skillName        = "combat",
                     activityKey      = dungeonKey,
@@ -518,6 +563,26 @@ class CombatViewModel @Inject constructor(
                     skillDisplayName = dungeon.displayName,
                     alarmOffsetMs    = alarmOffsetMs,
                 )
+                if (repeatCount > 1) {
+                    val dungeonSnapshot = QueuedAction(
+                        skillName        = "combat",
+                        activityKey      = dungeonKey,
+                        skillDisplayName = dungeon.displayName,
+                        equippedSnapshot = player.equipped,
+                        arrowsKey        = _extra.value.selectedArrowKey ?: flags.equippedArrows,
+                        spellName        = if (combatStyle == "magic" && selectedSpell != null) selectedSpell.name else flags.activeSpell,
+                        potionKey        = potionKey,
+                        weaponSlot       = activeWeaponSlot,
+                        repeatCount      = repeatCount,
+                    )
+                    playerRepo.updateFlags(playerRepo.getFlags().copy(
+                        activeDungeonRepeatIndex    = 1,
+                        activeDungeonRepeatTotal    = repeatCount,
+                        activeDungeonRepeatSnapshot = dungeonSnapshot,
+                    ))
+                } else {
+                    playerRepo.clearActiveDungeonRepeat()
+                }
             } catch (e: Exception) {
                 _extra.update { it.copy(snackbarMessage = context.getString(R.string.skill_session_start_failed, e.message ?: "")) }
             } finally {
@@ -528,19 +593,24 @@ class CombatViewModel @Inject constructor(
 
     fun startBossSession(bossKey: String) {
         viewModelScope.launch {
+            val repeatCount = _extra.value.selectedBossRepeatCount.coerceIn(1, MAX_BOSS_REPEAT_COUNT)
             if (sessionRepo.getActiveSession() != null) {
                 val bossName     = gameData.bosses[bossKey]?.displayName ?: bossKey
                 val bossMs       = (gameData.bosses[bossKey]?.durationMinutes ?: 1) * 60_000L
                 val queuedPlayer = playerRepo.getOrCreatePlayer()
                 val queuedFlags: PlayerFlags          = json.decodeFromString(queuedPlayer.flags)
                 val queuedEquipped: Map<String, String?> = json.decodeFromString(queuedPlayer.equipped)
+                val queuedInventory: Map<String, Int> = json.decodeFromString(queuedPlayer.inventory)
                 val bossWeaponSlot = _extra.value.selectedWeaponSlot
                     ?: queuedFlags.activeWeaponSlot
                     ?: EquipSlot.WEAPON_SLOTS.firstOrNull { queuedEquipped[it] != null }
                     ?: EquipSlot.WEAPON_ATK
-                val bossQueuedSpell = _extra.value.selectedSpell
+                // Falls back to the remembered spell/potion the same way the picker's displayed
+                // selection does (see uiState combine block) -- otherwise the picker shows a
+                // remembered choice as selected while starting silently ignores it (issue #1186).
+                val bossQueuedSpell = _extra.value.selectedSpell ?: queuedFlags.activeSpell?.let { gameData.spells[it] }
                 val bossQueuedWeapon = queuedEquipped[bossWeaponSlot]?.let { gameData.equipment[it] }
-                val bossQueuedPotionKey = _extra.value.selectedPotionKey
+                val bossQueuedPotionKey = _extra.value.selectedPotionKey ?: queuedFlags.activePotionKey?.takeIf { (queuedInventory[it] ?: 0) > 0 }
                 val bossQueuedLevels: Map<String, Int> = json.decodeFromString(queuedPlayer.skillLevels)
                 val bossPreviewXp = estimateBossPreviewXp(
                     bossKey       = bossKey,
@@ -563,6 +633,7 @@ class CombatViewModel @Inject constructor(
                         spellName           = if (bossQueuedWeapon?.combatStyle == "magic" && bossQueuedSpell != null) bossQueuedSpell.name else queuedFlags.activeSpell,
                         potionKey           = bossQueuedPotionKey,
                         weaponSlot          = bossWeaponSlot,
+                        repeatCount         = repeatCount,
                     )
                 )
                 if (enqueued) queuedSessionStarter.startNextQueued()
@@ -572,11 +643,12 @@ class CombatViewModel @Inject constructor(
                         selectedBoss       = null,
                         selectedArrowKey   = null,
                         selectedPotionKey  = null,
+                        selectedBossRepeatCount = 1,
                     )
                 }
                 return@launch
             }
-            _extra.update { it.copy(startingSession = true, selectedBoss = null) }
+            _extra.update { it.copy(startingSession = true, selectedBoss = null, selectedBossRepeatCount = 1) }
             try {
                 val boss    = gameData.bosses[bossKey] ?: error("Unknown boss: $bossKey")
                 val player  = playerRepo.getOrCreatePlayer()
@@ -591,7 +663,8 @@ class CombatViewModel @Inject constructor(
                 val bossWeapon = equipped[activeWeaponSlot]?.let { gameData.equipment[it] }
                 val totalDefBonus = EquipSlot.ARMOR_SLOTS.sumOf { gameData.equipment[equipped[it]]?.defenseBonus  ?: 0 } + (bossWeapon?.defenseBonus  ?: 0)
 
-                val potionKey     = _extra.value.selectedPotionKey
+                // Falls back to the remembered potion, same as the picker's displayed selection (issue #1186).
+                val potionKey     = _extra.value.selectedPotionKey ?: flags.activePotionKey?.takeIf { (inventory[it] ?: 0) > 0 }
                 val potionBonuses = if (potionKey != null && (inventory[potionKey] ?: 0) > 0) {
                     playerRepo.consumeItems(mapOf(potionKey to 1))
                     gameData.potionEffects[potionKey] ?: emptyMap()
@@ -622,7 +695,8 @@ class CombatViewModel @Inject constructor(
                 val bossMagicDmgBonus = if (combatStyle == "magic") {
                     EquipSlot.ARMOR_SLOTS.sumOf { gameData.equipment[equipped[it]]?.magicDamageBonus ?: 0 } + (bossWeapon?.magicDamageBonus ?: 0)
                 } else 0
-                val selectedSpell = _extra.value.selectedSpell
+                // Falls back to the remembered spell, same as the picker's displayed selection (issue #1186).
+                val selectedSpell = _extra.value.selectedSpell ?: flags.activeSpell?.let { gameData.spells[it] }
                 if (combatStyle == "magic" && selectedSpell == null) {
                     _extra.update { it.copy(snackbarMessage = "Select a spell before entering.", startingSession = false) }
                     return@launch
@@ -673,6 +747,7 @@ class CombatViewModel @Inject constructor(
                     runeCostPerAttack  = bossRuneCost,
                     availableRunes     = if (bossRuneKey != null) inventory[bossRuneKey] ?: 0 else Int.MAX_VALUE,
                     attackSpeedSec     = bossWeapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
+                    eatThresholdPct    = flags.foodEatThresholdPct,
                 )
 
                 val framesJson = json.encodeToString(
@@ -690,13 +765,28 @@ class CombatViewModel @Inject constructor(
                     skillDisplayName = boss.displayName,
                     // endsAt is cosmetic (full duration, no outcome spoiler); the alarm
                     // ends the session at the exact death tick within the final frame.
-                    alarmOffsetMs    = if (bossFrames.size < boss.durationMinutes) {
-                        val lastTicks   = bossFrames.lastOrNull()?.let { maxOf(it.playerHits.size, it.enemyHits.size) } ?: 0
-                        val tickMs      = if (lastTicks > 0) frameMs / lastTicks else 2_400L
-                        val lastFrameMs = if (lastTicks > 0) minOf(lastTicks * tickMs, frameMs) else frameMs
-                        (bossFrames.size - 1).coerceAtLeast(0) * frameMs + lastFrameMs + 2_000L
-                    } else null,
+                    alarmOffsetMs    = CombatSimulator.bossEndAlarmOffsetMs(bossFrames, boss.durationMinutes, frameMs),
                 )
+                if (repeatCount > 1) {
+                    val bossSnapshot = QueuedAction(
+                        skillName        = "boss",
+                        activityKey      = bossKey,
+                        skillDisplayName = boss.displayName,
+                        equippedSnapshot = player.equipped,
+                        arrowsKey        = _extra.value.selectedArrowKey ?: flags.equippedArrows,
+                        spellName        = if (combatStyle == "magic" && selectedSpell != null) selectedSpell.name else flags.activeSpell,
+                        potionKey        = potionKey,
+                        weaponSlot       = activeWeaponSlot,
+                        repeatCount      = repeatCount,
+                    )
+                    playerRepo.updateFlags(playerRepo.getFlags().copy(
+                        activeBossRepeatIndex    = 1,
+                        activeBossRepeatTotal    = repeatCount,
+                        activeBossRepeatSnapshot = bossSnapshot,
+                    ))
+                } else {
+                    playerRepo.clearActiveBossRepeat()
+                }
             } catch (e: Exception) {
                 _extra.update { it.copy(snackbarMessage = context.getString(R.string.combat_start_failed, e.message ?: "")) }
             } finally {
@@ -713,20 +803,33 @@ class CombatViewModel @Inject constructor(
         viewModelScope.launch {
             val session = sessionRepo.getActiveSession() ?: return@launch
             if (session.skillName == "combat" || session.skillName == "boss") {
-                val frames: List<SessionFrame> = json.decodeFromString(session.frames)
-                val totalMs = (session.endsAt - session.startedAt).coerceAtLeast(1L)
-                val perFrameMs = totalMs / frames.size.coerceAtLeast(1)
-                val elapsed = System.currentTimeMillis() - session.startedAt
-                val framesElapsed = (elapsed / perFrameMs).toInt().coerceIn(0, frames.size)
-                val arrowsUsed = mutableMapOf<String, Int>()
-                for (frame in frames.take(framesElapsed)) {
-                    for ((arrow, qty) in frame.arrowsConsumed) arrowsUsed[arrow] = (arrowsUsed[arrow] ?: 0) + qty
-                }
-                if (arrowsUsed.isNotEmpty()) playerRepo.consumeItems(arrowsUsed)
-                sessionRepo.abandonSession(session.sessionId)
+                abandonCombatSession(session)
                 queuedSessionStarter.startNextQueued()
             }
         }
+    }
+
+    /**
+     * Consumes arrows actually fired so far (frames are pre-simulated, so nothing is deducted
+     * until abandon/collect time) and deletes the session. Shared by [abandonSession] and
+     * [prestigeSkill] — prestiging a combat skill mid-fight must abandon the same way a manual
+     * abandon does, or the fight keeps running against stats that no longer match its frames
+     * (issue #1144).
+     */
+    private suspend fun abandonCombatSession(session: SkillSession) {
+        val frames: List<SessionFrame> = json.decodeFromString(session.frames)
+        val totalMs = (session.endsAt - session.startedAt).coerceAtLeast(1L)
+        val perFrameMs = totalMs / frames.size.coerceAtLeast(1)
+        val elapsed = System.currentTimeMillis() - session.startedAt
+        val framesElapsed = (elapsed / perFrameMs).toInt().coerceIn(0, frames.size)
+        val arrowsUsed = mutableMapOf<String, Int>()
+        for (frame in frames.take(framesElapsed)) {
+            for ((arrow, qty) in frame.arrowsConsumed) arrowsUsed[arrow] = (arrowsUsed[arrow] ?: 0) + qty
+        }
+        if (arrowsUsed.isNotEmpty()) playerRepo.consumeItems(arrowsUsed)
+        sessionRepo.abandonSession(session.sessionId)
+        if (session.skillName == "boss") playerRepo.clearActiveBossRepeat()
+        if (session.skillName == "combat") playerRepo.clearActiveDungeonRepeat()
     }
 
     fun debugFinishSession() {
@@ -742,8 +845,19 @@ class CombatViewModel @Inject constructor(
     fun prestigeSkill(skillName: String) {
         viewModelScope.launch {
             val activeSession = sessionRepo.getActiveSession()
-            val abandonedSession = activeSession?.takeIf { it.skillName == skillName }
-            if (abandonedSession != null) {
+            // A combat/boss fight's frames are locked in at start using the pre-prestige stats
+            // (e.g. Hitpoints level). Prestiging resets that skill to level 1, so an active fight
+            // left running would later fail its post-completion combat-level eligibility check
+            // and get silently voided -- but still show a misleading "Defeated by X" result
+            // (issue #1144). Abandoning it here, matching a manual abandon, avoids that entirely.
+            val abandonedCombatSession = activeSession?.takeIf {
+                skillName in Skills.COMBAT && (it.skillName == "combat" || it.skillName == "boss")
+            }
+            val abandonedSession = abandonedCombatSession
+                ?: activeSession?.takeIf { it.skillName == skillName }
+            if (abandonedCombatSession != null) {
+                abandonCombatSession(abandonedCombatSession)
+            } else if (abandonedSession != null) {
                 val frames: List<SessionFrame> = json.decodeFromString(abandonedSession.frames)
                 playerSessionMaterials(abandonedSession.skillName, abandonedSession.activityKey, frames.sumOf { it.kills }, gameData)
                     ?.let { playerRepo.addItems(it) }
@@ -847,35 +961,40 @@ class CombatViewModel @Inject constructor(
         val agility = levels[Skills.AGILITY]    ?: 1
 
         return gameData.dungeons.mapValues { (_, dungeon) ->
-            val result = CombatSimulator.simulateDungeon(
-                dungeon             = dungeon,
-                enemies             = gameData.enemies,
-                playerAttack        = atk,
-                playerStrength      = str,
-                playerDefence       = def,
-                blessingDefBonus    = ChurchRepository.defBonus(flags),
-                playerHp            = hp,
-                weaponAttackBonus   = totalAtk,
-                weaponStrengthBonus = totalStr,
-                combatStyle         = combatStyle,
-                playerRanged        = rng,
-                playerMagic         = mgc,
-                rangedGearStrengthBonus = if (combatStyle == "ranged") totalStr else 0,
-                spellMaxHit         = spellMaxHit,
-                agilityLevel        = agility,
-                agilityPrestige     = prestigeMap[Skills.AGILITY] ?: 0,
-                equippedFood        = foodQtys,
-                foodHealValues      = gameData.foodHealValues,
-                availableArrows     = availableArrows,
-                arrowStrengthBonuses = ARROW_STRENGTH_BONUS,
-                attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
-                random              = Random(42),
-            )
-            val deathFrame = result.frames.indexOfFirst { it.died }
+            var survived = 0
+            repeat(SURVIVAL_SIM_RUNS) {
+                val result = CombatSimulator.simulateDungeon(
+                    dungeon             = dungeon,
+                    enemies             = gameData.enemies,
+                    playerAttack        = atk,
+                    playerStrength      = str,
+                    playerDefence       = def,
+                    blessingDefBonus    = ChurchRepository.defBonus(flags),
+                    playerHp            = hp,
+                    weaponAttackBonus   = totalAtk,
+                    weaponStrengthBonus = totalStr,
+                    combatStyle         = combatStyle,
+                    playerRanged        = rng,
+                    playerMagic         = mgc,
+                    rangedGearStrengthBonus = if (combatStyle == "ranged") totalStr else 0,
+                    spellMaxHit         = spellMaxHit,
+                    agilityLevel        = agility,
+                    agilityPrestige     = prestigeMap[Skills.AGILITY] ?: 0,
+                    equippedFood        = foodQtys,
+                    foodHealValues      = gameData.foodHealValues,
+                    availableArrows     = availableArrows,
+                    arrowStrengthBonuses = ARROW_STRENGTH_BONUS,
+                    attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
+                    eatThresholdPct     = flags.foodEatThresholdPct,
+                    random              = Random.Default,
+                )
+                if (result.frames.none { it.died }) survived++
+            }
+            val survivalPct = survived.toDouble() / SURVIVAL_SIM_RUNS
             when {
-                deathFrame < 0   -> CombatSimulator.SurvivalRating.LIKELY
-                deathFrame >= 45 -> CombatSimulator.SurvivalRating.RISKY
-                else             -> CombatSimulator.SurvivalRating.UNLIKELY
+                survivalPct >= 0.9 -> CombatSimulator.SurvivalRating.LIKELY
+                survivalPct >= 0.5 -> CombatSimulator.SurvivalRating.RISKY
+                else               -> CombatSimulator.SurvivalRating.UNLIKELY
             }
         }
     }
@@ -991,6 +1110,7 @@ class CombatViewModel @Inject constructor(
             runeCostPerAttack   = selectedSpell?.runeCost ?: 1,
             availableRunes      = Int.MAX_VALUE,
             attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
+            eatThresholdPct     = flags.foodEatThresholdPct,
         )
         return result.frames.sumOf { it.xpGain.toLong() }
     }
@@ -1065,6 +1185,7 @@ class CombatViewModel @Inject constructor(
             runeCostPerAttack  = selectedSpell?.runeCost ?: 1,
             availableRunes     = Int.MAX_VALUE,
             attackSpeedSec     = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
+            eatThresholdPct    = flags.foodEatThresholdPct,
         )
         return bossFrames.sumOf { it.xpGain.toLong() }
     }
