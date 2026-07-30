@@ -697,7 +697,7 @@
     <string name="onboarding_welcome_desc">Ein von klassischen MMORPGs inspiriertes Idle-RPG. Trainiert Fähigkeiten, kämpft in Verliesen und stellt Ausrüstung her. Komplett offline, ohne Accounts und ohne Werbung.</string>
 
     <!-- Quantity picker quick buttons -->
-    <string name="qty_max">Max</string>
+    <string name="qty_max">Maximum</string>
 
     <!-- ===== Inn / Worker ===== -->
     <string-array name="worker_names"><!-- Not really translations, but alphabet close ancient German first names, the English original seems mixing surnames and first names; ignored possible gender -->
@@ -837,7 +837,7 @@
     <string name="guild_hall_desc">Tretet Gilden bei und erledigt Tagesaufgaben, um aufzusteigen</string>
     <string name="guild_hall_intro">Gilden belohnen Euch für Aktivitäten, die Ihr sowieso erledigt. Erledigt Missionen und Tagesaufgaben, um auch fähigkeitenübergreifend Materialien, Münzen und EP zu erhalten. So können selbst Spezialisten Ressourcen erhalten, in denen sie wenig bewandert sind.</string>
     <string name="guild_level_label">Level %1$d</string>
-    <string name="guild_level_max">Level 10 (Max)</string>
+    <string name="guild_level_max">Level 10 (Maximum)</string>
     <string name="guild_tab_quests">Missionen</string>
     <string name="guild_tab_dailies">Tagesaufgaben</string>
     <string name="guild_daily_resets_in">Wird um %1$s zurückgesetzt</string>
@@ -1122,7 +1122,7 @@
     <string name="bone_altar_select_prompt">Knochen zum Vergraben auswählen</string>
     <string name="bone_altar_tap">Zum Vergraben tippen</string>
     <string name="bone_altar_change_bone">Ändern</string>
-    <string name="bone_altar_combo_count">Combo ×%d</string>
+    <string name="bone_altar_combo_count">Kombo ×%d</string>
     <string name="bone_altar_bonus_active" formatted="false">+50% EP-Bonus!</string>
     <string name="bone_altar_session_xp">+%s EP diese Sitzung</string>
     <string name="bone_altar_buried_count">%d vergraben</string>
@@ -1640,12 +1640,12 @@
     <string name="home_welcome_greeting">Willkommen zurück,</string>
     <string name="home_welcome_name">%1$s!</string>
     <string name="home_welcome_title">Der %1$s!</string>
-    <string name="town_building_cape_rack_name">Mützenhalter</string>
+    <string name="town_building_cape_rack_name">Umhangständer</string>
     <string name="town_cape_rack_no_bonus">Upgrade to passively apply owned skill/guild cape yield and XP bonuses</string>
     <string name="town_cape_rack_t1_bonus">Passive bonuses from Tier 1 (Gathering) capes are active</string>
-    <string name="town_cape_rack_t2_bonus">Passive Boni von Tier-1- &amp; Tier-2-Umhängen (Sammeln, Handwerk) sind aktiv.</string>
-    <string name="town_cape_rack_t3_bonus">Passive Boni deiner Umhänge sind aktiv.</string>
+    <string name="town_cape_rack_t2_bonus">Passive Boni von Tier-1- &amp; Tier-2-Umhängen (Sammeln, Handwerk) sind aktiv</string>
+    <string name="town_cape_rack_t3_bonus">Passive Boni deiner Umhänge sind aktiv</string>
     <string name="crafting_owned">Besitz: %1$d</string>
-    <string name="crafting_owned_detail">Owned in inventory: %1$d</string>
-    <string name="firemaking_ashes_owned">Ashes owned: %1$d</string>
+    <string name="crafting_owned_detail">Im Inventar: %1$d</string>
+    <string name="firemaking_ashes_owned">Asche im Besitz: %1$d</string>
 </resources>
