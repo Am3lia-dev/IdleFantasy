@@ -665,13 +665,9 @@
     <string name="item_balrog_name" translatable="false">Balrog, ewige Flame von Udûn</string>
     <string name="item_balrog_whip_name" translatable="false">Peitsche des Balrog</string>
     <string name="item_balrog_wings_name" translatable="false">Flügel des Balrog</string>
-    <string name="item_beef_name" translatable="false">Schnitzel</string>
+    <string name="item_beef_name">Schnitzel</string>
     <string name="item_berserker_ring_name" translatable="false">Ring des Berserkers</string>
     <string name="item_blessed_fishing_rod_name" translatable="false">Gesegnete Angel</string>
-    <string name="item_blood_blast_name" translatable="false">Blood Blast</string><!-- not used at all -->
-    <string name="item_blood_bolt_name" translatable="false">Blood Bolt</string><!-- not used at all -->
-    <string name="item_blood_strike_name" translatable="false">Blood Strike</string><!-- not used at all -->
-    <string name="item_blood_wave_name" translatable="false">Blood Wave</string><!-- not used at all -->
     <string name="item_bronze_arrow_tip_name" translatable="false">Pfeilspitzen aus Bronze</string>
     <string name="item_bronze_boots_name" translatable="false">Bronze-Stiefel</string>
     <string name="item_bronze_chainbody_name" translatable="false">Bronze-Kettenhemd</string>
@@ -681,19 +677,11 @@
     <string name="item_bronze_med_helmet_name" translatable="false">Bronze-Helm mit Visier</string>
     <string name="item_bronze_plateskirt_name" translatable="false">Bronze-Plattenrock</string>
     <string name="item_bronze_square_shield_name" translatable="false">Bronze-Langschild</string>
-    <string name="item_chaos_blast_name" translatable="false">Chaos Blast</string><!-- not used at all -->
-    <string name="item_chaos_bolt_name" translatable="false">Chaos Bolt</string><!-- not used at all -->
-    <string name="item_chaos_strike_name" translatable="false">Chaos Strike</string><!-- not used at all -->
-    <string name="item_chaos_wave_name" translatable="false">Chaos Wave</string><!-- not used at all -->
-    <string name="item_chicken_name" translatable="false">Broiler</string>
+    <string name="item_chicken_name">Broiler</string>
     <string name="item_cooking_cape_name" translatable="false">Kochschürze</string>
     <string name="item_cooking_guild_cape_name" translatable="false">Gildenumhang der Köche</string>
     <string name="item_crafting_cape_name" translatable="false">Kunsthandwerksschürze</string>
     <string name="item_crafting_guild_cape_name" translatable="false">Gildenumhang der Kunsthandwerker</string>
-    <string name="item_death_blast_name" translatable="false">Death Blast</string><!-- not used at all -->
-    <string name="item_death_bolt_name" translatable="false">Death Bolt</string><!-- not used at all -->
-    <string name="item_death_strike_name" translatable="false">Death Strike</string><!-- not used at all -->
-    <string name="item_death_wave_name" translatable="false">Death Wave</string><!-- not used at all -->
     <string name="item_deep_iron_pickaxe_name" translatable="false">Spitzhacke des tiefen Stollens</string>
     <string name="item_defense_cape_name" translatable="false">Verteidigungsumhang</string>
     <string name="item_demon_lord_name" translatable="false">Dämonenkönig</string>
@@ -725,17 +713,9 @@
     <string name="item_dwarven_sword_name" translatable="false">Zwergisches Schwert</string>
     <string name="item_dwarven_tinderbox_name">Zwergen-Zunderbüchse</string>
     <string name="item_dwarven_warhammer_name" translatable="false">Zwergischer Kriegshammer</string>
-    <string name="item_earth_blast_name" translatable="false">Earth Blast</string><!-- not used at all -->
-    <string name="item_earth_bolt_name" translatable="false">Earth Bolt</string><!-- not used at all -->
-    <string name="item_earth_strike_name" translatable="false">Earth Strike</string><!-- not used at all -->
-    <string name="item_earth_wave_name" translatable="false">Earth Wave</string><!-- not used at all -->
     <string name="item_ent_name" translatable="false">Ent</string>
     <string name="item_farming_cape_name" translatable="false">Bauern-Umhang</string>
     <string name="item_farming_guild_cape_name" translatable="false">Gildenumhang der Bauern</string>
-    <string name="item_fire_blast_name" translatable="false">Fire Blast</string><!-- not used at all -->
-    <string name="item_fire_bolt_name" translatable="false">Fire Bolt</string><!-- not used at all -->
-    <string name="item_fire_strike_name" translatable="false">Fire Strike</string><!-- not used at all -->
-    <string name="item_fire_wave_name" translatable="false">Fire Wave</string><!-- not used at all -->
     <string name="item_firemaking_cape_name" translatable="false">Feuermacher-Umhang</string>
     <string name="item_firemaking_guild_cape_name" translatable="false">Gildenumhang der Feuermacher</string>
     <string name="item_fishing_cape_name" translatable="false">Angler-Umhang</string>
@@ -767,10 +747,6 @@
     <string name="item_magic_shortbow_name" translatable="false">Magie-Kurzbogen</string>
     <string name="item_maple_shortbow_name" translatable="false">Ahorn-Kurzbogen</string>
     <string name="item_mercantile_guild_cape_name" translatable="false">Gildenumhang der Händler</string>
-    <string name="item_mind_blast_name" translatable="false">Mind Blast</string><!-- not used at all -->
-    <string name="item_mind_bolt_name" translatable="false">Mind Bolt</string><!-- not used at all --> 
-    <string name="item_mind_strike_name" translatable="false">Mind Strike</string><!-- not used at all -->
-    <string name="item_mind_wave_name" translatable="false">Mind Wave</string><!-- not used at all -->
     <string name="item_mining_cape_name" translatable="false">Bergbau-Umhang</string>
     <string name="item_mining_guild_cape_name" translatable="false">Gildenumhang des Bergbaus</string>
     <string name="item_mithril_arrow_tip_name" translatable="false">Mithrilpfeilspitzen</string>
@@ -783,13 +759,14 @@
     <string name="item_mithril_med_helmet_name" translatable="false">Mithril-Helm mit Visier</string>
     <string name="item_mithril_plateskirt_name" translatable="false">Mithril-Plattenrock</string>
     <string name="item_mithril_square_shield_name" translatable="false">Mithril-Langschild</string>
-    <string name="item_mutton_name" translatable="false">Gekochter Hammel</string>
+    <string name="item_mutton_name">Gekochter Hammel</string>
     <string name="item_necklace_of_anguish_name" translatable="false">Halskette der Beklemmung</string>
     <string name="item_oak_shortbow_name" translatable="false">Eichen-Kurzbogen</string>
     <string name="item_platinum_ore_name" translatable="false">Platinerz</string>
     <string name="item_prayer_cape_name" translatable="false">Gebetsgewand</string>
     <string name="item_prayer_guild_cape_name" translatable="false">Gildenumhang der Betenden</string>
     <string name="item_ranged_cape_name" translatable="false">Schützenmantel</string>
+	<string name="item_rat_meat_name">Rattenfleisch</string>
     <string name="item_ring_of_dragons_might_name" translatable="false">Ring der Stärke des Drachens</string>
     <string name="item_ring_of_flame_name" translatable="false">Ring der Flamme</string>
     <string name="item_ring_of_recoil_name" translatable="false">Ring der Rückstoß</string>
@@ -840,15 +817,7 @@
     <string name="item_tormented_necklace_name" translatable="false">Halskette der gequälten Seele</string>
     <string name="item_trident_of_the_seas_name" translatable="false">Dreizack der Meere</string>
     <string name="item_warriors_guild_cape_name" translatable="false">Gildenumhang der Krieger</string>
-    <string name="item_water_blast_name" translatable="false">Water Blast</string><!-- not used at all -->
-    <string name="item_water_bolt_name" translatable="false">Water Bolt</string><!-- not used at all -->
-    <string name="item_water_strike_name" translatable="false">Water Strike</string><!-- not used at all -->
-    <string name="item_water_wave_name" translatable="false">Water Wave</string><!-- not used at all -->
     <string name="item_willow_shortbow_name" translatable="false">Weiden-Kurzbogen</string>
-    <string name="item_wind_blast_name" translatable="false">Wind Blast</string><!-- not used at all -->
-    <string name="item_wind_bolt_name" translatable="false">Wind Bolt</string><!-- not used at all -->
-    <string name="item_wind_strike_name" translatable="false">Wind Strike</string><!-- not used at all -->
-    <string name="item_wind_wave_name" translatable="false">Wind Wave</string><!-- not used at all -->
     <string name="item_woodcutting_cape_name" translatable="false">Holzfällerei-Umhang</string>
     <string name="item_woodcutting_guild_cape_name" translatable="false">Gildenumhang der Holzfäller</string>
     <string name="item_yew_longbow_name" translatable="false">Eiben-Langbogen</string>
