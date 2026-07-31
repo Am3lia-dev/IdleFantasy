@@ -605,10 +605,6 @@
     <string name="skills_fish_desc">Lv. %1$d  •  %2$s EP/Fang</string>
     <!-- Translator note: %1$d = required level, %2$s = skill name, %3$d = player level, %4$s = skill name again -->
     <string name="skills_req_with_have">Benötigt %1$d %2$s (Ihr habt %3$d %4$s)</string>
-    <!-- Translator note: %1$d = owned quantity -->
-    <string name="crafting_owned">Vorhanden: %1$d</string>
-    <string name="crafting_owned_detail">Vorhanden im Inventar: %1$d</string>
-    <string name="firemaking_ashes_owned">Asche vorhanden: %1$d</string>
 
     <!-- ===== ShopScreen ===== -->
     <string name="shop_active">AKTIV</string>
@@ -1234,11 +1230,6 @@
         <item quantity="one">+%1$d Extra-Warteschlangenplatz</item>
         <item quantity="other">+%1$d Extra-Warteschlangenplätze</item>
     </plurals>
-    <string name="town_building_cape_rack_name">Umhangsständer</string>
-    <string name="town_cape_rack_no_bonus">Verbessert den Ständer um die Boni der Fertigkeitsumhänge und Gildenumhänge zu erhalten, ohne diese zu tragen</string>
-    <string name="town_cape_rack_t1_bonus">Passive Boni der Umhänge der Sammelfertigkeiten sind aktiv</string>
-    <string name="town_cape_rack_t2_bonus">Passive Boni der Umhänge der Sammelfertigkeiten und Herstellungsberufe sind aktiv</string>
-    <string name="town_cape_rack_t3_bonus">Passive Boni aller Umhänge, die Ihr besitzt (Sammeln, Herstellen, Kampf &amp; Gilden), sind aktiv</string>
 
     <!-- Town achievements -->
     <string name="achievement_town_first_upgrade_name">Erste Renovierung</string>
@@ -1656,4 +1647,13 @@
     <string name="home_welcome_greeting">Willkommen zurück,</string>
     <string name="home_welcome_name">%1$s!</string>
     <string name="home_welcome_title">Der %1$s!</string>
+    <string name="town_building_cape_rack_name">Umhangsständer</string>
+    <string name="town_cape_rack_no_bonus">Verbessert den Ständer um die Boni der Fertigkeitsumhänge und Gildenumhänge zu erhalten, ohne diese zu tragen</string>
+    <string name="town_cape_rack_t1_bonus">Passive Boni der Umhänge der Sammelfertigkeiten sind aktiv</string>
+    <string name="town_cape_rack_t2_bonus">Passive Boni der Umhänge der Sammelfertigkeiten und Herstellungsberufe sind aktiv</string>
+    <string name="town_cape_rack_t3_bonus">Passive Boni aller Umhänge, die Ihr besitzt (Sammeln, Herstellen, Kampf &amp; Gilden), sind aktiv</string>
+	<!-- Translator note: %1$d = owned quantity -->
+    <string name="crafting_owned">Besitz: %1$d</string>
+    <string name="crafting_owned_detail">Im Inventar: %1$d</string>
+    <string name="firemaking_ashes_owned">Asche im Besitz: %1$d</string>
 </resources>
