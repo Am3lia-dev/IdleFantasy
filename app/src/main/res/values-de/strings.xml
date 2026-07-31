@@ -1571,7 +1571,7 @@
     <string name="seasonal_bounty_sunspire_firewood_hint">Hackt Eichen-Scheite — Holzfällerei</string>
     <string name="seasonal_bounty_sunspire_kindling_name">Sammelt Anzündmaterial für das Lagerfeuer</string>
     <string name="seasonal_bounty_sunspire_kindling_hint">Hackt Weiden-Scheite — Holzfällerei</string>
-    <string name="seasonal_bounty_sunspire_sunore_name">Grabt nach Gold um den Sonnenturm zu vergolden</string>
+    <string name="seasonal_bounty_sunspire_sunore_name">Grabt nach Gold um den Sonnenturm zu vergolden	</string>
     <string name="seasonal_bounty_sunspire_sunore_hint">Grabt nach Gold — Bergbau</string>
     <string name="seasonal_bounty_sunspire_draughts_name">Braut Stärke-Zaubertrank</string>
     <string name="seasonal_bounty_sunspire_draughts_hint">Kräuterkunde</string>
@@ -1579,7 +1579,7 @@
     <string name="seasonal_bounty_sunspire_embers_brew_hint">Kräuterkunde</string>
     <string name="seasonal_bounty_sunspire_sunfire_arrows_name">Fertigt Mithrilpfeile um die Irrlichter abzuhalten</string>
     <string name="seasonal_bounty_sunspire_sunfire_arrows_hint">Pfeilfertigung</string>
-    <string name="seasonal_bounty_sunspire_wisps_name">Vertreibt die Sonnenirrlichter</string><
+    <string name="seasonal_bounty_sunspire_wisps_name">Vertreibt die Sonnenirrlichter</string>
     <string name="seasonal_bounty_sunspire_wisps_hint">Nur im Verlies Sommerturm zu finden</string>
     <string name="seasonal_bounty_sunspire_hounds_name">Verjagt die Glutschufte</string>
     <string name="seasonal_bounty_sunspire_hounds_hint">Nur im Verlies Sommerturm zu finden</string>
