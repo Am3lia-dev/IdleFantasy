@@ -879,6 +879,7 @@
     <string name="guild_name_prayer">Gilde der Betenden</string>
     <string name="guild_name_thieving">Diebesgilde</string>
     <string name="guild_name_mercantile">Handelsgilde</string>
+    <string name="guild_name_construction">Baumeistergilde</string>
 
     <!-- Mercantile skill -->
     <string name="skill_mercantile">Handeln</string>
@@ -1100,10 +1101,13 @@
     <string name="crafting_cat_ammunition">Munition</string>
     <string name="crafting_cat_jewellery">Schmuck</string>
     <string name="crafting_cat_potion">Trank</string>
+    <string name="crafting_cat_arrow">Pfeil</string>
+    <string name="crafting_cat_bow">Bogen</string>
+    <string name="crafting_cat_plank">Planke</string>
+    <string name="crafting_cat_staff">Stab</string>
 
     <!-- Crafting tier filter chips -->
     <string name="crafting_tier_adamantite">Adamantit</string>
-    <string name="crafting_tier_arrow">Pfeil</string>
     <string name="crafting_tier_bronze">Bronze</string>
     <string name="crafting_tier_gold">Gold</string>
     <string name="crafting_tier_iron">Eisen</string>
@@ -1113,9 +1117,7 @@
     <string name="crafting_tier_oak">Eiche</string>
     <string name="crafting_tier_platinum">Platin</string>
     <string name="crafting_tier_runite">Runit</string>
-    <string name="crafting_tier_shortbow">Kurzbogen</string>
     <string name="crafting_tier_silver">Silber</string>
-    <string name="crafting_tier_staff">Stab</string>
     <string name="crafting_tier_steel">Stahl</string>
     <string name="crafting_tier_willow">Weide</string>
     <string name="crafting_tier_yew">Eibe</string>
@@ -1501,6 +1503,7 @@
     <string name="bonus_combat_stat_boost">Verstärkt Kampffähigkeiten</string>
     <string name="bonus_combined_xp">EP gesamt</string>
     <string name="bonus_yield">+%1$d%% Ausbeute</string>
+    <string name="bonus_boost">+%1$d%% Verstärkung</string>
     <string name="bonus_session_shorter">%1$d Min. kürzere Sitzungen</string>
     <string name="bonus_coin_return">+%1$d%% Münzrückgabe</string>
     <string name="bonus_tower">Turm</string>

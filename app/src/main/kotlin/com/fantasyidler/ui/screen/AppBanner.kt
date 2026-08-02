@@ -94,9 +94,14 @@ private const val BANNER_DISPLAY_MS = 2_500L
 @Composable
 fun AppBannerHost() {
     val current by AppBannerCenter.current.collectAsState()
+    val hostView = LocalView.current
 
     LaunchedEffect(current) {
-        if (current != null) {
+        current?.let { shown ->
+            // Banners replaced Toasts, which TalkBack announced on its own. The banner's
+            // window is non-focusable, so screen readers say nothing without an explicit
+            // announcement (#1241).
+            hostView.announceForAccessibility(shown.message)
             delay(BANNER_DISPLAY_MS)
             AppBannerCenter.dismissCurrent()
         }
