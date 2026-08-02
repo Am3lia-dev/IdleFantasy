@@ -13,14 +13,14 @@ val BrownContainer      = Color(0xFF3E1F0A)
 val BrownOnContainer    = Color(0xFFD6A882)
 
 // Backgrounds & surfaces — dark fantasy blues
-val DarkBackground      = Color(0xFF1A1A2E)
-val DarkSurface         = Color(0xFF16213E)
-val DarkSurfaceVariant  = Color(0xFF0F3460)
+val DarkBackground      = Color(0xFF05070C)
+val DarkSurface         = Color(0xFF111827)
+val DarkSurfaceVariant  = Color(0xFF24344D)
 val DarkSurfaceHigh     = Color(0xFF1E2A4A)
 
 // Text
 val ParchmentText       = Color(0xFFE8DCC8)
-val ParchmentTextMuted  = Color(0xFFA89880)
+val ParchmentTextMuted  = Color(0xFFC7BBA7)
 
 // Status
 val ErrorRed    = Color(0xFFCF6679)
