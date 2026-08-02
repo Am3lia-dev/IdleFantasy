@@ -26,8 +26,7 @@ Train **24 skills** at your own pace:
 - **Support** (3): Prayer, Mercantile, and Agility
 - **Combat** (8): Slayer, Attack, Strength, Defense, Ranged, Magic, Hitpoints, and Prayer
 
-Better equipment means faster gathering and surviving tougher dungeons. Craft your own gear or buy it from the Shop. Crafting windows display required ingredients alongside your currently owned item count (`Owned: X`). The **Mercantile** skill levels through trade routes and unlocks better prices. **Slayer** tasks are assigned by the Slayer Master in town and are completed by fighting specific enemies in dungeons.
-
+Better equipment means faster gathering and surviving tougher dungeons. Craft your own gear or buy it from the Shop. The **Mercantile** skill levels through trade routes and unlocks better prices. **Slayer** tasks are assigned by the Slayer Master in town and are completed by fighting specific enemies in dungeons.
 
 ## Combat and dungeons
 
@@ -47,7 +46,7 @@ Over **189 quests** span all skills. Daily quests reset every morning for a quic
 
 ## Guild System
 
-**18 guilds** cover every skill and combat style (Warriors, Archers, and Mages guilds for combat). Each guild has up to 10 rank levels. Advance by completing progression quests and earning reputation through daily requests. Higher ranks unlock harder dailies and better cross-skill rewards, letting specialists access resources from skills they don't personally train.
+**19 guilds** cover every skill and combat style (Warriors, Archers, and Mages guilds for combat). Each guild has up to 10 rank levels. Advance by completing progression quests and earning reputation through daily requests. Higher ranks unlock harder dailies and better cross-skill rewards, letting specialists access resources from skills they don't personally train.
 
 ## Builder's Workshop
 
