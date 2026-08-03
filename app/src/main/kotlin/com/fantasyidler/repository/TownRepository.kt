@@ -145,6 +145,21 @@ class TownRepository @Inject constructor(
         return 3 + extraSlots
     }
 
+    /** Secondary material preservation chance (Artisan's Workshop bonus). */
+    fun secondaryMaterialSaveChance(building: String, tier: Int): Float {
+        val bonuses = gameData.townBuildings[building]?.tiers?.getOrNull(tier - 1)?.bonuses ?: return 0.0f
+        return bonuses["secondary_material_save_chance"]?.toFloat() ?: 0.0f
+    }
+
+    /** Secondary material preservation chance based on Artisan's Workshop tier. */
+    fun secondaryMaterialSaveChance(flags: PlayerFlags): Float {
+        var chance = 0.0f
+        flags.townBuildingTiers.forEach { buildingName, tier ->
+            chance += secondaryMaterialSaveChance(buildingName, tier)
+        }
+        return chance
+    }
+
     // -------------------------------------------------------------------------
     // Upgrade action
     // -------------------------------------------------------------------------
