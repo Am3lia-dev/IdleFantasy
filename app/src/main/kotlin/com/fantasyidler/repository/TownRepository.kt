@@ -145,6 +145,21 @@ class TownRepository @Inject constructor(
         return 3 + extraSlots
     }
 
+    /** Player session speed reduction factor (Chronos Spire bonus). */
+    fun playerSessionSpeedReduction(building: String, tier: Int): Float {
+        val bonuses = gameData.townBuildings[building]?.tiers?.getOrNull(tier - 1)?.bonuses ?: return 0.0f
+        return bonuses["player_session_speed_reduction"]?.toFloat() ?: 0.0f
+    }
+
+    /** Player session duration multiplier (e.g. 0.98 for 2% reduction). */
+    fun playerSessionDurationMultiplier(flags: PlayerFlags): Float {
+        var reduction = 0.0f
+        flags.townBuildingTiers.forEach { buildingName, tier ->
+            reduction += playerSessionSpeedReduction(buildingName, tier)
+        }
+        return (1.0f - reduction).coerceAtLeast(0.5f)
+    }
+
     // -------------------------------------------------------------------------
     // Upgrade action
     // -------------------------------------------------------------------------

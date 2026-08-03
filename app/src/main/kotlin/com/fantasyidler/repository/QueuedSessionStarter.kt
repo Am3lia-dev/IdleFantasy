@@ -144,8 +144,8 @@ class QueuedSessionStarter @Inject constructor(
      * Estimates how long [action] would take without running the full simulation.
      * Used to decide whether a queued session fits within remaining catch-up time.
      */
-    private fun estimateDuration(action: QueuedAction, agilityLevel: Int, agilityPrestige: Int = 0): Long {
-        val base = SkillSimulator.sessionDurationMs(agilityLevel, agilityPrestige)
+    private fun estimateDuration(action: QueuedAction, agilityLevel: Int, agilityPrestige: Int = 0, chronosMult: Float = 1.0f): Long {
+        val base = SkillSimulator.sessionDurationMs(agilityLevel, agilityPrestige, chronosMult)
         val perItem = base / 60L
         return when (action.skillName) {
             Skills.MINING, Skills.WOODCUTTING, Skills.FISHING,
