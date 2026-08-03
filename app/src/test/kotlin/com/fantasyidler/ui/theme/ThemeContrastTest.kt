@@ -2,6 +2,7 @@ package com.fantasyidler.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.max
@@ -11,19 +12,27 @@ import kotlin.math.pow
 class ThemeContrastTest {
 
     @Test
-    fun `dark background and surface support enhanced contrast text`() {
-        assertContrastAtLeast(ParchmentText, DarkBackground, 7.0)
-        assertContrastAtLeast(ParchmentText, DarkSurface, 7.0)
+    fun `midnight background and surface support enhanced contrast text`() {
+        assertContrastAtLeast(ParchmentText, MidnightBackground, 7.0)
+        assertContrastAtLeast(ParchmentText, MidnightSurface, 7.0)
     }
 
     @Test
-    fun `dark surface variant supports normal contrast muted text`() {
-        assertContrastAtLeast(ParchmentTextMuted, DarkSurfaceVariant, 4.5)
+    fun `midnight surface variant supports normal contrast muted text`() {
+        assertContrastAtLeast(MidnightTextMuted, MidnightSurfaceVariant, 4.5)
     }
 
     @Test
-    fun `dark containers remain visually distinct`() {
-        assertEquals(3, setOf(DarkBackground, DarkSurface, DarkSurfaceVariant).size)
+    fun `midnight containers remain visually distinct`() {
+        assertEquals(3, setOf(MidnightBackground, MidnightSurface, MidnightSurfaceVariant).size)
+    }
+
+    @Test
+    fun `midnight palette remains separate from dark palette`() {
+        assertNotEquals(DarkBackground, MidnightBackground)
+        assertNotEquals(DarkSurface, MidnightSurface)
+        assertNotEquals(DarkSurfaceVariant, MidnightSurfaceVariant)
+        assertNotEquals(ParchmentTextMuted, MidnightTextMuted)
     }
 
     private fun assertContrastAtLeast(foreground: Color, background: Color, minimum: Double) {
