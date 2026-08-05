@@ -44,10 +44,10 @@
     <string name="btn_save">Save</string>
 
     <!-- ===== Common labels ===== -->
-    <string name="label_level" translatable="false">Level</string>
-    <string name="label_xp" translatable="false">XP</string>
-    <string name="label_coins" translatable="false">Coins</string>
-    <string name="label_hp" translatable="false">HP</string>
+    <string name="label_level">Level</string>
+    <string name="label_xp">XP</string>
+    <string name="label_coins">Coins</string>
+    <string name="label_hp">HP</string>
     <string name="label_attack">Attack</string>
     <string name="label_strength">Strength</string>
     <string name="label_defense">Defense</string>
@@ -62,7 +62,7 @@
     <string name="label_locations">Locations</string>
     <string name="label_bestiary">Bestiary</string>
     <string name="label_enemies">Enemies</string>
-    <string name="label_bosses" translatable="false">Bosses</string>
+    <string name="label_bosses">Bosses</string>
     <string name="label_by_location">By Location</string>
     <string name="bestiary_not_encountered">Not yet encountered</string>
     <string name="bestiary_always_drops">Always Drops</string>
