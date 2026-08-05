@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_skills">技能</string>
+    <string name="btn_start">开始</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_confirm">确认</string>
+    <string name="btn_abandon">放弃</string>
+</resources>
