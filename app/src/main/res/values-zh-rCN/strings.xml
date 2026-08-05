@@ -13,7 +13,7 @@
     <string name="btn_cancel">取消</string>
     <string name="btn_craft">工艺</string>
     <string name="btn_confirm">确认</string>
-    <string name="btn_abandon">取消</string>
+    <string name="btn_abandon">放弃</string>
     <string name="btn_repeat_action">重复操作</string>
     <string name="btn_collect">收获奖励</string>
     <string name="btn_equip">装备</string>
