@@ -412,6 +412,7 @@ class CraftingViewModel @Inject constructor(
                     estimatedXpGain     = (qty * recipe.xpPerItem * xpQueueMult * toolEff * (1.0 + queuePetPct / 100.0)).toLong(),
                     estimatedDurationMs = qty.toLong() * perItemMs,
                     catalystKey         = ashKey,
+                    catalystQty         = ashQtyToConsume,
                 )
                 val enqueued = playerRepo.enqueueAction(action)
                 if (enqueued) {

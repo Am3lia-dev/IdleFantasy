@@ -455,6 +455,8 @@ class SkillsViewModel @Inject constructor(
                 val mult       = when { rcLevel >= 75 -> 3; rcLevel >= 50 -> 2; else -> 1 } + ashBon
                 val xpQueueMult = (if (rcFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(rcFlags)
                 val ashCost = if (catalystKey != null) (qty + 9) / 10 else 0
+                val saveChance = townRepo.secondaryMaterialSaveChance(rcFlags)
+                val consumedAshCost = if (catalystKey != null) applyQtyPreservation(ashCost, saveChance) else 0
                 val enqueued = playerRepo.enqueueAction(
                     QueuedAction(
                         skillName           = Skills.RUNECRAFTING,
@@ -464,11 +466,9 @@ class SkillsViewModel @Inject constructor(
                         estimatedXpGain     = (qty.toLong() * (runeData.xpPerRune * mult).toLong() * xpQueueMult).toLong(),
                         estimatedDurationMs = qty.toLong() * perItemMs,
                         catalystKey         = catalystKey,
-                        catalystQty         = ashCost,
+                        catalystQty         = consumedAshCost,
                     )
                 )
-                val saveChance = townRepo.secondaryMaterialSaveChance(rcFlags)
-                val consumedAshCost = if (catalystKey != null) applyQtyPreservation(ashCost, saveChance) else 0
                 if (enqueued) {
                     playerRepo.consumeItems(mapOf("rune_essence" to runeData.essenceCost * qty))
                     if (catalystKey != null && consumedAshCost > 0) {
