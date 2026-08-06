@@ -18,6 +18,7 @@ import com.fantasyidler.repository.QuestRepository
 import com.fantasyidler.repository.SeasonalEventRepository
 import com.fantasyidler.repository.SessionRepository
 import com.fantasyidler.repository.WeeklyQuestRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.simulator.XpTable
 import com.fantasyidler.util.craftDurationEfficiency
@@ -154,6 +155,7 @@ class CraftingViewModel @Inject constructor(
     private val weeklyQuestRepo: WeeklyQuestRepository,
     private val guildRepo: GuildRepository,
     private val seasonalEventRepo: SeasonalEventRepository,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -392,7 +394,7 @@ class CraftingViewModel @Inject constructor(
                 val craftFlags = playerRepo.getFlags()
                 val agility   = state.skillLevels[Skills.AGILITY] ?: 1
                 val toolEff   = craftToolEfficiency(recipe, json.decodeFromString(playerRepo.getOrCreatePlayer().equipped))
-                val perItemMs = (SkillSimulator.sessionDurationMs(agility, craftFlags.skillPrestige[Skills.AGILITY] ?: 0) / 60 / toolEff).toLong()
+                val perItemMs = (SkillSimulator.sessionDurationMs(agility, craftFlags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(craftFlags)) / 60 / toolEff).toLong()
                 val totalOutput = qty * recipe.outputQty
                 val xpQueueMult = (if (craftFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(craftFlags)
                 val queuePetPct = petBoostFor(playerRepo.getOrCreatePlayer().pets, recipe.skillName)
@@ -454,7 +456,7 @@ class CraftingViewModel @Inject constructor(
             val flags = try { json.decodeFromString<PlayerFlags>(player.flags) } catch (_: Exception) { PlayerFlags() }
             val agilityLevel = levels[Skills.AGILITY] ?: 1
             // 1 item per minute, reduced by agility (same formula as gathering skills) and by tool efficiency
-            val perItemMs = (SkillSimulator.sessionDurationMs(agilityLevel, flags.skillPrestige[Skills.AGILITY] ?: 0) / 60 / efficiency).toLong()
+            val perItemMs = (SkillSimulator.sessionDurationMs(agilityLevel, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)) / 60 / efficiency).toLong()
 
             val framesJson = json.encodeToString(
                 json.serializersModule.serializer<List<SessionFrame>>(),
