@@ -18,6 +18,7 @@ import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.ChurchRepository
 import com.fantasyidler.repository.FarmingRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.PlayerRepository
@@ -138,6 +139,7 @@ class SkillsViewModel @Inject constructor(
     private val dailyQuestRepo: DailyQuestRepository,
     private val weeklyQuestRepo: WeeklyQuestRepository,
     private val seasonalEventRepo: SeasonalEventRepository,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -453,6 +455,8 @@ class SkillsViewModel @Inject constructor(
                 val mult       = when { rcLevel >= 75 -> 3; rcLevel >= 50 -> 2; else -> 1 } + ashBon
                 val xpQueueMult = (if (rcFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(rcFlags)
                 val ashCost = if (catalystKey != null) (qty + 9) / 10 else 0
+                val saveChance = townRepo.secondaryMaterialSaveChance(rcFlags)
+                val consumedAshCost = if (catalystKey != null) applyQtyPreservation(ashCost, saveChance) else 0
                 val enqueued = playerRepo.enqueueAction(
                     QueuedAction(
                         skillName           = Skills.RUNECRAFTING,
@@ -462,13 +466,13 @@ class SkillsViewModel @Inject constructor(
                         estimatedXpGain     = (qty.toLong() * (runeData.xpPerRune * mult).toLong() * xpQueueMult).toLong(),
                         estimatedDurationMs = qty.toLong() * perItemMs,
                         catalystKey         = catalystKey,
-                        catalystQty         = ashCost,
+                        catalystQty         = consumedAshCost,
                     )
                 )
                 if (enqueued) {
                     playerRepo.consumeItems(mapOf("rune_essence" to runeData.essenceCost * qty))
-                    if (catalystKey != null) {
-                        playerRepo.consumeItems(mapOf(catalystKey to ashCost))
+                    if (catalystKey != null && consumedAshCost > 0) {
+                        playerRepo.consumeItems(mapOf(catalystKey to consumedAshCost))
                     }
                     queuedSessionStarter.startNextQueued()
                 }
@@ -527,8 +531,10 @@ class SkillsViewModel @Inject constructor(
                 )
                 playerRepo.consumeItems(mapOf("rune_essence" to runeData.essenceCost * qty))
                 val ashCost = if (catalystKey != null) (qty + 9) / 10 else 0
-                if (catalystKey != null) {
-                    playerRepo.consumeItems(mapOf(catalystKey to ashCost))
+                val saveChance = townRepo.secondaryMaterialSaveChance(rcActFlags)
+                val consumedAshCost = if (catalystKey != null) applyQtyPreservation(ashCost, saveChance) else 0
+                if (catalystKey != null && consumedAshCost > 0) {
+                    playerRepo.consumeItems(mapOf(catalystKey to consumedAshCost))
                 }
                 sessionRepo.startSession(
                     skillName        = Skills.RUNECRAFTING,
@@ -537,7 +543,7 @@ class SkillsViewModel @Inject constructor(
                     durationMs       = qty.toLong() * perEssenceMs,
                     skillDisplayName = "Runecrafting",
                     catalystKey      = catalystKey,
-                    catalystQty      = ashCost,
+                    catalystQty      = consumedAshCost,
                 )
             } catch (e: Exception) {
                 _uiState.update { it.copy(snackbarMessage = context.getString(R.string.skill_session_start_failed, e.message ?: "")) }
@@ -1193,6 +1199,15 @@ class SkillsViewModel @Inject constructor(
             val pd = gameData.pets[pet.id]
             if (pd != null && (pd.boostedSkill == skillKey || pd.boostedSkill == "all")) pd.boostPercent else 0
         }
+    }
+
+    private fun applyQtyPreservation(totalQty: Int, saveChance: Float): Int {
+        if (saveChance <= 0f) return totalQty
+        var toConsume = 0
+        for (u in 0 until totalQty) {
+            if (kotlin.random.Random.nextFloat() >= saveChance) toConsume++
+        }
+        return toConsume
     }
 }
 

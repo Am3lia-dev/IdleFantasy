@@ -534,13 +534,15 @@ class QueuedSessionStarter @Inject constructor(
                 val qty = action.qty.takeIf { it > 0 } ?: return
                 val catalystKey = action.catalystKey
                 val outputKey   = if (catalystKey != null) "enhanced_${action.activityKey}" else action.activityKey
-                if (catalystKey != null) playerRepo.consumeItemsUnlocked(mapOf(catalystKey to qty))
+                // Ash is already consumed at enqueue time (CraftingViewModel);
+                // action.catalystQty carries that amount through for the refund-on-abandon path.
+                val ashCost   = action.catalystQty
                 val frames    = buildCraftFrames(xpMap[Skills.HERBLORE] ?: 0L, qty, r.xpPerItem, r.outputQuantity, outputKey,
                     petBoostPct = gatheringPetBoost(player.pets, Skills.HERBLORE),
                     petDropKey = petDropKey(Skills.HERBLORE), petDropChance = petDropChance(Skills.HERBLORE))
                 val perItemMs = SkillSimulator.sessionDurationMs(agilityLevel, agilityPrestige) / 60
                 sessionRepo.startSession(Skills.HERBLORE, action.activityKey, encodeFrames(frames), qty * perItemMs, action.skillDisplayName, insertAsCompleted = offline, backdateMs = backdateMs,
-                    catalystKey = catalystKey, catalystQty = if (catalystKey != null) qty else 0, levelAtStart = levelAtStart)
+                    catalystKey = catalystKey, catalystQty = ashCost, levelAtStart = levelAtStart)
             }
             Skills.MERCANTILE -> {
                 val route = gameData.tradeRoutes.firstOrNull { it.id == action.activityKey } ?: return
