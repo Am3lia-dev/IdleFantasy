@@ -76,7 +76,7 @@ Or grab the latest APK from the [Releases page](https://github.com/tristinbaker/
 
 ## Translating
 
-The game is available in 14 languages translated through community contributions. Translations live in standard Android string resource files and are Weblate-compatible. See [Translating](/TRANSLATING.md) to add a new language or improve an existing one.
+The game is available in 15 languages translated through community contributions. Translations live in standard Android string resource files and are Weblate-compatible. See [Translating](/TRANSLATING.md) to add a new language or improve an existing one.
 
 ## Contributing
 

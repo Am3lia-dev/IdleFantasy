@@ -527,7 +527,7 @@ class SkillsViewModel @Inject constructor(
                     )
                 )
 
-                val perEssenceMs = SkillSimulator.sessionDurationMs(agilityLevel, rcActFlags.skillPrestige[Skills.AGILITY] ?: 0) / 60
+                val perEssenceMs = SkillSimulator.sessionDurationMs(agilityLevel, rcActFlags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(rcActFlags)) / 60
                 val framesJson   = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),
                     frames,
@@ -617,7 +617,7 @@ class SkillsViewModel @Inject constructor(
 
                 val agilityLevel = levels[Skills.AGILITY] ?: 1
                 val prayerActFlags = try { json.decodeFromString<PlayerFlags>(player.flags) } catch (_: Exception) { PlayerFlags() }
-                val perBoneMs    = SkillSimulator.sessionDurationMs(agilityLevel, prayerActFlags.skillPrestige[Skills.AGILITY] ?: 0) / 60
+                val perBoneMs    = SkillSimulator.sessionDurationMs(agilityLevel, prayerActFlags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(prayerActFlags)) / 60
                 val framesJson   = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),
                     frames,

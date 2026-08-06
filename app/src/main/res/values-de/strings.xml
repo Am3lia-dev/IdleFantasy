@@ -1668,4 +1668,5 @@
     <string name="town_building_chronos_spire_name">Chronos Spire</string>
     <string name="town_chronos_spire_no_bonus">Upgrade to reduce player session durations</string>
     <string name="town_chronos_spire_active_bonus">%1$d%% reduction to player session durations</string>
+    <string name="settings_theme_midnight">Midnight</string>
 </resources>
