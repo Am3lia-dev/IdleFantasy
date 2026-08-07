@@ -3,3 +3,5 @@
 • Fixed the Chronos Spire session duration reduction not being reflected in the home screen queue countdown and duration estimates (thanks fjordsec!)
 • Prestiging Prayer now downgrades an active Church blessing to the strongest one your reset level allows (keeping its remaining time) instead of letting the high-level blessing keep running
 • Replaced the expired Discord invite in Settings with a permanent link
+• Fixed a crash when queueing very large runecrafting batches (thanks tdsotm!)
+• Updated Russian and French translations (thanks pikki!)
