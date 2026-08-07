@@ -4420,5 +4420,42 @@
     "requirements": {
       "thieving": 85
     }
+  },
+  "wraithbone_ring": {
+    "name": "wraithbone_ring",
+    "display_name": "Wraithbone Ring",
+    "slot": "ring",
+    "combat_style": null,
+    "description": "A pale ring carved from wight bone during the Gloomharvest. Steadies the hand and the heart.",
+    "attack_bonus": 8,
+    "strength_bonus": 8,
+    "defense_bonus": 8,
+    "requirements": {
+      "defense": 40
+    }
+  },
+  "reaper_scythe": {
+    "name": "reaper_scythe",
+    "display_name": "Reaper's Scythe",
+    "slot": "weapon",
+    "combat_style": "strength",
+    "description": "The Hollow King's own harvest tool. It reaps more than wheat.",
+    "attack_bonus": 58,
+    "strength_bonus": 75,
+    "defense_bonus": 0,
+    "requirements": {
+      "strength": 55
+    }
+  },
+  "gloomweave_cape": {
+    "name": "gloomweave_cape",
+    "display_name": "Gloomweave Cape",
+    "slot": "cape",
+    "combat_style": null,
+    "description": "Woven from dusk and lantern smoke at the Night Market. Only sold during the Gloomharvest.",
+    "attack_bonus": 3,
+    "strength_bonus": 3,
+    "defense_bonus": 8,
+    "requirements": {}
   }
 }

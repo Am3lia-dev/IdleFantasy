@@ -235,7 +235,7 @@ class PlayerRepository @Inject constructor(
 
     suspend fun addCoins(amount: Long) = playerMutex.withLock { addCoinsUnlocked(amount) }
 
-    private suspend fun addCoinsUnlocked(amount: Long) {
+    internal suspend fun addCoinsUnlocked(amount: Long) {
         require(amount >= 0) { "Cannot add negative coins" }
         val player = getOrCreatePlayer()
         val newCoins = (player.coins + amount).coerceAtMost(Long.MAX_VALUE)
@@ -840,6 +840,23 @@ class PlayerRepository @Inject constructor(
                 newFlags = newFlags.copy(activeSpell = fallback?.name)
             }
         }
+        if (skillName == Skills.PRAYER) {
+            val prayerLevel = levels[Skills.PRAYER] ?: 1
+            val activeBlessing = ChurchRepository.activeBlessing(newFlags)
+            if (activeBlessing != null && activeBlessing.prayerLevelRequired > prayerLevel) {
+                // The bones are already paid, so the blessing downgrades (keeping its expiry)
+                // to the strongest same-type blessing the reset level allows instead of ending.
+                val fallback = ChurchRepository.ALL_BLESSINGS
+                    .filter { it.type == activeBlessing.type && it.prayerLevelRequired <= prayerLevel }
+                    .maxByOrNull { it.prayerLevelRequired }
+                newFlags = if (fallback != null) {
+                    newFlags.copy(activeBlessingKey = fallback.key)
+                } else {
+                    buffNotifScheduler.cancelBlessingExpiry()
+                    newFlags.copy(activeBlessingKey = "", activeBlessingExpiresAt = 0L)
+                }
+            }
+        }
 
         playerDao.upsert(
             player.copy(
@@ -1192,8 +1209,10 @@ class PlayerRepository @Inject constructor(
     }
 
     /** Adds multiple items to inventory in a single DB write. */
-    suspend fun addItems(items: Map<String, Int>) = playerMutex.withLock {
-        if (items.isEmpty()) return@withLock
+    suspend fun addItems(items: Map<String, Int>) = playerMutex.withLock { addItemsUnlocked(items) }
+
+    internal suspend fun addItemsUnlocked(items: Map<String, Int>) {
+        if (items.isEmpty()) return
         val player = getOrCreatePlayer()
         val inventory: MutableMap<String, Int> = json.decodeFromString(player.inventory)
         for ((key, qty) in items) {

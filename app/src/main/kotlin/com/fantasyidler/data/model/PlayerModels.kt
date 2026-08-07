@@ -215,6 +215,10 @@ data class PlayerFlags(
     @SerialName("seasonal_minigame_easy_mode") val seasonalMinigameEasyMode: Boolean = false,
     /** Seasonal Events: permanent record of every event completed, kept even after the event's data is removed. */
     @SerialName("seasonal_banners_earned") val seasonalBannersEarned: List<SeasonalBannerEarned> = emptyList(),
+    /** Seasonal Events: event id -> token thresholds of reward tiers already claimed. */
+    @SerialName("seasonal_reward_tiers_claimed") val seasonalRewardTiersClaimed: Map<String, List<Int>> = emptyMap(),
+    /** Seasonal Events: "eventId:offerId" -> number of Night Market purchases made. */
+    @SerialName("seasonal_market_purchases") val seasonalMarketPurchases: Map<String, Int> = emptyMap(),
     /** Free-text notes the player jots down for themselves (e.g. what to queue next). */
     @SerialName("player_notes") val playerNotes: String = "",
     /** Titles: ids of every title ever earned. A title, once unlocked, is never revoked. */

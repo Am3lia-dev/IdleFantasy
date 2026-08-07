@@ -1,0 +1,5 @@
+• Added the Gloomharvest seasonal event (September 1 to November 30): earn 300 tokens across an expanded Bounty Board with farming and turn-in tasks, two expedition dungeons (The Hollowfen and The Blightwood), the Hollow King raid boss, and the Lantern Lights memory minigame
+• Fixed the theme setting squeezing its description text once the Midnight option was added; the theme buttons now sit below the text and wrap onto a second row when needed
+• Fixed the Chronos Spire session duration reduction not being reflected in the home screen queue countdown and duration estimates (thanks fjordsec!)
+• Prestiging Prayer now downgrades an active Church blessing to the strongest one your reset level allows (keeping its remaining time) instead of letting the high-level blessing keep running
+• Replaced the expired Discord invite in Settings with a permanent link

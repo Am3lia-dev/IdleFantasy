@@ -404,5 +404,68 @@
       "comment": "1/100 per kill"
     },
     "event_key": "sunspire_solstice_2026"
+  },
+  "the_hollow_king": {
+    "id": "the_hollow_king",
+    "display_name": "The Hollow King",
+    "emoji": "🎃",
+    "description": "The headless sovereign of the Gloomharvest, riding out from the Blightwood to reap what the living have sown.",
+    "combat_level_required": 70,
+    "duration_minutes": 55,
+    "hp": 2600,
+    "combat_stats": {
+      "attack_level": 66,
+      "strength_level": 62,
+      "defense_level": 64,
+      "attack_bonus": 50,
+      "strength_bonus": 85
+    },
+    "defensive_stats": {
+      "attack_defense": 85,
+      "strength_defense": 85,
+      "ranged_defense": 50,
+      "magic_defense": 110
+    },
+    "xp_rewards": {
+      "attack": 1600,
+      "strength": 1600,
+      "defense": 1600,
+      "hitpoints": 1250,
+      "magic": 800,
+      "ranged": 800
+    },
+    "common_loot": {
+      "coins_min": 20000,
+      "coins_max": 40000,
+      "items": {
+        "death_rune": {
+          "min": 120,
+          "max": 240
+        },
+        "adamantite_ore": {
+          "min": 50,
+          "max": 90
+        },
+        "runite_ore": {
+          "min": 12,
+          "max": 24
+        }
+      }
+    },
+    "rare_drops": [
+      {
+        "item": "runite_bar",
+        "chance": 0.02,
+        "comment": "1/50"
+      }
+    ],
+    "pet": {
+      "id": "lantern_wisp",
+      "display_name": "Lantern Wisp",
+      "emoji": "🎃",
+      "chance": 0.01,
+      "comment": "1/100 per kill"
+    },
+    "event_key": "gloomharvest_2026"
   }
 }
