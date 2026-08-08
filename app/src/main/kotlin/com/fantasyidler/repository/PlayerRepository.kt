@@ -1348,40 +1348,44 @@ fun resolveCapeMultiplier(
         else -> rackTier >= 3
     }
 
-    val eligibleCapeBonuses = mutableListOf<Float>()
+    var bestSkillCapeBonus = 0f
+    var bestGuildCapeBonus = 0f
 
-    // Check equipped cape
-    val equippedCapeSkill = equippedCape?.capeSkill
-    if (equippedCapeSkill != null) {
-        val isMatch = equippedCapeSkill == normSkill || isGuildCapeForSkill(equippedCapeSkill, normSkill)
-        if (isMatch && equippedCape.capeBonus > 0f) {
-            eligibleCapeBonuses.add(equippedCape.capeBonus)
+    fun considerCape(capeDef: EquipmentData?) {
+        if (capeDef == null || capeDef.capeBonus <= 0f) return
+        val capeSkill = capeDef.capeSkill ?: return
+        val isMatch = capeSkill == normSkill || isGuildCapeForSkill(capeSkill, normSkill)
+        if (!isMatch) return
+
+        val isGuildCape = capeDef.name.endsWith("_guild_cape") || capeSkill in setOf("warriors", "archers", "mages")
+        if (isGuildCape) {
+            bestGuildCapeBonus = maxOf(bestGuildCapeBonus, capeDef.capeBonus)
+        } else {
+            bestSkillCapeBonus = maxOf(bestSkillCapeBonus, capeDef.capeBonus)
         }
     }
+
+    // Check equipped cape
+    considerCape(equippedCape)
 
     // Check passive capes in inventory
     if (isCategoryUnlocked) {
         val candidateKeys = resolveOwnedCapeKeysForSkill(normSkill)
         for (key in candidateKeys) {
             if (inventoryKeys.contains(key)) {
-                val capeDef = allEquipment[key]
-                if (capeDef != null && capeDef.capeBonus > 0f) {
-                    eligibleCapeBonuses.add(capeDef.capeBonus)
-                }
+                considerCape(allEquipment[key])
             }
         }
     }
 
-    if (eligibleCapeBonuses.isEmpty()) return 1.0f
-
-    val maxBonus = eligibleCapeBonuses.maxOrNull() ?: 0f
-    if (maxBonus <= 0f) return 1.0f
+    val totalBonus = bestSkillCapeBonus + bestGuildCapeBonus
+    if (totalBonus <= 0f) return 1.0f
 
     val prestigeLevel = skillPrestige[normSkill] ?: 0
     val isCombatSkill = normSkill in setOf("attack", "strength", "defense", "ranged", "magic", "hp", "slayer")
     return if (isCombatSkill) {
-        1.0f + maxBonus
+        1.0f + totalBonus
     } else {
-        1.0f + maxBonus * (prestigeLevel + 1)
+        1.0f + totalBonus * (prestigeLevel + 1)
     }
 }
