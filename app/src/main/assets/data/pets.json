@@ -218,5 +218,35 @@
     "effect_type": "xp_boost",
     "boosted_skill": "combat",
     "boost_percent": 5
+  },
+  "lantern_wisp": {
+    "id": "lantern_wisp",
+    "display_name": "Lantern Wisp",
+    "emoji": "🎃",
+    "description": "A grinning gourd-light that escaped the Hollow King's crown and now lights your way to battle.",
+    "source": "The Hollow King raid (Gloomharvest event)",
+    "effect_type": "xp_boost",
+    "boosted_skill": "combat",
+    "boost_percent": 5
+  },
+  "grave_sprout": {
+    "id": "grave_sprout",
+    "display_name": "Grave Sprout",
+    "emoji": "🌱",
+    "description": "A stubborn little seedling that took root in a barrow mound. It knows a thing or two about growing.",
+    "source": "Gloomharvest event reward (125 tokens)",
+    "effect_type": "xp_boost",
+    "boosted_skill": "farming",
+    "boost_percent": 5
+  },
+  "golden_goose": {
+    "id": "golden_goose",
+    "display_name": "Golden Goose",
+    "emoji": "🪿",
+    "description": "A regal goose that roosts atop the gilded Monument. Coins simply seem to find its keeper.",
+    "source": "Grand Monument stage 4 (Gilded)",
+    "effect_type": "coin_boost",
+    "boosted_skill": "coins",
+    "boost_percent": 10
   }
 }
