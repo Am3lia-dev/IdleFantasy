@@ -238,5 +238,15 @@
     "effect_type": "xp_boost",
     "boosted_skill": "farming",
     "boost_percent": 5
+  },
+  "golden_goose": {
+    "id": "golden_goose",
+    "display_name": "Golden Goose",
+    "emoji": "🪿",
+    "description": "A regal goose that roosts atop the gilded Monument. Coins simply seem to find its keeper.",
+    "source": "Grand Monument stage 4 (Gilded)",
+    "effect_type": "coin_boost",
+    "boosted_skill": "coins",
+    "boost_percent": 10
   }
 }

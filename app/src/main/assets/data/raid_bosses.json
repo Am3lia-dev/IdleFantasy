@@ -467,5 +467,67 @@
       "comment": "1/100 per kill"
     },
     "event_key": "gloomharvest_2026"
+  },
+  "vault_guardian": {
+    "id": "vault_guardian",
+    "display_name": "The Vault Guardian",
+    "emoji": "🏆",
+    "description": "A colossus of living gold, woken by the lighting of the Eternal Flame. Only patrons of the Grand Monument may face it.",
+    "combat_level_required": 100,
+    "duration_minutes": 90,
+    "hp": 3000,
+    "combat_stats": {
+      "attack_level": 85,
+      "strength_level": 80,
+      "defense_level": 85,
+      "attack_bonus": 70,
+      "strength_bonus": 110
+    },
+    "defensive_stats": {
+      "attack_defense": 110,
+      "strength_defense": 110,
+      "ranged_defense": 80,
+      "magic_defense": 130
+    },
+    "xp_rewards": {
+      "attack": 2200,
+      "strength": 2200,
+      "defense": 2200,
+      "hitpoints": 1700,
+      "magic": 1100,
+      "ranged": 1100
+    },
+    "common_loot": {
+      "coins_min": 50000,
+      "coins_max": 100000,
+      "items": {
+        "runite_bar": {
+          "min": 5,
+          "max": 10
+        },
+        "diamond": {
+          "min": 2,
+          "max": 4
+        }
+      }
+    },
+    "rare_drops": [
+      {
+        "item": "gilded_full_helmet",
+        "chance": 0.04,
+        "comment": "1/25"
+      },
+      {
+        "item": "gilded_platebody",
+        "chance": 0.04,
+        "comment": "1/25"
+      },
+      {
+        "item": "gilded_kiteshield",
+        "chance": 0.04,
+        "comment": "1/25"
+      }
+    ],
+    "requires_monument": true
   }
 }
