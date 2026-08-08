@@ -7,6 +7,7 @@
 • Fixed a crash when queueing very large runecrafting batches (thanks tdsotm!)
 • Rebalanced the Yew and Magic Longbows (faster, stronger) so they are genuine upgrades over shortbows at their level; Equip Best Gear now picks the Magic Longbow at Ranged 60+
 • Updated Russian and French translations (thanks pikki!)
+• Skill Capes and Guild Capes for the same skill now stack their bonuses (e.g. +10% and +5% combine to +15%), so guild rank stays rewarding after level 99 (thanks fjordsec!)
 • Prayer no longer appears in the Combat screen skill list (it lives under Support skills), and its description no longer wrongly claims it raises your combat level
 • The Midnight theme background is now true black, so AMOLED pixels actually turn off
 • The 48h 2x XP boost now costs 25,000,000 coins (was 250,000)
