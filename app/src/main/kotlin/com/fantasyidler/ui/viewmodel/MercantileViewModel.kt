@@ -36,6 +36,7 @@ import kotlinx.serialization.serializer
 import javax.inject.Inject
 import android.content.Context
 import com.fantasyidler.R
+import com.fantasyidler.util.GameStrings
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 data class MercantileUiState(
@@ -145,7 +146,7 @@ class MercantileViewModel @Inject constructor(
                 }
                 _extra.update {
                     it.copy(snackbarMessage = if (enqueued)
-                        context.getString(R.string.mercantile_added_to_queue, route.displayName)
+                        context.getString(R.string.mercantile_added_to_queue, GameStrings.tradeRouteName(context, routeId))
                     else
                         context.getString(R.string.snackbar_queue_full))
                 }

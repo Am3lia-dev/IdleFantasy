@@ -269,7 +269,6 @@ data class RecentSession(
 @Serializable
 data class SlayerTask(
     @SerialName("enemy_key")       val enemyKey: String,
-    @SerialName("display_name")    val displayName: String,
     @SerialName("target_kills")    val targetKills: Int,
     @SerialName("kills_completed") val killsCompleted: Int = 0,
     @SerialName("xp_per_kill")     val xpPerKill: Int,

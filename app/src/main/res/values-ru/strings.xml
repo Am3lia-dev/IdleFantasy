@@ -846,9 +846,9 @@
     <string name="guild_quest_desc_trade">Завершить %1$d торговых маршрутов %2$s для %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Заработать %1$s монет через торговые маршруты для %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Обкрадите %2$s %1$d раз для %3$s.</string>
-    <string name="guild_combat_melee">ближний бой</string>
-    <string name="guild_combat_ranged">дальний бой</string>
-    <string name="guild_combat_magic">магия</string>
+    <string name="guild_combat_warriors">ближний бой</string>
+    <string name="guild_combat_archers">дальний бой</string>
+    <string name="guild_combat_mages">магия</string>
     <string name="guild_rep_label">%1$d / %2$d поручений</string>
     <string name="guild_quest_complete">Квест завершён: %1$s</string>
     <string name="guild_daily_complete">Награда за ежедневное поручение получена!</string>

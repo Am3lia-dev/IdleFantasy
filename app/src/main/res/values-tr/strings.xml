@@ -798,9 +798,9 @@
     <string name="guild_quest_desc_trade">%3$s için %1$d %2$s ticaret rotası tamamlayın.</string>
     <string name="guild_quest_desc_earn_coins">%2$s için ticaret rotaları aracılığıyla %1$s altın kazanın.</string>
     <string name="guild_quest_desc_pickpocket">%3$s için %2$s\'ı %1$d kez yankesicilik yapın.</string>
-    <string name="guild_combat_melee">yakın</string>
-    <string name="guild_combat_ranged">uzak</string>
-    <string name="guild_combat_magic">sihir</string>
+    <string name="guild_combat_warriors">yakın</string>
+    <string name="guild_combat_archers">uzak</string>
+    <string name="guild_combat_mages">sihir</string>
     <string name="guild_rep_label">%1$d / %2$d günlük görev</string>
     <string name="guild_quest_complete">Quest complete: %1$s</string>
     <string name="guild_daily_complete">Daily reward claimed!</string>

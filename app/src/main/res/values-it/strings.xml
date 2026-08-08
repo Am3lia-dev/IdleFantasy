@@ -853,9 +853,9 @@
     <string name="guild_quest_desc_trade">Completa %1$d affari in %2$s per la %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Guadagna %1$s monete tramite percorsi commerciali per la %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Borseggia il %2$s %1$d volte per il %3$s.</string>
-    <string name="guild_combat_melee">mischia</string>
-    <string name="guild_combat_ranged">a distanza</string>
-    <string name="guild_combat_magic">magico</string>
+    <string name="guild_combat_warriors">mischia</string>
+    <string name="guild_combat_archers">a distanza</string>
+    <string name="guild_combat_mages">magico</string>
     <string name="guild_rep_label">%1$d / %2$d missioni</string>
     <string name="guild_quest_complete">Missione completata: %1$s</string>
     <string name="guild_daily_complete">Ricompense ricevute!</string>

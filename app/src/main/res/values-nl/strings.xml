@@ -831,9 +831,9 @@
     <string name="guild_quest_desc_trade">Voltooi %1$d %2$s-handelsroute(s) voor het %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Verdien %1$s munten via handelsroutes voor het %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Steek de %2$s %1$d keer zakken voor het %3$s.</string>
-    <string name="guild_combat_melee">nabij</string>
-    <string name="guild_combat_ranged">afstand</string>
-    <string name="guild_combat_magic">magie</string>
+    <string name="guild_combat_warriors">nabij</string>
+    <string name="guild_combat_archers">afstand</string>
+    <string name="guild_combat_mages">magie</string>
     <string name="guild_rep_label">%1$d / %2$d dagelijkse opdrachten</string>
     <string name="guild_quest_complete">Quest voltooid: %1$s</string>
     <string name="guild_daily_complete">Dagelijkse beloning opgeëist!</string>

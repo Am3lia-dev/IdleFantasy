@@ -850,9 +850,9 @@
     <string name="guild_quest_desc_trade">%3$sのために%2$sの取引を%1$d回完了する。</string>
     <string name="guild_quest_desc_earn_coins">%2$sのために交易路を通じて%1$sコインを獲得する。</string>
     <string name="guild_quest_desc_pickpocket">%3$sのために%2$sから%1$d回スリを行う。</string>
-    <string name="guild_combat_melee">近接</string>
-    <string name="guild_combat_ranged">遠距離</string>
-    <string name="guild_combat_magic">魔法</string>
+    <string name="guild_combat_warriors">近接</string>
+    <string name="guild_combat_archers">遠距離</string>
+    <string name="guild_combat_mages">魔法</string>
     <string name="guild_rep_label">デイリー依頼 %1$d / %2$d</string>
     <string name="guild_quest_complete">クエスト完了: %1$s！</string>
     <string name="guild_daily_complete">デイリー報酬を受け取りました！</string>
