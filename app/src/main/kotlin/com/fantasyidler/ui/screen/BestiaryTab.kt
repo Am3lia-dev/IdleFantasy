@@ -171,7 +171,7 @@ private fun buildLocationGroups(
     }
     return grouped.entries
         .sortedWith(compareBy({ it.key == "Other" }, { it.key }))
-        .map { it.key to it.value.sortedBy { e -> e.displayName } }
+        .map { it.key to it.value.sortedBy { e -> e.key } }
 }
 
 @Composable
@@ -194,7 +194,7 @@ private fun BestiaryRow(entry: BestiaryEntry, onClick: () -> Unit) {
     ) {
         Column(Modifier.weight(1f)) {
             Text(
-                text  = entry.displayName,
+                text  = entry.nameLoader(LocalContext.current, entry.key),
                 style = MaterialTheme.typography.bodyMedium,
                 color = textColor,
             )
@@ -239,7 +239,7 @@ private fun EnemyDetailContent(
                 verticalAlignment     = Alignment.CenterVertically,
             ) {
                 Text(
-                    text       = enemy.displayName,
+                    text       = entry.nameLoader(context, enemy.name),
                     style      = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -346,7 +346,7 @@ private fun BossDetailContent(
                 verticalAlignment     = Alignment.CenterVertically,
             ) {
                 Text(
-                    text       = "${boss.emoji}  ${boss.displayName}",
+                    text       = "${boss.emoji}  ${GameStrings.bossName(context, boss.id)}",
                     style      = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -431,7 +431,7 @@ private fun BossDetailContent(
             item {
                 BestiarySectionHeader(stringResource(R.string.bestiary_pet_drop))
                 Spacer(Modifier.height(4.dp))
-                BestiaryDropTable(listOf(Triple("${pet.emoji} ${pet.displayName}", "", formatChance(pet.chance))))
+                BestiaryDropTable(listOf(Triple("${pet.emoji} ${GameStrings.petName(context, pet.id)}", "", formatChance(pet.chance))))
                 Spacer(Modifier.height(16.dp))
             }
         }

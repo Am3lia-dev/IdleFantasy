@@ -621,7 +621,7 @@ class HomeViewModel @Inject constructor(
                             for ((id, _) in pets) {
                                 val pd = gameData.pets[id] ?: continue
                                 if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                    petFoundName = pd.displayName
+                                    petFoundName = GameStrings.petName(context, pd.id)
                             }
                             questRepo.recordCombat(
                                 dungeonKey   = session.activityKey,
@@ -682,7 +682,7 @@ class HomeViewModel @Inject constructor(
                         for ((id, _) in pets) {
                             val pd = gameData.pets[id] ?: continue
                             if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                petFoundName = pd.displayName
+                                petFoundName = GameStrings.petName(context, pd.id)
                         }
                         if (!died) {
                             val style = detectCombatStyle(xpPerSkill)
@@ -816,7 +816,7 @@ class HomeViewModel @Inject constructor(
                         for ((id, _) in pets) {
                             val pd = gameData.pets[id] ?: continue
                             if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                petFoundName = pd.displayName
+                                petFoundName = GameStrings.petName(context, pd.id)
                         }
                         combinedXpBySkill[session.skillName] = (combinedXpBySkill[session.skillName] ?: 0L) + totalXp
                         for ((item, qty) in regular) combinedItems[item] = (combinedItems[item] ?: 0) + qty
@@ -863,8 +863,8 @@ class HomeViewModel @Inject constructor(
             // ── Recent sessions log ───────────────────────────────────────
             val newEntries = sessions.map { s ->
                 val activityDisplay = when (s.skillName) {
-                    "boss"       -> gameData.bosses[s.activityKey]?.displayName
-                    "combat"     -> gameData.dungeons[s.activityKey]?.displayName
+                    "boss"       -> GameStrings.bossName(context, s.activityKey)
+                    "combat"     -> GameStrings.dungeonName(context, s.activityKey)
                     "expedition" -> gameData.skillingDungeons[s.activityKey]?.displayName
                     else         -> null
                 } ?: s.activityKey.replace("_", " ").split(" ")
@@ -888,11 +888,11 @@ class HomeViewModel @Inject constructor(
                 n > 1 -> "$n Sessions Complete!"
                 last.sessionId in voidedSessionIds -> context.getString(R.string.home_session_voided)
                 last.skillName == "boss" -> {
-                    val bossName = gameData.bosses[last.activityKey]?.displayName ?: last.activityKey
+                    val bossName = GameStrings.bossName(context, last.activityKey)
                     if (bossWon == true) "Defeated $bossName!" else "Defeated by $bossName."
                 }
                 last.skillName == "combat" -> {
-                    val dungeonName = gameData.dungeons[last.activityKey]?.displayName ?: last.activityKey
+                    val dungeonName = GameStrings.dungeonName(context, last.activityKey)
                     if (anyDied) "$dungeonName — You Died" else "$dungeonName Complete!"
                 }
                 last.skillName == "expedition" -> {
@@ -937,7 +937,7 @@ class HomeViewModel @Inject constructor(
                                      .map { (key, qty) -> Pair(gameData.itemDisplayName(key), "×$qty") },
                 coinsGained    = displayedCoins,
                 killLines      = combinedKills.entries.sortedByDescending { it.value }
-                                     .map { (enemy, kills) -> Pair(gameData.enemies[enemy]?.displayName ?: enemy.toTitleCase(), "×$kills") },
+                                     .map { (enemy, kills) -> Pair(enemy, "×$kills") },
                 foodConsumedLines = combinedFood.entries.sortedByDescending { it.value }
                                      .map { (food, qty) -> Pair(gameData.itemDisplayName(food), "×$qty") },
                 arrowsConsumedLines  = combinedArrows.entries.sortedByDescending { it.value }
@@ -1006,8 +1006,8 @@ class HomeViewModel @Inject constructor(
             } else null
             val activityKeyForRepeat = if (nextTowerFloor != null) "tower_floor_$nextTowerFloor" else session.activityKey
             val displayName = when (session.skillName) {
-                "combat"     -> gameData.dungeons[session.activityKey]?.displayName ?: session.activityKey
-                "boss"       -> gameData.bosses[session.activityKey]?.displayName ?: session.activityKey
+                "combat"     -> GameStrings.dungeonName(context, session.activityKey)
+                "boss"       -> GameStrings.bossName(context, session.activityKey)
                 "expedition" -> gameData.skillingDungeons[session.activityKey]?.displayName ?: session.activityKey
                 "tower"      -> "Infinite Tower: Floor $nextTowerFloor"
                 else         -> session.skillName.toTitleCase()
@@ -1210,7 +1210,7 @@ class HomeViewModel @Inject constructor(
                             for ((id, _) in pets) {
                                 val pd = gameData.pets[id] ?: continue
                                 if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                    petFoundName = pd.displayName
+                                    petFoundName = GameStrings.petName(context, pd.id)
                             }
                             for ((skill, xp) in workerBossXp) {
                                 val petPct = workerBossPetBoost[skill] ?: 0
@@ -1246,7 +1246,7 @@ class HomeViewModel @Inject constructor(
                         for ((id, _) in pets) {
                             val pd = gameData.pets[id] ?: continue
                             if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                petFoundName = pd.displayName
+                                petFoundName = GameStrings.petName(context, pd.id)
                         }
                         if (!died) {
                             playerRepo.incrementDungeonRun(session.activityKey)
@@ -1272,7 +1272,7 @@ class HomeViewModel @Inject constructor(
                         for ((id, _) in pets) {
                             val pd = gameData.pets[id] ?: continue
                             if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                petFoundName = pd.displayName
+                                petFoundName = GameStrings.petName(context, pd.id)
                         }
                         val scaledXp      = if (mult == 1.0f) totalXp else (totalXp * mult).toLong()
                         val scaledRegular = if (mult == 1.0f) regular
@@ -1296,7 +1296,7 @@ class HomeViewModel @Inject constructor(
                         for ((id, _) in pets) {
                             val pd = gameData.pets[id] ?: continue
                             if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                                petFoundName = pd.displayName
+                                petFoundName = GameStrings.petName(context, pd.id)
                         }
                         val scaledXp      = if (mult == 1.0f) totalXp else (totalXp * mult).toLong()
                         val scaledRegular = if (mult == 1.0f) regular
@@ -1316,11 +1316,11 @@ class HomeViewModel @Inject constructor(
             val title = when {
                 n > 1 -> "Worker: $n Sessions Complete!"
                 last.skillName == "boss" -> {
-                    val bossName = gameData.bosses[last.activityKey]?.displayName ?: last.activityKey
+                    val bossName = GameStrings.bossName(context, last.activityKey)
                     "Worker: Defeated $bossName!"
                 }
                 last.skillName == "combat" -> {
-                    val dungeonName = gameData.dungeons[last.activityKey]?.displayName ?: last.activityKey
+                    val dungeonName = GameStrings.dungeonName(context, last.activityKey)
                     if (anyDied) "Worker: $dungeonName — Died" else "Worker: $dungeonName Complete!"
                 }
                 else -> "Worker: ${last.skillName.toTitleCase()} Complete"
@@ -1356,7 +1356,7 @@ class HomeViewModel @Inject constructor(
                                      .map { (key, qty) -> Pair(gameData.itemDisplayName(key), "×$qty") },
                 coinsGained    = displayedCoins,
                 killLines      = combinedKills.entries.sortedByDescending { it.value }
-                                     .map { (enemy, kills) -> Pair(gameData.enemies[enemy]?.displayName ?: enemy.toTitleCase(), "×$kills") },
+                                     .map { (enemy, kills) -> Pair(enemy, "×$kills") },
                 foodConsumedLines = emptyList(),
                 boostWasActive   = boostActive,
                 xpLineBonuses    = xpLineBonuses,
@@ -1517,7 +1517,7 @@ class HomeViewModel @Inject constructor(
         for ((id, _) in pets) {
             val pd = gameData.pets[id] ?: continue
             if (playerRepo.addPetIfNew(id, pd.boostPercent))
-                petFoundName = pd.displayName
+                petFoundName = GameStrings.petName(context, pd.id)
         }
         combinedXpBySkill[skillName] = (combinedXpBySkill[skillName] ?: 0L) + totalXp
         for ((item, qty) in regular) combinedItems[item] = (combinedItems[item] ?: 0) + qty

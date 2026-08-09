@@ -815,9 +815,9 @@
     <string name="guild_quest_desc_trade">Effectuez %1$d route(s) commerciale(s) %2$s pour la %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Gagnez %1$s pièces via les routes commerciales pour la %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Dérobez le %2$s %1$d fois pour le %3$s.</string>
-    <string name="guild_combat_melee">de mêlée</string>
-    <string name="guild_combat_ranged">à distance</string>
-    <string name="guild_combat_magic">magique</string>
+    <string name="guild_combat_warriors">de mêlée</string>
+    <string name="guild_combat_archers">à distance</string>
+    <string name="guild_combat_mages">magique</string>
     <string name="guild_rep_label">%1$d / %2$d quêtes quotidiennes</string>
     <string name="guild_quest_complete">Quête terminée : %1$s</string>
     <string name="guild_daily_complete">Récompense quotidienne réclamée !</string>

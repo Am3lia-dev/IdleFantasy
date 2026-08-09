@@ -803,9 +803,9 @@
     <string name="guild_quest_desc_trade">Completa %1$d rutas de %2$s para el %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Gana %1$s monedas a través de rutas comerciales para el %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Roba al %2$s %1$d veces para el %3$s.</string>
-    <string name="guild_combat_melee">cuerpo a cuerpo</string>
-    <string name="guild_combat_ranged">a distancia</string>
-    <string name="guild_combat_magic">mágico</string>
+    <string name="guild_combat_warriors">cuerpo a cuerpo</string>
+    <string name="guild_combat_archers">a distancia</string>
+    <string name="guild_combat_mages">mágico</string>
     <string name="guild_rep_label">%1$d / %2$d diarias</string>
     <string name="guild_quest_complete">Quest complete: %1$s</string>
     <string name="guild_daily_complete">Daily reward claimed!</string>

@@ -1,10 +1,8 @@
 import json
-import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
-from xml.dom.expatbuilder import DOCUMENT_NODE
 
 from docs.gen.repo_docs import TEMPLATES, ASSETS, ROOT, METADATA_PATH, RESOURCES
 
@@ -28,7 +26,7 @@ SKILLS = [
     ("Gathering", ["Mining", "Fishing", "Woodcutting", "Farming", "Thieving"]),
     ("Crafting", ["Smithing", "Cooking", "Fletching", "Crafting", "Firemaking", "Runecrafting", "Herblore", "Construction"]),
     ("Support", ["Prayer", "Mercantile", "Agility"]),
-    ("Combat", ["Slayer", "Attack", "Strength", "Defense", "Ranged", "Magic", "Hitpoints", "Prayer"])
+    ("Combat", ["Slayer", "Attack", "Strength", "Defense", "Ranged", "Magic", "Hitpoints"])
 ]
 
 # ---------------------------------------------------------------------------

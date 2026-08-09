@@ -972,9 +972,9 @@
     <string name="guild_quest_desc_sessions">Complete %1$d %2$s sessions for the %3$s.</string>
     <string name="guild_quest_desc_trade">Complete %1$d trade routes for the %2$s.</string>
     <string name="guild_quest_desc_earn_coins">Earn %1$s coins via trade routes for the %2$s.</string>
-    <string name="guild_combat_melee">melee</string>
-    <string name="guild_combat_ranged">ranged</string>
-    <string name="guild_combat_magic">magic</string>
+    <string name="guild_combat_warriors">melee</string>
+    <string name="guild_combat_archers">ranged</string>
+    <string name="guild_combat_mages">magic</string>
     <string name="settings_recent_activity_desc">Show Recent Activity button in the home screen header</string>
     <string name="settings_lang_russian">Русский</string>
     <string name="settings_lang_indonesian">Indonesio</string>

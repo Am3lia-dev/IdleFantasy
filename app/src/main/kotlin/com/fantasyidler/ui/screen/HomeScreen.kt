@@ -226,7 +226,7 @@ fun HomeScreen(
                     if (summary.killLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
                         SummarySection(stringResource(R.string.label_kills))
-                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(enemy, kills) }
+                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(GameStrings.enemyName(context, enemy), kills) }
                     }
                     if (summary.itemLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
@@ -382,7 +382,7 @@ fun HomeScreen(
                     if (summary.killLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
                         SummarySection(stringResource(R.string.label_kills))
-                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(enemy, kills) }
+                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(GameStrings.enemyName(context, enemy), kills) }
                     }
                     if (summary.itemLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))

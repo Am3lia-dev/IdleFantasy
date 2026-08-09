@@ -876,9 +876,9 @@
     <string name="guild_quest_desc_trade">Ukończ %1$d szlaków handlowych %2$s dla %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Zarób %1$s monet przez szlaki handlowe dla %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Okradnij %2$s %1$d razy dla %3$s.</string>
-    <string name="guild_combat_melee">wręcz</string>
-    <string name="guild_combat_ranged">strzelająca</string>
-    <string name="guild_combat_magic">magiczną</string>
+    <string name="guild_combat_warriors">wręcz</string>
+    <string name="guild_combat_archers">strzelająca</string>
+    <string name="guild_combat_mages">magiczną</string>
     <string name="guild_rep_label">%1$d / %2$d zadań dziennych</string>
     <string name="guild_quest_complete">Zadanie ukończone: %1$s!</string>
     <string name="guild_daily_complete">Odebrano dzienną nagrodę!</string>

@@ -652,9 +652,9 @@
     <string name="guild_quest_desc_trade">Lengkapi %1$d rute %2$s untuk %3$s.</string>
     <string name="guild_quest_desc_earn_coins">Dapatkan koin %1$s melalui jalur perdagangan untuk %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Mencopet %2$s %1$d kali untuk %3$s.</string>
-    <string name="guild_combat_melee">Melee</string>
-    <string name="guild_combat_ranged">Ranged</string>
-    <string name="guild_combat_magic">sihir</string>
+    <string name="guild_combat_warriors">Melee</string>
+    <string name="guild_combat_archers">Ranged</string>
+    <string name="guild_combat_mages">sihir</string>
     <string name="guild_rep_label">%1$d / %2$d harian</string>
     <string name="guild_quest_complete">Misi selesai: %1$s!</string>
     <string name="guild_daily_complete">Hadiah harian telah diklaim!</string>

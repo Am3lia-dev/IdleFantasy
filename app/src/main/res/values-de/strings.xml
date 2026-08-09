@@ -865,9 +865,9 @@
     <string name="guild_quest_desc_trade">Schließt %1$d %2$s-Handelsrouten für die %3$s ab.</string>
     <string name="guild_quest_desc_earn_coins">Verdient %1$s Münzen über Handelsrouten für die %2$s.</string>
     <string name="guild_quest_desc_pickpocket">Bestehlt den %2$s %1$d Mal für die %3$s.</string>
-    <string name="guild_combat_melee">Nahkampf</string>
-    <string name="guild_combat_ranged">Fernkampf</string>
-    <string name="guild_combat_magic">Magie</string>
+    <string name="guild_combat_warriors">Nahkampf</string>
+    <string name="guild_combat_archers">Fernkampf</string>
+    <string name="guild_combat_mages">Magie</string>
     <string name="guild_rep_label">%1$d / %2$d Tagesaufgaben</string>
     <string name="guild_quest_complete">Mission abgeschlossen: %1$s</string>
     <string name="guild_daily_complete">Tägliche Belohnung beansprucht!</string>
