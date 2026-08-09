@@ -81,7 +81,11 @@ class Plural:
         self._versions = quantities
 
     def format(self, amount: int, *args) -> str:
-        return _format_android_string(self._versions[self._quantity_selector(amount)], *args)
+        # Fall back to OTHER when the selected quantity is not defined, matching Android,
+        # which only uses quantities like "zero" in locales whose grammar requires them.
+        quantity = self._quantity_selector(amount)
+        version = self._versions.get(quantity) or self._versions[PluralAmount.OTHER]
+        return _format_android_string(version, *args)
 
 
 class GameStrings:
@@ -331,11 +335,11 @@ def dungeon_desc(dungeon: str) -> str:
 
 
 def expedition_name(expedition: str) -> str:
-    return _standard_string_resolution(expedition, f"skilling_dungeon_{expedition}_name", SimpleWarnType.EXPEDITION_NAME)
+    return _standard_string_resolution(expedition, "skilling_dungeon_{}_name", SimpleWarnType.EXPEDITION_NAME)
 
 
 def expedition_desc(expedition: str) -> str:
-    return _standard_string_resolution(expedition, f"skilling_dungeon_{expedition}_name", SimpleWarnType.EXPEDITION_DESC, "")
+    return _standard_string_resolution(expedition, "skilling_dungeon_{}_desc", SimpleWarnType.EXPEDITION_DESC, "")
 
 
 def seasonal_event_name(event: str) -> str:

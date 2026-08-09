@@ -132,8 +132,8 @@
     <string name="boss_sol_invictus_desc">A shard of the sun itself, torn loose from the Sunspire ruin. Only the boldest warriors dare approach.</string>
     <string name="boss_the_hollow_king_name">The Hollow King</string>
     <string name="boss_the_hollow_king_desc">The headless sovereign of the Gloomharvest, riding out from the Blightwood to reap what the living have sown.</string>
-    <string name="boss_vault_guardian_name">The Vault Guardian</string>
-    <string name="boss_vault_guardian_desc">A colossus of living gold, woken by the lighting of the Eternal Flame. Only patrons of the Grand Monument may face it.</string>
+    <string name="boss_the_vault_guardian_name">The Vault Guardian</string>
+    <string name="boss_the_vault_guardian_desc">A colossus of living gold, woken by the lighting of the Eternal Flame. Only patrons of the Grand Monument may face it.</string>
 
     <!-- ===== Expedition-unlocked dungeon names ===== -->
     <string name="dungeon_collapsed_mine_name">Collapsed Mine</string>

@@ -1,7 +1,6 @@
 package com.fantasyidler.ui.viewmodel
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fantasyidler.data.json.BossData

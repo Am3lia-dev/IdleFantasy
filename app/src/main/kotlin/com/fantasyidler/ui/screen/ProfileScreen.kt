@@ -1178,7 +1178,7 @@ private fun PetRow(pet: PetData, owned: Boolean) {
             .fillMaxWidth()
             .then(if (owned) Modifier.clickable {
                 val messages = context.resources.getStringArray(R.array.profile_pet_happy_messages)
-                AppBannerCenter.enqueue(String.format(messages.random(), GameStrings.petDesc(context, pet.id)))
+                AppBannerCenter.enqueue(String.format(messages.random(), GameStrings.petName(context, pet.id)))
             } else Modifier)
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,

@@ -1477,7 +1477,6 @@ def gen_guilds() -> str:
                 quest_name(key),
                 q["guild_level_required"],
                 _localised_quest_desc(q["type"], q["target"], q["amount"], q["guild"]),
-                f"{q['amount']:,}",
                 ", ".join(reward_parts),
             ])
         quest_table = table(["Quest", "Guild Level", "Goal", "Rewards"], rows)
@@ -1748,7 +1747,7 @@ def gen_boss(boss: dict) -> str:
         ])
     # Add pet chance
     pet = boss.get("pet")
-    assert isinstance(pet, dict)
+    assert pet is None or isinstance(pet, dict)
     if pet:
         name = f"{pet.get('emoji', '')} {pet_name(pet["id"])}".strip()
         rare_loot_rows.append([link("pets", name), fmt_pct(pet.get("chance", 0.005))])
