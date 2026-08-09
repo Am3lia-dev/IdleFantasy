@@ -190,6 +190,8 @@ data class HomeUiState(
     val activeSeasonalEvent: SeasonalEventSummary? = null,
     /** Total XP the active session will grant (single-skill only; 0 for combat/boss/expedition). */
     val activeSessionXpGain: Long = 0L,
+    /** Batch totals of the active crafting-type session (empty for gathering/combat sessions). */
+    val activeSessionAssignedItems: Map<String, Int> = emptyMap(),
     /** 1-based index of the boss fight currently running within a multi-fight repeat request. 0 = not repeating. */
     val activeBossRepeatIndex: Int = 0,
     /** Total fights requested for the current boss repeat run. */
@@ -313,6 +315,28 @@ class HomeViewModel @Inject constructor(
             val activeSessionXpGain   = sessionXpGain(session)
             val workerSessionXpGain   = sessionXpGain(workerSession)
             val workerSession2XpGain  = sessionXpGain(workerSession2)
+            // Batch totals for the active crafting-type session. Direct-start crafts store the
+            // whole batch in one frame, queue-started ones split it into up to 60 bucket frames,
+            // so totals are summed across frames rather than using singleBatchItems(). Restricted
+            // to batch skills (and pet drops filtered out) so pre-rolled gathering/combat loot and
+            // pet finds are never revealed mid-session.
+            val craftingBatchSkills = setOf(Skills.SMITHING, Skills.COOKING, Skills.FLETCHING, Skills.CRAFTING,
+                Skills.HERBLORE, Skills.FIREMAKING, Skills.RUNECRAFTING, Skills.CONSTRUCTION)
+            val activeSessionBatchTotals: Map<String, Int> = when {
+                session == null -> emptyMap()
+                session.skillName == Skills.PRAYER -> try {
+                    val bones = json.decodeFromString<List<SessionFrame>>(session.frames).sumOf { it.kills }
+                    if (bones > 0) mapOf(session.activityKey to bones) else emptyMap()
+                } catch (_: Exception) { emptyMap() }
+                session.skillName in craftingBatchSkills -> try {
+                    val totals = mutableMapOf<String, Int>()
+                    json.decodeFromString<List<SessionFrame>>(session.frames).forEach { f ->
+                        f.items.forEach { (k, v) -> if (k !in gameData.pets) totals[k] = (totals[k] ?: 0) + v }
+                    }
+                    totals
+                } catch (_: Exception) { emptyMap() }
+                else -> emptyMap()
+            }
             val progressMap      = guildProgress.associateBy { it.questId }
             val completedQuestIds = guildProgress.filter { it.completed }.map { it.questId }.toSet()
             val guildClaimableCount = GuildRepository.ALL_GUILDS.sumOf { guild ->
@@ -357,7 +381,7 @@ class HomeViewModel @Inject constructor(
                 equippedTitle       = flags.equippedTitle,
                 titleName           = titleRepo.displayName(context, flags.equippedTitle, flags),
                 sessionQueue        = flags.sessionQueue,
-                maxQueueSize        = townRepo.maxQueueSize(flags),
+                maxQueueSize        = playerRepo.maxQueueSize(flags),
                 showWhatsNew        = flags.lastSeenVersionCode < BuildConfig.VERSION_CODE,
                 queueEndsAt         = queueEndsAt,
                 towerCurrentFloor   = flags.towerCurrentFloor,
@@ -382,6 +406,7 @@ class HomeViewModel @Inject constructor(
                 guildClaimableCount        = guildClaimableCount,
                 activeSeasonalEvent        = activeSeasonalEvent,
                 activeSessionXpGain        = activeSessionXpGain,
+                activeSessionAssignedItems = activeSessionBatchTotals,
                 activeBossRepeatIndex      = flags.activeBossRepeatIndex,
                 activeBossRepeatTotal      = flags.activeBossRepeatTotal,
                 activeDungeonRepeatIndex   = flags.activeDungeonRepeatIndex,
@@ -445,6 +470,7 @@ class HomeViewModel @Inject constructor(
             val combinedBones     = mutableMapOf<String, Int>() // boneName → count
             var petFoundName: String? = null
             var bossWon: Boolean? = null  // set when session is a boss fight
+            var bossCoinsReduced = false
             val voidedSessionIds = mutableSetOf<String>()
             val awardedCapes = mutableListOf<String>()
             var expeditionNoteLines: List<String> = emptyList()
@@ -543,7 +569,9 @@ class HomeViewModel @Inject constructor(
                         val its   = frame.items.toMutableMap()
                         val coins = if (won) {
                             val base = its.remove("coins")?.toLong() ?: 0L
-                            (base * playerRepo.rollBossCoinSoftCap()).toLong()
+                            val mult = playerRepo.rollBossCoinSoftCap(session.activityKey)
+                            if (mult < 1.0 && base > 0L) bossCoinsReduced = true
+                            (base * mult).toLong()
                         } else 0L
                         val pets  = its.filterKeys { it in petIds }
                         val loot  = if (won) its.filterKeys { it !in petIds } else emptyMap()
@@ -924,7 +952,8 @@ class HomeViewModel @Inject constructor(
                 boostWasActive   = boostActive,
                 xpLineBonuses    = xpLineBonuses,
                 coinBlessingBonus = coinBlessingBonus,
-                noteLines        = expeditionNoteLines,
+                noteLines        = expeditionNoteLines +
+                                     (if (bossCoinsReduced) listOf(context.getString(R.string.session_note_boss_coin_cap)) else emptyList()),
                 unlockMessage    = expeditionUnlockMessage,
                 rareItems        = rareItemsDisplayNames,
             )

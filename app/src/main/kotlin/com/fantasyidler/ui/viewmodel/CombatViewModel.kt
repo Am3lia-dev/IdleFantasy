@@ -248,7 +248,7 @@ class CombatViewModel @Inject constructor(
                 activeBossRepeatTotal   = flags.activeBossRepeatTotal,
                 activeDungeonRepeatIndex = flags.activeDungeonRepeatIndex,
                 activeDungeonRepeatTotal = flags.activeDungeonRepeatTotal,
-                bossFullCoinKillsLeft   = playerRepo.bossFullCoinKillsLeft(flags),
+                bossFullCoinKillsLeft   = playerRepo.bossFullCoinKillsLeft(flags, extra.selectedBoss?.id ?: ""),
                 monumentComplete        = flags.monumentTier >= 5,
             )
         }

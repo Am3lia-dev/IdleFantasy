@@ -221,10 +221,12 @@ data class PlayerFlags(
     @SerialName("monument_fund") val monumentFund: Long = 0L,
     /** Grand Monument: yyyymmdd of the last daily touch boon. */
     @SerialName("monument_touch_day") val monumentTouchDay: Int = 0,
-    /** Boss coin soft cap: yyyymmdd day stamp [bossCoinKillsToday] applies to. */
+    /** Boss coin soft cap: yyyymmdd day stamp [bossCoinKillsByBoss] applies to. */
     @SerialName("boss_coin_day") val bossCoinDay: Int = 0,
-    /** Boss coin soft cap: victorious boss kills recorded for [bossCoinDay]. */
-    @SerialName("boss_coin_kills_today") val bossCoinKillsToday: Int = 0,
+    /** Boss coin soft cap: boss key -> victorious kills recorded for [bossCoinDay]. */
+    @SerialName("boss_coin_kills_by_boss") val bossCoinKillsByBoss: Map<String, Int> = emptyMap(),
+    /** Item keys the player locked against selling (long-press in the shop's sell list). */
+    @SerialName("locked_items") val lockedItems: List<String> = emptyList(),
     /** Seasonal Events: event id -> token thresholds of reward tiers already claimed. */
     @SerialName("seasonal_reward_tiers_claimed") val seasonalRewardTiersClaimed: Map<String, List<Int>> = emptyMap(),
     /** Seasonal Events: "eventId:offerId" -> number of Night Market purchases made. */

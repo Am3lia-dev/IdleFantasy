@@ -48,6 +48,7 @@ import com.fantasyidler.ui.viewmodel.BestiarySort
 import com.fantasyidler.ui.viewmodel.BestiaryViewModel
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.util.GameStrings
+import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.util.formatCoinsBrief
 import kotlin.math.roundToInt
 
@@ -401,11 +402,16 @@ private fun BossDetailContent(
                 "${boss.commonLoot.coinsMin.toLong().formatCoinsBrief()}–${boss.commonLoot.coinsMax.toLong().formatCoinsBrief()}",
                 null as String?,
             )
+            val cappedCoinRow = Triple(
+                stringResource(R.string.bestiary_coin_cap_label, PlayerRepository.BOSS_FULL_COIN_KILLS_PER_DAY),
+                "${(boss.commonLoot.coinsMin * PlayerRepository.BOSS_COIN_SOFT_CAP_MULT).toLong().formatCoinsBrief()}–${(boss.commonLoot.coinsMax * PlayerRepository.BOSS_COIN_SOFT_CAP_MULT).toLong().formatCoinsBrief()}",
+                null as String?,
+            )
             val itemRows = boss.commonLoot.items.map { (itemKey, range) ->
                 val qty = if (range.min == range.max) "×${range.min}" else "×${range.min}–${range.max}"
                 Triple(GameStrings.itemName(context, itemKey), qty, null)
             }
-            BestiaryDropTable(listOf(coinRow) + itemRows)
+            BestiaryDropTable(listOf(coinRow, cappedCoinRow) + itemRows)
             Spacer(Modifier.height(16.dp))
         }
 
