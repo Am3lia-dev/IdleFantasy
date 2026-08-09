@@ -13,3 +13,4 @@
 • The Bone Altar tap area now supports multi-touch, so two-thumb tapping registers every tap
 • Quest indicators now use five distinct icons (quest, daily, weekly, guild quest, guild daily) with a count when several quests of one type target the same item
 • The Skills overview now shows daily/weekly/guild-daily icons next to skills with ongoing timed quests, and an info button explains all the icons
+• Much more game text is now translatable and shown localized, including pet, boss, dungeon, and guild names (thanks CiaranGruber!)
