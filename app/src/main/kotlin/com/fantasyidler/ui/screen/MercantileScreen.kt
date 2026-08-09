@@ -43,7 +43,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
 import com.fantasyidler.data.json.TradeRouteData
 import com.fantasyidler.util.GameStrings
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.MercantileUiState
 import com.fantasyidler.ui.viewmodel.MercantileViewModel
 import com.fantasyidler.ui.viewmodel.xpProgressFraction
@@ -187,7 +186,7 @@ private fun MercantileStatsHeader(state: MercantileUiState) {
             Text(
                 text  = stringResource(R.string.mercantile_coins_label, state.coins.formatCoins()),
                 style = MaterialTheme.typography.bodySmall,
-                color = GoldPrimary,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

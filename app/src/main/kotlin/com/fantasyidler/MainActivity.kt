@@ -66,10 +66,10 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             val settingsViewModel: SettingsViewModel = hiltViewModel()
-            val themePreference by settingsViewModel.themePreference.collectAsStateWithLifecycle()
-            val fontScale       by settingsViewModel.fontScale.collectAsStateWithLifecycle()
+            val colourScheme by settingsViewModel.colourScheme.collectAsStateWithLifecycle()
+            val fontScale    by settingsViewModel.fontScale.collectAsStateWithLifecycle()
             val baseDensity = LocalDensity.current
-            FantasyIdlerTheme(themePreference = themePreference) {
+            FantasyIdlerTheme(colorScheme = colourScheme) {
                 CompositionLocalProvider(
                     LocalDensity provides Density(baseDensity.density, fontScale),
                     LocalAppFontScale provides fontScale,
