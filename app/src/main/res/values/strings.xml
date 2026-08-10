@@ -393,6 +393,7 @@
     <string name="settings_lang_japanese" translatable="false">日本語</string>
     <string name="settings_lang_irish" translatable="false">Gaeilge</string>
     <string name="settings_lang_czech" translatable="false">Čeština</string>
+    <string name="settings_lang_chinese_simplified" translatable="false">中文（简体）</string>
     <string name="settings_lang_system">System</string>
     <string name="settings_save_data">Save Data</string>
     <string name="settings_export">Export Save</string>

@@ -1734,7 +1734,7 @@
     <string name="town_chronos_spire_no_bonus">Améliorez pour réduire le temps des sessions du joueur</string>
     <string name="town_chronos_spire_active_bonus">%1$d%% de réduction du temps des sessions du joueur</string>
     <string name="settings_theme_midnight">Minuit</string>
-    <string name="tower_floor_desc">Infinite Tower étage %1$d</string>
+    <string name="tower_floor_desc">Étage %1$d de la Tour de l\'Infini</string>
     <string name="pet_baby_balrog_name">Bébé Balrog</string>
     <string name="pet_baby_balrog_desc">Un minuscule démon de feu et d\'ombre qui renforce votre magie.</string>
     <string name="pet_void_wisp_name">Follet du Vide</string>
@@ -1752,7 +1752,7 @@
     <string name="pet_gem_golem_name">Golem de Gemme</string>
     <string name="pet_gem_golem_desc">Une toute petite créature sculptée à partir d\'éclats de gemmes et de poussière de polissage. Elle garde vos outils bien affûtés.</string>
     <string name="pet_feather_drake_name">Dragon à Plumes</string>
-    <string name="pet_feather_drake_desc">Un dragon miniature entièrement constitué d\'empennages de flèches. Surprenamment aérodynamique.</string>
+    <string name="pet_feather_drake_desc">Un dragon miniature entièrement constitué d\'empennages de flèches. Étonnamment aérodynamique.</string>
     <string name="pet_forge_imp_name">Diablotin de la forge</string>
     <string name="pet_forge_imp_desc">Un diablotin malicieux qui vit dans la forge. Sa peau durcie par la chaleur est insensible aux brûlures.</string>
     <string name="pet_coin_drake_name">Dragon à Pièces</string>
@@ -1766,7 +1766,7 @@
     <string name="pet_solstice_sprite_name">Farfadet du Solstice</string>
     <string name="pet_solstice_sprite_desc">Un minuscule esprit de braise issu de l\'événement du Solstice de la Tour Solaire, qui renforce vos prouesses au combat.</string>
     <string name="pet_lantern_wisp_name">Feu Follet-Lanterne</string>
-    <string name="pet_lantern_wisp_desc">Une lanterne-citrouille grimaçante, échappée de la couronne du Roi du Vide, qui éclaire désormais votre chemin vers la bataille.</string>
+    <string name="pet_lantern_wisp_desc">Une lanterne-citrouille grimaçante, échappée de la couronne du Roi Creux, qui éclaire désormais votre chemin vers la bataille.</string>
     <string name="pet_grave_sprout_name">Germe de Tombe</string>
     <string name="pet_grave_sprout_desc">Une petite pousse tenace qui a pris racine dans un tumulus. Elle en sait long sur la croissance.</string>
     <string name="pet_golden_goose_name">Oie Dorée</string>
