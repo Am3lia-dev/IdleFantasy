@@ -22,6 +22,7 @@ import com.fantasyidler.repository.ThemeRepository
 import com.fantasyidler.repository.WorkerQueuedSessionStarter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -60,17 +61,23 @@ class SettingsViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "dark")
 
+    private val systemDark = MutableStateFlow(themeRepo.isSystemDarkNow())
+
+    /** Keeps the "system" theme in sync with the device night-mode setting; fed from composition. */
+    fun setSystemDark(dark: Boolean) { systemDark.value = dark }
+
     val colourScheme: StateFlow<ColorScheme> = combine(
         playerRepo.playerFlow,
         themeRepo.observeCustomThemes(),
-    ) { player, _ ->
+        systemDark,
+    ) { player, _, isSystemDark ->
         val preference = if (player == null) {
             "dark"
         } else {
             try { json.decodeFromString<PlayerFlags>(player.flags).themePreference }
             catch (_: Exception) { "dark" }
         }
-        themeRepo.getColourScheme(preference)
+        themeRepo.getColourScheme(preference, isSystemDark)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), darkColorScheme())
 
     val fontScale: StateFlow<Float> = playerRepo.playerFlow

@@ -372,6 +372,11 @@
     <string name="settings_font_normal">Normal</string>
     <string name="settings_font_large">Groß</string>
     <string name="settings_font_huge">Riesig</string>
+    <string name="settings_import_theme">Designs importieren</string>
+    <string name="settings_import_theme_desc">Importiert eigene Designs aus einer Datei</string>
+    <string name="settings_delete_theme_btn">Design löschen</string>
+    <string name="settings_theme_imported_ok">Design-Datei erfolgreich importiert</string>
+    <string name="settings_theme_imported_fail">Import fehlgeschlagen: ungültige Datei</string>
     <string name="settings_language_desc">Anzeigesprache der App überschreiben</string>
     <string name="settings_lang_english" translatable="false">English</string>
     <string name="settings_lang_deutsch" translatable="false">Deutsch</string>

@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalDensity
@@ -66,6 +68,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             val settingsViewModel: SettingsViewModel = hiltViewModel()
+            val systemDark = isSystemInDarkTheme()
+            LaunchedEffect(systemDark) { settingsViewModel.setSystemDark(systemDark) }
             val colourScheme by settingsViewModel.colourScheme.collectAsStateWithLifecycle()
             val fontScale    by settingsViewModel.fontScale.collectAsStateWithLifecycle()
             val baseDensity = LocalDensity.current

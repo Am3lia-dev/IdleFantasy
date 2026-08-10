@@ -15,8 +15,8 @@ enum class ThemeBase {
 /**
  * Theme entity for management of application themes.
  *
- * Complex fields are stored as JSON strings — identical to the IdleApes Python/SQLite schema.
- * Use [com.fantasyidler.repository.ThemeRepository] to read and write typed domain objects
+ * Complex fields are stored as JSON strings. Use
+ * [com.fantasyidler.repository.ThemeRepository] to read and write typed domain objects
  * rather than touching these raw columns directly.
  */
 @Entity(tableName = "themes")

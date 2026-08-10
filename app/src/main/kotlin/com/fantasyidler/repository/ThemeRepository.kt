@@ -36,10 +36,12 @@ class ThemeRepository @Inject constructor(
      * Resolves [theme] to a Material 3 [ColorScheme], preferring official asset themes
      * and falling back to a user-defined custom theme from the database.
      *
-     * `"system"` follows the device night-mode setting and resolves to `"dark"` or `"light"`.
+     * `"system"` resolves to `"dark"` or `"light"` via [isSystemDark], which defaults to the
+     * device night-mode setting at call time. Callers that must react to night-mode changes
+     * (e.g. the UI layer) should pass a value observed from composition instead.
      */
-    suspend fun getColourScheme(theme: String): ColorScheme {
-        val themeKey = if (theme == "system") systemThemeKey() else theme
+    suspend fun getColourScheme(theme: String, isSystemDark: Boolean = isSystemDarkNow()): ColorScheme {
+        val themeKey = if (theme == "system") (if (isSystemDark) "dark" else "light") else theme
         gameData.officialThemes[themeKey]?.let { official ->
             return buildColourScheme(official.base, official.colours, official.schemes)
         }
@@ -57,9 +59,9 @@ class ThemeRepository @Inject constructor(
         return darkColorScheme()
     }
 
-    private fun systemThemeKey(): String {
+    fun isSystemDarkNow(): Boolean {
         val night = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return if (night == Configuration.UI_MODE_NIGHT_YES) "dark" else "light"
+        return night == Configuration.UI_MODE_NIGHT_YES
     }
 
     /**
