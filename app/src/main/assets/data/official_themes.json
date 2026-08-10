@@ -13,7 +13,8 @@
       "dark_surface_variant": "0xFF0F3460",
       "parchment_text": "0xFFE8DCC8",
       "parchment_text_muted": "0xFFAA9A82",
-      "error_red": "0xFFCF6679"
+      "error_red": "0xFFCF6679",
+      "success_green": "0xFF4CAF50"
     },
     "colour_scheme": {
       "primary": "gold_primary",
@@ -31,7 +32,8 @@
       "surface_variant": "dark_surface_variant",
       "on_surface_variant": "parchment_text_muted",
       "error": "error_red",
-      "on_error": "parchment_text"
+      "on_error": "parchment_text",
+      "tertiary": "success_green"
     }
   },
   "midnight": {
@@ -48,7 +50,8 @@
       "midnight_surface_variant": "0xFF24344D",
       "parchment_text": "0xFFE8DCC8",
       "midnight_text_muted": "0xFFC7BBA7",
-      "error_red": "0xFFCF6679"
+      "error_red": "0xFFCF6679",
+      "success_green": "0xFF4CAF50"
     },
     "colour_scheme": {
       "primary": "gold_primary",
@@ -66,7 +69,8 @@
       "surface_variant": "midnight_surface_variant",
       "on_surface_variant": "midnight_text_muted",
       "error": "error_red",
-      "on_error": "parchment_text"
+      "on_error": "parchment_text",
+      "tertiary": "success_green"
     }
   },
   "light": {
@@ -84,7 +88,8 @@
       "dark_text": "0xFF1C1408",
       "dark_text_muted": "0xFF4A3820",
       "parchment_text": "0xFFE8DCC8",
-      "error_red": "0xFFCF6679"
+      "error_red": "0xFFCF6679",
+      "success_green": "0xFF4CAF50"
     },
     "colour_scheme": {
       "primary": "gold_primary",
@@ -102,7 +107,8 @@
       "surface_variant": "light_surface_variant",
       "on_surface_variant": "dark_text_muted",
       "error": "error_red",
-      "on_error": "parchment_text"
+      "on_error": "parchment_text",
+      "tertiary": "success_green"
     }
   }
 }

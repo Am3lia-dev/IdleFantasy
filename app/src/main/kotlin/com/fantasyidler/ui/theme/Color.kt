@@ -2,8 +2,7 @@ package com.fantasyidler.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-/** Semantic accents that are not Material colour-scheme roles. */
-val SuccessGreen = Color(0xFF4CAF50)
+/** Semantic accent that is not a Material colour-scheme role. */
 val WarningAmber = Color(0xFFFFB300)
 
 /** Equipment tier colours (level badges and item rarity). */

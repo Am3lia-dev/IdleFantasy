@@ -93,7 +93,6 @@ import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.ui.theme.ScaledSheetContent
-import com.fantasyidler.ui.theme.SuccessGreen
 import com.fantasyidler.ui.viewmodel.CombatViewModel
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
@@ -1039,8 +1038,8 @@ private fun DungeonRow(
             )
             if (unlocked && survivalRating != null) {
                 val (ratingText, ratingColor) = when (survivalRating) {
-                    CombatSimulator.SurvivalRating.LIKELY   -> stringResource(R.string.combat_difficulty_likely)   to SuccessGreen
-                    CombatSimulator.SurvivalRating.RISKY    -> stringResource(R.string.combat_difficulty_risky)    to MaterialTheme.colorScheme.tertiary
+                    CombatSimulator.SurvivalRating.LIKELY   -> stringResource(R.string.combat_difficulty_likely)   to MaterialTheme.colorScheme.tertiary
+                    CombatSimulator.SurvivalRating.RISKY    -> stringResource(R.string.combat_difficulty_risky)    to MaterialTheme.colorScheme.secondary
                     CombatSimulator.SurvivalRating.UNLIKELY -> stringResource(R.string.combat_difficulty_unlikely) to MaterialTheme.colorScheme.error
                 }
                 Text(

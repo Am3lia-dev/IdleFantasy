@@ -66,7 +66,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
-import com.fantasyidler.util.GameStrings
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -74,12 +73,11 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onReopenTutorial: () -> Unit = {},
     onNavigateToHomeScreenSettings: () -> Unit = {},
+    onNavigateToThemeSettings: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
-    val customThemes           by viewModel.customThemes.collectAsState()
-    val themePreference        by viewModel.themePreference.collectAsState()
     val fontScale              by viewModel.fontScale.collectAsState()
     val profileLayout          by viewModel.profileLayout.collectAsState()
     val backupFolderUri  by viewModel.backupFolderUri.collectAsState()
@@ -118,19 +116,6 @@ fun SettingsScreen(
         viewModel.importSave(jsonString) { success ->
             AppBannerCenter.enqueue(
                 if (success) context.getString(R.string.settings_imported_ok) else context.getString(R.string.settings_imported_fail)
-            )
-        }
-    }
-
-    val importThemeLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { uri ->
-        uri ?: return@rememberLauncherForActivityResult
-        val jsonString = context.contentResolver.openInputStream(uri)?.bufferedReader()?.readText()
-            ?: return@rememberLauncherForActivityResult
-        viewModel.importTheme(jsonString) { success ->
-            AppBannerCenter.enqueue(
-                if (success) context.getString(R.string.settings_theme_imported_ok) else context.getString(R.string.settings_theme_imported_fail)
             )
         }
     }
@@ -261,46 +246,10 @@ fun SettingsScreen(
             // Appearance section
             SectionHeader(title = stringResource(R.string.settings_appearance))
 
-            // Chips render below the text (not in the trailing slot) so the four theme
-            // options can wrap instead of squeezing the description into a sliver.
             SettingsRow(
                 title    = stringResource(R.string.settings_theme),
                 subtitle = stringResource(R.string.settings_theme_desc),
-            )
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                viewModel.officialThemes.forEach { theme ->
-                    FilterChip(
-                        selected = themePreference == theme,
-                        onClick  = { viewModel.setTheme(theme) },
-                        label    = {Text(GameStrings.themeName(context, theme), style = MaterialTheme.typography.labelSmall) },
-                    )
-                }
-            }
-            if (customThemes.isNotEmpty()) {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    customThemes.forEach { theme ->
-                        FilterChip(
-                            selected = themePreference == theme.name,
-                            onClick  = { viewModel.setTheme(theme.name) },
-                            label    = {Text(theme.displayName, style = MaterialTheme.typography.labelSmall) }
-                        )
-                    }
-                }
-                OutlinedButton(
-                    onClick = { viewModel.deleteTheme(themePreference) },
-                    enabled = themePreference in customThemes.map { it.name }
-                ) {
-                    Text(stringResource(R.string.settings_delete_theme_btn))
-                }
-            }
-            SettingsRow(
-                title    = stringResource(R.string.settings_import_theme),
-                subtitle = stringResource(R.string.settings_import_theme_desc),
-                trailing = {
-                    OutlinedButton(onClick = { importThemeLauncher.launch("*/*") }) {
-                        Text(stringResource(R.string.settings_import_btn))
-                    }
-                }
+                onClick  = onNavigateToThemeSettings,
             )
 
             SettingsRow(

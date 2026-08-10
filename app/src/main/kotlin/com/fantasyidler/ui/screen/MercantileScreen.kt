@@ -100,6 +100,7 @@ fun MercantileScreen(
                 TradeRouteRow(
                     route           = route,
                     playerCoins     = state.coins,
+                    coinReturnMult  = state.coinReturnMult,
                     isStarting      = state.startingSession,
                     sessionActive   = state.anySessionActive,
                     queueFull       = state.queueSize >= state.maxQueueSize,
@@ -151,6 +152,7 @@ fun MercantileSheetContent(
                 TradeRouteRow(
                     route           = route,
                     playerCoins     = state.coins,
+                    coinReturnMult  = state.coinReturnMult,
                     isStarting      = state.startingSession,
                     sessionActive   = state.anySessionActive,
                     queueFull       = state.queueSize >= state.maxQueueSize,
@@ -196,6 +198,7 @@ private fun MercantileStatsHeader(state: MercantileUiState) {
 private fun TradeRouteRow(
     route: TradeRouteData,
     playerCoins: Long,
+    coinReturnMult: Float,
     isStarting: Boolean,
     sessionActive: Boolean,
     queueFull: Boolean,
@@ -205,8 +208,8 @@ private fun TradeRouteRow(
     val context = LocalContext.current
     val canAfford = playerCoins >= route.coinCost
     val costStr   = route.coinCost.toLong().formatCoins()
-    val minReturn = route.coinRanges.values.minOf { it.min } * 60L
-    val maxReturn = route.coinRanges.values.maxOf { it.max } * 60L
+    val minReturn = (route.coinRanges.values.minOf { it.min } * 60L * coinReturnMult.toDouble()).toLong()
+    val maxReturn = (route.coinRanges.values.maxOf { it.max } * 60L * coinReturnMult.toDouble()).toLong()
 
     Column(
         modifier = Modifier

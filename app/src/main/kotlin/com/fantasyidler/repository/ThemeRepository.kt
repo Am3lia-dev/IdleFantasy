@@ -12,6 +12,7 @@ import com.fantasyidler.data.json.ColourSchemeParameter.*
 import com.fantasyidler.data.json.ThemeData
 import com.fantasyidler.data.model.CustomTheme
 import com.fantasyidler.data.model.ThemeBase
+import com.fantasyidler.util.ColorContrast
 import com.fantasyidler.util.toTitleCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -73,22 +74,45 @@ class ThemeRepository @Inject constructor(
     suspend fun importTheme(jsonString: String) {
         val themes = json.decodeFromString<Map<String, ThemeData>>(jsonString)
         require(themes.isNotEmpty()) { "Theme import contained no themes" }
-        val officialNames = getOfficialThemes().toSet()
-        val reserved = themes.keys.filter { it in officialNames }
-        require(reserved.isEmpty()) {
-            "Cannot import theme(s) that clash with official names: ${reserved.joinToString()}"
+        for ((name, data) in themes) saveCustomTheme(name, data)
+    }
+
+    /**
+     * Saves [data] as a custom theme under [name], replacing any existing custom theme
+     * with that name. Blank names and names that clash with [getOfficialThemes] are rejected.
+     */
+    suspend fun saveCustomTheme(name: String, data: ThemeData) {
+        require(name.isNotBlank()) { "Theme name must not be blank" }
+        require(name !in getOfficialThemes()) {
+            "Cannot save theme with reserved official name: $name"
         }
-        for ((name, data) in themes) {
-            customThemeDao.upsert(
-                CustomTheme(
-                    name = name,
-                    displayName = data.displayName.ifBlank { name.replace("_", " ").toTitleCase() },
-                    base = data.base,
-                    colours = json.encodeToString(data.colours),
-                    scheme = json.encodeToString(data.schemes),
-                )
+        customThemeDao.upsert(
+            CustomTheme(
+                name = name,
+                displayName = data.displayName.ifBlank { name.replace("_", " ").toTitleCase() },
+                base = data.base,
+                colours = json.encodeToString(data.colours),
+                scheme = json.encodeToString(data.schemes),
             )
-        }
+        )
+    }
+
+    /**
+     * Resolves [theme] to its typed [ThemeData] (official first, then custom), or null
+     * if unknown or unreadable. `"system"` resolves like [getColourScheme].
+     */
+    suspend fun getThemeData(theme: String): ThemeData? {
+        val themeKey = if (theme == "system") (if (isSystemDarkNow()) "dark" else "light") else theme
+        gameData.officialThemes[themeKey]?.let { return it }
+        val custom = customThemeDao.getTheme(themeKey) ?: return null
+        return try {
+            ThemeData(
+                base = custom.base,
+                displayName = custom.displayName,
+                colours = json.decodeFromString(custom.colours),
+                schemes = json.decodeFromString(custom.scheme),
+            )
+        } catch (_: Exception) { null }
     }
 
     /** Deletes a custom theme. Returns false if [name] is official or reserved. */
@@ -98,6 +122,10 @@ class ThemeRepository @Inject constructor(
         return true
     }
 
+    /** Builds a Material 3 [ColorScheme] from [data] without touching the database. */
+    fun buildColourScheme(data: ThemeData): ColorScheme =
+        buildColourScheme(data.base, data.colours, data.schemes)
+
     private fun buildColourScheme(
         base: ThemeBase,
         colours: Map<String, String>,
@@ -106,7 +134,7 @@ class ThemeRepository @Inject constructor(
         fun resolve(param: ColourSchemeParameter): Color? {
             val colourName = schemes[param] ?: return null
             val raw = colours[colourName] ?: return null
-            return try { Color(parseArgb(raw)) } catch (_: Exception) { null }
+            return try { Color(ColorContrast.parseArgb(raw)) } catch (_: Exception) { null }
         }
 
         val fallback = when (base) {
@@ -154,11 +182,14 @@ class ThemeRepository @Inject constructor(
         )
     }
 
-    private fun parseArgb(raw: String): Long {
-        val cleaned = raw.trim()
-            .removePrefix("0x")
-            .removePrefix("0X")
-            .removePrefix("#")
-        return cleaned.toULong(16).toLong()
+    companion object {
+        /**
+         * Converts a display name to a theme storage key, e.g. "My Theme!" → "my_theme".
+         * Unicode letters and digits are kept so localised names stay usable as keys.
+         */
+        fun slugify(displayName: String): String =
+            displayName.trim().lowercase()
+                .replace(Regex("[^\\p{L}\\p{N}]+"), "_")
+                .trim('_')
     }
 }

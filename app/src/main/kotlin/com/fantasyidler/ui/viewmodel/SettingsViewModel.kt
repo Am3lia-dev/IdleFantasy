@@ -7,6 +7,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fantasyidler.data.json.ThemeData
 import com.fantasyidler.data.model.CustomTheme
 import com.fantasyidler.data.model.PlayerFlags
 import com.fantasyidler.data.model.toExport
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -348,6 +350,19 @@ class SettingsViewModel @Inject constructor(
             } catch (_: Exception) {
                 onDone(false)
             }
+        }
+    }
+
+    /** Serializes [theme] in the shape importTheme reads and hands it to [onReady]. */
+    fun exportTheme(theme: String, onReady: (jsonString: String) -> Unit) {
+        viewModelScope.launch {
+            val data = themeRepo.getThemeData(theme) ?: return@launch
+            onReady(
+                json.encodeToString(
+                    json.serializersModule.serializer<Map<String, ThemeData>>(),
+                    mapOf(theme to data),
+                )
+            )
         }
     }
 }

@@ -9,15 +9,13 @@ import com.fantasyidler.data.json.ColourSchemeParameter.ON_SURFACE_VARIANT
 import com.fantasyidler.data.json.ColourSchemeParameter.SURFACE
 import com.fantasyidler.data.json.ColourSchemeParameter.SURFACE_VARIANT
 import com.fantasyidler.data.json.ThemeData
+import com.fantasyidler.util.ColorContrast
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
 
 /**
  * Contrast checks against the official theme definitions in
@@ -99,15 +97,7 @@ class ThemeContrastTest {
             ?: error("Theme is missing colour_scheme role '${param.name.lowercase()}'")
         val hex = colours[colourName]
             ?: error("Theme is missing colour '$colourName' for role '${param.name.lowercase()}'")
-        return Color(parseArgb(hex))
-    }
-
-    private fun parseArgb(raw: String): Long {
-        val cleaned = raw.trim()
-            .removePrefix("0x")
-            .removePrefix("0X")
-            .removePrefix("#")
-        return cleaned.toULong(16).toLong()
+        return Color(ColorContrast.parseArgb(hex))
     }
 
     private fun dataFile(name: String): File =
@@ -122,29 +112,11 @@ class ThemeContrastTest {
         minimum: Double,
         label: String = "",
     ) {
-        val ratio = contrastRatio(foreground, background)
+        val ratio = ColorContrast.contrastRatio(foreground, background)
         val detail = if (label.isEmpty()) "" else " ($label)"
         assertTrue(
             "Expected contrast of at least $minimum$detail, but was $ratio",
             ratio >= minimum,
         )
     }
-
-    private fun contrastRatio(first: Color, second: Color): Double {
-        val lighter = max(relativeLuminance(first), relativeLuminance(second))
-        val darker = min(relativeLuminance(first), relativeLuminance(second))
-        return (lighter + 0.05) / (darker + 0.05)
-    }
-
-    private fun relativeLuminance(color: Color): Double =
-        0.2126 * linearize(color.red.toDouble()) +
-            0.7152 * linearize(color.green.toDouble()) +
-            0.0722 * linearize(color.blue.toDouble())
-
-    private fun linearize(component: Double): Double =
-        if (component <= 0.04045) {
-            component / 12.92
-        } else {
-            ((component + 0.055) / 1.055).pow(2.4)
-        }
 }
