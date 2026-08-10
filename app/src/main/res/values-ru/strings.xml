@@ -386,6 +386,11 @@
     <string name="settings_font_normal">Обычный</string>
     <string name="settings_font_large">Большой</string>
     <string name="settings_font_huge">Огромный</string>
+    <string name="settings_import_theme">Импорт тем</string>
+    <string name="settings_import_theme_desc">Импорт пользовательских тем из файла</string>
+    <string name="settings_delete_theme_btn">Удалить тему</string>
+    <string name="settings_theme_imported_ok">Файл темы успешно импортирован</string>
+    <string name="settings_theme_imported_fail">Не удалось импортировать: недопустимый файл</string>
     <string name="settings_language_desc">Изменить язык приложения</string>
     <string name="settings_lang_english">English</string>
     <string name="settings_lang_deutsch">Deutsch</string>

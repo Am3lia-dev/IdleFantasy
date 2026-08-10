@@ -372,6 +372,11 @@
     <string name="settings_font_normal">標準</string>
     <string name="settings_font_large">大</string>
     <string name="settings_font_huge">極大</string>
+    <string name="settings_import_theme">テーマをインポート</string>
+    <string name="settings_import_theme_desc">ファイルからカスタムテーマをインポート</string>
+    <string name="settings_delete_theme_btn">テーマを削除</string>
+    <string name="settings_theme_imported_ok">テーマファイルをインポートしました</string>
+    <string name="settings_theme_imported_fail">インポートに失敗しました: 無効なファイル</string>
     <string name="settings_language_desc">アプリの表示言語を上書き</string>
     <string name="settings_lang_english">English</string>
     <string name="settings_lang_deutsch">Deutsch</string>

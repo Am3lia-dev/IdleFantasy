@@ -289,6 +289,11 @@
     <string name="settings_font_normal">Normal</string>
     <string name="settings_font_large">Besar</string>
     <string name="settings_font_huge">Sangat besar</string>
+    <string name="settings_import_theme">Impor tema</string>
+    <string name="settings_import_theme_desc">Impor tema kustom dari file</string>
+    <string name="settings_delete_theme_btn">Hapus tema</string>
+    <string name="settings_theme_imported_ok">File tema berhasil diimpor</string>
+    <string name="settings_theme_imported_fail">Gagal mengimpor: file tidak valid</string>
     <string name="settings_language_desc">Mengganti bahasa tampilan aplikasi</string>
     <string name="settings_lang_english">Bahasa Inggris</string>
     <string name="settings_lang_deutsch">Jerman</string>

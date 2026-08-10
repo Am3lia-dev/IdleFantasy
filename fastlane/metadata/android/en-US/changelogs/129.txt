@@ -1,0 +1,2 @@
+• You can now import custom themes from a file in Settings (thanks CiaranGruber!)
+• Muted text in the dark theme is slightly brighter to meet accessibility contrast guidelines

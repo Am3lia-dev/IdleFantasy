@@ -369,6 +369,11 @@
     <string name="settings_font_normal">Normaal</string>
     <string name="settings_font_large">Groot</string>
     <string name="settings_font_huge">Enorm</string>
+    <string name="settings_import_theme">Thema\'s importeren</string>
+    <string name="settings_import_theme_desc">Importeer aangepaste thema\'s uit een bestand</string>
+    <string name="settings_delete_theme_btn">Thema verwijderen</string>
+    <string name="settings_theme_imported_ok">Themabestand geïmporteerd</string>
+    <string name="settings_theme_imported_fail">Importeren mislukt: ongeldig bestand</string>
     <string name="settings_language_desc">Kies de taal van de app</string>
     <string name="settings_lang_english">Engels</string>
     <string name="settings_lang_deutsch">Duits</string>

@@ -371,6 +371,11 @@
     <string name="settings_font_normal">Normal</string>
     <string name="settings_font_large">Grande</string>
     <string name="settings_font_huge">Enorme</string>
+    <string name="settings_import_theme">Importar temas</string>
+    <string name="settings_import_theme_desc">Importe temas personalizados de um arquivo</string>
+    <string name="settings_delete_theme_btn">Excluir tema</string>
+    <string name="settings_theme_imported_ok">Arquivo de tema importado com sucesso</string>
+    <string name="settings_theme_imported_fail">Falha ao importar: arquivo inválido</string>
     <string name="settings_language_desc">Substituir o idioma de exibição do app</string>
     <string name="settings_lang_english">English</string>
     <string name="settings_lang_deutsch">Deutsch</string>

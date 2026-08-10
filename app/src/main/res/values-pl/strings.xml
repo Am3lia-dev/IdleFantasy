@@ -386,6 +386,11 @@
     <string name="settings_font_normal">Normalna</string>
     <string name="settings_font_large">Duża</string>
     <string name="settings_font_huge">Ogromna</string>
+    <string name="settings_import_theme">Importuj motywy</string>
+    <string name="settings_import_theme_desc">Importuj własne motywy z pliku</string>
+    <string name="settings_delete_theme_btn">Usuń motyw</string>
+    <string name="settings_theme_imported_ok">Plik motywu został zaimportowany</string>
+    <string name="settings_theme_imported_fail">Import nieudany: nieprawidłowy plik</string>
     <string name="settings_language_desc">Nadpisz język wyświetlania aplikacji</string>
     <string name="settings_lang_english">English</string>
     <string name="settings_lang_deutsch">Deutsch</string>

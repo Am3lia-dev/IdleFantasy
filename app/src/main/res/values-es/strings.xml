@@ -690,6 +690,11 @@
     <string name="settings_font_normal">Normal</string>
     <string name="settings_font_large">Large</string>
     <string name="settings_font_huge">Huge</string>
+    <string name="settings_import_theme">Importar temas</string>
+    <string name="settings_import_theme_desc">Importa temas personalizados desde un archivo</string>
+    <string name="settings_delete_theme_btn">Eliminar tema</string>
+    <string name="settings_theme_imported_ok">Archivo de tema importado correctamente</string>
+    <string name="settings_theme_imported_fail">Error al importar: archivo no válido</string>
     <string name="settings_lang_français">Français</string>
     <string name="settings_lang_español">Español</string>
     <string name="settings_lang_español_españa">Español (España)</string>
