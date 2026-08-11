@@ -45,9 +45,9 @@
 
     <!-- ===== Common labels ===== -->
     <string name="label_level">Level</string>
-    <string name="label_xp">XP</string>
+    <string name="label_xp" translatable="false">XP</string>
     <string name="label_coins">Coins</string>
-    <string name="label_hp">HP</string>
+    <string name="label_hp" translatable="false">HP</string>
     <string name="label_attack">Attack</string>
     <string name="label_strength">Strength</string>
     <string name="label_defense">Defense</string>
@@ -875,7 +875,7 @@
     <string name="quest_kbd_slayer_2_name">King Black Dragon Slayer II</string>
     <string name="quest_kbd_slayer_3_name">King Black Dragon Slayer III</string>
     <string name="inn_daily_resets">Refreshes daily at %1$s</string>
-    <string name="inn_food_heal">+%1$d HP</string>
+    <string name="inn_food_heal" translatable="false">+%1$d HP</string>
     <string name="inn_food_purchased">Food purchased.</string>
     <string name="inn_buy_qty">Quantity</string>
     <string name="inn_buy_total">Total: %1$s</string>
