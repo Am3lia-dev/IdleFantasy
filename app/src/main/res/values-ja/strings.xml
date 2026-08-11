@@ -615,9 +615,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">レベル %1$d  •  骨を埋葬するか灰を撒いて祈り経験値を獲得</string>
     <string name="skills_no_bones">インベントリに骨や灰がありません</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">各 %1$d XP  •  所持数: %2$d</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">各 %1$d XP</string>
     <string name="skills_bone_selected">各 %1$d XP  •  使用可能: %2$d</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">累計 +%1$d XP</string>
@@ -658,6 +657,7 @@
     <string name="quest_legend_guild_daily">ギルドデイリー</string>
     <string name="quest_legend_guild">ギルドクエスト</string>
     <string name="quest_legend_quest">クエスト</string>
+    <string name="quest_legend_gold_dot">Gold dot on skill icon: has an open daily, weekly, or guild daily quest.</string>
     <string name="quest_legend_notes">薄いアイコンはまだ達成できません（レベルや素材が不足）。小さな上付き数字は、同じ対象を求めるクエストがその種類に複数あることを示します。</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">インベントリ所持数: ×%1$d</string>

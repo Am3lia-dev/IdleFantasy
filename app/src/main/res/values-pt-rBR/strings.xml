@@ -615,9 +615,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Nível %1$d  •  Enterre ossos ou espalhe cinzas para ganhar XP de Oração</string>
     <string name="skills_no_bones">Nenhum osso ou cinza no inventário</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d XP cada  •  %2$d no inventário</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">%1$d XP cada</string>
     <string name="skills_bone_selected">%1$d XP cada  •  %2$d disponíveis</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d XP no total</string>
@@ -658,6 +657,7 @@
     <string name="quest_legend_guild_daily">Diária da guilda</string>
     <string name="quest_legend_guild">Missão da guilda</string>
     <string name="quest_legend_quest">Missão</string>
+    <string name="quest_legend_gold_dot">Gold dot on skill icon: has an open daily, weekly, or guild daily quest.</string>
     <string name="quest_legend_notes">Ícones esmaecidos ainda não podem ser concluídos (falta nível ou materiais). Um pequeno número elevado indica que várias missões desse tipo pedem a mesma coisa.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d no inventário</string>
