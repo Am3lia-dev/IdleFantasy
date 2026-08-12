@@ -425,6 +425,7 @@
     <!-- Translator note: %1$d = HP healed -->
     <string name="combat_heals_hp">%1$d HP iyileştirir</string>
     <string name="combat_defeated_so_far">şimdiye kadar yenildi.</string>
+    <string name="combat_eaten_so_far">şimdiye kadar yendi.</string>
     <string name="combat_fighting">Savaşıyor…</string>
     <string name="combat_log_you_hit">Vurdun</string>
     <string name="combat_log_hit_you">sana vurdu</string>
@@ -1803,4 +1804,35 @@
     <string name="pet_grave_sprout_desc">A stubborn little seedling that took root in a barrow mound. It knows a thing or two about growing.</string>
     <string name="pet_golden_goose_name">Golden Goose</string>
     <string name="pet_golden_goose_desc">A regal goose that roosts atop the gilded Monument. Coins simply seem to find its keeper.</string>
+
+    <!-- Save slots / character manager + Ironman mode -->
+    <string name="settings_characters">Karakterler</string>
+    <string name="settings_characters_desc">En fazla 3 kayıt yuvası. Karakter oluştur, değiştir veya sil.</string>
+    <string name="save_slots_title">Karakterler</string>
+    <string name="save_slots_desc">Bu cihazda en fazla üç karakter yaşayabilir. Geçiş yaptığında mevcut karakterin otomatik kaydedilir; etkin olmayan karakterin oturumları sen dönene kadar duraklatılır.</string>
+    <string name="save_slot_label">Yuva %1$d</string>
+    <string name="save_slot_new">Yeni Karakter</string>
+    <string name="save_slot_playing">Oynanıyor</string>
+    <string name="save_slot_ironman">Ironman</string>
+    <string name="save_slot_combat_level">Savaş Seviyesi %1$d</string>
+    <string name="save_slot_total_level">Toplam Seviye %1$d</string>
+    <string name="save_slot_last_played">%1$s önce</string>
+    <string name="save_slot_switch_title">Karakter değiştirilsin mi?</string>
+    <string name="save_slot_switch_body">%1$s olarak oynansın mı? Mevcut karakterin otomatik kaydedilir.</string>
+    <string name="save_slot_switch_btn">Değiştir</string>
+    <string name="save_slot_create_title">Yeni karakter oluşturulsun mu?</string>
+    <string name="save_slot_create_body">%1$d numaralı yuvada yepyeni bir karakter başlatılsın mı? Mevcut karakterin otomatik kaydedilir.</string>
+    <string name="save_slot_create_btn">Oluştur</string>
+    <string name="save_slot_delete_title">Karakter silinsin mi?</string>
+    <string name="save_slot_delete_body">%1$s kalıcı olarak silinsin mi? Bu işlem geri alınamaz.</string>
+    <string name="save_slot_delete_btn">Sil</string>
+    <string name="save_slot_switch_failed">Karakter değiştirilemedi.</string>
+    <string name="character_ironman_title">Ironman Modu</string>
+    <string name="character_ironman_desc">XP ve verim takviyeleri devre dışıdır, eşya satın alınamaz ve işçi tutulamaz. Kalıcıdır: oluşturulduktan sonra değiştirilemez. Kayıt dosyasını düzenlemek Ironman durumunu kaldırır.</string>
+    <string name="ironman_shop_buy_blocked">Ironman karakterler eşya satın alamaz.</string>
+    <string name="ironman_inn_blocked">Ironman karakterler işçi tutamaz.</string>
+    <string name="ironman_blessing_blocked">Ironman karakterler yalnızca savunma kutsamaları alabilir.</string>
+    <string name="ironman_bonuses_notice">Ironman: bu karakter için XP, verim ve altın takviyeleri devre dışıdır.</string>
+    <string name="ironman_badge">Ironman</string>
+    <string name="settings_imported_demoted">Kayıt içe aktarıldı. Oyun dışında değiştirildiği için Ironman durumu kaldırıldı.</string>
 </resources>
