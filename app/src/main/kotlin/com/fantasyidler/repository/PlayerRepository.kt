@@ -1391,9 +1391,9 @@ fun resolveCapeMultiplier(
     if (ironman) return 1.0f
     val normSkill = if (skillName == Skills.HITPOINTS) "hp" else skillName
     val rackTier = townBuildingTiers["cape_rack"] ?: 0
-    val isCategoryUnlocked = when {
-        normSkill in Skills.GATHERING -> rackTier >= 1
-        normSkill in Skills.CRAFTING_SKILLS -> rackTier >= 2
+    val isCategoryUnlocked = when (normSkill) {
+        in Skills.GATHERING -> rackTier >= 1
+        in Skills.CRAFTING_SKILLS -> rackTier >= 2
         else -> rackTier >= 3
     }
 
