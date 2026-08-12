@@ -966,55 +966,56 @@ internal fun SkillRow(
                         .clip(RoundedCornerShape(2.dp)),
                     color    = MaterialTheme.colorScheme.primary,
                 )
-                if (toolEfficiency > 1.0f) {
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text  = stringResource(R.string.skills_tool_bonus, "%.2f".format(toolEfficiency)),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
-                if (petBoostPct > 0) {
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text  = stringResource(R.string.skills_pet_bonus, petBoostPct),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-                }
-            }
-        }
-
-        // Prestige section: stars and button, outside the clickable row
-        if (prestigeLevel > 0 || (onPrestige != null && level >= 99)) {
-            Row(
-                modifier              = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 72.dp, end = 16.dp, bottom = 6.dp),
-                verticalAlignment     = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text  = "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                when {
-                    onPrestige != null && level >= 99 && prestigeLevel < 3 -> {
-                        TextButton(onClick = { showPrestigeConfirm = true }) {
+                if (toolEfficiency > 1.0f || petBoostPct > 0) {
+                    Spacer(Modifier.height(6.dp))
+                    Box(Modifier.fillMaxWidth()) {
+                        if (toolEfficiency > 1.0f) {
                             Text(
-                                text  = stringResource(R.string.prestige),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary,
+                                text     = stringResource(R.string.skills_tool_bonus, "%.2f".format(toolEfficiency)),
+                                style    = MaterialTheme.typography.labelSmall,
+                                color    = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.align(Alignment.CenterStart),
+                            )
+                        }
+                        if (petBoostPct > 0) {
+                            Text(
+                                text     = stringResource(R.string.skills_pet_bonus, petBoostPct),
+                                style    = MaterialTheme.typography.labelSmall,
+                                color    = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.align(Alignment.CenterEnd),
                             )
                         }
                     }
-                    prestigeLevel >= 3 -> {
+                }
+                if (prestigeLevel > 0 || (onPrestige != null && level >= 99)) {
+                    Spacer(Modifier.height(4.dp))
+                    Row(
+                        modifier              = Modifier.fillMaxWidth(),
+                        verticalAlignment     = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
                         Text(
-                            text  = stringResource(R.string.prestige_max),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            text  = "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
                         )
+                        when {
+                            onPrestige != null && level >= 99 && prestigeLevel < 3 -> {
+                                Text(
+                                    text     = stringResource(R.string.prestige),
+                                    style    = MaterialTheme.typography.labelSmall,
+                                    color    = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.clickable { showPrestigeConfirm = true },
+                                )
+                            }
+                            prestigeLevel >= 3 -> {
+                                Text(
+                                    text  = stringResource(R.string.prestige_max),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
                     }
                 }
             }
