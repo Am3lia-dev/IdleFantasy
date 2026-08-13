@@ -936,10 +936,10 @@
     <string name="guild_quest_desc_slayer_kill">Éliminez %1$d ennemis pendant une mission de Tueur.</string>
 
     <!-- Mercantile skill -->
-    <string name="skill_mercantile">Marchandage</string>
+    <string name="skill_mercantile">Commerce</string>
     <string name="label_support_skills">Support</string> <!-- untranslated -->
     <string name="mercantile_routes_label">Routes Commerciales</string>
-    <string name="mercantile_level_label">Niveau %1$d Marchandage</string>
+    <string name="mercantile_level_label">Niveau %1$d Commerce</string>
     <string name="mercantile_xp_label">XP : %1$s</string>
     <string name="mercantile_coins_label">Pièces : %1$s</string>
     <string name="mercantile_cost_label">Coût : %1$s</string>
@@ -1439,7 +1439,7 @@
     <string name="armory_source_skill_cape">Atteignez le niveau 99 en %1$s</string>
 
     <!-- Session / queue messages (issue #596) -->
-    <string name="skill_no_logs">Pas de rondins dans l\'inventaire</string>
+    <string name="skill_no_logs">Pas de bûches dans l\'inventaire</string>
     <string name="skill_not_enough_rune_essence">Pas assez d\'Essence de Runes</string>
     <string name="skill_not_enough_item">Pas assez de %1$s</string>
     <string name="skill_not_enough_materials">Pas assez de matériaux</string>
@@ -1472,7 +1472,7 @@
     <string name="guild_contributed_items">%1$d objets contribués.</string>
     <string name="mercantile_not_enough_coins">Pas assez de pièces (besoin de %1$s pièces).</string>
     <string name="mercantile_route_start_failed">Impossible de démarrer la route: %1$s</string>
-    <string name="mercantile_added_to_queue">Ajouté à la file: Marchandage — %1$s.</string>
+    <string name="mercantile_added_to_queue">Ajouté à la file: Commerce — %1$s.</string>
     <string name="inventory_requires_to_equip">Nécessite %1$s pour équiper.</string>
     <string name="home_found_pet">Vous avez trouvé un familier : %1$s !</string>
     <string name="pet_found_title">Nouveau familier!</string>
@@ -1593,8 +1593,8 @@
     <string name="seasonal_claim">Réclamer</string>
     <string name="seasonal_bounty_cooldown">Nouvelle prime dans %1$dm %2$ds</string>
     <string name="seasonal_go">Aller</string>
-    <string name="seasonal_event_sunspire_solstice_2026_name">Solstice de la Tour du Soleil</string>
-    <string name="seasonal_event_sunspire_solstice_2026_banner">A participé au Solstice de la Tour du Soleil 2026</string>
+    <string name="seasonal_event_sunspire_solstice_2026_name">Solstice de la Flèche du Soleil</string>
+    <string name="seasonal_event_sunspire_solstice_2026_banner">A participé au Solstice de la Flèche du Soleil 2026</string>
     <string name="seasonal_minigame_bonfire_rhythm_name">Rythme du feu de joie</string>
     <string name="seasonal_reward_sunspire_solstice_2026_100_desc">Bannière du Solstice de la Tour du Soleil 2026</string>
     <string name="seasonal_bounty_sunspire_firewood_name">Apportez du bois pour le feu de joie</string>
@@ -1610,9 +1610,9 @@
     <string name="seasonal_bounty_sunspire_sunfire_arrows_name">Des Flèches en Mithril pour repousser les feux follets</string>
     <string name="seasonal_bounty_sunspire_sunfire_arrows_hint">Plumage de Flèches</string>
     <string name="seasonal_bounty_sunspire_wisps_name">Éloignez les feux follets solaires</string>
-    <string name="seasonal_bounty_sunspire_wisps_hint">Disponible uniquement dans L\'Expédition de la Tour du Soleil</string>
+    <string name="seasonal_bounty_sunspire_wisps_hint">Disponible uniquement dans L\'Expédition de la Flèche du Soleil</string>
     <string name="seasonal_bounty_sunspire_hounds_name">Chasser les Chiens de Braise</string>
-    <string name="seasonal_bounty_sunspire_hounds_hint">Disponible uniquement dans L\'Expédition de la Tour du Soleil</string>
+    <string name="seasonal_bounty_sunspire_hounds_hint">Disponible uniquement dans L\'Expédition de la Flèche du Soleil</string>
     <string name="seasonal_bounty_sunspire_colossus_name">Abattez les Colosses de Braises froides</string>
     <string name="seasonal_bounty_sunspire_colossus_hint">On ne le trouve que dans L\'Expédition de la Tour du Soleil — rare</string>
     <string name="seasonal_rewards_title">Récompenses</string>
@@ -1831,31 +1831,31 @@
     <string name="ironman_badge">Ironman</string> <!-- untranslated -->
     <string name="settings_imported_demoted">Sauvegarde importée. Elle a été modifiée en dehors du jeu, le statut Ironman a donc été retiré.</string>
     <string name="shop_xp_boost_name">2× XP Boost (48h)</string> <!-- untranslated -->
-    <string name="bestiary_stat_hp">HP</string> <!-- untranslated -->
-    <string name="bestiary_stat_attack">Attack</string> <!-- untranslated -->
-    <string name="bestiary_stat_strength">Strength</string> <!-- untranslated -->
-    <string name="bestiary_stat_defense">Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_atk_defense">Atk Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_str_defense">Str Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_rng_defense">Rng Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_mag_defense">Mag Defense</string> <!-- untranslated -->
+    <string name="bestiary_stat_hp">PV</string>
+    <string name="bestiary_stat_attack">Attaque</string>
+    <string name="bestiary_stat_strength">Force</string>
+    <string name="bestiary_stat_defense">Défense</string>
+    <string name="bestiary_stat_atk_defense">Défense Atq</string>
+    <string name="bestiary_stat_str_defense">Défense For</string>
+    <string name="bestiary_stat_rng_defense">Défense Dis</string>
+    <string name="bestiary_stat_mag_defense">Défense Mag</string>
     <string name="bestiary_stat_xp">XP</string> <!-- untranslated -->
-    <string name="bestiary_stat_required_level">Required Level</string> <!-- untranslated -->
-    <string name="bestiary_stat_xp_reward">XP Reward</string> <!-- untranslated -->
-    <string name="bestiary_stat_duration">Duration</string> <!-- untranslated -->
+    <string name="bestiary_stat_required_level">Niveau Requis</string>
+    <string name="bestiary_stat_xp_reward">Récompense d\'XP</string>
+    <string name="bestiary_stat_duration">Durée</string>
     <string name="bestiary_stat_duration_min">%1$d min</string> <!-- untranslated -->
-    <string name="bestiary_kill_count">%1$d kills</string> <!-- untranslated -->
-    <string name="bestiary_location_other">Other</string> <!-- untranslated -->
-    <string name="carnival_stat_atk">ATK +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_str">STR +%1$d</string> <!-- untranslated -->
+    <string name="bestiary_kill_count">%1$d tués</string>
+    <string name="bestiary_location_other">Autre</string>
+    <string name="carnival_stat_atk">ATQ +%1$d</string>
+    <string name="carnival_stat_str">FOR +%1$d</string>
     <string name="carnival_stat_def">DEF +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_yield">Yield</string> <!-- untranslated -->
-    <string name="carnival_potion_letter_green">G</string> <!-- untranslated -->
+    <string name="carnival_stat_yield">Rendement</string>
+    <string name="carnival_potion_letter_green">V</string>
     <string name="carnival_potion_letter_blue">B</string> <!-- untranslated -->
     <string name="carnival_potion_letter_red">R</string> <!-- untranslated -->
     <string name="carnival_potion_letter_purple">P</string> <!-- untranslated -->
     <string name="carnival_potion_letter_orange">O</string> <!-- untranslated -->
     <string name="carnival_potion_letter_cyan">C</string> <!-- untranslated -->
-    <string name="farming_crop_picker_stats">Lv. %1$d  •  %2$s  •  %3$d XP/crop</string> <!-- untranslated -->
-    <string name="farming_seeds_owned">Seeds: %1$d  •  Owned: %2$d</string> <!-- untranslated -->
+    <string name="farming_crop_picker_stats">Niv. %1$d  •  %2$s  •  %3$d XP/récolte</string>
+    <string name="farming_seeds_owned">Graines: %1$d  •  Possédé: %2$d</string>
 </resources>
