@@ -673,7 +673,6 @@
     <string name="quest_legend_guild_daily">Dzienne gildii</string>
     <string name="quest_legend_guild">Zadanie gildii</string>
     <string name="quest_legend_quest">Zadanie</string>
-    <string name="quest_legend_gold_dot">Gold dot on skill icon: has an open daily, weekly, or guild daily quest.</string>
     <string name="quest_legend_notes">Przyciemnione ikony nie mogą być jeszcze ukończone (brak poziomu lub materiałów). Mała podniesiona cyfra oznacza, że kilka zadań tego typu dotyczy tego samego.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d w ekwipunku</string>

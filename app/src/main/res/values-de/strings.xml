@@ -657,7 +657,6 @@
     <string name="quest_legend_guild_daily">Gilden-Tagesquest</string>
     <string name="quest_legend_guild">Gildenquest</string>
     <string name="quest_legend_quest">Quest</string> <!-- untranslated -->
-    <string name="quest_legend_gold_dot">Gold dot on skill icon: has an open daily, weekly, or guild daily quest.</string>
     <string name="quest_legend_notes">Abgeblendete Symbole können noch nicht abgeschlossen werden (Level oder Materialien fehlen). Eine kleine hochgestellte Zahl bedeutet, dass mehrere Quests dieses Typs dasselbe Ziel haben.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d im Inventar</string>

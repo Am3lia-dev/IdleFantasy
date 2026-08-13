@@ -657,7 +657,7 @@
     <string name="quest_legend_guild_daily">Guild daily</string>
     <string name="quest_legend_guild">Guild quest</string>
     <string name="quest_legend_quest">Quest</string>
-    <string name="quest_legend_gold_dot">Gold dot on skill icon: has an open daily, weekly, or guild daily quest.</string>
+    <string name="quest_legend_gold_dot">Timed quest is available.</string>
     <string name="quest_legend_notes">Dimmed icons can\'t be completed yet (missing level or materials). A small raised number means several quests of that type want the same thing.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d in inventory</string>

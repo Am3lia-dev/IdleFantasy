@@ -608,7 +608,6 @@
     <string name="skills_prayer_desc">Level %1$d  •  Bury bones or scatter ashes for Prayer XP</string> <!-- untranslated -->
     <string name="skills_no_bones">Tidak ada tulang atau abu di inventaris.</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
-    <string name="skills_xp_each">%1$d XP each</string> <!-- untranslated -->
     <string name="skills_bone_selected">%1$d XP each  •  %2$d available</string> <!-- untranslated -->
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d XP total</string> <!-- untranslated -->
@@ -649,7 +648,6 @@
     <string name="quest_legend_guild_daily">Harian guild</string>
     <string name="quest_legend_guild">Quest guild</string>
     <string name="quest_legend_quest">Quest</string> <!-- untranslated -->
-    <string name="quest_legend_gold_dot">Gold dot on skill icon: has an open daily, weekly, or guild daily quest.</string> <!-- untranslated -->
     <string name="quest_legend_notes">Ikon redup belum bisa diselesaikan (level atau bahan kurang). Angka kecil di atas berarti beberapa quest jenis itu menginginkan hal yang sama.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d di inventaris</string>
