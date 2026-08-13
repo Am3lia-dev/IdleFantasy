@@ -367,7 +367,7 @@
     <string name="item_adamantite_fishing_rod_desc">Une canne à pêche extrêmement durable.</string>
     <string name="item_runite_fishing_rod_name">Canne à pêche en runite</string>
     <string name="item_runite_fishing_rod_desc">La meilleure canne à pêche disponible.</string>
-    <string name="item_divine_fishing_rod_name">Divine Fishing Rod</string> <!-- untranslated -->
+    <string name="item_divine_fishing_rod_name">Canne à pêche divine</string>
     <string name="item_divine_fishing_rod_desc">A rod blessed by the sea gods. Fish practically leap onto it.</string> <!-- untranslated -->
 
     <!-- ===== Arrows ===== -->
