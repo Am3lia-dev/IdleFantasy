@@ -103,7 +103,17 @@ private val POTION_COLORS = listOf(
     Color(0xFF00BCD4), // cyan   (hard mode)
 )
 
-private val POTION_NAMES = listOf("Green", "Blue", "Red", "Purple", "Orange", "Cyan")
+// One single-letter string per potion color, translator-controlled so every
+// language can pick six DISTINCT letters (in French "Violet" and "Vert" would
+// otherwise both abbreviate to V - issue #1146).
+private val POTION_LETTER_RES = listOf(
+    R.string.carnival_potion_letter_green,
+    R.string.carnival_potion_letter_blue,
+    R.string.carnival_potion_letter_red,
+    R.string.carnival_potion_letter_purple,
+    R.string.carnival_potion_letter_orange,
+    R.string.carnival_potion_letter_cyan,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -586,7 +596,7 @@ private fun PotionSequenceCard(gameState: ActiveGameState, difficulty: Difficult
                                 ) {
                                     if (i == current) {
                                         Text(
-                                            text  = POTION_NAMES[colorIdx].first().toString(),
+                                            text  = stringResource(POTION_LETTER_RES[colorIdx]),
                                             style = MaterialTheme.typography.bodyLarge,
                                             fontWeight = FontWeight.Bold,
                                             color = Color.White,
@@ -651,7 +661,7 @@ private fun PotionButton(colorIdx: Int, onClick: () -> Unit) {
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    text  = POTION_NAMES[colorIdx].first().toString(),
+                    text  = stringResource(POTION_LETTER_RES[colorIdx]),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -691,18 +701,18 @@ private fun ItemAppraisalCard(
                         )
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(0) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[0], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[0]), textAlign = TextAlign.Center)
                             }
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(1) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[1], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[1]), textAlign = TextAlign.Center)
                             }
                         }
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(2) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[2], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[2]), textAlign = TextAlign.Center)
                             }
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(3) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[3], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[3]), textAlign = TextAlign.Center)
                             }
                         }
                     }
@@ -717,10 +727,10 @@ private fun ItemAppraisalCard(
                         )
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(0) }, modifier = Modifier.weight(1f)) {
-                                Text(pair.itemA, textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, pair.itemA), textAlign = TextAlign.Center)
                             }
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(1) }, modifier = Modifier.weight(1f)) {
-                                Text(pair.itemB, textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, pair.itemB), textAlign = TextAlign.Center)
                             }
                         }
                     }
@@ -1002,11 +1012,12 @@ private fun PrizeRow(
             )
             if (equipData != null) {
                 val statParts = buildList {
-                    if (equipData.attackBonus   > 0) add("ATK +${equipData.attackBonus}")
-                    if (equipData.strengthBonus > 0) add("STR +${equipData.strengthBonus}")
-                    if (equipData.defenseBonus  > 0) add("DEF +${equipData.defenseBonus}")
+                    if (equipData.attackBonus   > 0) add(stringResource(R.string.carnival_stat_atk, equipData.attackBonus))
+                    if (equipData.strengthBonus > 0) add(stringResource(R.string.carnival_stat_str, equipData.strengthBonus))
+                    if (equipData.defenseBonus  > 0) add(stringResource(R.string.carnival_stat_def, equipData.defenseBonus))
                     if ((equipData.capeBonus) > 0f) {
-                        val capeLabel = if (equipData.capeSkill in COMBAT_CAPE_SKILLS) "XP" else "Yield"
+                        val capeLabel = if (equipData.capeSkill in COMBAT_CAPE_SKILLS) stringResource(R.string.bestiary_stat_xp)
+                                        else stringResource(R.string.carnival_stat_yield)
                         add("$capeLabel +${(equipData.capeBonus * 100).toInt()}%")
                     }
                 }
