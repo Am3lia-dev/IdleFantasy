@@ -3,47 +3,47 @@
     <!-- ===== Skill names and descriptions ===== -->
 
     <!-- Gathering skills -->
-    <string name="skill_mining_name">Mining</string> <!-- untranslated -->
+    <string name="skill_mining_name">挖矿</string>
     <string name="skill_mining_desc">Extract valuable ores and gems from the earth.</string> <!-- untranslated -->
-    <string name="skill_fishing_name">Fishing</string> <!-- untranslated -->
+    <string name="skill_fishing_name">捕鱼</string>
     <string name="skill_fishing_desc">Catch fish and aquatic treasures from the waters.</string> <!-- untranslated -->
-    <string name="skill_woodcutting_name">Woodcutting</string> <!-- untranslated -->
+    <string name="skill_woodcutting_name">伐木</string>
     <string name="skill_woodcutting_desc">Chop trees and gather various types of wood.</string> <!-- untranslated -->
-    <string name="skill_farming_name">Farming</string> <!-- untranslated -->
+    <string name="skill_farming_name">种植</string>
     <string name="skill_farming_desc">Plant and harvest crops from your farming patches.</string> <!-- untranslated -->
-    <string name="skill_firemaking_name">Firemaking</string> <!-- untranslated -->
+    <string name="skill_firemaking_name">生火</string>
     <string name="skill_firemaking_desc">Burn logs from your inventory to gain Firemaking XP. Each log burned also produces ashes, which can be scattered in the Prayer skill for bonus Prayer XP.</string> <!-- untranslated -->
-    <string name="skill_agility_name">Agility</string> <!-- untranslated -->
+    <string name="skill_agility_name">迅捷</string>
     <string name="skill_agility_desc">Train Agility to reduce session times across all skills. Level 99 cuts 20 minutes off the hour (60 min → 40 min), with a smooth linear reduction as you level up.</string> <!-- untranslated -->
 
     <!-- Crafting skills -->
-    <string name="skill_smithing_name">Smithing</string> <!-- untranslated -->
+    <string name="skill_smithing_name">锻造</string>
     <string name="skill_smithing_desc">Smelt ores into bars and forge powerful metal equipment.</string> <!-- untranslated -->
-    <string name="skill_cooking_name">Cooking</string> <!-- untranslated -->
+    <string name="skill_cooking_name">烹饪</string>
     <string name="skill_cooking_desc">Cook raw ingredients into food that restores HP in combat.</string> <!-- untranslated -->
-    <string name="skill_fletching_name">Fletching</string> <!-- untranslated -->
+    <string name="skill_fletching_name">木工</string>
     <string name="skill_fletching_desc">Craft bows and arrows from logs and metal components.</string> <!-- untranslated -->
-    <string name="skill_crafting_name">Crafting</string> <!-- untranslated -->
+    <string name="skill_crafting_name">手工</string>
     <string name="skill_crafting_desc">Create jewellery and other crafted items from precious materials.</string> <!-- untranslated -->
-    <string name="skill_runecrafting_name">Runecrafting</string> <!-- untranslated -->
+    <string name="skill_runecrafting_name">符造</string>
     <string name="skill_runecrafting_desc">Craft magical runes from rune essence for use in spellcasting.</string> <!-- untranslated -->
-    <string name="skill_herblore_name">Herblore</string> <!-- untranslated -->
+    <string name="skill_herblore_name">酿药</string>
     <string name="skill_herblore_desc">Brew potions from farming herbs and dungeon reagents to boost your combat stats.</string> <!-- untranslated -->
 
     <!-- Combat skills -->
-    <string name="skill_attack_name">Attack</string> <!-- untranslated -->
+    <string name="skill_attack_name">攻击</string>
     <string name="skill_attack_desc">Improves your melee accuracy, increasing your chance to hit.</string> <!-- untranslated -->
-    <string name="skill_strength_name">Strength</string> <!-- untranslated -->
+    <string name="skill_strength_name">力量</string>
     <string name="skill_strength_desc">Increases your maximum melee damage per hit.</string> <!-- untranslated -->
-    <string name="skill_defense_name">Defense</string> <!-- untranslated -->
+    <string name="skill_defense_name">防御</string>
     <string name="skill_defense_desc">Reduces the damage you take from enemy attacks.</string> <!-- untranslated -->
-    <string name="skill_ranged_name">Ranged</string> <!-- untranslated -->
+    <string name="skill_ranged_name">远程</string>
     <string name="skill_ranged_desc">Attack enemies from a safe distance using a bow and arrows.</string> <!-- untranslated -->
-    <string name="skill_magic_name">Magic</string> <!-- untranslated -->
+    <string name="skill_magic_name">魔法</string>
     <string name="skill_magic_desc">Cast powerful spells using runes. Higher levels unlock stronger spells.</string> <!-- untranslated -->
-    <string name="skill_hitpoints_name">Hitpoints</string> <!-- untranslated -->
+    <string name="skill_hitpoints_name">生命</string>
     <string name="skill_hitpoints_desc">Your total health. Higher levels let you survive longer in combat.</string> <!-- untranslated -->
-    <string name="skill_prayer_name">Prayer</string> <!-- untranslated -->
+    <string name="skill_prayer_name">祈祷</string>
     <string name="skill_prayer_desc">Bury bones dropped from combat to earn Prayer XP. Higher levels unlock stronger Church blessings.</string> <!-- untranslated -->
 
     <!-- ===== Skill unlock sheet labels ===== -->
@@ -88,7 +88,7 @@
     <string name="agility_transcendent_course_desc">The ultimate test of agility, transcending mortal limits.</string> <!-- untranslated -->
 
     <!-- ===== Session skill type labels ===== -->
-    <string name="skill_expedition_name">Expedition</string> <!-- untranslated -->
+    <string name="skill_expedition_name">探险</string>
     <string name="skill_boss_name">Boss</string> <!-- untranslated -->
-    <string name="skill_mercantile_name">Mercantile</string> <!-- untranslated -->
+    <string name="skill_mercantile_name">经商</string>
 </resources>
