@@ -45,9 +45,9 @@
 
     <!-- ===== Common labels ===== -->
     <string name="label_level">Livello</string>
-    <string name="label_xp">XP</string> <!-- untranslated -->
+    <string name="label_xp">XP</string>
     <string name="label_coins">Monete</string>
-    <string name="label_hp">HP</string> <!-- untranslated -->
+    <string name="label_hp">HP</string>
     <string name="label_attack">Mischia</string>
     <string name="label_strength">Forza</string>
     <string name="label_defense">Difesa</string>
@@ -117,8 +117,8 @@
     <string name="label_combat_style">Stile di Combattimento</string>
     <string name="label_active_spell">Incantesimo in Uso</string>
     <string name="label_drops">Ricompense</string>
-    <string name="label_boss">Boss</string> <!-- untranslated -->
-    <string name="label_dungeon">Dungeon</string> <!-- untranslated -->
+    <string name="label_boss">Boss</string>
+    <string name="label_dungeon">Dungeon</string>
     <string name="label_difficulty">Difficoltà</string>
     <string name="label_completed">Completato</string>
     <string name="label_in_progress">In Corso</string>
@@ -189,7 +189,7 @@
     <!-- Translator note: %1$s = skill display name, %2$d = level number -->
     <string name="format_skill_level">%1$s: Livello %2$d</string>
     <!-- Translator note: %1$d = boost percentage -->
-    <string name="format_xp_boost_percent">+%1$d%% XP</string> <!-- untranslated -->
+    <string name="format_xp_boost_percent">+%1$d%%% XP</string>
     <!-- Translator note: %1$s = item/resource name, %2$d = quantity drop amount -->
 
     <!-- Translator note: %1$d = minutes remaining -->
@@ -331,7 +331,7 @@
     <string name="settings_notifications_header">Notifiche</string>
     <string name="settings_performance_header">Prestazioni</string>
     <string name="settings_general_header">Generale</string>
-    <string name="settings_tutorial_title">Tutorial</string> <!-- untranslated -->
+    <string name="settings_tutorial_title">Tutorial</string>
     <string name="settings_tutorial_desc">Mostra nuovamente l\'introduzione</string>
     <string name="settings_reopen">Riapri</string>
     <string name="settings_changelog_title">Novità</string>
@@ -529,7 +529,7 @@
     <string name="combat_req_level">Livello di combattimento richiesto</string>
     <string name="combat_duration">Durata</string>
     <!-- Translator note: %1$d = minutes -->
-    <string name="combat_duration_min">%1$d min</string> <!-- untranslated -->
+    <string name="combat_duration_min">%1$d min</string>
     <string name="combat_fight_count_label">Numero di combattimenti</string>
     <!-- Translator note: %1$d = number of queued repeat fights, e.g. "×100 fights" -->
     <string name="combat_fight_count_suffix">×%1$d combattimenti</string>
@@ -609,7 +609,7 @@
     <string name="skills_level_req_xp">Lv. %1$d  •  %2$s XP/minerale</string>
     <!-- Translator note: %1$s = formatted multiplier (e.g. "1.15") -->
     <string name="skills_tool_bonus">×%1$s bonus strumento</string>
-    <string name="skills_pet_bonus">+%1$d%% XP (compagno)</string>
+    <string name="skills_pet_bonus">+%1$d%%% XP (compagno)</string>
     <!-- Translator note: %1$d = fishing level -->
     <string name="skills_fishing_desc">Livello %1$d  •  Pesca in base al livello</string>
     <!-- Translator note: %1$d = prayer level -->
@@ -749,7 +749,7 @@
     <string name="onboarding_welcome_desc">Un RPG incrementale che trae ispirazione dagli MMORPG classici. Allena le tue abilità, saccheggia dungeon, e crea armi, armature ed accessori. Tutto offline, niente account, niente pubblicità.</string>
 
     <!-- Quantity picker quick buttons -->
-    <string name="qty_max">Max</string> <!-- untranslated -->
+    <string name="qty_max">Max</string>
 
     <!-- ===== Inn / Worker ===== -->
     <string-array name="worker_names">
@@ -848,7 +848,7 @@
     <string name="achievement_combat_30_desc">Raggiungi un livello di combattimento di 30</string>
     <string name="achievement_combat_50_name">Campione</string>
     <string name="achievement_combat_50_desc">Raggiungi un livello di combattimento di 50</string>
-    <string name="achievement_combat_75_name">Elite</string> <!-- untranslated -->
+    <string name="achievement_combat_75_name">Elite</string>
     <string name="achievement_combat_75_desc">Raggiungi un livello di combattimento di 75</string>
     <string name="achievement_combat_99_name">Campionissimo</string>
     <string name="achievement_combat_99_desc">Raggiungi un livello di combattimento di 99</string>
@@ -876,7 +876,7 @@
     <string name="quest_kbd_slayer_2_name">Sgozzatore di Draghi Neri Regali II</string>
     <string name="quest_kbd_slayer_3_name">Sgozzatore di Draghi Neri Regali III</string>
     <string name="inn_daily_resets">Si aggiorna quotidianamente alle %1$s</string>
-    <string name="inn_food_heal">+%1$d HP</string> <!-- untranslated -->
+    <string name="inn_food_heal">+%1$d HP</string>
     <string name="inn_food_purchased">Cibo acquistato.</string>
     <string name="inn_buy_qty">Quantità</string>
     <string name="inn_buy_total">Totale: %1$s</string>
@@ -935,11 +935,11 @@
     <string name="guild_quest_desc_slayer_kill">Sconfiggi %1$d nemici durante un incarico da Sicario.</string>
 
     <!-- Mercantile skill -->
-    <string name="skill_mercantile">Mercantile</string> <!-- untranslated -->
+    <string name="skill_mercantile">Mercantile</string>
     <string name="label_support_skills">Supporto</string>
     <string name="mercantile_routes_label">Rotte Commerciali</string>
     <string name="mercantile_level_label">Livello Mercante %1$d</string>
-    <string name="mercantile_xp_label">XP: %1$s</string> <!-- untranslated -->
+    <string name="mercantile_xp_label">XP: %1$s</string>
     <string name="mercantile_coins_label">Monete: %1$s</string>
     <string name="mercantile_cost_label">Costo: %1$s</string>
     <string name="mercantile_return_range">Ricavo: %1$s – %2$s</string>
@@ -963,7 +963,7 @@
     <string name="church_blessing_suffix">da benedizione</string>
     <string name="church_effect_xp">×%1$.2f XP per %2$d ore</string>
     <string name="church_effect_def">+%1$d Difesa per %2$d ore</string>
-    <string name="church_effect_coins">+%1$d%% monete raccolte per %2$d ore</string>
+    <string name="church_effect_coins">+%1$d%%% monete raccolte per %2$d ore</string>
     <string name="church_cost_bones">Richiede %1$d ossa</string>
     <string name="church_confirm_title">Attivare Benedizione?</string>
     <string name="church_bones_available">Hai %1$d ossa, pari a %2$d per le benedizioni (le ossa più grandi valgono più)</string>
@@ -1048,7 +1048,7 @@
     <string name="slayer_card_desc">Incarichi e ricompense per i sicari</string>
     <string name="slayer_desc">Completa gli incarichi per ottenere XP e punti. Puoi ottenere armamenti unici spendendo i punti accumulati.</string>
     <string name="slayer_level_label">Livello %1$d</string>
-    <string name="slayer_xp_label">%1$s XP</string> <!-- untranslated -->
+    <string name="slayer_xp_label">%1$s XP</string>
     <string name="slayer_points">%1$d punti</string>
     <string name="slayer_active_task">Incarichi Attivi</string>
     <string name="slayer_kills_remaining">%1$d / %2$d scalpi</string>
@@ -1092,10 +1092,10 @@
     <string name="prestige">Onore</string>
     <string name="prestige_max">Onore Massimo</string>
     <string name="prestige_confirm_title">Onora %s?</string>
-    <string name="prestige_confirm_message_xp">Il livello di %1$s tornerà a 1, ma otterrai un bonus permanente di +%2$d%% XP per questa abilità.</string>
+    <string name="prestige_confirm_message_xp">Il livello di %1$s tornerà a 1, ma otterrai un bonus permanente di +%2$d%%% XP per questa abilità.</string>
     <string name="prestige_confirm_message_stat">Il livello di %1$s tornerà a 1, ma otterrai un bonus permanente di +%2$d alle statistiche.</string>
-    <string name="prestige_confirm_message_agility">Il livello di %1$s tornerà a 1, ma otterrai un bonus XP permanente del +%2$d%%, e la durata delle sessioni continuerà a diminuire — al livello 99 una sessione durerà %3$d min invece di %4$d min.</string>
-    <string name="prestige_confirm_message_mercantile">Il livello di %1$s tornerà a 1, ma otterrai un bonus XP permanente del +%2$d%%, oltre a un ulteriore +%2$d%% di ritorno in monete dalle rotte commerciali.</string>
+    <string name="prestige_confirm_message_agility">Il livello di %1$s tornerà a 1, ma otterrai un bonus XP permanente del +%2$d%%%, e la durata delle sessioni continuerà a diminuire — al livello 99 una sessione durerà %3$d min invece di %4$d min.</string>
+    <string name="prestige_confirm_message_mercantile">Il livello di %1$s tornerà a 1, ma otterrai un bonus XP permanente del +%2$d%%%, oltre a un ulteriore +%2$d%%% di ritorno in monete dalle rotte commerciali.</string>
 
     <!-- Prestige achievements -->
     <string name="achievement_prestige_first_name">Primo Reset</string>
@@ -1128,7 +1128,7 @@
     <string name="trade_route_local_market_name">Mercato locale</string>
     <string name="trade_route_river_trading_post_name">Avamposto fluviale</string>
     <string name="trade_route_eastern_caravan_name">Carovana dell\'Est</string>
-    <string name="trade_route_grand_exchange_name">Grand Exchange</string> <!-- untranslated -->
+    <string name="trade_route_grand_exchange_name">Grand Exchange</string>
     <string name="trade_route_merchants_quarter_name">Quartiere dei Mercanti</string>
     <string name="trade_route_northern_ports_name">Porti del Nord</string>
     <string name="trade_route_local_market_desc">Scambia beni comuni al mercato locale. I ritorni sono modesti ma variabili.</string>
@@ -1159,10 +1159,10 @@
     <string name="crafting_tier_iron">Ferro</string>
     <string name="crafting_tier_magic">Magico</string>
     <string name="crafting_tier_maple">Acero</string>
-    <string name="crafting_tier_mithril">Mithril</string> <!-- untranslated -->
+    <string name="crafting_tier_mithril">Mithril</string>
     <string name="crafting_tier_oak">Quercia</string>
     <string name="crafting_tier_platinum">Platino</string>
-    <string name="crafting_tier_runite">Runite</string> <!-- untranslated -->
+    <string name="crafting_tier_runite">Runite</string>
     <string name="crafting_tier_silver">Argento</string>
     <string name="crafting_tier_steel">Acciaio</string>
     <string name="crafting_tier_willow">Salice</string>
@@ -1174,7 +1174,7 @@
     <string name="bone_altar_select_prompt">Scegli le ossa da seppellire</string>
     <string name="bone_altar_tap">Tocca per Seppellire</string>
     <string name="bone_altar_change_bone">Cambia</string>
-    <string name="bone_altar_combo_count">Combo ×%d</string> <!-- untranslated -->
+    <string name="bone_altar_combo_count">Combo ×%d</string>
     <string name="bone_altar_bonus_active" formatted="false">+50% bonus XP!</string>
     <string name="bone_altar_session_xp">+%s XP questa sessione</string>
     <string name="bone_altar_buried_count">%d sepolti</string>
@@ -1187,7 +1187,7 @@
     <string name="firemaking_burn">Ardi</string>
     <string name="farming_fertilizer">Fertilizzante</string>
     <string name="farming_fertilizer_optional">Aggiungi fertilizzante</string>
-    <string name="farming_fertilizer_yield">+%1$d%% alla resa</string>
+    <string name="farming_fertilizer_yield">+%1$d%%% alla resa</string>
     <string name="farming_fertilized">Fertilizzato</string>
     <string name="catalyst_optional">Cenere catalizzante (facoltativo)</string>
     <string name="catalyst_enhanced_output">Produce pozione potenziata</string>
@@ -1201,7 +1201,7 @@
     <!-- Thieving skill -->
     <string name="skill_thieving_name">Furto</string>
     <string name="skill_thieving_desc">Borseggia qualcuno ad ogni sessione. La probabilità di successo dipende dal tuo livello. Fallire ti lascerà stordito per un po\'.</string>
-    <string name="thieving_npc_detail">Lv. %1$d • %2$d XP • %3$d%% di successo</string>
+    <string name="thieving_npc_detail">Lv. %1$d • %2$d XP • %3$d%%% di successo</string>
     <string name="thieving_npc_coins">%1$d–%2$d monete per furto</string>
 
     <!-- Thieving NPC names -->
@@ -1232,9 +1232,9 @@
     <string name="town_upgrade_fail_level">Richiede Costruzione Lv. %1$d</string>
     <string name="town_upgrade_fail_coins">Monete insufficienti</string>
     <string name="town_upgrade_fail_mats">Materiali insufficienti</string>
-    <string name="town_inn_active_bonus">+%1$d%% XP lavoratore per sessione</string>
+    <string name="town_inn_active_bonus">+%1$d%%% XP lavoratore per sessione</string>
     <string name="town_inn_no_bonus">Potenzia per bonus XP ai lavoratori</string>
-    <string name="town_guild_active_bonus">-%1$d%% requisiti missioni gilda</string>
+    <string name="town_guild_active_bonus">-%1$d%%% requisiti missioni gilda</string>
     <string name="town_guild_no_bonus">Migliora per ridurre i requisiti delle missioni</string>
     <string name="town_church_active_bonus">Le benedizioni durano %1$dh (base: 24h)</string>
     <string name="town_church_no_bonus">Potenzia per estendere la durata delle benedizioni</string>
@@ -1262,10 +1262,10 @@
     <string name="town_cape_rack_t3_bonus">Attiva i bonus derivati dai mantelli di qualunque livello (raccolta, mestieri, combattimento e gilda)</string>
     <string name="town_building_artisans_workshop_name">Bottega dell\'Artigiano</string>
     <string name="town_artisans_workshop_no_bonus">Migliora per avere possibilità di recuperare materiali</string>
-    <string name="town_artisans_workshop_active_bonus">%1$d%% di recuperare materiali</string>
+    <string name="town_artisans_workshop_active_bonus">%1$d%%% di recuperare materiali</string>
     <string name="town_building_chronos_spire_name">Guglia di Crono</string>
     <string name="town_chronos_spire_no_bonus">Migliora per ridurre i tempi di sessione</string>
-    <string name="town_chronos_spire_active_bonus">Riduzione del %1$d%% ai tempi di sessione</string>
+    <string name="town_chronos_spire_active_bonus">Riduzione del %1$d%%% ai tempi di sessione</string>
 
     <!-- Town achievements -->
     <string name="achievement_town_first_upgrade_name">Ristrutturazione</string>
@@ -1305,7 +1305,7 @@
     <string name="carnival_idle_desc_wizard">Lancia incantesimi illusori contro maghi rivali. La tua padronanza della magia influirà sul risultato.</string>
     <string name="carnival_fishing_derby">Gara di pesca</string>
     <string name="carnival_idle_desc_fishing">Pesca il pesce più grande di tutti! Fai pratica per puntare ai premi migliori!</string>
-    <string name="carnival_skill_level">%1$s Lv.%2$d</string> <!-- untranslated -->
+    <string name="carnival_skill_level">%1$s Lv.%2$d</string>
     <string name="carnival_ticket_yield">circa %1$d biglietti/sessione</string>
     <string name="carnival_queue">Metti in coda</string>
     <string name="carnival_ring_toss">Lancio degli anelli</string>
@@ -1489,14 +1489,14 @@
     <string name="bonus_section_skills">Bonus da Abilità</string>
     <string name="bonus_combat_stat_boost">Potenzia statistiche combattimento</string>
     <string name="bonus_combined_xp">XP combinata</string>
-    <string name="bonus_yield">+%1$d%% alla resa</string>
-    <string name="bonus_boost">+%1$d%% bonus</string>
+    <string name="bonus_yield">+%1$d%%% alla resa</string>
+    <string name="bonus_boost">+%1$d%%% bonus</string>
     <string name="bonus_session_shorter">%1$d min in meno per sessione</string>
-    <string name="bonus_coin_return">+%1$d%% ritorno in monete</string>
+    <string name="bonus_coin_return">+%1$d%%% ritorno in monete</string>
     <string name="bonus_tower">Torre</string>
 
-    <string name="bonus_coin_drops">+%1$d%% monete</string>
-    <string name="bonus_hp">+%1$d HP</string> <!-- untranslated -->
+    <string name="bonus_coin_drops">+%1$d%%% monete</string>
+    <string name="bonus_hp">+%1$d HP</string>
     <string name="snackbar_added_to_queue">Aggiunto alla coda: %1$s.</string>
     <string name="snackbar_queue_full">La coda è piena.</string>
     <string name="combat_start_failed">Impossibile avviare: %1$s</string>
@@ -1628,7 +1628,7 @@
     <string name="seasonal_event_gloomharvest_2026_banner">Hai partecipato all\'evento Raccolto Oscuro 2026</string>
     <string name="seasonal_minigame_lantern_lights_name">Luci delle Lanterne</string>
     <string name="seasonal_minigame_sequence_hint">Osserva le lanterne e ripeti l\'ordine. Raggiungi il round %1$d di %2$d per vincere un gettone!</string>
-    <string name="seasonal_minigame_sequence_round">Round %1$d / %2$d</string> <!-- untranslated -->
+    <string name="seasonal_minigame_sequence_round">Round %1$d / %2$d</string>
     <string name="seasonal_minigame_watch">Osserva!</string>
     <string name="seasonal_minigame_your_turn">Tocca a te!</string>
     <string name="seasonal_minigame_sequence_mode_caption">%1$dms per lampo, disponibile dopo %2$s</string>
@@ -1754,7 +1754,7 @@
     <string name="pet_baby_kraken_desc">Un giovane kraken mago dei fornelli.</string>
     <string name="pet_rock_golem_name">Golem di roccia</string>
     <string name="pet_rock_golem_desc">Un blocco di roccia ha preso vita per aiutarti nelle miniere.</string>
-    <string name="pet_ent_name">Ent</string> <!-- untranslated -->
+    <string name="pet_ent_name">Ent</string>
     <string name="pet_ent_desc">Uno spirito degli alberi a guida della tua ascia.</string>
     <string name="pet_tiny_templar_name">Temolo</string>
     <string name="pet_tiny_templar_desc">Un piccolo pesce esperto di lenza e amo.</string>
@@ -1802,7 +1802,7 @@
     <string name="settings_characters_desc">Fino a 3 slot di salvataggio. Crea, cambia o elimina personaggi.</string>
     <string name="save_slots_title">Personaggi</string>
     <string name="save_slots_desc">Su questo dispositivo possono vivere fino a tre personaggi. Al cambio, il personaggio attuale viene salvato automaticamente; le sessioni di un personaggio inattivo restano in pausa finché non torni.</string>
-    <string name="save_slot_label">Slot %1$d</string> <!-- untranslated -->
+    <string name="save_slot_label">Slot %1$d</string>
     <string name="save_slot_new">Nuovo personaggio</string>
     <string name="save_slot_playing">In gioco</string>
     <string name="save_slot_ironman">Superuomo</string>
@@ -1829,32 +1829,32 @@
     <string name="ironman_bonuses_notice">Ironman: i potenziamenti di XP, resa e monete sono disattivati per questo personaggio.</string>
     <string name="ironman_badge">Superuomo</string>
     <string name="settings_imported_demoted">Salvataggio importato. È stato modificato fuori dal gioco, quindi lo stato Ironman è stato rimosso.</string>
-    <string name="shop_xp_boost_name">2× XP Boost (48h)</string> <!-- untranslated -->
-    <string name="bestiary_stat_hp">HP</string> <!-- untranslated -->
-    <string name="bestiary_stat_attack">Attack</string> <!-- untranslated -->
-    <string name="bestiary_stat_strength">Strength</string> <!-- untranslated -->
-    <string name="bestiary_stat_defense">Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_atk_defense">Atk Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_str_defense">Str Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_rng_defense">Rng Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_mag_defense">Mag Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_xp">XP</string> <!-- untranslated -->
-    <string name="bestiary_stat_required_level">Required Level</string> <!-- untranslated -->
-    <string name="bestiary_stat_xp_reward">XP Reward</string> <!-- untranslated -->
-    <string name="bestiary_stat_duration">Duration</string> <!-- untranslated -->
+    <string name="shop_xp_boost_name">Potenziamento 2× XP (48 ore)</string>
+    <string name="bestiary_stat_hp">HP</string>
+    <string name="bestiary_stat_attack">Attacco</string>
+    <string name="bestiary_stat_strength">Forza</string>
+    <string name="bestiary_stat_defense">Difesa</string>
+    <string name="bestiary_stat_atk_defense">Dif. Mischia</string>
+    <string name="bestiary_stat_str_defense">Dif. Forza</string>
+    <string name="bestiary_stat_rng_defense">Dif. Distanza</string>
+    <string name="bestiary_stat_mag_defense">Dif. Magia</string>
+    <string name="bestiary_stat_xp">XP</string>
+    <string name="bestiary_stat_required_level">Livello necessario</string>
+    <string name="bestiary_stat_xp_reward">XP Ricevuti</string>
+    <string name="bestiary_stat_duration">Durata</string>
     <string name="bestiary_stat_duration_min">%1$d min</string> <!-- untranslated -->
-    <string name="bestiary_kill_count">%1$d kills</string> <!-- untranslated -->
-    <string name="bestiary_location_other">Other</string> <!-- untranslated -->
-    <string name="carnival_stat_atk">ATK +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_str">STR +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_def">DEF +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_yield">Yield</string> <!-- untranslated -->
-    <string name="carnival_potion_letter_green">G</string> <!-- untranslated -->
+    <string name="bestiary_kill_count">%1$d scalpi</string>
+    <string name="bestiary_location_other">Altro</string>
+    <string name="carnival_stat_atk">ATT +%1$d</string>
+    <string name="carnival_stat_str">FRZ +%1$d</string>
+    <string name="carnival_stat_def">DIF +%1$d</string>
+    <string name="carnival_stat_yield">Fornisce</string>
+    <string name="carnival_potion_letter_green">V</string>
     <string name="carnival_potion_letter_blue">B</string> <!-- untranslated -->
     <string name="carnival_potion_letter_red">R</string> <!-- untranslated -->
     <string name="carnival_potion_letter_purple">P</string> <!-- untranslated -->
-    <string name="carnival_potion_letter_orange">O</string> <!-- untranslated -->
+    <string name="carnival_potion_letter_orange">A</string>
     <string name="carnival_potion_letter_cyan">C</string> <!-- untranslated -->
-    <string name="farming_crop_picker_stats">Lv. %1$d  •  %2$s  •  %3$d XP/crop</string> <!-- untranslated -->
-    <string name="farming_seeds_owned">Seeds: %1$d  •  Owned: %2$d</string> <!-- untranslated -->
+    <string name="farming_crop_picker_stats">Lv. %1$d  •  %2$s  •  %3$d XP/campo</string>
+    <string name="farming_seeds_owned">Semi: %1$d  •  In possesso: %2$d</string>
 </resources>
