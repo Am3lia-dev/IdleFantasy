@@ -367,7 +367,7 @@
     <string name="item_adamantite_fishing_rod_desc">Une canne à pêche extrêmement durable.</string>
     <string name="item_runite_fishing_rod_name">Canne à pêche en runite</string>
     <string name="item_runite_fishing_rod_desc">La meilleure canne à pêche disponible.</string>
-    <string name="item_divine_fishing_rod_name">Canne à Pêche Divine</string>
+    <string name="item_divine_fishing_rod_name">Canne à pêche divine</string>
     <string name="item_divine_fishing_rod_desc">Une canne bénie par les dieux de la mer. Les poissons bondissent pratiquement dessus.</string>
 
     <!-- ===== Arrows ===== -->
@@ -651,8 +651,8 @@
     <string name="item_runite_tinderbox_name">Briquet à Amadou en Runite</string>
 
     <!-- ===== Agility grappling hooks ===== -->
-    <string name="item_bronze_grappling_hook_name">Grappin en Bronze</string>
-    <string name="item_iron_grappling_hook_name">Grappin en Fer</string>
+    <string name="item_bronze_grappling_hook_name">Grappin en bronze</string>
+    <string name="item_iron_grappling_hook_name">Grappin en fer</string>
     <string name="item_steel_grappling_hook_name">Grappin en Acier</string>
     <string name="item_mithril_grappling_hook_name">Grappin en Mithril</string>
     <string name="item_adamantite_grappling_hook_name">Grappin en Adamantite</string>
@@ -732,37 +732,53 @@
 
     <!-- ===== Seed names ===== -->
     <string name="item_potato_seed_name">Graine de pommes de terre</string>
-    <string name="item_potato_seed_desc">Plantez pour cultiver des pommes de terre. Pousse en 2 heures.\nNécessite un niveau d\'agriculture de 1.</string>
+    <string name="item_potato_seed_desc">Plantez pour cultiver des pommes de terre. Pousse en 2 heures.
+\nNécessite un niveau d\'agriculture de 1.</string>
     <string name="item_onion_seed_name">Graine d\'oignon</string>
-    <string name="item_onion_seed_desc">Plantez pour cultiver des oignons. Pousse en 3 heures.\nNécessite le niveau 5 d\'agriculture.</string>
+    <string name="item_onion_seed_desc">Plantez pour cultiver des oignons. Pousse en 3 heures.
+\nNécessite le niveau 5 d\'agriculture.</string>
     <string name="item_cabbage_seed_name">Graine de chou</string>
-    <string name="item_cabbage_seed_desc">Plantez pour cultiver des choux. Pousse en 4 heures.\nNécessite le niveau 10 d\'agriculture.</string>
+    <string name="item_cabbage_seed_desc">Plantez pour cultiver des choux. Pousse en 4 heures.
+\nNécessite le niveau 10 d\'agriculture.</string>
     <string name="item_carrot_seed_name">Graine de carotte</string>
-    <string name="item_carrot_seed_desc">Plantez pour cultiver des carottes. Pousse en 5 heures.\nNécessite le niveau 15 d\'agriculture.</string>
+    <string name="item_carrot_seed_desc">Plantez pour cultiver des carottes. Pousse en 5 heures.
+\nNécessite le niveau 15 d\'agriculture.</string>
     <string name="item_tomato_seed_name">Graine de tomate</string>
-    <string name="item_tomato_seed_desc">Plantez pour cultiver des tomates. Pousse en 6 heures.\nNécessite le niveau 20 d\'agriculture.</string>
+    <string name="item_tomato_seed_desc">Plantez pour cultiver des tomates. Pousse en 6 heures.
+\nNécessite le niveau 20 d\'agriculture.</string>
     <string name="item_corn_seed_name">Graine de maïs</string>
-    <string name="item_corn_seed_desc">Plantez pour cultiver du maïs. Pousse en 7 heures.\nNécessite le niveau 25 d\'agriculture.</string>
+    <string name="item_corn_seed_desc">Plantez pour cultiver du maïs. Pousse en 7 heures.
+\nNécessite le niveau 25 d\'agriculture.</string>
     <string name="item_pumpkin_seed_name">Graine de citrouille</string>
-    <string name="item_pumpkin_seed_desc">Plantez pour cultiver des citrouilles. Pousse en 9 heures.\nNécessite le niveau 30 d\'agriculture.</string>
+    <string name="item_pumpkin_seed_desc">Plantez pour cultiver des citrouilles. Pousse en 9 heures.
+\nNécessite le niveau 30 d\'agriculture.</string>
     <string name="item_watermelon_seed_name">Graine de pastèque</string>
-    <string name="item_watermelon_seed_desc">Plantez pour cultiver des pastèques. Pousse en 10 heures.\nNécessite le niveau 35 d\'agriculture.</string>
+    <string name="item_watermelon_seed_desc">Plantez pour cultiver des pastèques. Pousse en 10 heures.
+\nNécessite le niveau 35 d\'agriculture.</string>
     <string name="item_strawberry_seed_name">Graine de fraise</string>
-    <string name="item_strawberry_seed_desc">Plantez pour cultiver des fraises. Pousse en 11 heures.\nNécessite le niveau 40 d\'agriculture.</string>
+    <string name="item_strawberry_seed_desc">Plantez pour cultiver des fraises. Pousse en 11 heures.
+\nNécessite le niveau 40 d\'agriculture.</string>
     <string name="item_magic_herb_seed_name">Graine d\'herbe magique</string>
-    <string name="item_magic_herb_seed_desc">Plantez pour cultiver des herbes magiques. Pousse en 13 heures.\nNécessite le niveau 50 d\'agriculture.</string>
+    <string name="item_magic_herb_seed_desc">Plantez pour cultiver des herbes magiques. Pousse en 13 heures.
+\nNécessite le niveau 50 d\'agriculture.</string>
     <string name="item_dragon_fruit_seed_name">Graine de fruit du dragon</string>
-    <string name="item_dragon_fruit_seed_desc">Plantez pour cultiver des fruits du dragon. Pousse en 14 heures.\nNécessite le niveau 55 d\'agriculture.</string>
+    <string name="item_dragon_fruit_seed_desc">Plantez pour cultiver des fruits du dragon. Pousse en 14 heures.
+\nNécessite le niveau 55 d\'agriculture.</string>
     <string name="item_golden_wheat_seed_name">Graine de blé doré</string>
-    <string name="item_golden_wheat_seed_desc">Plantez pour cultiver du blé doré. Pousse en 16 heures.\nNécessite le niveau 65 d\'agriculture.</string>
+    <string name="item_golden_wheat_seed_desc">Plantez pour cultiver du blé doré. Pousse en 16 heures.
+\nNécessite le niveau 65 d\'agriculture.</string>
     <string name="item_spirit_seed_name">Graine de l\'esprit</string>
-    <string name="item_spirit_seed_desc">Plantez pour cultiver des herbes spirituelles. Pousse en 19 heures.\nNécessite le niveau 75 d\'agriculture.</string>
+    <string name="item_spirit_seed_desc">Plantez pour cultiver des herbes spirituelles. Pousse en 19 heures.
+\nNécessite le niveau 75 d\'agriculture.</string>
     <string name="item_celestial_bloom_seed_name">Graine de fleur céleste</string>
-    <string name="item_celestial_bloom_seed_desc">Plantez pour cultiver des fleurs célestes. Pousse en 21 heures.\nNécessite le niveau 85 d\'agriculture.</string>
+    <string name="item_celestial_bloom_seed_desc">Plantez pour cultiver des fleurs célestes. Pousse en 21 heures.
+\nNécessite le niveau 85 d\'agriculture.</string>
     <string name="item_starfruit_seed_name">Graine de fruit d\'étoile</string>
-    <string name="item_starfruit_seed_desc">Plantez pour cultiver des fruits d\'étoile. Pousse en 23 heures.\nNécessite le niveau 95 d\'agriculture.</string>
+    <string name="item_starfruit_seed_desc">Plantez pour cultiver des fruits d\'étoile. Pousse en 23 heures.
+\nNécessite le niveau 95 d\'agriculture.</string>
     <string name="item_void_lotus_seed_name">Graine de lotus du vide</string>
-    <string name="item_void_lotus_seed_desc">Plantez pour cultiver des lotus du vide. Pousse en 24 heures.\nNécessite le niveau 99 d\'agriculture.</string>
+    <string name="item_void_lotus_seed_desc">Plantez pour cultiver des lotus du vide. Pousse en 24 heures.
+\nNécessite le niveau 99 d\'agriculture.</string>
 
 
     <!-- Additional item/boss/food names (English placeholders) -->
