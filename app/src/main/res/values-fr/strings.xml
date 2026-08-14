@@ -728,7 +728,7 @@
     <string name="character_race_dwarf">Nain</string>
     <string name="character_race_orc">Orque</string>
 
-    <string name="character_race_gnome">Gnome</string> <!-- untranslated -->
+    <string name="character_race_gnome">Gnome</string>
 
     <!-- ===== CharacterCustomizationSheet ===== -->
     <string name="appearance_title">Personnaliser l\'apparence</string>

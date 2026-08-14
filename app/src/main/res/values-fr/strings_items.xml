@@ -651,8 +651,8 @@
     <string name="item_runite_tinderbox_name">Runite Tinderbox</string> <!-- untranslated -->
 
     <!-- ===== Agility grappling hooks ===== -->
-    <string name="item_bronze_grappling_hook_name">Bronze Grappling Hook</string> <!-- untranslated -->
-    <string name="item_iron_grappling_hook_name">Iron Grappling Hook</string> <!-- untranslated -->
+    <string name="item_bronze_grappling_hook_name">Grappin en bronze</string>
+    <string name="item_iron_grappling_hook_name">Grappin en fer</string>
     <string name="item_steel_grappling_hook_name">Steel Grappling Hook</string> <!-- untranslated -->
     <string name="item_mithril_grappling_hook_name">Mithril Grappling Hook</string> <!-- untranslated -->
     <string name="item_adamantite_grappling_hook_name">Adamantite Grappling Hook</string> <!-- untranslated -->
