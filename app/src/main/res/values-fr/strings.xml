@@ -189,7 +189,7 @@
     <!-- Translator note: %1$s = skill display name, %2$d = level number -->
     <string name="format_skill_level">%1$s : Niveau %2$d</string>
     <!-- Translator note: %1$d = boost percentage -->
-    <string name="format_xp_boost_percent">+%1$d%% XP</string>
+    <string name="format_xp_boost_percent">+%1$d%%% XP</string>
     <!-- Translator note: %1$s = item/resource name, %2$d = quantity drop amount -->
 
     <!-- Translator note: %1$d = minutes remaining -->
@@ -610,7 +610,7 @@
     <string name="skills_level_req_xp">Niv. %1$d  •  %2$s XP/ressource</string>
     <!-- Translator note: %1$s = formatted multiplier (e.g. "1.15") -->
     <string name="skills_tool_bonus">Outil à ×%1$s de bonus</string>
-    <string name="skills_pet_bonus">+%1$d%% XP (familier)</string>
+    <string name="skills_pet_bonus">+%1$d%%% XP (familier)</string>
     <!-- Translator note: %1$d = fishing level -->
     <string name="skills_fishing_desc">Niv. %1$d  •  Pêche adaptée au niveau</string>
     <!-- Translator note: %1$d = prayer level -->
@@ -936,10 +936,10 @@
     <string name="guild_quest_desc_slayer_kill">Éliminez %1$d ennemis pendant une mission de Tueur.</string>
 
     <!-- Mercantile skill -->
-    <string name="skill_mercantile">Marchandage</string>
+    <string name="skill_mercantile">Commerce</string>
     <string name="label_support_skills">Support</string>
     <string name="mercantile_routes_label">Routes Commerciales</string>
-    <string name="mercantile_level_label">Niveau %1$d Marchandage</string>
+    <string name="mercantile_level_label">Niveau %1$d Commerce</string>
     <string name="mercantile_xp_label">XP : %1$s</string>
     <string name="mercantile_coins_label">Pièces : %1$s</string>
     <string name="mercantile_cost_label">Coût : %1$s</string>
@@ -964,7 +964,7 @@
     <string name="church_blessing_suffix">de la bénédiction</string>
     <string name="church_effect_xp">×%1$.2f XP pendant %2$d heures</string>
     <string name="church_effect_def">+%1$d Défense pendant %2$d heures</string>
-    <string name="church_effect_coins">+%1$d%% de butin de pièces pendant %2$d heures</string>
+    <string name="church_effect_coins">+%1$d%%% de butin de pièces pendant %2$d heures</string>
     <string name="church_cost_bones">Coûte %1$d os</string>
     <string name="church_confirm_title">Activer la bénédiction ?</string>
     <string name="church_bones_available">Vous avez %1$d os (tous types), soit %2$d pour les bénédictions (les os plus gros comptent plus)</string>
@@ -1093,10 +1093,10 @@
     <string name="prestige">Prestige</string> <!-- untranslated -->
     <string name="prestige_max">Prestige max</string>
     <string name="prestige_confirm_title">Prestige %s ?</string>
-    <string name="prestige_confirm_message_xp">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%% XP pour cette aptitude.</string>
+    <string name="prestige_confirm_message_xp">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%%% XP pour cette aptitude.</string>
     <string name="prestige_confirm_message_stat">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d à vos statistiques.</string>
-    <string name="prestige_confirm_message_agility">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%% d\'XP, et la durée de vos sessions continuera de diminuer — au niveau 99, une session prendra %3$d min au lieu de %4$d min.</string>
-    <string name="prestige_confirm_message_mercantile">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%% d\'XP, plus un bonus supplémentaire de +%2$d%% sur les gains de pièces des routes commerciales.</string>
+    <string name="prestige_confirm_message_agility">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%%% d\'XP, et la durée de vos sessions continuera de diminuer — au niveau 99, une session prendra %3$d min au lieu de %4$d min.</string>
+    <string name="prestige_confirm_message_mercantile">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%%% d\'XP, plus un bonus supplémentaire de +%2$d%%% sur les gains de pièces des routes commerciales.</string>
 
     <!-- Prestige achievements -->
     <string name="achievement_prestige_first_name">Première réinitialisation</string>
@@ -1188,7 +1188,7 @@
     <string name="firemaking_burn">Brûle</string>
     <string name="farming_fertilizer">Engrais</string>
     <string name="farming_fertilizer_optional">Ajouter de l’engrais (optionnel)</string>
-    <string name="farming_fertilizer_yield">+%1$d%% rendement</string>
+    <string name="farming_fertilizer_yield">+%1$d%%% rendement</string>
     <string name="farming_fertilized">fertilisé</string>
     <string name="catalyst_optional">Catalyseur à cendres (optionnel)</string>
     <string name="catalyst_enhanced_output">Produit une potion améliorée</string>
@@ -1202,7 +1202,7 @@
     <!-- Thieving skill -->
     <string name="skill_thieving_name">Vol à la tire</string>
     <string name="skill_thieving_desc">Effectuez un vol à la tire sur des PNJ à chaque session. La chance de succès dépend de votre niveau. Les échecs vous étourdissent pendant une frame.</string>
-    <string name="thieving_npc_detail">Nv. %1$d • %2$d XP • %3$d%% succès</string>
+    <string name="thieving_npc_detail">Nv. %1$d • %2$d XP • %3$d%%% succès</string>
     <string name="thieving_npc_coins">%1$d–%2$d pièces par succès</string>
 
     <!-- Thieving NPC names -->
@@ -1233,9 +1233,9 @@
     <string name="town_upgrade_fail_level">Nécessite Construction Nv. %1$d</string>
     <string name="town_upgrade_fail_coins">Pas assez de pièces</string>
     <string name="town_upgrade_fail_mats">Matériaux insuffisants</string>
-    <string name="town_inn_active_bonus">+%1$d%% XP d\'ouvrier par session</string>
+    <string name="town_inn_active_bonus">+%1$d%%% XP d\'ouvrier par session</string>
     <string name="town_inn_no_bonus">Améliorez pour donner un bonus XP aux ouvriers</string>
-    <string name="town_guild_active_bonus">-%1$d%% exigences de quêtes de guilde</string>
+    <string name="town_guild_active_bonus">-%1$d%%% exigences de quêtes de guilde</string>
     <string name="town_guild_no_bonus">Améliorez pour réduire les exigences de quête</string>
     <string name="town_church_active_bonus">Les bénédictions durent %1$dh (défaut : 24h)</string>
     <string name="town_church_no_bonus">Améliorez pour prolonger la durée des bénédictions</string>
@@ -1263,10 +1263,10 @@
     <string name="town_cape_rack_t3_bonus">Les bonus passifs de toutes les capes possédées (de Collecte, de Façonnage, de Combat &amp; de Guildes) sont actives</string>
     <string name="town_building_artisans_workshop_name">Atelier de l\'Artisan</string>
     <string name="town_artisans_workshop_no_bonus">Améliorez pour avoir une chance de préserver des matériaux de fabrication secondaires</string>
-    <string name="town_artisans_workshop_active_bonus">%1$d%% chance de préserver des matériaux de fabrication secondaires</string>
+    <string name="town_artisans_workshop_active_bonus">%1$d%%% chance de préserver des matériaux de fabrication secondaires</string>
     <string name="town_building_chronos_spire_name">Flèche du Chrono</string>
     <string name="town_chronos_spire_no_bonus">Améliorez pour réduire le temps des sessions du joueur</string>
-    <string name="town_chronos_spire_active_bonus">%1$d%% de réduction du temps des sessions du joueur</string>
+    <string name="town_chronos_spire_active_bonus">%1$d%%% de réduction du temps des sessions du joueur</string>
 
     <!-- Town achievements -->
     <string name="achievement_town_first_upgrade_name">Première Rénovation</string>
@@ -1439,7 +1439,7 @@
     <string name="armory_source_skill_cape">Atteignez le niveau 99 en %1$s</string>
 
     <!-- Session / queue messages (issue #596) -->
-    <string name="skill_no_logs">Pas de rondins dans l\'inventaire</string>
+    <string name="skill_no_logs">Pas de bûches dans l\'inventaire</string>
     <string name="skill_not_enough_rune_essence">Pas assez d\'Essence de Runes</string>
     <string name="skill_not_enough_item">Pas assez de %1$s</string>
     <string name="skill_not_enough_materials">Pas assez de matériaux</string>
@@ -1472,7 +1472,7 @@
     <string name="guild_contributed_items">%1$d objets contribués.</string>
     <string name="mercantile_not_enough_coins">Pas assez de pièces (besoin de %1$s pièces).</string>
     <string name="mercantile_route_start_failed">Impossible de démarrer la route: %1$s</string>
-    <string name="mercantile_added_to_queue">Ajouté à la file: Marchandage — %1$s.</string>
+    <string name="mercantile_added_to_queue">Ajouté à la file: Commerce — %1$s.</string>
     <string name="inventory_requires_to_equip">Nécessite %1$s pour équiper.</string>
     <string name="home_found_pet">Vous avez trouvé un familier : %1$s !</string>
     <string name="pet_found_title">Nouveau familier!</string>
@@ -1490,13 +1490,13 @@
     <string name="bonus_section_skills">Bonus d\'aptitudes</string>
     <string name="bonus_combat_stat_boost">Améliore les stats de combat</string>
     <string name="bonus_combined_xp">XP combiné</string>
-    <string name="bonus_yield">+%1$d%% rendement</string>
-    <string name="bonus_boost">+%1$d%% renforcement</string>
+    <string name="bonus_yield">+%1$d%%% rendement</string>
+    <string name="bonus_boost">+%1$d%%% renforcement</string>
     <string name="bonus_session_shorter">%1$d min de sessions en moins</string>
-    <string name="bonus_coin_return">+%1$d%% retour de pièces</string>
+    <string name="bonus_coin_return">+%1$d%%% retour de pièces</string>
     <string name="bonus_tower">Tour</string>
 
-    <string name="bonus_coin_drops">+%1$d%% pièces obtenues</string>
+    <string name="bonus_coin_drops">+%1$d%%% pièces obtenues</string>
     <string name="bonus_hp">+%1$d PV</string>
     <string name="snackbar_added_to_queue">Ajouté à la file : %1$s.</string>
     <string name="snackbar_queue_full">La file est pleine.</string>
@@ -1593,8 +1593,8 @@
     <string name="seasonal_claim">Réclamer</string>
     <string name="seasonal_bounty_cooldown">Nouvelle prime dans %1$dm %2$ds</string>
     <string name="seasonal_go">Aller</string>
-    <string name="seasonal_event_sunspire_solstice_2026_name">Solstice de la Tour du Soleil</string>
-    <string name="seasonal_event_sunspire_solstice_2026_banner">A participé au Solstice de la Tour du Soleil 2026</string>
+    <string name="seasonal_event_sunspire_solstice_2026_name">Solstice de la Flèche du Soleil</string>
+    <string name="seasonal_event_sunspire_solstice_2026_banner">A participé au Solstice de la Flèche du Soleil 2026</string>
     <string name="seasonal_minigame_bonfire_rhythm_name">Rythme du feu de joie</string>
     <string name="seasonal_reward_sunspire_solstice_2026_100_desc">Bannière du Solstice de la Tour du Soleil 2026</string>
     <string name="seasonal_bounty_sunspire_firewood_name">Apportez du bois pour le feu de joie</string>
@@ -1610,9 +1610,9 @@
     <string name="seasonal_bounty_sunspire_sunfire_arrows_name">Des Flèches en Mithril pour repousser les feux follets</string>
     <string name="seasonal_bounty_sunspire_sunfire_arrows_hint">Plumage de Flèches</string>
     <string name="seasonal_bounty_sunspire_wisps_name">Éloignez les feux follets solaires</string>
-    <string name="seasonal_bounty_sunspire_wisps_hint">Disponible uniquement dans L\'Expédition de la Tour du Soleil</string>
+    <string name="seasonal_bounty_sunspire_wisps_hint">Disponible uniquement dans L\'Expédition de la Flèche du Soleil</string>
     <string name="seasonal_bounty_sunspire_hounds_name">Chasser les Chiens de Braise</string>
-    <string name="seasonal_bounty_sunspire_hounds_hint">Disponible uniquement dans L\'Expédition de la Tour du Soleil</string>
+    <string name="seasonal_bounty_sunspire_hounds_hint">Disponible uniquement dans L\'Expédition de la Flèche du Soleil</string>
     <string name="seasonal_bounty_sunspire_colossus_name">Abattez les Colosses de Braises froides</string>
     <string name="seasonal_bounty_sunspire_colossus_hint">On ne le trouve que dans L\'Expédition de la Tour du Soleil — rare</string>
     <string name="seasonal_rewards_title">Récompenses</string>
@@ -1831,31 +1831,31 @@
     <string name="ironman_badge">Ironman</string> <!-- untranslated -->
     <string name="settings_imported_demoted">Sauvegarde importée. Elle a été modifiée en dehors du jeu, le statut Ironman a donc été retiré.</string>
     <string name="shop_xp_boost_name">2× XP Boost (48h)</string> <!-- untranslated -->
-    <string name="bestiary_stat_hp">HP</string> <!-- untranslated -->
-    <string name="bestiary_stat_attack">Attack</string> <!-- untranslated -->
-    <string name="bestiary_stat_strength">Strength</string> <!-- untranslated -->
-    <string name="bestiary_stat_defense">Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_atk_defense">Atk Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_str_defense">Str Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_rng_defense">Rng Defense</string> <!-- untranslated -->
-    <string name="bestiary_stat_mag_defense">Mag Defense</string> <!-- untranslated -->
+    <string name="bestiary_stat_hp">PV</string>
+    <string name="bestiary_stat_attack">Attaque</string>
+    <string name="bestiary_stat_strength">Force</string>
+    <string name="bestiary_stat_defense">Défense</string>
+    <string name="bestiary_stat_atk_defense">Défense Atq</string>
+    <string name="bestiary_stat_str_defense">Défense For</string>
+    <string name="bestiary_stat_rng_defense">Défense Dis</string>
+    <string name="bestiary_stat_mag_defense">Défense Mag</string>
     <string name="bestiary_stat_xp">XP</string> <!-- untranslated -->
-    <string name="bestiary_stat_required_level">Required Level</string> <!-- untranslated -->
-    <string name="bestiary_stat_xp_reward">XP Reward</string> <!-- untranslated -->
-    <string name="bestiary_stat_duration">Duration</string> <!-- untranslated -->
+    <string name="bestiary_stat_required_level">Niveau Requis</string>
+    <string name="bestiary_stat_xp_reward">Récompense d\'XP</string>
+    <string name="bestiary_stat_duration">Durée</string>
     <string name="bestiary_stat_duration_min">%1$d min</string> <!-- untranslated -->
-    <string name="bestiary_kill_count">%1$d kills</string> <!-- untranslated -->
-    <string name="bestiary_location_other">Other</string> <!-- untranslated -->
-    <string name="carnival_stat_atk">ATK +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_str">STR +%1$d</string> <!-- untranslated -->
+    <string name="bestiary_kill_count">%1$d tués</string>
+    <string name="bestiary_location_other">Autre</string>
+    <string name="carnival_stat_atk">ATQ +%1$d</string>
+    <string name="carnival_stat_str">FOR +%1$d</string>
     <string name="carnival_stat_def">DEF +%1$d</string> <!-- untranslated -->
-    <string name="carnival_stat_yield">Yield</string> <!-- untranslated -->
-    <string name="carnival_potion_letter_green">G</string> <!-- untranslated -->
+    <string name="carnival_stat_yield">Rendement</string>
+    <string name="carnival_potion_letter_green">V</string>
     <string name="carnival_potion_letter_blue">B</string> <!-- untranslated -->
     <string name="carnival_potion_letter_red">R</string> <!-- untranslated -->
     <string name="carnival_potion_letter_purple">P</string> <!-- untranslated -->
     <string name="carnival_potion_letter_orange">O</string> <!-- untranslated -->
     <string name="carnival_potion_letter_cyan">C</string> <!-- untranslated -->
-    <string name="farming_crop_picker_stats">Lv. %1$d  •  %2$s  •  %3$d XP/crop</string> <!-- untranslated -->
-    <string name="farming_seeds_owned">Seeds: %1$d  •  Owned: %2$d</string> <!-- untranslated -->
+    <string name="farming_crop_picker_stats">Niv. %1$d  •  %2$s  •  %3$d XP/récolte</string>
+    <string name="farming_seeds_owned">Graines: %1$d  •  Possédé: %2$d</string>
 </resources>
