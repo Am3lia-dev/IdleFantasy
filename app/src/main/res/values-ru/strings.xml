@@ -189,7 +189,7 @@
     <!-- Translator note: %1$s = skill display name, %2$d = level number -->
     <string name="format_skill_level">%1$s: Уровень %2$d</string>
     <!-- Translator note: %1$d = boost percentage -->
-    <string name="format_xp_boost_percent">+%1$d%% опыта</string>
+    <string name="format_xp_boost_percent">+%1$d%%% опыта</string>
     <!-- Translator note: %1$s = item/resource name, %2$d = quantity drop amount -->
 
     <!-- Translator note: %1$d = minutes remaining -->
@@ -558,7 +558,7 @@
     <string name="combat_run_progress">Заход %1$d/%2$d</string>
     <string name="combat_xp_on_victory">Опыт за победу</string>
     <string name="combat_you_died">Вы погибли!</string>
-    <string name="combat_died_reward">Вы получили 10% наград.</string>
+    <string name="combat_died_reward">Вы получили 10%% наград.</string>
     <!-- Translator note: %1$d = gear bonus value -->
     <string name="combat_gear_bonus">+%1$d снаряжение</string>
     <!-- Translator note: %1$d = permanent prestige stat bonus value -->
@@ -625,7 +625,7 @@
     <string name="skills_level_req_xp">Ур. %1$d  •  %2$s опыта/руда</string>
     <!-- Translator note: %1$s = formatted multiplier (e.g. "1.15") -->
     <string name="skills_tool_bonus">×%1$s бонус инструмента</string>
-    <string name="skills_pet_bonus">+%1$d%% XP (питомец)</string>
+    <string name="skills_pet_bonus">+%1$d%%% XP (питомец)</string>
     <!-- Translator note: %1$d = fishing level -->
     <string name="skills_fishing_desc">Уровень %1$d  •  Улов по уровню</string>
     <!-- Translator note: %1$d = prayer level -->
@@ -979,7 +979,7 @@
     <string name="church_blessing_suffix">от благословения</string>
     <string name="church_effect_xp">×%1$.2f опыта на %2$d ч.</string>
     <string name="church_effect_def">+%1$d Защиты на %2$d ч.</string>
-    <string name="church_effect_coins">+%1$d%% монет с добычи на %2$d ч.</string>
+    <string name="church_effect_coins">+%1$d%%% монет с добычи на %2$d ч.</string>
     <string name="church_cost_bones">Стоимость: %1$d костей</string>
     <string name="church_confirm_title">Активировать благословение?</string>
     <string name="church_bones_available">У вас %1$d костей (все виды), что равно %2$d для благословений (крупные кости считаются больше)</string>
@@ -1108,10 +1108,10 @@
     <string name="prestige">Престиж</string>
     <string name="prestige_max">Макс. престиж</string>
     <string name="prestige_confirm_title">Престиж %s?</string>
-    <string name="prestige_confirm_message_xp">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%% опыта для этого навыка.</string>
+    <string name="prestige_confirm_message_xp">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%%% опыта для этого навыка.</string>
     <string name="prestige_confirm_message_stat">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d к характеристикам.</string>
-    <string name="prestige_confirm_message_agility">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%% к опыту, а длительность сессии продолжит сокращаться — на 99 уровне сессия будет занимать %3$d мин вместо %4$d мин.</string>
-    <string name="prestige_confirm_message_mercantile">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%% к опыту, а также дополнительные +%2$d%% возврата монет с торговых путей.</string>
+    <string name="prestige_confirm_message_agility">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%%% к опыту, а длительность сессии продолжит сокращаться — на 99 уровне сессия будет занимать %3$d мин вместо %4$d мин.</string>
+    <string name="prestige_confirm_message_mercantile">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%%% к опыту, а также дополнительные +%2$d%%% возврата монет с торговых путей.</string>
 
     <!-- Prestige achievements -->
     <string name="achievement_prestige_first_name">Первый сброс</string>
@@ -1191,7 +1191,7 @@
     <string name="bone_altar_tap">Нажмите, чтобы захоронить</string>
     <string name="bone_altar_change_bone">Изменить</string>
     <string name="bone_altar_combo_count">Комбо ×%d</string>
-    <string name="bone_altar_bonus_active">+50% к XP!</string>
+    <string name="bone_altar_bonus_active">+50%% к XP!</string>
     <string name="bone_altar_session_xp">+%s XP за сессию</string>
     <string name="bone_altar_buried_count">%d захоронено</string>
     <string name="bone_altar_no_bones">Нет костей в инвентаре</string>
@@ -1203,7 +1203,7 @@
     <string name="firemaking_burn">Сжечь</string>
     <string name="farming_fertilizer">Удобрение</string>
     <string name="farming_fertilizer_optional">Добавить удобрение (необязательно)</string>
-    <string name="farming_fertilizer_yield">+%1$d%% урожай</string>
+    <string name="farming_fertilizer_yield">+%1$d%%% урожай</string>
     <string name="farming_fertilized">Удобрено</string>
     <string name="catalyst_optional">Пепельный катализатор (необязательно)</string>
     <string name="catalyst_enhanced_output">Производит усиленное зелье</string>
@@ -1217,7 +1217,7 @@
     <!-- Thieving skill -->
     <string name="skill_thieving_name">Воровство</string>
     <string name="skill_thieving_desc">Обворовывайте НПС в каждой сессии. Шанс успеха зависит от вашего уровня. Провалы оглушают вас на один кадр.</string>
-    <string name="thieving_npc_detail">Ур. %1$d • %2$d XP • %3$d%% успех</string>
+    <string name="thieving_npc_detail">Ур. %1$d • %2$d XP • %3$d%%% успех</string>
     <string name="thieving_npc_coins">%1$d–%2$d монет за успех</string>
 
     <!-- Thieving NPC names -->
@@ -1248,9 +1248,9 @@
     <string name="town_upgrade_fail_level">Нужно Строительство Ур. %1$d</string>
     <string name="town_upgrade_fail_coins">Недостаточно монет</string>
     <string name="town_upgrade_fail_mats">Недостаточно материалов</string>
-    <string name="town_inn_active_bonus">+%1$d%% XP работника за сессию</string>
+    <string name="town_inn_active_bonus">+%1$d%%% XP работника за сессию</string>
     <string name="town_inn_no_bonus">Улучшите для бонуса XP работникам</string>
-    <string name="town_guild_active_bonus">-%1$d%% требований квестов гильдии</string>
+    <string name="town_guild_active_bonus">-%1$d%%% требований квестов гильдии</string>
     <string name="town_guild_no_bonus">Улучшите для снижения требований квестов</string>
     <string name="town_church_active_bonus">Благословения длятся %1$dh (по умолчанию: 24ч)</string>
     <string name="town_church_no_bonus">Улучшите для продления благословений</string>
@@ -1282,10 +1282,10 @@
     <string name="town_cape_rack_t3_bonus">Пассивные бонусы от всех имеющихся у вас плащей («Добыча», «Навыки крафта», «Бой» и гильдий) активны</string>
     <string name="town_building_artisans_workshop_name">Мастерская ремесленника</string>
     <string name="town_artisans_workshop_no_bonus">Улучшите, чтобы получить шанс сохранить вторичные материалы для крафта</string>
-    <string name="town_artisans_workshop_active_bonus">%1$d%% шанс сохранить вторичные материалы для крафта</string>
+    <string name="town_artisans_workshop_active_bonus">%1$d%%% шанс сохранить вторичные материалы для крафта</string>
     <string name="town_building_chronos_spire_name">Шпиль Хроноса</string>
     <string name="town_chronos_spire_no_bonus">Улучшите, чтобы сократить продолжительность игровой сессии</string>
-    <string name="town_chronos_spire_active_bonus">Сокращение продолжительности игровых сессий на %1$d%%</string>
+    <string name="town_chronos_spire_active_bonus">Сокращение продолжительности игровых сессий на %1$d%%%</string>
 
     <!-- Town achievements -->
     <string name="achievement_town_first_upgrade_name">Первая Реновация</string>
@@ -1330,7 +1330,7 @@
     <string name="carnival_queue">В очередь</string>
     <string name="carnival_ring_toss">Набрасывание колец</string>
     <string name="carnival_active_ring_desc">Бросайте кольцо, когда указатель достигает золотой целевой зоны.</string>
-    <string name="carnival_ring_target_hint">Целитесь в центр (45%–55%)</string>
+    <string name="carnival_ring_target_hint">Целитесь в центр (45%%–55%%)</string>
     <string name="carnival_throw">Бросить!</string>
     <string name="carnival_hammer_strike">Удар молотом</string>
     <string name="carnival_active_hammer_desc">Ударьте, когда измеритель мощности достигает своего пика.</string>
@@ -1386,7 +1386,7 @@
     <string name="carnival_difficulty_label">Сложность</string>
     <string name="carnival_difficulty_normal">Нормально</string>
     <string name="carnival_difficulty_hard">Сложно</string>
-    <string name="carnival_ring_hard_hint">Сложно: 52%–57% цель, 7 билетов</string>
+    <string name="carnival_ring_hard_hint">Сложно: 52%%–57%% цель, 7 билетов</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1509,13 +1509,13 @@
     <string name="bonus_section_skills">Бонусы навыков</string>
     <string name="bonus_combat_stat_boost">Повышает боевые характеристики</string>
     <string name="bonus_combined_xp">Суммарный XP</string>
-    <string name="bonus_yield">+%1$d%% выход</string>
-    <string name="bonus_boost">+%1$d%% усиление</string>
+    <string name="bonus_yield">+%1$d%%% выход</string>
+    <string name="bonus_boost">+%1$d%%% усиление</string>
     <string name="bonus_session_shorter">На %1$d мин короче сессии</string>
-    <string name="bonus_coin_return">+%1$d%% возврат монет</string>
+    <string name="bonus_coin_return">+%1$d%%% возврат монет</string>
     <string name="bonus_tower">Башня</string>
 
-    <string name="bonus_coin_drops">+%1$d%% выпадения монет</string>
+    <string name="bonus_coin_drops">+%1$d%%% выпадения монет</string>
     <string name="bonus_hp">+%1$d HP</string> <!-- untranslated -->
     <string name="snackbar_added_to_queue">Добавлено в очередь: %1$s.</string>
     <string name="snackbar_queue_full">Очередь заполнена.</string>

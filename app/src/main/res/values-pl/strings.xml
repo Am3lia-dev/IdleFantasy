@@ -1330,7 +1330,7 @@
     <string name="carnival_queue">Zakolejkuj sesję</string>
     <string name="carnival_ring_toss">Rzut Obręczą</string>
     <string name="carnival_active_ring_desc">Wyczuj moment rzutu, gdy wskaźnik trafi w złotą strefę celu.</string>
-    <string name="carnival_ring_target_hint">Celuj w środek (45%–55%)</string>
+    <string name="carnival_ring_target_hint">Celuj w środek (45%%–55%%)</string>
     <string name="carnival_throw">Rzuć!</string>
     <string name="carnival_hammer_strike">Uderzenie Młotem</string>
     <string name="carnival_active_hammer_desc">Uderz, gdy miernik mocy osiągnie szczyt, by zdobyć maksymalny wynik.</string>
@@ -1386,7 +1386,7 @@
     <string name="carnival_difficulty_label">Trudność</string>
     <string name="carnival_difficulty_normal">Normalna</string>
     <string name="carnival_difficulty_hard">Trudna</string>
-    <string name="carnival_ring_hard_hint">Trudna: cel 52%–57%, 7 biletów</string>
+    <string name="carnival_ring_hard_hint">Trudna: cel 52%%–57%%, 7 biletów</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1805,7 +1805,7 @@
     <string name="pet_timber_sprite_name">Timber Sprite</string> <!-- untranslated -->
     <string name="pet_timber_sprite_desc">A wood spirit awakened from sawdust and lumber. It knows exactly where every nail should go.</string> <!-- untranslated -->
     <string name="pet_juggling_imp_name">Juggling Imp</string> <!-- untranslated -->
-    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%.</string> <!-- untranslated -->
+    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%%.</string> <!-- untranslated -->
     <string name="pet_tower_pet_name">Stone Guardian</string> <!-- untranslated -->
     <string name="pet_tower_pet_desc">An ancient stone golem that guards the tower\'s secrets. Boosts combat XP.</string> <!-- untranslated -->
     <string name="pet_solstice_sprite_name">Solstice Sprite</string> <!-- untranslated -->

@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,7 +40,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -68,6 +66,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
 import com.fantasyidler.data.json.CarnivalPrize
 import com.fantasyidler.data.model.Skills
+import com.fantasyidler.ui.components.LampSkillDialog
 import com.fantasyidler.ui.viewmodel.ActiveGameState
 import com.fantasyidler.ui.viewmodel.AppraisalQuad
 import com.fantasyidler.ui.viewmodel.CarnivalViewModel
@@ -128,9 +127,10 @@ fun CarnivalScreen(
     state.pendingLampPrizeKey?.let { prizeKey ->
         val prize = viewModel.prizesMap[prizeKey]
         if (prize != null) {
-            LampSkillPickerDialog(
-                xpAmount        = prize.xpAmount,
+            LampSkillDialog(
                 skillLevels     = state.skillLevels,
+                skillXp         = state.skillXp,
+                sessionXpGain   = prize.xpAmount,
                 onSkillSelected = viewModel::redeemLamp,
                 onDismiss       = viewModel::dismissLampPicker,
             )
@@ -1068,52 +1068,3 @@ private fun PrizeRow(
     }
 }
 
-// ── Lamp skill picker ──────────────────────────────────────────────────────────
-
-@Composable
-private fun LampSkillPickerDialog(
-    xpAmount: Long,
-    skillLevels: Map<String, Int>,
-    onSkillSelected: (String) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    val context = LocalContext.current
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.slayer_lamp_pick_skill)) },
-        text = {
-            Column(
-                modifier            = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                Skills.ALL.forEach { skillKey ->
-                    val level = skillLevels[skillKey] ?: 1
-                    val name  = GameStrings.skillName(context, skillKey)
-                    Surface(
-                        onClick  = { onSkillSelected(skillKey) },
-                        shape    = RoundedCornerShape(8.dp),
-                        color    = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Row(
-                            modifier              = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment     = Alignment.CenterVertically,
-                        ) {
-                            Text(name, style = MaterialTheme.typography.bodyMedium)
-                            Text(
-                                text  = stringResource(R.string.slayer_level_label, level),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_cancel)) } },
-    )
-}

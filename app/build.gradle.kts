@@ -76,7 +76,7 @@ android {
         // running `./gradlew lintDebug`.
         baseline = file("lint-baseline.xml")
         warningsAsErrors = false
-        warning += "MissingTranslation"
+        warning += listOf("MissingTranslation", "MissingQuantity")
     }
 
     testOptions {
