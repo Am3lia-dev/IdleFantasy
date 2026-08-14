@@ -437,12 +437,12 @@
     <string name="quest_treasure_hunter_6_objective">Collect 15 Troll Bones from combat</string> <!-- untranslated -->
 
     <!-- Daily quest verbs -->
-    <string name="daily_verb_mining">Mine</string> <!-- untranslated -->
-    <string name="daily_verb_fishing">Catch</string> <!-- untranslated -->
-    <string name="daily_verb_woodcutting">Chop</string> <!-- untranslated -->
-    <string name="daily_verb_smithing">Smith</string> <!-- untranslated -->
-    <string name="daily_verb_cooking">Cook</string> <!-- untranslated -->
-    <string name="daily_verb_combat">Defeat</string> <!-- untranslated -->
+    <string name="daily_verb_mining">挖掘</string>
+    <string name="daily_verb_fishing">捕获</string>
+    <string name="daily_verb_woodcutting">砍伐</string>
+    <string name="daily_verb_smithing">锻造</string>
+    <string name="daily_verb_cooking">烹饪</string>
+    <string name="daily_verb_combat">击败</string>
 
     <!-- Daily quest names -->
     <string name="quest_daily_mine_iron_name">Iron Miner</string> <!-- untranslated -->
@@ -471,14 +471,14 @@
     <string name="quest_daily_kill_dragon_name">Dragon Slayer</string> <!-- untranslated -->
 
     <!-- Quest objective verb strings for craft skills -->
-    <string name="daily_verb_crafting">Craft</string> <!-- untranslated -->
-    <string name="daily_verb_firemaking">Burn</string> <!-- untranslated -->
-    <string name="daily_verb_fletching">Fletch</string> <!-- untranslated -->
-    <string name="daily_verb_herblore">Brew</string> <!-- untranslated -->
-    <string name="daily_verb_runecrafting">Craft</string> <!-- untranslated -->
-    <string name="daily_verb_prayer">Bury</string> <!-- untranslated -->
-    <string name="daily_verb_construction">Build</string> <!-- untranslated -->
-    <string name="daily_verb_farming">Harvest</string> <!-- untranslated -->
+    <string name="daily_verb_crafting">打造</string>
+    <string name="daily_verb_firemaking">燃烧</string>
+    <string name="daily_verb_fletching">制作</string>
+    <string name="daily_verb_herblore">酿造</string>
+    <string name="daily_verb_runecrafting">制作</string>
+    <string name="daily_verb_prayer">掩埋</string>
+    <string name="daily_verb_construction">建造</string>
+    <string name="daily_verb_farming">收获</string>
 
     <!-- Quest objective format strings -->
     <string name="quest_obj_gather">%1$s %2$d %3$s</string> <!-- untranslated -->

@@ -108,8 +108,8 @@
     <string name="dungeon_abyssal_throne_desc">Le point le plus profond du monde connu, gouverné par des seigneurs du vide depuis l\'aube des temps.</string>
 
     <!-- ===== Event dungeon names ===== -->
-    <string name="dungeon_sunspire_name">The Sunspire</string> <!-- untranslated -->
-    <string name="dungeon_sunspire_desc">A sun-tower ruin cracked open by the solstice, spilling heat spirits into the region. Part of the Sunspire Solstice event.</string> <!-- untranslated -->
+    <string name="dungeon_sunspire_name">La Flèche du Soleil</string>
+    <string name="dungeon_sunspire_desc">Les ruines d\'une tour solaire, fendues par le solstice, déversant des esprits de chaleur dans la région. Fait partie de l\'événement du Solstice de la Flèche du Soleil.</string>
     <string name="dungeon_hollowfen_name">The Hollowfen</string> <!-- untranslated -->
     <string name="dungeon_hollowfen_desc">A mist-drowned marsh of sunken barrows where the harvest dead walk. Part of the Gloomharvest event.</string> <!-- untranslated -->
     <string name="dungeon_cloud_kingdom_name">Cloud Kingdom</string> <!-- untranslated -->
@@ -128,8 +128,8 @@
     <string name="boss_balrog_desc">Un ancien démon de flammes et d\'ombres, réveillé de son sommeil profond sous la terre.</string>
     <string name="boss_void_sovereign_name">Le Souverain du Vide</string>
     <string name="boss_void_sovereign_desc">L\'entité primordiale derrière les failles du vide. Ancienne au-delà de toute mesure, elle considère les provocateurs mortels avec mépris.</string>
-    <string name="boss_sol_invictus_name">Sol Invictus, the Sundered Flame</string> <!-- untranslated -->
-    <string name="boss_sol_invictus_desc">A shard of the sun itself, torn loose from the Sunspire ruin. Only the boldest warriors dare approach.</string> <!-- untranslated -->
+    <string name="boss_sol_invictus_name">Sol Invictus, la Flamme Brisée</string>
+    <string name="boss_sol_invictus_desc">Un éclat du soleil lui-même, arraché aux ruines de la Flèche du Soleil. Seuls les guerriers les plus audacieux osent s\'en approcher.</string>
     <string name="boss_the_hollow_king_name">The Hollow King</string> <!-- untranslated -->
     <string name="boss_the_hollow_king_desc">The headless sovereign of the Gloomharvest, riding out from the Blightwood to reap what the living have sown.</string> <!-- untranslated -->
     <string name="boss_the_vault_guardian_name">The Vault Guardian</string> <!-- untranslated -->

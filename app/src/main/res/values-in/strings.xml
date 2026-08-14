@@ -534,7 +534,7 @@
     <string name="combat_run_progress">Putaran %1$d/%2$d</string>
     <string name="combat_xp_on_victory">XP saat menang</string>
     <string name="combat_you_died">Kamu meninggal!</string>
-    <string name="combat_died_reward">Anda menerima 10% dari hadiah.</string>
+    <string name="combat_died_reward">Anda menerima 10%% dari hadiah.</string>
     <!-- Translator note: %1$d = gear bonus value -->
     <string name="combat_gear_bonus">+%1$d perlengkapan</string>
     <!-- Translator note: %1$d = permanent prestige stat bonus value -->
@@ -1167,7 +1167,7 @@
     <string name="bone_altar_tap">Ketuk untuk Mengubur</string>
     <string name="bone_altar_change_bone">Mengubah</string>
     <string name="bone_altar_combo_count">Kombo ×%d</string>
-    <string name="bone_altar_bonus_active">Bonus XP +50% !</string>
+    <string name="bone_altar_bonus_active">Bonus XP +50%% !</string>
     <string name="bone_altar_session_xp">+%s XP sesi ini</string>
     <string name="bone_altar_buried_count">%d terkubur</string>
     <string name="bone_altar_no_bones">Tidak ada tulang dalam inventaris.</string>
@@ -1302,7 +1302,7 @@
     <string name="carnival_queue">Antrian Sesi</string>
     <string name="carnival_ring_toss">Lempar Cincin</string>
     <string name="carnival_active_ring_desc">Atur waktu lemparan Anda saat indikator mengenai zona target emas.</string>
-    <string name="carnival_ring_target_hint">Aim for the centre (45%–55%)</string> <!-- untranslated -->
+    <string name="carnival_ring_target_hint">Aim for the centre (45%%–55%%)</string> <!-- untranslated -->
     <string name="carnival_throw">Lemparr!</string>
     <string name="carnival_hammer_strike">Pukulan Palu</string>
     <string name="carnival_active_hammer_desc">Serang saat indikator daya berada di puncaknya untuk mendapatkan skor maksimal.</string>
@@ -1358,7 +1358,7 @@
     <string name="carnival_difficulty_label">Kesulitan</string>
     <string name="carnival_difficulty_normal">Normal</string> <!-- untranslated -->
     <string name="carnival_difficulty_hard">Hard</string> <!-- untranslated -->
-    <string name="carnival_ring_hard_hint">Hard: 52%–57% target, 7 tickets</string> <!-- untranslated -->
+    <string name="carnival_ring_hard_hint">Hard: 52%%–57%% target, 7 tickets</string> <!-- untranslated -->
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1777,7 +1777,7 @@
     <string name="pet_timber_sprite_name">Timber Sprite</string> <!-- untranslated -->
     <string name="pet_timber_sprite_desc">A wood spirit awakened from sawdust and lumber. It knows exactly where every nail should go.</string> <!-- untranslated -->
     <string name="pet_juggling_imp_name">Juggling Imp</string> <!-- untranslated -->
-    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%.</string> <!-- untranslated -->
+    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%%.</string> <!-- untranslated -->
     <string name="pet_tower_pet_name">Stone Guardian</string> <!-- untranslated -->
     <string name="pet_tower_pet_desc">An ancient stone golem that guards the tower\'s secrets. Boosts combat XP.</string> <!-- untranslated -->
     <string name="pet_solstice_sprite_name">Solstice Sprite</string> <!-- untranslated -->
