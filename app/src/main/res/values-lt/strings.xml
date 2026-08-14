@@ -45,9 +45,9 @@
 
     <!-- ===== Common labels ===== -->
     <string name="label_level">Lygis</string>
-    <string name="label_xp">XP</string> <!-- untranslated -->
+    <string name="label_xp">XP</string>
     <string name="label_coins">Monetos</string>
-    <string name="label_hp">HP</string> <!-- untranslated -->
+    <string name="label_hp">HP</string>
     <string name="label_attack">Užpulti</string>
     <string name="label_strength">Stiprumas</string>
     <string name="label_defense">Apsauga</string>
@@ -73,174 +73,174 @@
     <string name="bestiary_str_def">Str Def</string> <!-- untranslated -->
     <string name="bestiary_rng_def">Rng Def</string> <!-- untranslated -->
     <string name="bestiary_mag_def">Mag Def</string> <!-- untranslated -->
-    <string name="label_session_in_progress">Session in Progress</string> <!-- untranslated -->
-    <string name="label_session_active">Session Active</string> <!-- untranslated -->
-    <string name="label_no_active_session">No Active Session</string> <!-- untranslated -->
-    <string name="label_session_complete">Session Complete!</string> <!-- untranslated -->
-    <string name="label_training">Training</string> <!-- untranslated -->
-    <string name="label_gathering_skills">Gathering</string> <!-- untranslated -->
-    <string name="label_crafting_skills">Crafting Skills</string> <!-- untranslated -->
-    <string name="label_choose_activity">Choose Activity</string> <!-- untranslated -->
-    <string name="label_coming_soon">Coming soon</string> <!-- untranslated -->
-    <string name="label_time_remaining">Time remaining</string> <!-- untranslated -->
-    <string name="label_session_results">Session Results</string> <!-- untranslated -->
-    <string name="label_xp_gained">XP gained</string> <!-- untranslated -->
-    <string name="label_items_collected">Items collected</string> <!-- untranslated -->
-    <string name="label_level_ups">Level ups</string> <!-- untranslated -->
-    <string name="label_requirements">Requirements</string> <!-- untranslated -->
-    <string name="label_rewards">Rewards</string> <!-- untranslated -->
-    <string name="label_your_level">Your Level</string> <!-- untranslated -->
-    <string name="label_xp_to_next">XP to next level</string> <!-- untranslated -->
-    <string name="label_total_xp">Total XP</string> <!-- untranslated -->
-    <string name="label_quantity">Quantity</string> <!-- untranslated -->
-    <string name="label_price">Price</string> <!-- untranslated -->
-    <string name="label_available">Available</string> <!-- untranslated -->
+    <string name="label_session_in_progress">Sesija Dabar Vyksta</string>
+    <string name="label_session_active">Sesija dabar Aktyvi</string>
+    <string name="label_no_active_session">Jokios Aktyvios Sesijos</string>
+    <string name="label_session_complete">Sesija Pabaigta!</string>
+    <string name="label_training">Treniruotis</string>
+    <string name="label_gathering_skills">Rinkti</string>
+    <string name="label_crafting_skills">Gaminimo Įgudžiai</string>
+    <string name="label_choose_activity">Pasirinkti Veikla</string>
+    <string name="label_coming_soon">Greitai Pasirodys</string>
+    <string name="label_time_remaining">Liko Laiko</string>
+    <string name="label_session_results">Sesijos Rezultatas</string>
+    <string name="label_xp_gained">XP surinktą</string>
+    <string name="label_items_collected">Daiktų Surinktą</string>
+    <string name="label_level_ups">Lygio Pakelimas</string>
+    <string name="label_requirements">Reikalavimai</string>
+    <string name="label_rewards">Apdovanojimai</string>
+    <string name="label_your_level">Tavo Lygis</string>
+    <string name="label_xp_to_next">XP Iki Kito Lygio</string>
+    <string name="label_total_xp">Išviso XP</string>
+    <string name="label_quantity">Vienetų</string>
+    <string name="label_price">Kaina</string>
+    <string name="label_available">Galima</string>
     <string name="label_patch">Patch</string> <!-- untranslated -->
-    <string name="label_growth_time">Growth time</string> <!-- untranslated -->
-    <string name="label_ready_to_harvest">Ready to harvest</string> <!-- untranslated -->
-    <string name="label_empty">Empty</string> <!-- untranslated -->
-    <string name="inventory_sort_quantity">Quantity</string> <!-- untranslated -->
+    <string name="label_growth_time">Augimo Laikas</string>
+    <string name="label_ready_to_harvest">Paruošta Nuimti Derlių</string>
+    <string name="label_empty">Tuščia</string>
+    <string name="inventory_sort_quantity">Vienietai</string>
 
-    <string name="inventory_cat_weapons">Weapons</string> <!-- untranslated -->
-    <string name="inventory_cat_armour">Armour</string> <!-- untranslated -->
-    <string name="inventory_cat_tools">Tools</string> <!-- untranslated -->
-    <string name="inventory_cat_food">Food</string> <!-- untranslated -->
-    <string name="inventory_cat_potions">Potions</string> <!-- untranslated -->
-    <string name="inventory_cat_materials">Materials</string> <!-- untranslated -->
-    <string name="inventory_cat_other">Other</string> <!-- untranslated -->
-    <string name="inventory_cat_raw_food">Raw Food</string> <!-- untranslated -->
-    <string name="inventory_cat_ammunition">Ammunition</string> <!-- untranslated -->
-    <string name="inventory_cat_ores">Ores &amp; Gems</string> <!-- untranslated -->
-    <string name="inventory_cat_construction">Construction</string> <!-- untranslated -->
-    <string name="inventory_cat_seeds">Seeds &amp; Crops</string> <!-- untranslated -->
-    <string name="inventory_cat_filter_all">All</string> <!-- untranslated -->
-    <string name="label_combat_style">Combat Style</string> <!-- untranslated -->
-    <string name="label_active_spell">Active Spell</string> <!-- untranslated -->
-    <string name="label_drops">Drops</string> <!-- untranslated -->
-    <string name="label_boss">Boss</string> <!-- untranslated -->
-    <string name="label_dungeon">Dungeon</string> <!-- untranslated -->
-    <string name="label_difficulty">Difficulty</string> <!-- untranslated -->
-    <string name="label_completed">Completed</string> <!-- untranslated -->
-    <string name="label_in_progress">In Progress</string> <!-- untranslated -->
-    <string name="label_available_quests">Available</string> <!-- untranslated -->
-    <string name="label_stats">Stats</string> <!-- untranslated -->
-    <string name="label_skills">Skills</string> <!-- untranslated -->
-    <string name="label_shop">Shop</string> <!-- untranslated -->
-    <string name="label_sell_items">Sell Items</string> <!-- untranslated -->
-    <string name="label_total_level">Total Level</string> <!-- untranslated -->
-    <string name="label_wins">Wins</string> <!-- untranslated -->
-    <string name="label_losses">Losses</string> <!-- untranslated -->
-    <string name="label_active">Active</string> <!-- untranslated -->
-    <string name="label_inactive">Inactive</string> <!-- untranslated -->
+    <string name="inventory_cat_weapons">Ginklai</string>
+    <string name="inventory_cat_armour">Šarvai</string>
+    <string name="inventory_cat_tools">Įrankiai</string>
+    <string name="inventory_cat_food">Maistas</string>
+    <string name="inventory_cat_potions">Eliksyrai</string>
+    <string name="inventory_cat_materials">Mineralai</string>
+    <string name="inventory_cat_other">Kitą</string>
+    <string name="inventory_cat_raw_food">Žalias Maistas</string>
+    <string name="inventory_cat_ammunition">Šaudmenys</string>
+    <string name="inventory_cat_ores">Rudos Ir Brangakmeniai</string>
+    <string name="inventory_cat_construction">Statybos</string>
+    <string name="inventory_cat_seeds">Sėklos ir Derlius</string>
+    <string name="inventory_cat_filter_all">Viskas</string>
+    <string name="label_combat_style">Kovojimo Stylius</string>
+    <string name="label_active_spell">Aktyvuota Magija</string>
+    <string name="label_drops">Daiktai</string>
+    <string name="label_boss">Bosas</string>
+    <string name="label_dungeon">Požemiai</string>
+    <string name="label_difficulty">Sudetingumas</string>
+    <string name="label_completed">Pabaigtas</string>
+    <string name="label_in_progress">Dabar Vyksta</string>
+    <string name="label_available_quests">Galimas</string>
+    <string name="label_stats">Statistika</string>
+    <string name="label_skills">Įgudžiai</string>
+    <string name="label_shop">Parduotuvė</string>
+    <string name="label_sell_items">Parduoti Daiktus</string>
+    <string name="label_total_level">Iš Viso Visi Lygiai</string>
+    <string name="label_wins">Laimėjimai</string>
+    <string name="label_losses">Pralaimejimai</string>
+    <string name="label_active">Aktyvus</string>
+    <string name="label_inactive">Neaktyvus</string>
     <string name="label_boost">Boost</string> <!-- untranslated -->
-    <string name="label_xp_boost">XP Boost</string> <!-- untranslated -->
-    <string name="label_weapon">Weapon</string> <!-- untranslated -->
-    <string name="label_armour">Armour</string> <!-- untranslated -->
-    <string name="label_food">Food</string> <!-- untranslated -->
-    <string name="label_arrows_consumed">Arrows Consumed</string> <!-- untranslated -->
-    <string name="label_arrows_reclaimed">Arrows Reclaimed</string> <!-- untranslated -->
-    <string name="label_runes_consumed">Runes Consumed</string> <!-- untranslated -->
-    <string name="label_runes_reclaimed">Runes Reclaimed</string> <!-- untranslated -->
-    <string name="label_arrows">Arrows</string> <!-- untranslated -->
-    <string name="label_runes">Runes</string> <!-- untranslated -->
-    <string name="label_spell">Spell</string> <!-- untranslated -->
-    <string name="label_none">None</string> <!-- untranslated -->
-    <string name="label_melee">Melee</string> <!-- untranslated -->
-    <string name="label_ranged_style">Ranged</string> <!-- untranslated -->
-    <string name="label_magic_style">Magic</string> <!-- untranslated -->
-    <string name="label_gathering">Gathering</string> <!-- untranslated -->
-    <string name="label_crafting">Crafting</string> <!-- untranslated -->
-    <string name="label_jewellery">Jewelry</string> <!-- untranslated -->
-    <string name="label_combat">Combat</string> <!-- untranslated -->
-    <string name="label_recipe">Recipe</string> <!-- untranslated -->
-    <string name="label_recipes">Recipes</string> <!-- untranslated -->
-    <string name="label_ingredients">Ingredients</string> <!-- untranslated -->
-    <string name="label_output">Output</string> <!-- untranslated -->
-    <string name="label_xp_per_action">XP per action</string> <!-- untranslated -->
-    <string name="label_unlocked_at">Unlocked at level</string> <!-- untranslated -->
-    <string name="label_kills">Kills</string> <!-- untranslated -->
-    <string name="label_personal_best">Personal Best</string> <!-- untranslated -->
-    <string name="label_daily_dig">Daily Dig</string> <!-- untranslated -->
-    <string name="label_dig_depth">Hole Depth</string> <!-- untranslated -->
-    <string name="label_version">Version</string> <!-- untranslated -->
+    <string name="label_xp_boost">XP Padauginimas</string>
+    <string name="label_weapon">Ginklas</string>
+    <string name="label_armour">Šarvai</string>
+    <string name="label_food">Maistas</string>
+    <string name="label_arrows_consumed">Strelės Sunaudotos</string>
+    <string name="label_arrows_reclaimed">Algal Surinktos Strelės</string>
+    <string name="label_runes_consumed">Panaudotos Runos</string>
+    <string name="label_runes_reclaimed">Atgal Surinktos Runos</string>
+    <string name="label_arrows">Strelės</string>
+    <string name="label_runes">Runos</string>
+    <string name="label_spell">Burtažodis</string>
+    <string name="label_none">Nieko</string>
+    <string name="label_melee">Artimos Kovos</string>
+    <string name="label_ranged_style">Nuotuolinis</string>
+    <string name="label_magic_style">Magija</string>
+    <string name="label_gathering">Surinkimas</string>
+    <string name="label_crafting">Gaminimas</string>
+    <string name="label_jewellery">Papuošalai</string>
+    <string name="label_combat">Kovos</string>
+    <string name="label_recipe">Receptas</string>
+    <string name="label_recipes">Receptai</string>
+    <string name="label_ingredients">Ingridientai</string>
+    <string name="label_output">Rezultatas</string>
+    <string name="label_xp_per_action">XP per Veiksma</string>
+    <string name="label_unlocked_at">Atrakinta Nuo Lygio</string>
+    <string name="label_kills">Nužudymai</string>
+    <string name="label_personal_best">Persionalus Geriausias</string>
+    <string name="label_daily_dig">Kasdieninis Kasymas</string>
+    <string name="label_dig_depth">Skylės Gylis</string>
+    <string name="label_version">Versija</string>
 
 
     <!-- ===== Format strings — all use positional args for Weblate ===== -->
     <!-- Translator note: %1$d = level number, %2$s = formatted XP string -->
-    <string name="format_level_xp">Level %1$d — %2$s XP</string> <!-- untranslated -->
+    <string name="format_level_xp">Lygys %1$d — %2$s XP</string>
     <!-- Translator note: %1$s = formatted XP amount, %2$d = target level number -->
-    <string name="format_xp_to_next">%1$s XP to level %2$d</string> <!-- untranslated -->
+    <string name="format_xp_to_next">%1$s XP to Lygio %2$d</string>
     <!-- Translator note: %1$s = time string (e.g. "42m 10s") -->
-    <string name="format_time_remaining">%1$s remaining</string> <!-- untranslated -->
+    <string name="format_time_remaining">%1$s Liko</string>
     <!-- Translator note: %1$s = relative time (e.g. "5m ago") -->
-    <string name="format_started_ago">Started %1$s ago</string> <!-- untranslated -->
+    <string name="format_started_ago">Prasidėjo prieš %1$s</string>
     <!-- Translator note: %1$s = item display name, %2$d = quantity -->
 
     <!-- Translator note: %1$d = coin amount -->
-    <string name="format_price_coins">%1$d coins</string> <!-- untranslated -->
+    <string name="format_price_coins">%1$d Monetų</string>
     <!-- Translator note: %1$d = required level, %2$s = skill display name -->
-    <string name="format_level_requirement">Requires level %1$d %2$s</string> <!-- untranslated -->
+    <string name="format_level_requirement">Reikalauja Lygio %1$d %2$s</string>
     <!-- Translator note: %1$s = formatted XP amount -->
-    <string name="format_xp_per_action">%1$s XP per action</string> <!-- untranslated -->
+    <string name="format_xp_per_action">%1$s XP Per Veiksma</string>
     <!-- Translator note: %1$d = patch number -->
-    <string name="format_patch_number">Patch %1$d</string> <!-- untranslated -->
+    <string name="format_patch_number">Lysvė %1$d</string>
     <!-- Translator note: %1$d = wins, %2$d = losses -->
-    <string name="format_arena_record">%1$d wins / %2$d losses</string> <!-- untranslated -->
+    <string name="format_arena_record">%1$d Laimėjimų / %2$d Pralaimėjimų</string>
     <!-- Translator note: %1$s = skill display name, %2$d = level number -->
-    <string name="format_skill_level">%1$s: Level %2$d</string> <!-- untranslated -->
+    <string name="format_skill_level">%1$s: Lygis %2$d</string>
     <!-- Translator note: %1$d = boost percentage -->
     <string name="format_xp_boost_percent">+%1$d%% XP</string> <!-- untranslated -->
     <!-- Translator note: %1$s = item/resource name, %2$d = quantity drop amount -->
 
     <!-- Translator note: %1$d = minutes remaining -->
-    <string name="format_minutes_remaining">%1$d min remaining</string> <!-- untranslated -->
+    <string name="format_minutes_remaining">Liko %1$d Min</string>
     <!-- Translator note: %1$s = version string (e.g. "0.1.0") -->
-    <string name="format_version">Version %1$s</string> <!-- untranslated -->
+    <string name="format_version">Versija %1$s</string>
 
     <!-- ===== Plurals ===== -->
     <plurals name="plural_level_ups">
-        <item quantity="one">%1$d level up</item>
-        <item quantity="other">%1$d level ups</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d Lygio Pakelimas</item>
+        <item quantity="other">%1$d Lygio Pakelimai</item>
+    </plurals>
     <plurals name="plural_items">
-        <item quantity="one">%1$d item</item>
-        <item quantity="other">%1$d items</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d Daiktą</item>
+        <item quantity="other">%1$d Daiktus</item>
+    </plurals>
     <plurals name="plural_minutes">
-        <item quantity="one">%1$d minute</item>
-        <item quantity="other">%1$d minutes</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d Minute</item>
+        <item quantity="other">%1$d Minučių</item>
+    </plurals>
     <plurals name="plural_hours">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="other">%1$d hours</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d Valandą</item>
+        <item quantity="other">%1$d Valandos</item>
+    </plurals>
     <plurals name="plural_patches">
-        <item quantity="one">%1$d patch</item>
-        <item quantity="other">%1$d patches</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d Lysvė</item>
+        <item quantity="other">%1$d Lysvės</item>
+    </plurals>
     <plurals name="plural_kills">
-        <item quantity="one">%1$d kill</item>
-        <item quantity="other">%1$d kills</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d nužudymas</item>
+        <item quantity="other">%1$d nužudymų</item>
+    </plurals>
     <plurals name="plural_quests_completed">
-        <item quantity="one">%1$d quest completed</item>
-        <item quantity="other">%1$d quests completed</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">%1$d Užduotis Pabaigta</item>
+        <item quantity="other">%1$d Užduočių Pabaigta</item>
+    </plurals>
 
     <!-- ===== Error messages ===== -->
-    <string name="error_no_player">Could not load player data. Please restart the app.</string> <!-- untranslated -->
-    <string name="error_session_already_active">You already have an active session. Complete or abandon it first.</string> <!-- untranslated -->
-    <string name="error_not_enough_coins">Not enough coins.</string> <!-- untranslated -->
+    <string name="error_no_player">Negalejome Užkrauti Žaidėjo Informacija. Perkraukite Progemele</string>
+    <string name="error_session_already_active">Jau turite Aktyvia sesija. Pirma Pabaikyte ar Palikite.</string>
+    <string name="error_not_enough_coins">Nepakankamai Monetų.</string>
     <!-- Translator note: %1$s = item display name -->
-    <string name="error_not_enough_items">Not enough %1$s.</string> <!-- untranslated -->
+    <string name="error_not_enough_items">Nepakankamai %1$s.</string>
     <!-- Translator note: %1$s = skill display name -->
-    <string name="error_level_too_low">Your %1$s level is too low.</string> <!-- untranslated -->
+    <string name="error_level_too_low">tavo %1$s Lygis Yra Per Žemas.</string>
     <!-- Translator note: %1$s = item display name -->
-    <string name="error_inventory_required">You need %1$s to do this.</string> <!-- untranslated -->
-    <string name="error_patch_occupied">This patch is already planted.</string> <!-- untranslated -->
-    <string name="error_patch_empty">This patch is empty.</string> <!-- untranslated -->
-    <string name="error_crop_not_ready">This crop is not ready yet.</string> <!-- untranslated -->
-    <string name="error_quest_active">You already have an active quest.</string> <!-- untranslated -->
+    <string name="error_inventory_required">Tau Reikia %1$s Kad Tai Padaryti.</string>
+    <string name="error_patch_occupied">Čia Jau Yra Pasodinta.</string>
+    <string name="error_patch_empty">Ši Lysvė Yra Tuščia.</string>
+    <string name="error_crop_not_ready">Šis Derlius dar pilnai Neužaugo.</string>
+    <string name="error_quest_active">Jus Jau Turite Aktyvią Užduotį</string>
     <string name="error_quest_requirements_not_met">You don\'t meet the requirements for this quest.</string> <!-- untranslated -->
     <string name="error_dungeon_level_too_low">Your combat level is too low for this dungeon.</string> <!-- untranslated -->
     <string name="error_unknown">Something went wrong. Please try again.</string> <!-- untranslated -->
