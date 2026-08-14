@@ -241,6 +241,7 @@ fun SlayerScreen(
                 inventory            = state.inventory,
                 queueSize            = state.queueSize,
                 maxQueueSize         = state.maxQueueSize,
+                hasActiveTask        = state.activeTask != null,
                 onForetell           = viewModel::foretellTask,
                 onQueueTask          = viewModel::queueForetelledTaskDungeon,
             )
@@ -418,6 +419,7 @@ private fun ForetellSection(
     inventory: Map<String, Int>,
     queueSize: Int,
     maxQueueSize: Int,
+    hasActiveTask: Boolean,
     onForetell: () -> Unit,
     onQueueTask: (SlayerTask) -> Unit,
 ) {
@@ -473,6 +475,7 @@ private fun ForetellSection(
             if (foretelledTasks.size < 3) {
                 Button(
                     onClick  = onForetell,
+                    enabled  = hasActiveTask,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(stringResource(R.string.slayer_foretell_btn, nextCostUnits))
