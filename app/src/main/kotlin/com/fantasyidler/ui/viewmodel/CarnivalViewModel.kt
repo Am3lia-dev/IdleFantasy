@@ -57,6 +57,7 @@ data class CarnivalUiState(
     val selectedTab: Int = 0,
     val tabInitialized: Boolean = false,
     val skillLevels: Map<String, Int> = emptyMap(),
+    val skillXp: Map<String, Long> = emptyMap(),
     val tierBonus: Float = 0f,
     val queueSize: Int = 0,
     val maxQueueSize: Int = 3,
@@ -165,6 +166,7 @@ class CarnivalViewModel @Inject constructor(
             val inventory: Map<String, Int> = json.decodeFromString(player.inventory)
             val flags: PlayerFlags = json.decodeFromString(player.flags)
             val levels: Map<String, Int> = json.decodeFromString(player.skillLevels)
+            val xpMap: Map<String, Long> = json.decodeFromString(player.skillXp)
             val pets: List<com.fantasyidler.data.model.OwnedPet> = try { json.decodeFromString(player.pets) } catch (_: Exception) { emptyList() }
             val ownedPetIds = pets.map { it.id }.toSet()
             val ownedPrizeKeys = prizes
@@ -179,6 +181,7 @@ class CarnivalViewModel @Inject constructor(
                 isLoading           = false,
                 ticketBalance       = inventory["carnival_ticket"] ?: 0,
                 skillLevels         = levels,
+                skillXp             = xpMap,
                 tierBonus           = townRepo.idleTicketBonusChance(flags),
                 queueSize           = flags.sessionQueue.size,
                 maxQueueSize        = playerRepo.maxQueueSize(flags),
