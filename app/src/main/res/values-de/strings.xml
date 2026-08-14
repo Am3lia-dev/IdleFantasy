@@ -1366,7 +1366,7 @@
     <string name="carnival_difficulty_label">Schwierigkeit</string>
     <string name="carnival_difficulty_normal">Üblich</string>
     <string name="carnival_difficulty_hard">Schwierig</string>
-    <string name="carnival_ring_hard_hint">Schwierig: 52%–57% Ziel, 7 Lose</string>
+    <string name="carnival_ring_hard_hint">Schwierig: 52%%–57%% Ziel, 7 Lose</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1785,7 +1785,7 @@
     <string name="pet_timber_sprite_name">Timber Sprite</string> <!-- untranslated -->
     <string name="pet_timber_sprite_desc">A wood spirit awakened from sawdust and lumber. It knows exactly where every nail should go.</string> <!-- untranslated -->
     <string name="pet_juggling_imp_name">Juggling Imp</string> <!-- untranslated -->
-    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%.</string> <!-- untranslated -->
+    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%%.</string> <!-- untranslated -->
     <string name="pet_tower_pet_name">Stone Guardian</string> <!-- untranslated -->
     <string name="pet_tower_pet_desc">An ancient stone golem that guards the tower\'s secrets. Boosts combat XP.</string> <!-- untranslated -->
     <string name="pet_solstice_sprite_name">Solstice Sprite</string> <!-- untranslated -->

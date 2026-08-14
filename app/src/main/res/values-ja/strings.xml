@@ -1240,9 +1240,9 @@
     <string name="town_church_no_bonus">祝福の持続時間を延ばすにはアップグレードしてください</string>
     <string name="town_building_fairgrounds_name">カーニバル広場</string>
     <string name="town_fairgrounds_no_bonus">4つのミニゲームがプレイ可能、クールダウン10分</string>
-    <string name="town_fairgrounds_t1_bonus">「Pick-a-Cup」をアンロック、クールダウンが7.5分に短縮、チケットのドロップ確率 +5%</string>
-    <string name="town_fairgrounds_t2_bonus">「Higher or Lower」をアンロック、チケットのドロップ確率 +10%</string>
-    <string name="town_fairgrounds_t3_bonus">クールダウンが5分に短縮、チケットのドロップ確率 +15%</string>
+    <string name="town_fairgrounds_t1_bonus">「Pick-a-Cup」をアンロック、クールダウンが7.5分に短縮、チケットのドロップ確率 +5%%</string>
+    <string name="town_fairgrounds_t2_bonus">「Higher or Lower」をアンロック、チケットのドロップ確率 +10%%</string>
+    <string name="town_fairgrounds_t3_bonus">クールダウンが5分に短縮、チケットのドロップ確率 +15%%</string>
     <string name="town_building_garden_name">庭園</string>
     <plurals name="town_garden_bonus">
         <item quantity="zero">追加の畑はまだありません</item>
@@ -1310,7 +1310,7 @@
     <string name="carnival_queue">セッションをキューに追加</string>
     <string name="carnival_ring_toss">輪投げ</string>
     <string name="carnival_active_ring_desc">インジケーターがゴールデンターゲットゾーンに入った瞬間に輪を投げましょう。</string>
-    <string name="carnival_ring_target_hint">中央を狙う (45%–55%)</string>
+    <string name="carnival_ring_target_hint">中央を狙う (45%%–55%%)</string>
     <string name="carnival_throw">投げる！</string>
     <string name="carnival_hammer_strike">ハンマー叩き</string>
     <string name="carnival_active_hammer_desc">パワーメーターが最大になった瞬間に叩いて最高スコアを目指しましょう。</string>
@@ -1366,7 +1366,7 @@
     <string name="carnival_difficulty_label">難易度</string>
     <string name="carnival_difficulty_normal">ノーマル</string>
     <string name="carnival_difficulty_hard">ハード</string>
-    <string name="carnival_ring_hard_hint">ハード: ターゲット 52%–57%、獲得 7チケット</string>
+    <string name="carnival_ring_hard_hint">ハード: ターゲット 52%%–57%%、獲得 7チケット</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1785,7 +1785,7 @@
     <string name="pet_timber_sprite_name">Timber Sprite</string> <!-- untranslated -->
     <string name="pet_timber_sprite_desc">A wood spirit awakened from sawdust and lumber. It knows exactly where every nail should go.</string> <!-- untranslated -->
     <string name="pet_juggling_imp_name">Juggling Imp</string> <!-- untranslated -->
-    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%.</string> <!-- untranslated -->
+    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%%.</string> <!-- untranslated -->
     <string name="pet_tower_pet_name">Stone Guardian</string> <!-- untranslated -->
     <string name="pet_tower_pet_desc">An ancient stone golem that guards the tower\'s secrets. Boosts combat XP.</string> <!-- untranslated -->
     <string name="pet_solstice_sprite_name">Solstice Sprite</string> <!-- untranslated -->
