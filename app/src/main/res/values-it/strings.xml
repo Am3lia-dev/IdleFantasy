@@ -615,9 +615,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Level %1$d  •  Seppellisci ossa o disperdi ceneri per XP Preghiera</string>
     <string name="skills_no_bones">Non hai ossa o ceneri con te</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d XP ciascuno  •  ne hai %2$d</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">%1$d XP ciascuno</string>
     <string name="skills_bone_selected">%1$d XP ciascuno  •  %2$d disponibili</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d XP totali</string>

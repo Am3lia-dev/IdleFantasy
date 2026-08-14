@@ -615,9 +615,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Level %1$d  •  Knochen vergraben oder Asche verstreuen für Gebets-EP</string>
     <string name="skills_no_bones">Keine Knochen oder Asche im Inventar</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d EP je  •  %2$d im Inventar</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">%1$d EP je</string>
     <string name="skills_bone_selected">%1$d EP je  •  %2$d verfügbar</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d EP gesamt</string>

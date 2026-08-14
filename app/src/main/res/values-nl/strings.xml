@@ -615,9 +615,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Lvl %1$d  •  Begraaf botten of verstrooi as voor Gebeds XP</string>
     <string name="skills_no_bones">Geen botten of as in inventaris</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d XP per stuk  •  %2$d in inventaris</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">%1$d XP per stuk</string>
     <string name="skills_bone_selected">%1$d XP per stuk  •  %2$d beschikbaar</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d XP totaal</string>

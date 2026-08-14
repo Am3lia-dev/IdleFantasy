@@ -631,9 +631,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Уровень %1$d  •  Захороните кости или рассейте прах для опыта молитвы</string>
     <string name="skills_no_bones">Нет костей или праха в инвентаре</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d опыта за шт.  •  %2$d в инвентаре</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">%1$d опыта за шт.</string>
     <string name="skills_bone_selected">%1$d опыта за шт.  •  %2$d доступно</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d опыта всего</string>

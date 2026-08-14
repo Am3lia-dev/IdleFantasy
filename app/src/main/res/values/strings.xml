@@ -615,8 +615,7 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Level %1$d  •  Bury bones or scatter ashes for Prayer XP</string>
     <string name="skills_no_bones">No bones or ashes in inventory</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d XP each  •  %2$d in inventory</string>
+    <string name="skills_xp_each">%1$d XP each</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
     <string name="skills_bone_selected">%1$d XP each  •  %2$d available</string>
     <!-- Translator note: %1$d = total XP -->
@@ -658,6 +657,7 @@
     <string name="quest_legend_guild_daily">Guild daily</string>
     <string name="quest_legend_guild">Guild quest</string>
     <string name="quest_legend_quest">Quest</string>
+    <string name="quest_legend_gold_dot">Timed quest is available.</string>
     <string name="quest_legend_notes">Dimmed icons can\'t be completed yet (missing level or materials). A small raised number means several quests of that type want the same thing.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d in inventory</string>

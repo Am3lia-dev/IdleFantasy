@@ -615,9 +615,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Seviye %1$d  •  Dua XP\'si için kemikleri göm veya külleri saç</string>
     <string name="skills_no_bones">Envanterde kemik veya kül yok</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">Tanesi %1$d XP  •  Envanterde %2$d adet</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">Tanesi %1$d XP</string>
     <string name="skills_bone_selected">Tanesi %1$d XP  •  %2$d adet mevcut</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">Toplam +%1$d XP</string>

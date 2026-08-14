@@ -616,9 +616,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Niv. %1$d  •  Enterrez des os ou dispersez des cendres pour XP en Prière</string>
     <string name="skills_no_bones">Aucun os ou cendres dans l\'inventaire</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity in inventory -->
-    <string name="skills_bone_qty">%1$d XP par os  •  %2$d dans l\'inventaire</string>
     <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
+    <string name="skills_xp_each">%1$d XP par os</string>
     <string name="skills_bone_selected">%1$d XP par os  •  %2$d disponibles</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d XP au total</string>
