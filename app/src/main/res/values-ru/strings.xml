@@ -558,7 +558,7 @@
     <string name="combat_run_progress">Заход %1$d/%2$d</string>
     <string name="combat_xp_on_victory">Опыт за победу</string>
     <string name="combat_you_died">Вы погибли!</string>
-    <string name="combat_died_reward">Вы получили 10% наград.</string>
+    <string name="combat_died_reward">Вы получили 10%% наград.</string>
     <!-- Translator note: %1$d = gear bonus value -->
     <string name="combat_gear_bonus">+%1$d снаряжение</string>
     <!-- Translator note: %1$d = permanent prestige stat bonus value -->
@@ -1191,7 +1191,7 @@
     <string name="bone_altar_tap">Нажмите, чтобы захоронить</string>
     <string name="bone_altar_change_bone">Изменить</string>
     <string name="bone_altar_combo_count">Комбо ×%d</string>
-    <string name="bone_altar_bonus_active">+50% к XP!</string>
+    <string name="bone_altar_bonus_active">+50%% к XP!</string>
     <string name="bone_altar_session_xp">+%s XP за сессию</string>
     <string name="bone_altar_buried_count">%d захоронено</string>
     <string name="bone_altar_no_bones">Нет костей в инвентаре</string>
@@ -1256,9 +1256,9 @@
     <string name="town_church_no_bonus">Улучшите для продления благословений</string>
     <string name="town_building_fairgrounds_name">Ярмарочная площадь</string>
     <string name="town_fairgrounds_no_bonus">4 доступных мини-игры, время восстановления 10 минут</string>
-    <string name="town_fairgrounds_t1_bonus">Открывает возможность игры в Pick-a-Cup, время восстановления сокращено до 7,5 минут, +5% шанс простоя билета</string>
-    <string name="town_fairgrounds_t2_bonus">Unlocks Higher or Lower, +10% idle ticket chance</string> <!-- untranslated -->
-    <string name="town_fairgrounds_t3_bonus">Время восстановления уменьшается до 5 минут, +15% к шансу получения билета</string>
+    <string name="town_fairgrounds_t1_bonus">Открывает возможность игры в Pick-a-Cup, время восстановления сокращено до 7,5 минут, +5%% шанс простоя билета</string>
+    <string name="town_fairgrounds_t2_bonus">Unlocks Higher or Lower, +10%% idle ticket chance</string> <!-- untranslated -->
+    <string name="town_fairgrounds_t3_bonus">Время восстановления уменьшается до 5 минут, +15%% к шансу получения билета</string>
     <string name="town_building_garden_name">Сад</string>
     <plurals name="town_garden_bonus">
         <item quantity="zero">Пока нет дополнительных грядок</item>
@@ -1330,7 +1330,7 @@
     <string name="carnival_queue">В очередь</string>
     <string name="carnival_ring_toss">Набрасывание колец</string>
     <string name="carnival_active_ring_desc">Бросайте кольцо, когда указатель достигает золотой целевой зоны.</string>
-    <string name="carnival_ring_target_hint">Целитесь в центр (45%–55%)</string>
+    <string name="carnival_ring_target_hint">Целитесь в центр (45%%–55%%)</string>
     <string name="carnival_throw">Бросить!</string>
     <string name="carnival_hammer_strike">Удар молотом</string>
     <string name="carnival_active_hammer_desc">Ударьте, когда измеритель мощности достигает своего пика.</string>
@@ -1386,7 +1386,7 @@
     <string name="carnival_difficulty_label">Сложность</string>
     <string name="carnival_difficulty_normal">Нормально</string>
     <string name="carnival_difficulty_hard">Сложно</string>
-    <string name="carnival_ring_hard_hint">Сложно: 52%–57% цель, 7 билетов</string>
+    <string name="carnival_ring_hard_hint">Сложно: 52%%–57%% цель, 7 билетов</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1805,7 +1805,7 @@
     <string name="pet_timber_sprite_name">Timber Sprite</string> <!-- untranslated -->
     <string name="pet_timber_sprite_desc">A wood spirit awakened from sawdust and lumber. It knows exactly where every nail should go.</string> <!-- untranslated -->
     <string name="pet_juggling_imp_name">Juggling Imp</string> <!-- untranslated -->
-    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%.</string> <!-- untranslated -->
+    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%%.</string> <!-- untranslated -->
     <string name="pet_tower_pet_name">Stone Guardian</string> <!-- untranslated -->
     <string name="pet_tower_pet_desc">An ancient stone golem that guards the tower\'s secrets. Boosts combat XP.</string> <!-- untranslated -->
     <string name="pet_solstice_sprite_name">Solstice Sprite</string> <!-- untranslated -->

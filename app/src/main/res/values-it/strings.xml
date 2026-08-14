@@ -1240,9 +1240,9 @@
     <string name="town_church_no_bonus">Potenzia per estendere la durata delle benedizioni</string>
     <string name="town_building_fairgrounds_name">Giostre</string>
     <string name="town_fairgrounds_no_bonus">4 mini-giochi di abilità, 10 minuti di attesa prima di giocare di nuovo</string>
-    <string name="town_fairgrounds_t1_bonus">Sblocca Scegli-Bicchiere, attesa ridotta a 7.5 minutes, +5% probabilità di ottenere biglietti</string>
-    <string name="town_fairgrounds_t2_bonus">Sblocca Grande-o-Piccolo, +10% probabilità di ottenere biglietti</string>
-    <string name="town_fairgrounds_t3_bonus">Attesa ridotta a 5 minuti, +15% probabilità di ottenere biglietti</string>
+    <string name="town_fairgrounds_t1_bonus">Sblocca Scegli-Bicchiere, attesa ridotta a 7.5 minutes, +5%% probabilità di ottenere biglietti</string>
+    <string name="town_fairgrounds_t2_bonus">Sblocca Grande-o-Piccolo, +10%% probabilità di ottenere biglietti</string>
+    <string name="town_fairgrounds_t3_bonus">Attesa ridotta a 5 minuti, +15%% probabilità di ottenere biglietti</string>
     <string name="town_building_garden_name">Giardino</string>
     <plurals name="town_garden_bonus">
         <item quantity="zero">Ancora nessun campo extra</item>
@@ -1310,7 +1310,7 @@
     <string name="carnival_queue">Metti in coda</string>
     <string name="carnival_ring_toss">Lancio degli anelli</string>
     <string name="carnival_active_ring_desc">Lancia quando l\'indicatore colpisce la zona dorata.</string>
-    <string name="carnival_ring_target_hint">Mira al centro (45%–55%)</string>
+    <string name="carnival_ring_target_hint">Mira al centro (45%%–55%%)</string>
     <string name="carnival_throw">Lancia!</string>
     <string name="carnival_hammer_strike">Colpo di martello</string>
     <string name="carnival_active_hammer_desc">Colpisci quando il misuratore di potenza è al massimo.</string>
@@ -1366,7 +1366,7 @@
     <string name="carnival_difficulty_label">Difficoltà</string>
     <string name="carnival_difficulty_normal">Normale</string>
     <string name="carnival_difficulty_hard">Difficile</string>
-    <string name="carnival_ring_hard_hint">Difficile: 52%–57% target, 7 biglietti</string>
+    <string name="carnival_ring_hard_hint">Difficile: 52%%–57%% target, 7 biglietti</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1785,7 +1785,7 @@
     <string name="pet_timber_sprite_name">Spiritello del legno</string>
     <string name="pet_timber_sprite_desc">Creatura risvegliata dalla trasformazione del legno. Sa costruire opere di pregiata fattura.</string>
     <string name="pet_juggling_imp_name">Folletto Carnevalesco</string>
-    <string name="pet_juggling_imp_desc">Un folletto con tanta voglia di divertire. Aumenta i tuoi XP di 3%.</string>
+    <string name="pet_juggling_imp_desc">Un folletto con tanta voglia di divertire. Aumenta i tuoi XP di 3%%.</string>
     <string name="pet_tower_pet_name">Guardiano di pietra</string>
     <string name="pet_tower_pet_desc">A guardia dei misteri della torre da tempo immemore. Aumenta l\'XP dalle battaglie.</string>
     <string name="pet_solstice_sprite_name">Folletto del solstizio</string>

@@ -543,7 +543,7 @@
     <string name="combat_run_progress">Partie %1$d/%2$d</string>
     <string name="combat_xp_on_victory">XP à la victoire</string>
     <string name="combat_you_died">Vous êtes mort !</string>
-    <string name="combat_died_reward">Vous avez reçu 10% des récompenses.</string>
+    <string name="combat_died_reward">Vous avez reçu 10%% des récompenses.</string>
     <!-- Translator note: %1$d = gear bonus value -->
     <string name="combat_gear_bonus">+%1$d équipement</string>
     <!-- Translator note: %1$d = permanent prestige stat bonus value -->
@@ -1311,7 +1311,7 @@
     <string name="carnival_queue">Mettre en file</string>
     <string name="carnival_ring_toss">Lancer d\'anneaux</string>
     <string name="carnival_active_ring_desc">Lancez quand l\'indicateur atteint la zone cible dorée.</string>
-    <string name="carnival_ring_target_hint">Visez le centre (45%–55%)</string>
+    <string name="carnival_ring_target_hint">Visez le centre (45%%–55%%)</string>
     <string name="carnival_throw">Lancer !</string>
     <string name="carnival_hammer_strike">Coup de marteau</string>
     <string name="carnival_active_hammer_desc">Frappez quand le jauge de puissance est à son maximum.</string>
@@ -1786,7 +1786,7 @@
     <string name="pet_timber_sprite_name">Farfadet des Bois</string>
     <string name="pet_timber_sprite_desc">Un esprit de la forêt s\'est éveillé de la sciure et du bois d\'œuvre. Il sait exactement où doit aller chaque clou.</string>
     <string name="pet_juggling_imp_name">Diablotin Jongleur</string>
-    <string name="pet_juggling_imp_desc">Un diablotin malicieux qui jongle avec vos soucis pour les faire disparaître. Augmente de 3 % l\'XP de toutes les aptitudes.</string>
+    <string name="pet_juggling_imp_desc">Un diablotin malicieux qui jongle avec vos soucis pour les faire disparaître. Augmente de 3 %% l\'XP de toutes les aptitudes.</string>
     <string name="pet_tower_pet_name">Gardien de Pierre</string>
     <string name="pet_tower_pet_desc">Un ancien golem de pierre qui garde les secrets de la tour. Augmente l\'XP de combat.</string>
     <string name="pet_solstice_sprite_name">Farfadet du Solstice</string>

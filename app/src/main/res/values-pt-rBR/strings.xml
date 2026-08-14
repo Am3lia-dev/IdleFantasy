@@ -1240,9 +1240,9 @@
     <string name="town_church_no_bonus">Melhore para aumentar a duração das bênçãos</string>
     <string name="town_building_fairgrounds_name">Parque de Diversões</string>
     <string name="town_fairgrounds_no_bonus">4 minijogos ativos disponíveis, recarga de 10 minutos</string>
-    <string name="town_fairgrounds_t1_bonus">Desbloqueia Escolha o Copo, recarga reduzida para 7,5 minutos, +5% de chance de bilhete ocioso</string>
-    <string name="town_fairgrounds_t2_bonus">Desbloqueia Maior ou Menor, +10% de chance de bilhete ocioso</string>
-    <string name="town_fairgrounds_t3_bonus">Recarga reduzida para 5 minutos, +15% de chance de bilhete ocioso</string>
+    <string name="town_fairgrounds_t1_bonus">Desbloqueia Escolha o Copo, recarga reduzida para 7,5 minutos, +5%% de chance de bilhete ocioso</string>
+    <string name="town_fairgrounds_t2_bonus">Desbloqueia Maior ou Menor, +10%% de chance de bilhete ocioso</string>
+    <string name="town_fairgrounds_t3_bonus">Recarga reduzida para 5 minutos, +15%% de chance de bilhete ocioso</string>
     <string name="town_building_garden_name">Jardim</string>
     <plurals name="town_garden_bonus">
         <item quantity="zero">Nenhum canteiro extra ainda</item>
@@ -1310,7 +1310,7 @@
     <string name="carnival_queue">Colocar na Fila</string>
     <string name="carnival_ring_toss">Lançamento de Argolas</string>
     <string name="carnival_active_ring_desc">Cronometre seu lançamento para quando o indicador atingir a zona dourada.</string>
-    <string name="carnival_ring_target_hint">Mire no centro (45%–55%)</string>
+    <string name="carnival_ring_target_hint">Mire no centro (45%%–55%%)</string>
     <string name="carnival_throw">Lançar!</string>
     <string name="carnival_hammer_strike">Golpe de Martelo</string>
     <string name="carnival_active_hammer_desc">Golpeie quando o medidor de força estiver no auge para pontuação máxima.</string>
@@ -1366,7 +1366,7 @@
     <string name="carnival_difficulty_label">Dificuldade</string>
     <string name="carnival_difficulty_normal">Normal</string> <!-- untranslated -->
     <string name="carnival_difficulty_hard">Difícil</string>
-    <string name="carnival_ring_hard_hint">Difícil: alvo de 52%–57%, 7 bilhetes</string>
+    <string name="carnival_ring_hard_hint">Difícil: alvo de 52%%–57%%, 7 bilhetes</string>
 
 
     <!-- ===== Magic Bean / Farming ===== -->
@@ -1785,7 +1785,7 @@
     <string name="pet_timber_sprite_name">Timber Sprite</string> <!-- untranslated -->
     <string name="pet_timber_sprite_desc">A wood spirit awakened from sawdust and lumber. It knows exactly where every nail should go.</string> <!-- untranslated -->
     <string name="pet_juggling_imp_name">Juggling Imp</string> <!-- untranslated -->
-    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%.</string> <!-- untranslated -->
+    <string name="pet_juggling_imp_desc">A mischievous imp that juggles your worries away. Boosts all skill XP by 3%%.</string> <!-- untranslated -->
     <string name="pet_tower_pet_name">Stone Guardian</string> <!-- untranslated -->
     <string name="pet_tower_pet_desc">An ancient stone golem that guards the tower\'s secrets. Boosts combat XP.</string> <!-- untranslated -->
     <string name="pet_solstice_sprite_name">Solstice Sprite</string> <!-- untranslated -->
