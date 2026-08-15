@@ -658,7 +658,7 @@
     <string name="quest_legend_guild_daily">Quotidienne de guilde</string>
     <string name="quest_legend_guild">Quête de guilde</string>
     <string name="quest_legend_quest">Quête</string>
-    <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
+    <string name="quest_legend_gold_dot">Un quête temporaire est disponible.</string>
     <string name="quest_legend_notes">Les icônes estompées ne peuvent pas encore être terminées (niveau ou matériaux manquants). Un petit chiffre en exposant indique que plusieurs quêtes de ce type visent la même chose.</string>
     <!-- Translator note: %1$d = quantity -->
     <string name="shop_qty_in_inv">×%1$d dans l\'inventaire</string>
@@ -1024,7 +1024,7 @@
     <string name="skilling_dungeon_shattered_spire_desc">Les vestiges d’une tour de mage réduite à un champ de décombres. L’air crépite encore de magie résiduelle.</string>
     <string name="skilling_dungeon_thieves_den_name">Repaire des Voleurs</string>
     <string name="skilling_dungeon_thieves_den_desc">Un labyrinthe de tunnels sous les rues de la ville, utilisé par un réseau organisé de voleurs.</string>
-    <string name="skilling_dungeon_shadow_vault_name">Coffre-fort de l\'Ombre</string>
+    <string name="skilling_dungeon_shadow_vault_name">Chambre Forte d\'Ombre</string>
     <string name="skilling_dungeon_shadow_vault_desc">Une chambre forte cachée sous le Sanctuaire des Malfrats où les biens les plus précieux de la guilde sont gardés.</string>
 
     <!-- Expeditions -->
@@ -1070,9 +1070,9 @@
     <string name="slayer_owned">Possédé</string>
     <string name="slayer_lamp_purchased">+%1$s XP ajoutée à %2$s !</string>
     <string name="slayer_lamp_pick_skill">Choisissez une aptitude</string>
-    <string name="slayer_lamp_max_level_warning">⚠ XP will be wasted</string> <!-- untranslated -->
-    <string name="slayer_lamp_level_preview">→ Level %1$d (%2$d%%)</string> <!-- untranslated -->
-    <string name="slayer_lamp_level_preview_gain">→ Level %1$d (+%2$d, %3$d%%)</string> <!-- untranslated -->
+    <string name="slayer_lamp_max_level_warning">⚠ XP sera gachée</string>
+    <string name="slayer_lamp_level_preview">→ Niveau %1$d (%2$d%%)</string>
+    <string name="slayer_lamp_level_preview_gain">→ Niveau %1$d (+%2$d, %3$d%%)</string>
     <string name="slayer_lamp_small">Lampe XP (Petite)</string>
     <string name="slayer_lamp_large">Lampe XP (Grande)</string>
     <string name="slayer_lamp_small_desc">+10 000 XP à n’importe quelle aptitude</string>
@@ -1259,7 +1259,7 @@
         <item quantity="one">+%1$d emplacement de file supplémentaire</item>
         <item quantity="other">+%1$d emplacements de file supplémentaires</item>
     </plurals>
-    <string name="town_building_cape_rack_name">Rangement à Capes</string>
+    <string name="town_building_cape_rack_name">Râtelier à Capes</string>
     <string name="town_cape_rack_no_bonus">Améliorez pour appliquer passivement les bonus d\'XP et de rendement des aptitudes/capes de guildes possédées</string>
     <string name="town_cape_rack_t1_bonus">Les bonus passifs des capes Tier 1 (de Collecte) sont actives</string>
     <string name="town_cape_rack_t2_bonus">Les bonus passifs des capes Tier 1 &amp; 2 (de Collecte, de Façonnage) sont actives</string>
@@ -1522,7 +1522,7 @@
     <string name="monument_stage_2_reward">Débloque le toucher quotidien du monument</string>
     <string name="monument_stage_3_reward">Les bénédictions durent 6 heures de plus</string>
     <string name="monument_stage_4_reward" formatted="false">+1 emplacement de file, et l\'Oie Dorée s\'installe (+10% de pièces)</string>
-    <string name="monument_stage_5_reward">Débloque le Gardien de la Chambre forte et le titre Mécène du Royaume</string>
+    <string name="monument_stage_5_reward">Débloque le Gardien de la Chambre Forte et le titre Mécène du Royaume</string>
     <string name="monument_built">Construit</string>
     <string name="monument_build_btn">Construire (%1$s)</string>
     <string name="monument_contribute_label">Nourrissez la Flamme Éternelle</string>
@@ -1537,7 +1537,7 @@
     <string name="monument_touch_blessing">Une bénédiction vous enveloppe pendant une heure.</string>
     <string name="monument_touch_items">Le Monument accorde : %1$s</string>
     <string name="monument_contributed">La flamme brille plus fort !</string>
-    <string name="monument_flame_lit">La Flamme Éternelle est allumée ! Le Gardien de la Chambre forte vous attend.</string>
+    <string name="monument_flame_lit">La Flamme Éternelle est allumée ! Le Gardien de la Chambre Forte vous attend.</string>
     <string name="monument_stage_built">Étape terminée !</string>
     <string name="monument_goose_joined">Étape terminée ! L\'Oie Dorée s\'installe.</string>
     <string name="monument_not_enough_coins">Pas assez de pièces.</string>
@@ -1668,7 +1668,7 @@
     <string name="seasonal_bounty_gloom_runes_name">Façonnez des Runes de Mort pour apaiser les esprits</string>
     <string name="seasonal_bounty_gloom_runes_hint">Façonnage de Runes</string>
     <string name="seasonal_bounty_gloom_wisps_name">Chassez les Feux Follets</string>
-    <string name="seasonal_bounty_gloom_wisps_hint">Disponible uniquement dans le Hollowfen</string>
+    <string name="seasonal_bounty_gloom_wisps_hint">Disponible uniquement dans le Marais Creux</string>
     <string name="seasonal_bounty_gloom_ghouls_name">Éliminez les Goules des Tombes</string>
     <string name="seasonal_bounty_gloom_ghouls_hint">Disponible uniquement dans le Hollowfen</string>
     <string name="seasonal_bounty_gloom_husks_name">Abattez les Horreurs de Paille</string>
@@ -1758,7 +1758,7 @@
     <string name="pet_baby_kraken_desc">Un tout petit kraken qui augmente votre XP de Cuisine.</string>
     <string name="pet_rock_golem_name">Golem de Pierre</string>
     <string name="pet_rock_golem_desc">Une formation rocheuse vivante qui augmente votre XP d’Extraction.</string>
-    <string name="pet_ent_name">Ent</string> <!-- untranslated -->
+    <string name="pet_ent_name">Ent</string>
     <string name="pet_ent_desc">Un ancien esprit d’arbre qui booste votre XP de coupe de Bois.</string>
     <string name="pet_tiny_templar_name">Petite templier</string>
     <string name="pet_tiny_templar_desc">Un petit compagnon poisson qui augmente votre XP de Pêche.</string>
@@ -1766,7 +1766,7 @@
     <string name="pet_tangleroot_desc">Une créature végétale magique qui améliore votre XP d’Agriculture.</string>
     <string name="pet_baby_balrog_name">Bébé Balrog</string>
     <string name="pet_baby_balrog_desc">Un minuscule démon de feu et d\'ombre qui renforce votre magie.</string>
-    <string name="pet_void_wisp_name">Follet du Vide</string>
+    <string name="pet_void_wisp_name">Feu Follet du Vide</string>
     <string name="pet_void_wisp_desc">Un fragment de l\'essence du Souverain du Vide, lié à ceux qui ont vaincu son maître. Amplifie l\'expérience de combat.</string>
     <string name="pet_graceling_sprite_name">Farfadet Gracieux</string>
     <string name="pet_graceling_sprite_desc">Une fée agile, née de milliers de tours de piste parcourus en silence. Elle guide vos pas avec une grâce saisissante.</string>
@@ -1774,7 +1774,7 @@
     <string name="pet_shadow_fox_desc">Un renard rusé qui a surgi des ombres de mille tentatives de vol à la tire.</string>
     <string name="pet_ember_moth_name">Papillon de Braise</string>
     <string name="pet_ember_moth_desc">Attiré par la flamme si longtemps qu\'il a fini par en devenir une. Ses ailes miroitent sous l\'effet de la chaleur résiduelle.</string>
-    <string name="pet_herb_wisp_name">Follet des Herbes</string>
+    <string name="pet_herb_wisp_name">Feu Follet des Herbes</string>
     <string name="pet_herb_wisp_desc">Un esprit né de la vapeur de mille potions infusées. Sa présence aiguise l\'esprit.</string>
     <string name="pet_rune_sprite_name">Farfadet Runique</string>
     <string name="pet_rune_sprite_desc">Un fragment cristallisé d\'énergie magique qui s\'est échappé de l\'autel de fabrication des runes.</string>
@@ -1782,7 +1782,7 @@
     <string name="pet_gem_golem_desc">Une toute petite créature sculptée à partir d\'éclats de gemmes et de poussière de polissage. Elle garde vos outils bien affûtés.</string>
     <string name="pet_feather_drake_name">Dragon à Plumes</string>
     <string name="pet_feather_drake_desc">Un dragon miniature entièrement constitué d\'empennages de flèches. Étonnamment aérodynamique.</string>
-    <string name="pet_forge_imp_name">Diablotin de la forge</string>
+    <string name="pet_forge_imp_name">Diablotin de forge</string>
     <string name="pet_forge_imp_desc">Un diablotin malicieux qui vit dans la forge. Sa peau durcie par la chaleur est insensible aux brûlures.</string>
     <string name="pet_coin_drake_name">Dragon à Pièces</string>
     <string name="pet_coin_drake_desc">Un dragonceau élevé à un régime de pièces d\'or. Il a un flair étonnant pour le profit.</string>

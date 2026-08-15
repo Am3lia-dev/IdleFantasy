@@ -568,9 +568,9 @@
     <string name="crop_magic_herb_name">Herbe magique</string>
     <string name="crop_dragon_fruit_name">Fruits du dragon</string>
     <string name="crop_golden_wheat_name">Blé doré</string>
-    <string name="crop_spirit_herb_name">Herbe de l’esprit</string>
+    <string name="crop_spirit_herb_name">Herbe Spirituelle</string>
     <string name="crop_spirit_herb_desc">Une herbe rare utilisée en herboristerie de haut niveau.</string>
-    <string name="crop_celestial_bloom_name">Fleur céleste</string>
+    <string name="crop_celestial_bloom_name">Fleur Céleste</string>
     <string name="crop_celestial_bloom_desc">Une fleur éthérée utilisée dans des potions de maître.</string>
     <string name="crop_starfruit_name">Fruit d’étoile</string>
     <string name="crop_void_lotus_name">Lotus du vide</string>
@@ -755,9 +755,9 @@
     <string name="item_dragon_fruit_seed_desc">Plantez pour cultiver des fruits du dragon. Pousse en 14 heures.\n\nNécessite le niveau 55 d\'agriculture.</string>
     <string name="item_golden_wheat_seed_name">Graine de blé doré</string>
     <string name="item_golden_wheat_seed_desc">Plantez pour cultiver du blé doré. Pousse en 16 heures.\n\nNécessite le niveau 65 d\'agriculture.</string>
-    <string name="item_spirit_seed_name">Graine de l\'esprit</string>
+    <string name="item_spirit_seed_name">Graine d\'esprit</string>
     <string name="item_spirit_seed_desc">Plantez pour cultiver des herbes spirituelles. Pousse en 19 heures.\n\nNécessite le niveau 75 d\'agriculture.</string>
-    <string name="item_celestial_bloom_seed_name">Graine de fleur céleste</string>
+    <string name="item_celestial_bloom_seed_name">Graine de Fleur Céleste</string>
     <string name="item_celestial_bloom_seed_desc">Plantez pour cultiver des fleurs célestes. Pousse en 21 heures.\n\nNécessite le niveau 85 d\'agriculture.</string>
     <string name="item_starfruit_seed_name">Graine de fruit d\'étoile</string>
     <string name="item_starfruit_seed_desc">Plantez pour cultiver des fruits d\'étoile. Pousse en 23 heures.\n\nNécessite le niveau 95 d\'agriculture.</string>
@@ -1145,7 +1145,7 @@
     <string name="item_forge_pickaxe_desc">Trempée dans les flammes de l\'Ancienne Forge elle-même. La pioche la plus rare et la plus puissante qui soit.</string>
     <string name="item_ironwood_axe_desc">Taillé dans les bois de fer qui se dressaient autrefois dans les Ruines de la Forêt Ancienne. D\'une durabilité exceptionnelle.</string>
     <string name="item_dwarven_axe_desc">Une hache naine légendaire. Elle abat n\'importe quel arbre avec facilité.</string>
-    <string name="item_sanctum_axe_desc">Forgée dans l\'ombre du Sanctuaire corrompu. Sa lame tranche avec aisance même les bûches imprégnées de magie.</string>
+    <string name="item_sanctum_axe_desc">Forgée dans l\'ombre du Sanctuaire Corrompu. Sa lame tranche avec aisance même les bûches imprégnées de magie.</string>
     <string name="item_blessed_fishing_rod_desc">Façonné à partir de bois flotté récupéré au Temple englouti, béni par d\'anciens rites marins.</string>
     <string name="item_dwarven_fishing_rod_desc">Une canne à pêche de facture naine. Elle sort pratiquement les poissons de l\'eau toute seule.</string>
     <string name="item_abyssal_rod_desc">Tissé à partir de filaments imprégnés du Vide, récupérés dans les Ruines abyssales. Les poissons bondissent littéralement dessus.</string>
@@ -1271,11 +1271,11 @@
     <string name="item_blood_blast_desc">Un puissant sort de sang qui projette une déferlante sur votre adversaire.</string>
     <string name="item_blood_wave_name">Vague de Sang</string>
     <string name="item_blood_wave_desc">Un sort de sang dévastateur qui déferle sur votre adversaire.</string>
-    <string name="item_spirit_herb_name">Spirit Herb</string> <!-- untranslated -->
-    <string name="item_spirit_herb_desc">A rare herb used in high-level herblore. Requires Mercantile level 20 to purchase.</string> <!-- untranslated -->
-    <string name="item_celestial_bloom_name">Celestial Bloom</string> <!-- untranslated -->
-    <string name="item_celestial_bloom_desc">An ethereal flower used in master potions. Requires Mercantile level 40 to purchase.</string> <!-- untranslated -->
-    <string name="item_void_lotus_name">Void Lotus</string> <!-- untranslated -->
-    <string name="item_void_lotus_desc">A mysterious lotus used in the rarest concoctions. Requires Mercantile level 60 to purchase.</string> <!-- untranslated -->
-    <string name="crop_magic_bean_name">Magic Bean</string> <!-- untranslated -->
+    <string name="item_spirit_herb_name">Herbe Spirituelle</string>
+    <string name="item_spirit_herb_desc">Une herbe rare utilisée en herboristerie de haut niveau. Nécessite le niveau 20 en Commerce pour l\'acheter.</string>
+    <string name="item_celestial_bloom_name">Fleur Céleste</string>
+    <string name="item_celestial_bloom_desc">Une fleur éthérée utilisée dans des potions de maître. Nécessite le niveau 40 en Commerce pour l\'acheter.</string>
+    <string name="item_void_lotus_name">Lotus du Vide</string>
+    <string name="item_void_lotus_desc">Un lotus mystérieux utilisé dans les préparations les plus rares. Nécessite le niveau 60 en Commerce pour l\'acheter.</string>
+    <string name="crop_magic_bean_name">Haricot Magique</string>
 </resources>
