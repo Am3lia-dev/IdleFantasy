@@ -716,6 +716,7 @@
     <string name="character_create_title">Create Your Character</string>
     <string name="character_edit_title">Edit Character</string>
     <string name="character_name_label">Character Name</string>
+    <string name="character_name_too_long">Only the first %1$d characters will be used.</string>
     <string name="character_gender">Gender</string>
     <string name="character_gender_male">Male</string>
     <string name="character_gender_female">Female</string>
