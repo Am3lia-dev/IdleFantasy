@@ -399,12 +399,12 @@ def skill_icon_path(skill: str) -> Path:
     return icon_path(f"skill_{skill.lower()}")
 
 
-def boss_icon(boss_id: str, boss: dict, width: int) -> str:
+def boss_icon(boss_id: str, fallback: str, width: int | None = None) -> str:
     """Boss art image, falling back to the emoji for bosses without a sprite."""
     sprite = SPRITES / "bosses" / f"{boss_id}.png"
     if sprite.is_file():
         return html_image(sprite, boss_name(boss_id), width=width)
-    return boss.get("emoji", "")
+    return fallback
 
 
 def _tool_table(slot: str, efficiency_key: str) -> str:
@@ -1142,6 +1142,12 @@ def gen_equipment() -> str:
     return get_template("inventory/equipment").format(equipment="\n\n".join(sections))
 
 
+def footer_link(text: str, icon: str | None = None) -> str:
+    if icon:
+        return f"<div class=\"footer-image-link\">{icon} {text}</div>"
+    return text
+
+
 def gen_combat_footer() -> str:
     dungeons = sorted(
         (load(f, False) for f in (ASSETS / "dungeons").glob("*.json")),
@@ -1156,8 +1162,8 @@ def gen_combat_footer() -> str:
         boss_heading=html_link("bosses"),
         enemy_heading=html_link("enemies"),
         dungeon_links=", ".join(html_link(dungeon["name"]) for dungeon in dungeons),
-        boss_links=", ".join(
-            f"{boss.get("emoji", "")} {html_link(boss_id)}"
+        boss_links="\n".join(
+            footer_link(html_link(boss_id), boss_icon(boss_id, boss))
             for boss_id, boss in sorted(bosses.items(), key=lambda x: bosses[x[0]].get("combat_level_required", 0))
         ),
         enemy_links=", ".join(
@@ -1173,7 +1179,7 @@ def gen_bosses() -> str:
     assert isinstance(bosses, dict)
     rows = [
         [
-            boss_icon(boss_id, boss, 48),
+            boss_icon(boss_id, boss.get("emoji", ""), 48),
             link(boss_id),
             boss.get("combat_level_required", "—"),
             boss_desc(boss_id),
@@ -1798,7 +1804,7 @@ def gen_boss(boss: dict) -> str:
     xp = boss.get("xp_rewards", {})
 
     return get_template("combat/boss").format(
-        icon=boss_icon(boss["id"], boss, 192),
+        icon=boss_icon(boss["id"], boss.get("emoji", ""), 192),
         name=boss_name(boss["id"]),
         combat_level=boss.get("combat_level_required", "—"),
         hp=f"{hp:,}" if isinstance(hp, int) else hp,
