@@ -1577,7 +1577,7 @@
     <string name="tower_milestone_claim">回収</string>
     <string name="tower_milestone_claimed">回収済み</string>
     <string name="tower_enemies_this_floor">出現する敵</string>
-    <string name="tower_enemy_strength" formatted="false">敵の強さ: %s%</string>
+    <string name="tower_enemy_strength">敵の強さ: %1$s%%</string>
     <string name="tower_entry_card_desc">無限に続く階層。あなたはどこまで登れますか？</string>
     <string name="tower_collect_prompt">塔の挑戦報酬を回収</string>
     <string name="tower_home_collect_hint">塔の画面を開いて、この報酬を回収してください</string>

@@ -1577,7 +1577,7 @@
     <string name="tower_milestone_claim">Ottieni</string>
     <string name="tower_milestone_claimed">Ottenuto</string>
     <string name="tower_enemies_this_floor">Nemici</string>
-    <string name="tower_enemy_strength" formatted="false">Forza nemica: %s%</string>
+    <string name="tower_enemy_strength">Forza nemica: %1$s%%</string>
     <string name="tower_entry_card_desc">Nessun limite. Per quanto riuscirai a salire?</string>
     <string name="tower_collect_prompt">Raccogli le ricompense</string>
     <string name="tower_home_collect_hint">Apri la schermata della Torre per ottenere le ricompense</string>

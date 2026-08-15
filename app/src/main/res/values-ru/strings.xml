@@ -1597,7 +1597,7 @@
     <string name="tower_milestone_claim">Получить</string>
     <string name="tower_milestone_claimed">Получено</string>
     <string name="tower_enemies_this_floor">Враги</string>
-    <string name="tower_enemy_strength" formatted="false">Сила врага: %s%</string>
+    <string name="tower_enemy_strength">Сила врага: %1$s%%</string>
     <string name="tower_entry_card_desc">Бесконечный подъем. Как высоко вы заберетесь?</string>
     <string name="tower_collect_prompt">Собери свой пробег по башне</string>
     <string name="tower_home_collect_hint">Откройте экран «Башня», чтобы собрать этот забег</string>

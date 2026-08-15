@@ -1577,7 +1577,7 @@
     <string name="tower_milestone_claim">Coletar</string>
     <string name="tower_milestone_claimed">Coletado</string>
     <string name="tower_enemies_this_floor">Inimigos</string>
-    <string name="tower_enemy_strength" formatted="false">Força do inimigo: %s%</string>
+    <string name="tower_enemy_strength">Força do inimigo: %1$s%%</string>
     <string name="tower_entry_card_desc">Andares infinitos. Até onde você consegue subir?</string>
     <string name="tower_collect_prompt">Colete sua jornada na torre</string>
     <string name="tower_home_collect_hint">Abra a tela da Torre para coletar esta jornada</string>

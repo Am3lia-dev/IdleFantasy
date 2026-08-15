@@ -1577,7 +1577,7 @@
     <string name="tower_milestone_claim">Einfordern</string>
     <string name="tower_milestone_claimed">Eingefordert</string>
     <string name="tower_enemies_this_floor">Gegner</string>
-    <string name="tower_enemy_strength" formatted="false">Gegner-Stärke: %s%</string>
+    <string name="tower_enemy_strength">Gegner-Stärke: %1$s%%</string>
     <string name="tower_entry_card_desc">Endlose Etagen. Wie weit könnt Ihr ihn erklimmen?</string>
     <string name="tower_collect_prompt">Sammelt die Beute Eures Turmbesuchs ein</string>
     <string name="tower_home_collect_hint">Betretet den Turm um Eure Beute einzusammeln</string>

@@ -1597,7 +1597,7 @@
     <string name="tower_milestone_claim">Odbierz</string>
     <string name="tower_milestone_claimed">Odebrano</string>
     <string name="tower_enemies_this_floor">Wrogowie</string>
-    <string name="tower_enemy_strength" formatted="false">Siła wroga: %s%</string>
+    <string name="tower_enemy_strength">Siła wroga: %1$s%%</string>
     <string name="tower_entry_card_desc">Nieskończone piętra. Jak wysoko się wspiąć?</string>
     <string name="tower_collect_prompt">Odbierz swój przebieg wieży</string>
     <string name="tower_home_collect_hint">Otwórz ekran Wieży, by odebrać ten przebieg</string>

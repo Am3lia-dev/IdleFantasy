@@ -1577,7 +1577,7 @@
     <string name="tower_milestone_claim">Claim</string>
     <string name="tower_milestone_claimed">Claimed</string>
     <string name="tower_enemies_this_floor">Enemies</string>
-    <string name="tower_enemy_strength" formatted="false">Enemy strength: %s%</string>
+    <string name="tower_enemy_strength">Enemy strength: %1$s%%</string>
     <string name="tower_entry_card_desc">Endless floors. How far can you climb?</string>
     <string name="tower_collect_prompt">Collect your tower run</string>
     <string name="tower_home_collect_hint">Open the Tower screen to collect this run</string>
