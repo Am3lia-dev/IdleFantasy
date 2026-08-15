@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -24,6 +26,7 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -97,10 +100,17 @@ fun BestiaryTab(viewModel: BestiaryViewModel = hiltViewModel()) {
             )
         }
 
+        val enemiesListState = rememberLazyListState()
+        val bossesListState = rememberLazyListState()
+        LaunchedEffect(state.sort) {
+            enemiesListState.scrollToItem(0)
+            bossesListState.scrollToItem(0)
+        }
         val entries = if (selectedSubTab == 0) state.enemies else state.bosses
         BestiaryList(
             entries = entries,
             sort    = state.sort,
+            listState = if (selectedSubTab == 0) enemiesListState else bossesListState,
             onEntryClick = { selectedEntry = it },
         )
     }
@@ -130,10 +140,11 @@ fun BestiaryTab(viewModel: BestiaryViewModel = hiltViewModel()) {
 private fun BestiaryList(
     entries: List<BestiaryEntry>,
     sort: BestiarySort,
+    listState: LazyListState = rememberLazyListState(),
     onEntryClick: (BestiaryEntry) -> Unit,
 ) {
     val otherLabel = stringResource(R.string.bestiary_location_other)
-    LazyColumn(Modifier.fillMaxSize()) {
+    LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
         if (sort == BestiarySort.BY_LOCATION) {
             val grouped = buildLocationGroups(entries, otherLabel)
             grouped.forEach { (groupName, groupEntries) ->
@@ -157,7 +168,7 @@ private fun BestiaryList(
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
         }
-        item { Spacer(Modifier.height(16.dp)) }
+        item(key = "bestiary_footer_spacer") { Spacer(Modifier.height(16.dp)) }
     }
 }
 

@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -212,6 +214,7 @@ fun SkillsScreen(
                     text     = { Text(stringResource(R.string.nav_expeditions)) },
                 )
             }
+            val skillsListState = rememberLazyListState()
             HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
                 if (page == 1) {
                     ExpeditionsScreen(viewModel = expeditionsViewModel, showTitle = false)
@@ -220,6 +223,7 @@ fun SkillsScreen(
                         state                 = state,
                         viewModel             = viewModel,
                         context               = context,
+                        listState             = skillsListState,
                         onNavigateToSlayer    = onNavigateToSlayer,
                         onNavigateToBoneAltar = onNavigateToBoneAltar,
                     )
@@ -615,12 +619,13 @@ private fun SkillsTabContent(
     state: SkillsUiState,
     viewModel: SkillsViewModel,
     context: android.content.Context,
+    listState: LazyListState = rememberLazyListState(),
     onNavigateToSlayer: () -> Unit = {},
     onNavigateToBoneAltar: () -> Unit = {},
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
         state.activeSession?.let { session ->
-            item {
+            item(key = "active_session") {
                 ActiveSessionBanner(
                     skillName     = GameStrings.skillName(context, session.skillName),
                     activityLabel = when (session.skillName) {
@@ -638,8 +643,8 @@ private fun SkillsTabContent(
             }
         }
 
-        item { SectionHeader(stringResource(R.string.label_gathering_skills)) }
-        items(Skills.GATHERING.filter { it != Skills.AGILITY }) { key ->
+        item(key = "header_gathering") { SectionHeader(stringResource(R.string.label_gathering_skills)) }
+        items(Skills.GATHERING.filter { it != Skills.AGILITY }, key = { "gather_$it" }) { key ->
             val efficiency = when (key) {
                 Skills.MINING      -> state.miningEfficiency
                 Skills.WOODCUTTING -> state.woodcuttingEfficiency
@@ -664,8 +669,8 @@ private fun SkillsTabContent(
             )
         }
 
-        item { SectionHeader(stringResource(R.string.label_crafting_skills)) }
-        items(Skills.CRAFTING_SKILLS) { key ->
+        item(key = "header_crafting") { SectionHeader(stringResource(R.string.label_crafting_skills)) }
+        items(Skills.CRAFTING_SKILLS, key = { "craft_$it" }) { key ->
             val craftEfficiency = when (key) {
                 Skills.SMITHING   -> state.smithingEfficiency
                 Skills.FIREMAKING -> state.firemakingEfficiency
@@ -687,8 +692,8 @@ private fun SkillsTabContent(
             )
         }
 
-        item { SectionHeader(stringResource(R.string.label_support_skills)) }
-        items(Skills.SUPPORT + listOf(Skills.AGILITY)) { key ->
+        item(key = "header_support") { SectionHeader(stringResource(R.string.label_support_skills)) }
+        items(Skills.SUPPORT + listOf(Skills.AGILITY), key = { "support_$it" }) { key ->
             SkillRow(
                 skillKey       = key,
                 level          = state.skillLevels[key] ?: 1,
@@ -704,8 +709,8 @@ private fun SkillsTabContent(
             )
         }
 
-        item { SectionHeader(stringResource(R.string.label_combat)) }
-        item {
+        item(key = "header_combat") { SectionHeader(stringResource(R.string.label_combat)) }
+        item(key = "combat_${Skills.SLAYER}") {
             SkillRow(
                 skillKey      = Skills.SLAYER,
                 level         = state.skillLevels[Skills.SLAYER] ?: 1,
