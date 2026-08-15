@@ -156,11 +156,19 @@ internal fun BossInfoSheet(
         Column(modifier = Modifier
             .weight(1f, fill = false)
             .verticalScroll(rememberScrollState())) {
-        Text(
-            text       = "${boss.emoji} ${GameStrings.bossName(context, boss.id)}",
-            style      = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            BossIcon(
+                bossId        = boss.id,
+                modifier      = Modifier.size(48.dp),
+                fallbackEmoji = boss.emoji,
+            )
+            Spacer(Modifier.width(12.dp))
+            Text(
+                text       = GameStrings.bossName(context, boss.id),
+                style      = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+            )
+        }
         Text(
             text  = GameStrings.bossDesc(context, boss.id).takeIf { it.isNotBlank() } ?: boss.description,
             style = MaterialTheme.typography.bodyMedium,

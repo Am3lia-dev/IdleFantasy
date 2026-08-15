@@ -275,6 +275,8 @@
     <string name="settings_profile_layout_desc">Choisissez entre Liste (latérale) ou Onglets</string>
     <string name="settings_profile_layout_rail">Liste</string>
     <string name="settings_profile_layout_tabs">Onglets</string>
+    <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
+    <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
     <string name="settings_home_screen">Écran d\'Accueil</string>
     <string name="settings_home_screen_desc">Choisir ce qui apparaît sur l\'écran d\'accueil</string>
     <string name="settings_recent_activity">Journal d’activité récente</string>
@@ -314,10 +316,12 @@
     <string name="label_weekly_reset">Se réinitialise le lundi à %1$s</string>
     <string name="weekly_bonus_title">Bonus hebdomadaire !</string>
     <string name="weekly_bonus_claim">Réclamer le bonus hebdomadaire</string>
-    <string name="label_daily_info">Chaque quête quotidienne rapporte des pièces. Chaque quête a également 1 chance sur 100 de faire tomber un équipement nanique.</string>
+    <string name="label_daily_info_pity">Each daily quest rewards coins. Every quest also has a 1 in %1$d chance to drop a piece of Dwarven gear you don\'t own yet. Each claim without a drop improves the odds; a drop resets them to 1 in 100.</string> <!-- untranslated -->
+    <string name="label_daily_info_complete">Each daily quest rewards coins. You already own every piece of Dwarven gear!</string> <!-- untranslated -->
     <string name="label_weekly_info">Chaque défi hebdomadaire rapporte des pièces selon son niveau requis. Complétez les 5 pour gagner un bonus : 100 000 pièces, ou %1$s de chance d\'obtenir un équipement divin.</string>
     <string name="label_weekly_info_complete">Chaque défi hebdomadaire rapporte des pièces selon son niveau requis. Complétez les 5 pour gagner un bonus : 100 000 pièces. Vous possédez déjà tout l\'équipement divin !</string>
-    <string name="label_daily_reward">2 000 pièces (1/100 : équipement nanique)</string>
+    <string name="label_daily_reward_pity">2,000 coins (1/%1$d: Dwarven gear)</string> <!-- untranslated -->
+    <string name="label_daily_reward_complete">2,000 coins</string> <!-- untranslated -->
     <string name="msg_daily_claimed_coins">Quête quotidienne terminée ! +2 000 pièces.</string>
     <string name="msg_daily_claimed_dwarven">Quête quotidienne terminée ! Vous avez trouvé %1$s !</string>
     <string name="label_hide_completed">Masquer les tâches terminées</string>
@@ -616,8 +620,8 @@
     <!-- Translator note: %1$d = prayer level -->
     <string name="skills_prayer_desc">Niv. %1$d  •  Enterrez des os ou dispersez des cendres pour XP en Prière</string>
     <string name="skills_no_bones">Aucun os ou cendres dans l\'inventaire</string>
-    <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
     <string name="skills_xp_each">%1$d XP par os</string>
+    <!-- Translator note: %1$d = XP per bone, %2$d = quantity available -->
     <string name="skills_bone_selected">%1$d XP par os  •  %2$d disponibles</string>
     <!-- Translator note: %1$d = total XP -->
     <string name="skills_xp_total">+%1$d XP au total</string>
@@ -717,6 +721,7 @@
     <string name="character_create_title">Créer votre personnage</string>
     <string name="character_edit_title">Modifier le personnage</string>
     <string name="character_name_label">Nom du personnage</string>
+    <string name="character_name_too_long">Only the first %1$d characters will be used.</string> <!-- untranslated -->
     <string name="character_gender">Genre</string>
     <string name="character_gender_male">Masculin</string>
     <string name="character_gender_female">Féminin</string>
@@ -1071,6 +1076,7 @@
     <string name="slayer_lamp_purchased">+%1$s XP ajoutée à %2$s !</string>
     <string name="slayer_lamp_pick_skill">Choisissez une aptitude</string>
     <string name="slayer_lamp_max_level_warning">⚠ XP sera gachée</string>
+    <!-- Translator note: %1$d = level after using the lamp, %2$d = level gain, last value = progress percent into the level -->
     <string name="slayer_lamp_level_preview">→ Niveau %1$d (%2$d%%)</string>
     <string name="slayer_lamp_level_preview_gain">→ Niveau %1$d (+%2$d, %3$d%%)</string>
     <string name="slayer_lamp_small">Lampe XP (Petite)</string>
@@ -1230,6 +1236,7 @@
     <string name="town_upgrade_next_label">Prochaine Amélioration</string>
     <string name="town_upgrade_constr_req">Construction Nv. %1$d requis</string>
     <string name="town_upgrade_cost">Coût : %1$s pièces</string>
+    <string name="town_builder_discount">Builder\'s discount: %1$d%% off</string> <!-- untranslated -->
     <string name="town_upgrade_materials_header">Matériaux :</string>
     <string name="town_upgrade_btn">Améliorer</string>
     <string name="town_upgrade_success">Bâtiment amélioré !</string>
@@ -1498,6 +1505,7 @@
     <string name="bonus_session_shorter">%1$d min de sessions en moins</string>
     <string name="bonus_coin_return">+%1$d%% retour de pièces</string>
     <string name="bonus_tower">Tour</string>
+    <string name="bonus_builder_discount_detail" formatted="false">0.5% off building upgrade costs per level</string> <!-- untranslated -->
 
     <string name="bonus_coin_drops">+%1$d%% pièces obtenues</string>
     <string name="bonus_hp">+%1$d PV</string>
@@ -1739,10 +1747,15 @@
     <string name="title_master_farmer_name">Maître Fermier</string>
     <string name="title_master_farmer_requirement">Atteindre le niveau max de la Guilde des Agriculteurs</string>
     <string name="settings_art_credits">Crédits artistiques</string>
+    <string name="settings_art_credits_desc">The artists behind the game\'s art</string> <!-- untranslated -->
     <string name="settings_credit_banners_title">Bannières saisonnières</string>
     <string name="settings_credit_banners_subtitle">Illustrations de Wenrexa</string>
     <string name="settings_credit_skill_icons_title">Icônes des Aptitudes</string>
 
+    <string name="settings_credit_characters_title">Character Sprites</string> <!-- untranslated -->
+    <string name="settings_credit_characters_subtitle">Art by Pixylac</string> <!-- untranslated -->
+    <string name="settings_credit_bosses_title">Boss Sprites</string> <!-- untranslated -->
+    <string name="settings_credit_bosses_subtitle">Art by Meg</string> <!-- untranslated -->
     <string name="title_seasonal_champion_of">Champion de %1$s</string>
     <string name="title_seasonal_requirement">Terminez l\'Événement Saisonnier %1$s</string>
     <string name="home_welcome_greeting">Bon retour,</string>
@@ -1764,7 +1777,7 @@
     <string name="pet_tiny_templar_desc">Un petit compagnon poisson qui augmente votre XP de Pêche.</string>
     <string name="pet_tangleroot_name">Créature végétale</string>
     <string name="pet_tangleroot_desc">Une créature végétale magique qui améliore votre XP d’Agriculture.</string>
-    <string name="pet_baby_balrog_name">Bébé Balrog</string>
+    <string name="pet_baby_balrog_name">Gothic Emberling</string> <!-- untranslated -->
     <string name="pet_baby_balrog_desc">Un minuscule démon de feu et d\'ombre qui renforce votre magie.</string>
     <string name="pet_void_wisp_name">Feu Follet du Vide</string>
     <string name="pet_void_wisp_desc">Un fragment de l\'essence du Souverain du Vide, lié à ceux qui ont vaincu son maître. Amplifie l\'expérience de combat.</string>
@@ -1813,6 +1826,7 @@
     <string name="save_slot_combat_level">Niveau de combat %1$d</string>
     <string name="save_slot_total_level">Niveau total %1$d</string>
     <string name="save_slot_last_played">il y a %1$s</string>
+    <string name="save_slot_created">Created %1$s ago</string> <!-- untranslated -->
     <string name="save_slot_switch_title">Changer de personnage ?</string>
     <string name="save_slot_switch_body">Jouer avec %1$s ? Votre personnage actuel est sauvegardé automatiquement.</string>
     <string name="save_slot_switch_btn">Changer</string>

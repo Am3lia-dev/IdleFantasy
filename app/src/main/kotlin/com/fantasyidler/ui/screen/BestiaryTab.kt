@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -204,6 +205,15 @@ private fun BestiaryRow(entry: BestiaryEntry, onClick: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        if (entry.boss != null) {
+            BossIcon(
+                bossId        = entry.boss.id,
+                modifier      = Modifier.size(40.dp),
+                silhouette    = !entry.encountered,
+                fallbackEmoji = entry.boss.emoji,
+            )
+            Spacer(Modifier.width(12.dp))
+        }
         Column(Modifier.weight(1f)) {
             Text(
                 text  = entry.nameLoader(LocalContext.current, entry.key),
@@ -353,12 +363,23 @@ private fun BossDetailContent(
     ) {
         item {
             Row(
+                Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                BossIcon(
+                    bossId        = boss.id,
+                    modifier      = Modifier.size(96.dp),
+                    silhouette    = !entry.encountered,
+                    fallbackEmoji = boss.emoji,
+                )
+            }
+            Row(
                 Modifier.fillMaxWidth().padding(bottom = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment     = Alignment.CenterVertically,
             ) {
                 Text(
-                    text       = "${boss.emoji}  ${GameStrings.bossName(context, boss.id)}",
+                    text       = GameStrings.bossName(context, boss.id),
                     style      = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )

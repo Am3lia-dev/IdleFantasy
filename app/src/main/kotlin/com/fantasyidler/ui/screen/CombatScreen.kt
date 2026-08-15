@@ -61,6 +61,7 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -925,10 +926,12 @@ private fun BossRow(
             modifier         = Modifier.size(36.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text  = boss.emoji,
-                style = MaterialTheme.typography.titleLarge,
-                color = if (unlocked) MaterialTheme.colorScheme.onSurface else dimColor,
+            BossIcon(
+                bossId        = boss.id,
+                modifier      = Modifier
+                    .size(36.dp)
+                    .then(if (unlocked) Modifier else Modifier.alpha(0.38f)),
+                fallbackEmoji = boss.emoji,
             )
         }
         Spacer(Modifier.width(8.dp))

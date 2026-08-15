@@ -664,7 +664,7 @@ private fun SkillsTabContent(
                 prestigeLevel  = state.skillPrestige[key] ?: 0,
                 onPrestige     = if (state.ironman) null else ({ viewModel.prestigeSkill(key) }),
                 cropsReady     = if (key == Skills.FARMING) state.cropsReadyCount else 0,
-                guildDailyOpen = state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
                 questIndicators = state.timedQuestsBySkill[key] ?: emptyList(),
             )
         }
@@ -687,7 +687,7 @@ private fun SkillsTabContent(
                 petBoostPct    = state.petBoostBySkill[key] ?: 0,
                 prestigeLevel  = state.skillPrestige[key] ?: 0,
                 onPrestige     = if (state.ironman) null else ({ viewModel.prestigeSkill(key) }),
-                guildDailyOpen = state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
                 questIndicators = state.timedQuestsBySkill[key] ?: emptyList(),
             )
         }
@@ -704,7 +704,7 @@ private fun SkillsTabContent(
                 petBoostPct    = state.petBoostBySkill[key] ?: 0,
                 prestigeLevel  = state.skillPrestige[key] ?: 0,
                 onPrestige     = if (state.ironman) null else ({ viewModel.prestigeSkill(key) }),
-                guildDailyOpen = state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
                 questIndicators = state.timedQuestsBySkill[key] ?: emptyList(),
             )
         }
@@ -720,7 +720,7 @@ private fun SkillsTabContent(
                 petBoostPct   = state.petBoostBySkill[Skills.SLAYER] ?: 0,
                 prestigeLevel = state.skillPrestige[Skills.SLAYER] ?: 0,
                 onPrestige    = if (state.ironman) null else ({ viewModel.prestigeSkill(Skills.SLAYER) }),
-                guildDailyOpen = state.sheetQuests[Skills.SLAYER]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[Skills.SLAYER]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
                 questIndicators = state.timedQuestsBySkill[Skills.SLAYER] ?: emptyList(),
             )
         }
