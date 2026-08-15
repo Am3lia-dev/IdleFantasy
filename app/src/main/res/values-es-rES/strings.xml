@@ -1073,7 +1073,7 @@
     <string name="slayer_already_owned">Already owned.</string> <!-- untranslated -->
     <string name="slayer_purchased">Added to inventory.</string> <!-- untranslated -->
     <string name="slayer_owned">Owned</string> <!-- untranslated -->
-    <string name="slayer_lamp_purchased">XP added to %1$s!</string>
+    <string name="slayer_lamp_purchased">+%1$s XP added to %2$s!</string> <!-- untranslated -->
     <string name="slayer_lamp_pick_skill">Choose a skill</string> <!-- untranslated -->
     <string name="slayer_lamp_max_level_warning">⚠ XP will be wasted</string> <!-- untranslated -->
     <!-- Translator note: %1$d = level after using the lamp, %2$d = level gain, last value = progress percent into the level -->
@@ -1354,7 +1354,7 @@
     <string name="carnival_appraisal_wrong">Wrong! The more valuable item was %1$s.</string> <!-- untranslated -->
     <string name="carnival_redeemed">Redeemed: %1$s!</string> <!-- untranslated -->
     <string name="carnival_not_enough_tickets">Not enough tickets.</string> <!-- untranslated -->
-    <string name="carnival_lamp_redeemed">+%1$d XP in %2$s!</string>
+    <string name="carnival_lamp_redeemed">+%1$s XP in %2$s!</string>
     <string name="carnival_shell_game">Pick-a-Cup</string> <!-- untranslated -->
     <string name="carnival_active_shell_desc">Watch which cup hides the gem, then pick it after the shuffle!</string> <!-- untranslated -->
     <string name="carnival_shell_showing">Watch carefully — gem is under cup %1$d</string> <!-- untranslated -->
@@ -1574,7 +1574,7 @@
     <string name="tower_floor_cleared" formatted="false">Floor %d cleared!</string> <!-- untranslated -->
     <string name="tower_new_best" formatted="false">New best: Floor %d!</string> <!-- untranslated -->
     <!-- Translator note: %1$d = floor died on, %2$d = floor resuming from (last checkpoint + 1) -->
-    <string name="tower_death_reset">You fell on floor %%d. Resetting to floor 1.</string>
+    <string name="tower_death_reset">You fell on floor %1$d. Resetting to floor %2$d.</string> <!-- untranslated -->
     <string name="tower_not_enough_runes">Not enough %1$s for max potential attacks.</string> <!-- untranslated -->
     <string name="tower_milestone_claim">Claim</string> <!-- untranslated -->
     <string name="tower_milestone_claimed">Claimed</string> <!-- untranslated -->
