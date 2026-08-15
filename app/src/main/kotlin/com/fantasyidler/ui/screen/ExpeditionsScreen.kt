@@ -1,6 +1,9 @@
 package com.fantasyidler.ui.screen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -82,7 +86,7 @@ fun ExpeditionsScreen(
                     items(dungeons, key = { it.key }) { item ->
                         SkillingDungeonCard(
                             item = item,
-                            anySessionActive = state.anySessionActive,
+                            isQueueFull = state.isQueueFull,
                             onExplore = { viewModel.startExpedition(item.key) },
                         )
                     }
@@ -96,7 +100,7 @@ fun ExpeditionsScreen(
 @Composable
 private fun SkillingDungeonCard(
     item: SkillingDungeonUiItem,
-    anySessionActive: Boolean,
+    isQueueFull: Boolean,
     onExplore: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -134,11 +138,25 @@ private fun SkillingDungeonCard(
                     )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    onClick = onExplore,
-                    enabled = item.isAccessible,
-                ) {
-                    Text(stringResource(R.string.expedition_explore_button))
+                val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+                Box {
+                    Button(
+                        onClick = onExplore,
+                        enabled = item.isAccessible && !isQueueFull,
+                    ) {
+                        Text(stringResource(R.string.expedition_explore_button))
+                    }
+                    if (item.isAccessible && isQueueFull) {
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication        = null,
+                                    onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
+                                ),
+                        )
+                    }
                 }
             }
 

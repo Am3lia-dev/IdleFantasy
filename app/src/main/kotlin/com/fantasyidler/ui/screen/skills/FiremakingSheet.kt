@@ -3,6 +3,7 @@ package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -208,11 +209,22 @@ internal fun FiremakingSheet(
                                     color = if (ashOwned > 0) MaterialTheme.colorScheme.primary else dim,
                                 )
                             }
-                            Text(
-                                text  = "$logsOwned ${stringResource(R.string.firemaking_logs_in_inventory)}",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = rowAlpha),
-                            )
+
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(text = " ", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    text = "$logsOwned ${stringResource(R.string.firemaking_logs_in_inventory)}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = rowAlpha),
+                                )
+                                if (isQueueFull) {
+                                    Text(
+                                        text = context.getString(R.string.snackbar_queue_full),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = dim,
+                                    )
+                                }
+                            }
                         }
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                     }

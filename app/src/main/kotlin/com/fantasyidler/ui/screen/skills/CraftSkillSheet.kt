@@ -49,6 +49,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -282,6 +283,7 @@ internal fun CraftSkillSheet(
                         recipe     = recipe,
                         craftState = craftState,
                         context    = context,
+                        isQueueFull=isQueueFull,
                         onTap      = { craftingViewModel.openRecipe(recipe) },
                     )
                 }
@@ -296,6 +298,7 @@ private fun CraftRecipeRow(
     recipe: CraftableRecipe,
     craftState: CraftingUiState,
     context: android.content.Context,
+    isQueueFull: Boolean,
     onTap: () -> Unit,
 ) {
     val meetsLvl = craftState.meetsLevel(recipe)
@@ -412,6 +415,13 @@ private fun CraftRecipeRow(
                 }
                 else -> Text(
                     text  = context.getString(R.string.crafting_no_mats),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = dim,
+                )
+            }
+            if (isQueueFull) {
+                Text(
+                    text  = context.getString(R.string.snackbar_queue_full),
                     style = MaterialTheme.typography.labelSmall,
                     color = dim,
                 )
@@ -582,11 +592,30 @@ private fun CraftQuantityContent(
             }
         }
         Spacer(Modifier.height(20.dp))
-        Button(
-            onClick  = { onCraft(qty) },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(R.string.btn_craft))
+        val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { onCraft(qty) },
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isQueueFull,
+            ) {
+                Text(
+                    if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(
+                        R.string.btn_craft
+                    )
+                )
+            }
+            if (isQueueFull) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { AppBannerCenter.enqueue(queueFullMessage) },
+                        ),
+                )
+            }
         }
     }
 }

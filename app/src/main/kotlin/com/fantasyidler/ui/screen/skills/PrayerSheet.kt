@@ -3,6 +3,7 @@ package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -233,8 +234,24 @@ internal fun PrayerSheet(
                                 color = if (qty > 0) MaterialTheme.colorScheme.primary else dim,
                             )
                         }
-                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text(text = " ", style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                stringResource(R.string.btn_select),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            if (isQueueFull) {
+                                Text(
+                                    text = context.getString(R.string.snackbar_queue_full),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = dim,
+                                )
+                            }
+                        }
                     }
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
             }
         } else {
@@ -329,15 +346,31 @@ internal fun PrayerSheet(
                 )
             }
 
-            Button(
-                onClick  = { onStart(selectedKey!!, qty) },
-                enabled  = !isStarting && qty > 0 && maxQty > 0,
+            val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             ) {
-                if (isStarting) CircularProgressIndicator(Modifier.size(20.dp))
-                else Text(if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(R.string.btn_start_burying))
+                Button(
+                    onClick  = { onStart(selectedKey!!, qty) },
+                    enabled  = !isStarting && qty > 0 && maxQty > 0 && !isQueueFull,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (isStarting) CircularProgressIndicator(Modifier.size(20.dp))
+                    else Text(if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(R.string.btn_start_burying))
+                }
+                if (isQueueFull) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication        = null,
+                                onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
+                            ),
+                    )
+                }
             }
         }
     }
