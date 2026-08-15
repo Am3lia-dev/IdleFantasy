@@ -423,6 +423,8 @@
 
 
 
+
+
     <string name="settings_lang_system">Système</string>
     <string name="settings_save_data">Sauvegarder les données</string>
     <string name="settings_export">Exporter la sauvegarde</string>
@@ -704,7 +706,9 @@
     <!-- Translator note: %1$d = patch count -->
     <string name="farming_patches">%1$d parcelles débloquées</string>
     <string name="farming_clear_patch">Arracher la parcelle</string>
-    <string name="farming_clear_desc">Enlever la culture sans récompense ?</string>
+    <!-- Translator note: %1$s = crop name -->
+    <string name="farming_clear_desc_named">Remove the %1$s without any reward?</string> <!-- untranslated -->
+    <string name="farming_clear_desc_bean">Remove the Magic Bean? It will be returned to your inventory.</string> <!-- untranslated -->
     <string name="farming_harvest_and_plant">Tout récolter et planter</string>
     <string name="farming_harvest_all_complete">Toutes les parcelles récoltées !</string>
     <string name="farming_no_crops_ready">Aucune culture prête à récolter</string>
@@ -967,7 +971,7 @@
     <string name="church_activate">Activer</string>
     <string name="church_blessing_bonus">+%1$s de la bénédiction</string>
     <string name="church_blessing_suffix">de la bénédiction</string>
-    <string name="church_effect_xp">×%%1$.2f XP pendant %2$d heures</string>
+    <string name="church_effect_xp">×%1$.2f XP pendant %2$d heures</string>
     <string name="church_effect_def">+%1$d Défense pendant %2$d heures</string>
     <string name="church_effect_coins">+%1$d%% de butin de pièces pendant %2$d heures</string>
     <string name="church_cost_bones">Coûte %1$d os</string>
@@ -1392,6 +1396,7 @@
     <string name="farming_bean_ready">Le haricot magique s\'étend au-delà des nuages. Prêt à grimper ?</string>
     <string name="farming_bean_climb">Grimper</string>
     <string name="farming_bean_climbed">Vous avez grimpé le haricot magique. Quelque chose vous attend…</string>
+    <string name="farming_bean_cleared">The Magic Bean was returned to your inventory.</string> <!-- untranslated -->
 
     <string name="farming_magic_bean_one_plot">Les haricots magiques ne peuvent être plantés que sur une parcelle</string>
 
