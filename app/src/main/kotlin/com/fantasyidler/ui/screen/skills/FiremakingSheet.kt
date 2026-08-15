@@ -251,27 +251,31 @@ internal fun FiremakingSheet(
                     .verticalScroll(detailScrollState)
                     .imePadding(),
             ) {
-                TextButton(onClick = { selectedKey = null }, modifier = Modifier.padding(start = 4.dp)) {
+                TextButton(
+                    onClick = { selectedKey = null },
+                    modifier = Modifier.padding(start = 4.dp)
+                ) {
                     Text(stringResource(R.string.btn_back_arrow))
                 }
                 Text(
-                    text     = GameStrings.itemName(context, key),
-                    style    = MaterialTheme.typography.titleMedium,
+                    text = GameStrings.itemName(context, key),
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
                 Text(
-                    text     = "${maxQty} ${stringResource(R.string.firemaking_logs_in_inventory)}",
-                    style    = MaterialTheme.typography.bodySmall,
-                    color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                    text = "${maxQty} ${stringResource(R.string.firemaking_logs_in_inventory)}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
                 Text(
-                    text     = stringResource(R.string.firemaking_ashes_owned, ashOwned),
-                    style    = MaterialTheme.typography.labelSmall,
-                    color    = if (ashOwned > 0) MaterialTheme.colorScheme.primary else dim,
+                    text = stringResource(R.string.firemaking_ashes_owned, ashOwned),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (ashOwned > 0) MaterialTheme.colorScheme.primary else dim,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
                 Spacer(Modifier.height(12.dp))
+            }
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                     androidx.compose.material3.IconButton(onClick = { if (qty > 1) { qty--; textValue = qty.toString() } }, enabled = qty > 1) {

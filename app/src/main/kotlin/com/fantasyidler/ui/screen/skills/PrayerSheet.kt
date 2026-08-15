@@ -3,7 +3,6 @@ package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,6 +47,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -228,28 +228,24 @@ internal fun PrayerSheet(
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
-                            Text(
-                                text  = stringResource(R.string.crafting_owned, qty),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = if (qty > 0) MaterialTheme.colorScheme.primary else dim,
-                            )
-                        }
-
-                        Column(horizontalAlignment = Alignment.End) {
-                            Text(text = " ", style = MaterialTheme.typography.bodyLarge)
-                            Text(
-                                stringResource(R.string.btn_select),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            if (isQueueFull) {
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(text = " ", style = MaterialTheme.typography.bodyLarge)
                                 Text(
-                                    text = context.getString(R.string.snackbar_queue_full),
+                                    text  = stringResource(R.string.crafting_owned, qty),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = dim,
+                                    color = if (qty > 0) MaterialTheme.colorScheme.primary else dim,
                                 )
+                                if (isQueueFull) {
+                                    Text(
+                                        text = context.getString(R.string.snackbar_queue_full),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = dim,
+                                    )
+                                }
                             }
                         }
+
+
                     }
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
@@ -379,4 +375,3 @@ internal fun PrayerSheet(
 // ---------------------------------------------------------------------------
 // Runecrafting sheet
 // ---------------------------------------------------------------------------
-
