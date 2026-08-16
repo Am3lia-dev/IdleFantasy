@@ -697,7 +697,7 @@
     <string name="quest_legend_guild_daily">Gilden-Tagesquest</string>
     <string name="quest_legend_guild">Gildenquest</string>
     <string name="quest_legend_quest">Aufgabe</string>
-    <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
+    <string name="quest_legend_gold_dot">Aufgabe mit Zeitbegrenzung ist verfügbar.</string>
     <string name="quest_legend_notes">Abgeblendete Symbole können noch nicht abgeschlossen werden (Level oder Materialien fehlen). Eine kleine hochgestellte Zahl bedeutet, dass mehrere Quests dieses Typs dasselbe Ziel haben.</string>
     <!-- Translator note: %1$s = quantity in inventory -->
     <string name="shop_qty_in_inv">×%1$s im Inventar</string>
@@ -1310,11 +1310,11 @@
     <string name="town_cape_rack_t2_bonus">Passive Boni der Umhänge der Sammelfertigkeiten und Herstellungsberufe sind aktiv</string>
     <string name="town_cape_rack_t3_bonus">Passive Boni aller Umhänge, die Ihr besitzt (Sammeln, Herstellen, Kampf &amp; Gilden), sind aktiv</string>
     <string name="town_building_artisans_workshop_name">Werkstatt des Handwerkers</string>
-    <string name="town_artisans_workshop_no_bonus">Upgrade to grant a chance to preserve secondary crafting materials</string> <!-- untranslated -->
-    <string name="town_artisans_workshop_active_bonus">%1$d%% chance to preserve secondary crafting materials</string> <!-- untranslated -->
-    <string name="town_building_chronos_spire_name">Chronos Spire</string> <!-- untranslated -->
-    <string name="town_chronos_spire_no_bonus">Upgrade to reduce player session durations</string> <!-- untranslated -->
-    <string name="town_chronos_spire_active_bonus">%1$d%% reduction to player session durations</string> <!-- untranslated -->
+    <string name="town_artisans_workshop_no_bonus">Verbessere für eine Chance, sekundäre Herstellungsmaterialien einzusparen</string>
+    <string name="town_artisans_workshop_active_bonus">%1$d%% Chance, sekundäre Herstellungsmaterialien einzusparen</string>
+    <string name="town_building_chronos_spire_name">Chronos-Turm</string>
+    <string name="town_chronos_spire_no_bonus">Verbessere, um die Dauer der Spieler-Aktivitäten zu verringern</string>
+    <string name="town_chronos_spire_active_bonus">%1$d%% Verringerung der Dauer der Spieler-Aktivitäten</string>
 
     <!-- Town achievements -->
     <string name="achievement_town_first_upgrade_name">Erste Renovierung</string>
@@ -1923,9 +1923,9 @@
     <string name="carnival_potion_letter_green">G</string>
     <string name="carnival_potion_letter_blue">B</string>
     <string name="carnival_potion_letter_red">R</string>
-    <string name="carnival_potion_letter_purple">P</string> <!-- untranslated -->
+    <string name="carnival_potion_letter_purple">L</string>
     <string name="carnival_potion_letter_orange">O</string>
-    <string name="carnival_potion_letter_cyan">C</string> <!-- untranslated -->
-    <string name="farming_crop_picker_stats">Lv. %1$d  •  %2$s  •  %3$d XP/crop</string> <!-- untranslated -->
-    <string name="farming_seeds_owned">Seeds: %1$d  •  Owned: %2$d</string> <!-- untranslated -->
+    <string name="carnival_potion_letter_cyan">C</string>
+    <string name="farming_crop_picker_stats">Lv. %1$d  •  %2$s  •  %3$d XP/Pflanze</string>
+    <string name="farming_seeds_owned">Samen: %1$d  •  In Besitz: %2$d</string>
 </resources>
