@@ -1812,7 +1812,7 @@
     <string name="title_seasonal_champion_of">Champion of %1$s</string> <!-- untranslated -->
     <string name="title_seasonal_requirement">Complete the %1$s Seasonal Event</string> <!-- untranslated -->
     <string name="home_welcome_greeting">Welcome back,</string> <!-- untranslated -->
-
+    <string name="home_welcome_name">%1$s!</string> <!-- untranslated -->
     <string name="home_welcome_title">The %1$s!</string> <!-- untranslated -->
 
     <!-- Pet names and descriptions -->
