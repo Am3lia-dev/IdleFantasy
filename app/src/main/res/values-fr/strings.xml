@@ -68,18 +68,18 @@
     <string name="bestiary_qty_header">Qté</string>
     <string name="bestiary_chance_header">Chance</string>
     <string name="bestiary_encountered_progress">%1$d / %2$d croisés</string>
-    <string name="bestiary_always_drops">Donne toujours</string>
-    <string name="bestiary_rare_drops">Donne rarement</string>
-    <string name="bestiary_common_loot">Butin commun</string>
+    <string name="bestiary_always_drops">Donne Toujours</string>
+    <string name="bestiary_rare_drops">Donne Rarement</string>
+    <string name="bestiary_common_loot">Butin Commun</string>
     <string name="bestiary_pet_drop">Familier</string>
     <string name="bestiary_atk_def">Déf Atq</string>
     <string name="bestiary_str_def">Déf For</string>
     <string name="bestiary_rng_def">Déf Dis</string>
     <string name="bestiary_mag_def">Déf Mag</string>
-    <string name="label_session_in_progress">Session en cours</string>
-    <string name="label_session_active">Session active</string>
-    <string name="label_no_active_session">Aucune session active</string>
-    <string name="label_session_complete">La session est terminée !</string>
+    <string name="label_session_in_progress">Session en Cours</string>
+    <string name="label_session_active">Session Active</string>
+    <string name="label_no_active_session">Aucune Session Active</string>
+    <string name="label_session_complete">Session Terminée !</string>
     <string name="home_sessions_complete_title">%1$d Sessions Finies !</string>
     <string name="home_boss_defeated_title">%1$s Vaincu !</string>
     <string name="home_boss_defeated_by_title">Vaincu par %1$s.</string>
@@ -107,7 +107,7 @@
     <string name="duration_minutes">%1$dm</string> <!-- untranslated -->
     <string name="duration_seconds">%1$ds</string> <!-- untranslated -->
     <string name="duration_complete">Finie</string>
-    <string name="label_session_results">Résultats de la session</string>
+    <string name="label_session_results">Résultats de la Session</string>
     <string name="label_xp_gained">XP gagnés</string>
     <string name="label_items_collected">Articles collectés</string>
     <string name="label_level_ups">Passer au niveau supérieur</string>
@@ -679,7 +679,7 @@
 
     <!-- ===== ShopScreen ===== -->
     <string name="shop_active">ACTIF</string>
-    <string name="shop_sell_junk">Vendre les déchets</string>
+    <string name="shop_sell_junk">Vendre les Déchets</string>
     <string name="shop_keep_one_toggle">Garder un objet de chaque</string>
     <string name="shop_search_hint">Chercher les objets</string>
     <string name="shop_filter_all">Tout</string>
@@ -1341,7 +1341,7 @@
 
     <!-- ===== Carnival ===== -->
     <string name="carnival_title">Kermesse</string>
-    <string name="carnival_desc">Jeux, prix et festivités!</string>
+    <string name="carnival_desc">Jeux, prix et festivités !</string>
     <string name="carnival_prize_xp_lamp_small_name">Petite Lampe d\'XP</string>
     <string name="carnival_prize_xp_lamp_small_desc">Donne 10 000 XP à une aptitude choisie.</string>
     <string name="carnival_prize_xp_lamp_large_name">Grande Lampe d\'XP</string>
