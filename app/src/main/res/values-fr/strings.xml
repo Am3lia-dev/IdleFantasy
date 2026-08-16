@@ -95,7 +95,7 @@
     <string name="worker_skill_complete_title">Worker: %1$s Complete</string> <!-- untranslated -->
     <string name="label_training">Entraînement</string>
     <string name="label_gathering_skills">Collecte</string>
-    <string name="label_crafting_skills">Façonnage</string>
+    <string name="label_crafting_skills">Fabrication</string>
     <string name="label_choose_activity">Choisissez une activité</string>
     <string name="label_coming_soon">À venir</string>
     <string name="label_time_remaining">Temps restant</string>
@@ -1308,8 +1308,8 @@
     <string name="town_building_cape_rack_name">Râtelier à Capes</string>
     <string name="town_cape_rack_no_bonus">Améliorez pour appliquer passivement les bonus d\'XP et de rendement des aptitudes/capes de guildes possédées</string>
     <string name="town_cape_rack_t1_bonus">Les bonus passifs des capes Tier 1 (de Collecte) sont actives</string>
-    <string name="town_cape_rack_t2_bonus">Les bonus passifs des capes Tier 1 &amp; 2 (de Collecte, de Façonnage) sont actives</string>
-    <string name="town_cape_rack_t3_bonus">Les bonus passifs de toutes les capes possédées (de Collecte, de Façonnage, de Combat &amp; de Guildes) sont actives</string>
+    <string name="town_cape_rack_t2_bonus">Les bonus passifs des capes Tier 1 &amp; 2 (de Collecte, de Fabrication) sont actives</string>
+    <string name="town_cape_rack_t3_bonus">Les bonus passifs de toutes les capes possédées (de Collecte, de Fabrication, de Combat &amp; de Guildes) sont actives</string>
     <string name="town_building_artisans_workshop_name">Atelier de l\'Artisan</string>
     <string name="town_artisans_workshop_no_bonus">Améliorez pour avoir une chance de préserver des matériaux de fabrication secondaires</string>
     <string name="town_artisans_workshop_active_bonus">%1$d%% chance de préserver des matériaux de fabrication secondaires</string>
@@ -1727,8 +1727,8 @@
     <string name="seasonal_bounty_gloom_feast_hint">Cuisine</string>
     <string name="seasonal_bounty_gloom_bars_name">Fondez de l\'adamantite pour le fer des tombes</string>
     <string name="seasonal_bounty_gloom_bars_hint">Métallurgie</string>
-    <string name="seasonal_bounty_gloom_runes_name">Façonnez des Runes de Mort pour apaiser les esprits</string>
-    <string name="seasonal_bounty_gloom_runes_hint">Façonnage de Runes</string>
+    <string name="seasonal_bounty_gloom_runes_name">Fabrication des Runes de Mort pour apaiser les esprits</string>
+    <string name="seasonal_bounty_gloom_runes_hint">Fabrication de Runes</string>
     <string name="seasonal_bounty_gloom_wisps_name">Chassez les Feux Follets</string>
     <string name="seasonal_bounty_gloom_wisps_hint">Disponible uniquement dans le Marais Creux</string>
     <string name="seasonal_bounty_gloom_ghouls_name">Éliminez les Goules des Tombes</string>
