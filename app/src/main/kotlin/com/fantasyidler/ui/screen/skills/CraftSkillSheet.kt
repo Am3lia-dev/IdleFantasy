@@ -415,7 +415,7 @@ private fun CraftRecipeRow(
             }
             if (craftState.isQueueFull) {
                 Text(
-                    text  = context.getString(R.string.snackbar_queue_full),
+                    text  = stringResource(R.string.snackbar_queue_full),
                     style = MaterialTheme.typography.labelSmall,
                     color = dim,
                 )
