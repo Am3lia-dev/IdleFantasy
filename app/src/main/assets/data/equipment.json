@@ -1693,6 +1693,19 @@
       "defense": 45
     }
   },
+  "slayer_plateskirt": {
+    "name": "slayer_plateskirt",
+    "display_name": "Slayer Plateskirt",
+    "slot": "legs",
+    "combat_style": null,
+    "description": "Protective skirt crafted for extended dungeon runs.",
+    "attack_bonus": 0,
+    "strength_bonus": 0,
+    "defense_bonus": 65,
+    "requirements": {
+      "defense": 45
+    }
+  },
   "runite_med_helmet": {
     "name": "runite_med_helmet",
     "display_name": "Runite Med Helmet",

@@ -321,6 +321,8 @@
     <string name="item_slayer_platebody_desc">Heavy armour etched with slayer runes.</string>
     <string name="item_slayer_platelegs_name">Slayer Platelegs</string>
     <string name="item_slayer_platelegs_desc">Protective legs crafted for extended dungeon runs.</string>
+    <string name="item_slayer_plateskirt_name">Slayer Plateskirt</string>
+    <string name="item_slayer_plateskirt_desc">Protective skirt crafted for extended dungeon runs.</string>
 
     <!-- ===== Tools — pickaxes ===== -->
     <string name="item_bronze_pickaxe_name">Bronze Pickaxe</string>
