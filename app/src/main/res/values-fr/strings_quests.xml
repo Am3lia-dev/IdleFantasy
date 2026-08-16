@@ -300,15 +300,15 @@
     <string name="quest_herblore_6_objective">Mélanger 1500 Potions de Super Force</string>
 
     <!-- Construction -->
-    <string name="quest_construction_1_name">Construction I</string> <!-- untranslated -->
+    <string name="quest_construction_1_name">Construction I</string>
     <string name="quest_construction_1_objective">Construisez 50 Étagères en Bois</string>
-    <string name="quest_construction_2_name">Construction II</string> <!-- untranslated -->
+    <string name="quest_construction_2_name">Construction II</string>
     <string name="quest_construction_2_objective">Construisez 50 Tables en Bois</string>
-    <string name="quest_construction_3_name">Construction III</string> <!-- untranslated -->
+    <string name="quest_construction_3_name">Construction III</string>
     <string name="quest_construction_3_objective">Construisez 50 Armoires en Saule</string>
-    <string name="quest_construction_4_name">Construction IV</string> <!-- untranslated -->
+    <string name="quest_construction_4_name">Construction IV</string>
     <string name="quest_construction_4_objective">Construisez 50 Commodes en Saule</string>
-    <string name="quest_construction_5_name">Construction V</string> <!-- untranslated -->
+    <string name="quest_construction_5_name">Construction V</string>
     <string name="quest_construction_5_objective">Construisez 25 Trônes Magiques</string>
     <string name="quest_construction_upgrade_inn_name">Rénovez l\'Auberge</string>
     <string name="quest_construction_upgrade_inn_objective">Améliorez l\'Auberge au moins une fois</string>
@@ -508,8 +508,8 @@
     <string name="daily_verb_farming">Récolter</string>
 
     <!-- Quest objective format strings -->
-    <string name="quest_obj_gather">%1$s %2$d %3$s</string> <!-- untranslated -->
-    <string name="quest_obj_craft">%1$s %2$d %3$s</string> <!-- untranslated -->
+    <string name="quest_obj_gather">%1$s %2$d %3$s</string>
+    <string name="quest_obj_craft">%1$s %2$d %3$s</string>
     <string name="quest_obj_prayer">Enterrer %1$d os de tout type</string>
     <string name="quest_obj_kill">Vaincre %1$d ennemis</string>
     <string name="quest_obj_kill_enemy">Vaincre %1$d %2$s</string>
