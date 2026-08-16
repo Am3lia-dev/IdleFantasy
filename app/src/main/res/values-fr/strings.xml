@@ -277,6 +277,8 @@
     <string name="settings_profile_layout_tabs">Onglets</string>
     <string name="settings_quest_dots">Point de quête sur aptitudes</string>
     <string name="settings_quest_dots_desc">Montre un point doré sur les aptitudes qui ont une quête possible</string>
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Écran d\'Accueil</string>
     <string name="settings_home_screen_desc">Choisir ce qui apparaît sur l\'écran d\'accueil</string>
     <string name="settings_recent_activity">Journal d’activité récente</string>
@@ -667,7 +669,7 @@
     <string name="quest_legend_gold_dot">Une quête temporaire est disponible.</string>
     <string name="quest_legend_notes">Les icônes estompées ne peuvent pas encore être terminées (niveau ou matériaux manquants). Un petit chiffre en exposant indique que plusieurs quêtes de ce type visent la même chose.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">×%1$d dans l\'inventaire</string>
+    <string name="shop_qty_in_inv">×%1$s dans l\'inventaire</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">%1$s pièces l’unité</string>
     <!-- Translator note: %1$s = item name -->

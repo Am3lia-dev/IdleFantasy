@@ -91,6 +91,7 @@ data class ShopUiState(
     val skillPrestige: Map<String, Int> = emptyMap(),
     /** Ironman characters can only sell — every buy path is blocked. */
     val ironman: Boolean = false,
+    val compactNumbers: Boolean = false,
 ) {
     val xpBoostActive: Boolean get() = xpBoostExpiresAt > System.currentTimeMillis()
 }
@@ -131,6 +132,7 @@ class ShopViewModel @Inject constructor(
                 townBuildingTiers = flags.townBuildingTiers,
                 skillPrestige     = flags.skillPrestige,
                 ironman           = flags.ironman,
+                compactNumbers    = flags.compactNumbers,
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ShopUiState())

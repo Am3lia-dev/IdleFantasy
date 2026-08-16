@@ -291,6 +291,8 @@
     <string name="settings_profile_layout_tabs">Вкладки</string>
     <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
     <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Главный экран</string>
     <string name="settings_home_screen_desc">Выберите, что отображается на главном экране</string>
     <string name="settings_recent_activity">Журнал последней активности</string>
@@ -682,7 +684,7 @@
     <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
     <string name="quest_legend_notes">Тусклые значки пока нельзя выполнить (не хватает уровня или материалов). Маленькая надстрочная цифра означает, что несколько заданий этого типа требуют одного и того же.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">×%1$d в инвентаре</string>
+    <string name="shop_qty_in_inv">×%1$s в инвентаре</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">%1$s монет шт.</string>
     <!-- Translator note: %1$s = item name -->

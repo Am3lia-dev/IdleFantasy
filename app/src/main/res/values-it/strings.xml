@@ -277,6 +277,8 @@
     <string name="settings_profile_layout_tabs">Schede</string>
     <string name="settings_quest_dots">Indicatori missione</string>
     <string name="settings_quest_dots_desc">Mostra un indicatore quando una missione è disponibile</string>
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Schermata Principale</string>
     <string name="settings_home_screen_desc">Scegli cosa mostrare nella schermata principale</string>
     <string name="settings_recent_activity">Registro delle ultime attività</string>
@@ -666,7 +668,7 @@
     <string name="quest_legend_gold_dot">Una missione a tempo è disponibile.</string>
     <string name="quest_legend_notes">Le icone attenuate non possono ancora essere completate (livello o materiali mancanti). Un piccolo numero in apice indica che più missioni di quel tipo richiedono la stessa cosa.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">Hai ×%1$d</string>
+    <string name="shop_qty_in_inv">Hai ×%1$s</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">%1$s monete cad.</string>
     <!-- Translator note: %1$s = item name -->

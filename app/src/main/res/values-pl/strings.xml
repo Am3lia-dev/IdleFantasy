@@ -291,6 +291,8 @@
     <string name="settings_profile_layout_tabs">Zakładki</string>
     <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
     <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Ekran Główny</string>
     <string name="settings_home_screen_desc">Wybierz, co wyświetla się na ekranie głównym</string>
     <string name="settings_recent_activity">Dziennik ostatniej aktywności</string>
@@ -682,7 +684,7 @@
     <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
     <string name="quest_legend_notes">Przyciemnione ikony nie mogą być jeszcze ukończone (brak poziomu lub materiałów). Mała podniesiona cyfra oznacza, że kilka zadań tego typu dotyczy tego samego.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">×%1$d w ekwipunku</string>
+    <string name="shop_qty_in_inv">×%1$s w ekwipunku</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">%1$s monet za szt.</string>
     <!-- Translator note: %1$s = item name -->

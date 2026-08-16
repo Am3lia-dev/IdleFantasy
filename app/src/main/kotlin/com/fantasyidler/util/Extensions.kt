@@ -29,11 +29,31 @@ fun Long.formatCoins(): String = when {
     else               -> toString()
 }
 
+/** Format an Int coin amount with thousands separators. */
+fun Int.formatCoins(): String = toLong().formatCoins()
+
 /** Abbreviated coin format for compact UI (e.g. 50000 → "50k"). */
 fun Long.formatCoinsBrief(): String = when {
     this >= 1_000_000L -> "%.1fM".format(this / 1_000_000.0)
     this >= 1_000L     -> "${this / 1000}k"
     else               -> toString()
+}
+
+/** Format an integer quantity as a readable string, respecting the [compact] setting. */
+fun Int.formatQuantity(compact: Boolean = false): String = toLong().formatQuantity(compact)
+
+/** Format a Long quantity as a readable string, respecting the [compact] setting. */
+fun Long.formatQuantity(compact: Boolean = false): String = when {
+    compact && this >= 1_000_000L -> {
+        val formatted = "%.2f".format(this / 1_000_000.0).trimEnd('0').trimEnd('.', ',')
+        "${formatted}M"
+    }
+    compact && this >= 1_000L -> {
+        val formatted = "%.1f".format(this / 1_000.0).trimEnd('0').trimEnd('.', ',')
+        "${formatted}k"
+    }
+    this >= 1_000L || this <= -1_000L -> "%,d".format(this)
+    else -> toString()
 }
 
 /** Formats an epoch-ms timestamp as a clock time, respecting the device's 12/24-hour preference. */

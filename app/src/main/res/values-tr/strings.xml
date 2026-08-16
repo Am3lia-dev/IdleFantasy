@@ -277,6 +277,8 @@
     <string name="settings_profile_layout_tabs">Sekmeler</string>
     <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
     <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Ana Ekran</string>
     <string name="settings_home_screen_desc">Ana ekranda neyin görüneceğini seç</string>
     <string name="settings_recent_activity">Son Aktivite Günlüğü</string>
@@ -666,7 +668,7 @@
     <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
     <string name="quest_legend_notes">Soluk simgeler henüz tamamlanamaz (seviye veya malzeme eksik). Küçük üst simge sayı, aynı hedefi isteyen birden fazla görev olduğunu gösterir.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">Envanterde ×%1$d adet</string>
+    <string name="shop_qty_in_inv">Envanterde ×%1$s adet</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">Tanesi %1$s altın</string>
     <!-- Translator note: %1$s = item name -->

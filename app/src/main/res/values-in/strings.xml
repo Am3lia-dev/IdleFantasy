@@ -270,6 +270,8 @@
     <string name="settings_profile_layout_tabs">Tab</string>
     <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
     <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Layar Beranda</string>
     <string name="settings_home_screen_desc">Pilih apa yang muncul di layar beranda</string>
     <string name="settings_recent_activity">Catatan Aktivitas</string>
@@ -658,7 +660,7 @@
     <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
     <string name="quest_legend_notes">Ikon redup belum bisa diselesaikan (level atau bahan kurang). Angka kecil di atas berarti beberapa quest jenis itu menginginkan hal yang sama.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">×%1$d di inventaris</string>
+    <string name="shop_qty_in_inv">×%1$s di inventaris</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">%1$s setiap koin</string>
     <!-- Translator note: %1$s = item name -->

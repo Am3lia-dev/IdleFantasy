@@ -43,8 +43,31 @@ class ExtensionsTest {
     @Test
     fun `formatCoins uses the same boundaries as formatXp`() {
         assertEquals("500", 500L.formatCoins())
+        assertEquals("500", 500.formatCoins())
         assertEquals("1,000", 1_000L.formatCoins())
+        assertEquals("1,000", 1_000.formatCoins())
         assertEquals("2.5M", 2_500_000L.formatCoins())
+    }
+
+    @Test
+    fun `formatQuantity formats full and compact numbers correctly`() {
+        // Full formatting (compact = false)
+        assertEquals("0", 0.formatQuantity(compact = false))
+        assertEquals("455", 455.formatQuantity(compact = false))
+        assertEquals("1,021", 1_021.formatQuantity(compact = false))
+        assertEquals("35,715", 35_715.formatQuantity(compact = false))
+        assertEquals("2,461,940", 2_461_940.formatQuantity(compact = false))
+
+        // Compact formatting (compact = true)
+        assertEquals("0", 0.formatQuantity(compact = true))
+        assertEquals("455", 455.formatQuantity(compact = true))
+        assertEquals("1k", 1_000.formatQuantity(compact = true))
+        assertEquals("1k", 1_021.formatQuantity(compact = true))
+        assertEquals("1.5k", 1_500.formatQuantity(compact = true))
+        assertEquals("35.7k", 35_715.formatQuantity(compact = true))
+        assertEquals("1M", 1_000_000.formatQuantity(compact = true))
+        assertEquals("2.4M", 2_400_000.formatQuantity(compact = true))
+        assertEquals("2.46M", 2_461_940.formatQuantity(compact = true))
     }
 
     @Test

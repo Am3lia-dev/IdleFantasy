@@ -277,6 +277,8 @@
     <string name="settings_profile_layout_tabs">Abas</string>
     <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
     <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Tela Inicial</string>
     <string name="settings_home_screen_desc">Escolha o que aparece na tela inicial</string>
     <string name="settings_recent_activity">Registro de Atividade Recente</string>
@@ -666,7 +668,7 @@
     <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
     <string name="quest_legend_notes">Ícones esmaecidos ainda não podem ser concluídos (falta nível ou materiais). Um pequeno número elevado indica que várias missões desse tipo pedem a mesma coisa.</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">×%1$d no inventário</string>
+    <string name="shop_qty_in_inv">×%1$s no inventário</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">%1$s moedas cada</string>
     <!-- Translator note: %1$s = item name -->
