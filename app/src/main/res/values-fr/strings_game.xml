@@ -8,7 +8,7 @@
     <string name="game_max_level">Niveau maximum atteint !</string>
 
     <!-- ===== Session result summaries ===== -->
-    <string name="game_session_results_title">Résultats de la session</string>
+    <string name="game_session_results_title">Résultats de la Session</string>
     <!-- Translator note: %1$s = skill display name -->
     <string name="game_session_summary_header">La session %1$s est terminée</string>
     <!-- Translator note: %1$s = formatted XP amount (e.g. "1,234") -->
@@ -56,7 +56,7 @@
 
     <!-- ===== Prayer / burying ===== -->
     <!-- Translator note: %1$s = bone display name, %2$s = formatted XP gained -->
-    <string name="game_bones_buried">Os enterrés : %1$s — +%2$s XP de Prière.</string>
+    <string name="game_bones_buried">%1$s Os enterrés — +%2$s XP de Prière.</string>
 
     <!-- ===== Quest messages ===== -->
     <!-- Translator note: %1$s = quest display name -->

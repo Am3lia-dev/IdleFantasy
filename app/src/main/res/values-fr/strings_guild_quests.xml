@@ -150,7 +150,7 @@
     <string name="quest_runecrafting_guild_6_name">Lot de mort</string>
     <string name="quest_runecrafting_guild_7_name">Réserve de sang</string>
     <string name="quest_runecrafting_guild_8_name">Chambre Forte de Runes</string>
-    <string name="quest_runecrafting_guild_9_name">Réserve arcanique</string>
+    <string name="quest_runecrafting_guild_9_name">Réserve Arcanique</string>
     <string name="quest_slayer_guild_1_name">Premier Contrat</string>
     <string name="quest_slayer_guild_10_name">Porteur de Mort</string>
     <string name="quest_slayer_guild_2_name">Contrat d\'Abattage</string>
@@ -181,8 +181,8 @@
     <string name="quest_thieving_guild_7_name">Leste et Armé</string>
     <string name="quest_thieving_guild_8_name">La Folie des Chevaliers</string>
     <string name="quest_thieving_guild_9_name">Poches Bénies</string>
-    <string name="quest_warriors_guild_1_name">Premier sang</string>
-    <string name="quest_warriors_guild_10_name">Maître guerrier</string>
+    <string name="quest_warriors_guild_1_name">Premier Sang</string>
+    <string name="quest_warriors_guild_10_name">Maître Guerrier</string>
     <string name="quest_warriors_guild_2_name">Voltigeur</string>
     <string name="quest_warriors_guild_3_name">Aguerri</string>
     <string name="quest_warriors_guild_4_name">Soldat vétéran</string>
@@ -260,9 +260,9 @@
     <string name="quest_farming_daily_4d_name">Lot d\'herbes magiques</string>
     <string name="quest_farming_daily_4e_name">Course aux fruits du dragon</string>
     <string name="quest_farming_daily_7a_name">Herbes Spirituelles</string>
-    <string name="quest_farming_daily_7b_name">Floraison céleste</string>
-    <string name="quest_farming_daily_7c_name">Blé doré</string>
-    <string name="quest_farming_daily_7d_name">Livraison de caramboles</string>
+    <string name="quest_farming_daily_7b_name">Floraison Céleste</string>
+    <string name="quest_farming_daily_7c_name">Blé Doré</string>
+    <string name="quest_farming_daily_7d_name">Livraison de Caramboles</string>
     <string name="quest_farming_daily_7e_name">Lotus du Vide</string>
     <string name="quest_firemaking_daily_1a_name">Feu de bûches</string>
     <string name="quest_firemaking_daily_1b_name">Bûcher de chêne</string>
