@@ -81,8 +81,8 @@
     <string name="label_no_active_session">Нет активной сессии</string>
     <string name="label_session_complete">Сессия завершена!</string>
     <string name="home_sessions_complete_title">%1$d сессий завершено!</string>
-    <string name="home_boss_defeated_title">Побеждено %1$s!</string>
-    <string name="home_boss_defeated_by_title">Умер %1$s.</string>
+    <string name="home_boss_defeated_title">Побеждён %1$s!</string>
+    <string name="home_boss_defeated_by_title">Вас победил %1$s.</string>
     <string name="home_dungeon_died_title">%1$s — вы умерли</string>
     <string name="home_dungeon_complete_title">%1$s завершено!</string>
     <string name="home_expedition_complete_title">%1$s экспедиция завершена</string>
