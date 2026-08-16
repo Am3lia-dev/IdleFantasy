@@ -1924,6 +1924,18 @@
       "defense": 70
     }
   },
+  "tower_plateskirt": {
+    "name": "tower_plateskirt",
+    "display_name": "Tower Plateskirt",
+    "slot": "legs",
+    "description": "A plateskirt forged in the tower's deepest forge.",
+    "attack_bonus": 0,
+    "strength_bonus": 0,
+    "defense_bonus": 125,
+    "requirements": {
+      "defense": 70
+    }
+  },
   "tower_boots": {
     "name": "tower_boots",
     "display_name": "Tower Boots",
