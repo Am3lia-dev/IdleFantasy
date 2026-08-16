@@ -65,9 +65,9 @@
     <string name="label_bosses">Boss</string>
     <string name="label_by_location">Par lieu</string>
     <string name="bestiary_not_encountered">Pas encore rencontré</string>
-    <string name="bestiary_qty_header">Qty</string> <!-- untranslated -->
+    <string name="bestiary_qty_header">Qté</string>
     <string name="bestiary_chance_header">Chance</string>
-    <string name="bestiary_encountered_progress">%1$d / %2$d encountered</string> <!-- untranslated -->
+    <string name="bestiary_encountered_progress">%1$d / %2$d croisés</string>
     <string name="bestiary_always_drops">Donne Toujours</string>
     <string name="bestiary_rare_drops">Donne Rarement</string>
     <string name="bestiary_common_loot">Butin Commun</string>
@@ -80,19 +80,19 @@
     <string name="label_session_active">Session Active</string>
     <string name="label_no_active_session">Aucune Session Active</string>
     <string name="label_session_complete">Session Terminée !</string>
-    <string name="home_sessions_complete_title">%1$d Sessions Complete!</string> <!-- untranslated -->
-    <string name="home_boss_defeated_title">Defeated %1$s!</string> <!-- untranslated -->
-    <string name="home_boss_defeated_by_title">Defeated by %1$s.</string> <!-- untranslated -->
-    <string name="home_dungeon_died_title">%1$s — You Died</string> <!-- untranslated -->
-    <string name="home_dungeon_complete_title">%1$s Complete!</string> <!-- untranslated -->
-    <string name="home_expedition_complete_title">%1$s Expedition Complete</string> <!-- untranslated -->
-    <string name="home_skill_session_complete_title">%1$s Session Complete</string> <!-- untranslated -->
-    <string name="home_bones_buried_row">%1$s buried</string> <!-- untranslated -->
-    <string name="worker_sessions_complete_title">Worker: %1$d Sessions Complete!</string> <!-- untranslated -->
-    <string name="worker_boss_defeated_title">Worker: Defeated %1$s!</string> <!-- untranslated -->
-    <string name="worker_dungeon_died_title">Worker: %1$s — Died</string> <!-- untranslated -->
-    <string name="worker_dungeon_complete_title">Worker: %1$s Complete!</string> <!-- untranslated -->
-    <string name="worker_skill_complete_title">Worker: %1$s Complete</string> <!-- untranslated -->
+    <string name="home_sessions_complete_title">%1$d Sessions Finies !</string>
+    <string name="home_boss_defeated_title">%1$s Vaincu !</string>
+    <string name="home_boss_defeated_by_title">Vaincu par %1$s.</string>
+    <string name="home_dungeon_died_title">%1$s — Vous êtes Mort</string>
+    <string name="home_dungeon_complete_title">%1$s Finie !</string>
+    <string name="home_expedition_complete_title">%1$s Expédition Finie</string>
+    <string name="home_skill_session_complete_title">%1$s Session Finie</string>
+    <string name="home_bones_buried_row">%1$s enterré(s)</string>
+    <string name="worker_sessions_complete_title">Ouvrier : %1$d Sessions Finies !</string>
+    <string name="worker_boss_defeated_title">Ouvrier : %1$s Vaincu !</string>
+    <string name="worker_dungeon_died_title">Ouvrier : %1$s — Mort</string>
+    <string name="worker_dungeon_complete_title">Ouvrier : %1$s Finie !</string>
+    <string name="worker_skill_complete_title">Ouvrier : %1$s Finie</string>
     <string name="label_training">Entraînement</string>
     <string name="label_gathering_skills">Collecte</string>
     <string name="label_crafting_skills">Fabrication</string>
@@ -101,12 +101,12 @@
     <string name="label_time_remaining">Temps restant</string>
     <!-- Translator note: compact duration units; English puts the letter(s) right after the number -->
     <string name="duration_months">%1$dmo</string> <!-- untranslated -->
-    <string name="duration_weeks">%1$dw</string> <!-- untranslated -->
-    <string name="duration_days">%1$dd</string> <!-- untranslated -->
+    <string name="duration_weeks">%1$dS</string>
+    <string name="duration_days">%1$dj</string>
     <string name="duration_hours">%1$dh</string> <!-- untranslated -->
     <string name="duration_minutes">%1$dm</string> <!-- untranslated -->
     <string name="duration_seconds">%1$ds</string> <!-- untranslated -->
-    <string name="duration_complete">Complete</string> <!-- untranslated -->
+    <string name="duration_complete">Finie</string>
     <string name="label_session_results">Résultats de la Session</string>
     <string name="label_xp_gained">XP gagnés</string>
     <string name="label_items_collected">Articles collectés</string>
@@ -680,13 +680,13 @@
     <!-- ===== ShopScreen ===== -->
     <string name="shop_active">ACTIF</string>
     <string name="shop_sell_junk">Vendre les Déchets</string>
-    <string name="shop_keep_one_toggle">Keep one of each item</string> <!-- untranslated -->
-    <string name="shop_search_hint">Search items</string> <!-- untranslated -->
-    <string name="shop_filter_all">All</string> <!-- untranslated -->
-    <string name="shop_sell_blocked_equipped">%1$s is equipped. Unequip it first to sell.</string> <!-- untranslated -->
-    <string name="shop_sell_blocked_reserved">%1$s is reserved for a queued task.</string> <!-- untranslated -->
-    <string name="shop_sell_blocked_keep_one">Keeping your last %1$s (Keep one of each item is on).</string> <!-- untranslated -->
-    <string name="shop_sell_blocked_none">Nothing to sell.</string> <!-- untranslated -->
+    <string name="shop_keep_one_toggle">Garder un objet de chaque</string>
+    <string name="shop_search_hint">Chercher les objets</string>
+    <string name="shop_filter_all">Tout</string>
+    <string name="shop_sell_blocked_equipped">%1$s est équipé. Déséquipez-le d\'abord pour le vendre.</string>
+    <string name="shop_sell_blocked_reserved">%1$s est réservé pour une tâche en attente.</string>
+    <string name="shop_sell_blocked_keep_one">Gardez votre dernière %1$s (Garder un objet de chaque est activé).</string>
+    <string name="shop_sell_blocked_none">Rien à vendre.</string>
     <string name="shop_sell_old_gear">Vendre l\'ancien équipement</string>
     <string name="shop_equipped_label">(équipé)</string>
     <string name="shop_item_locked">%1$s est verrouillé. Appui long pour déverrouiller.</string>
@@ -1080,7 +1080,7 @@
     <string name="expedition_lore_notes">%1$d / %2$d notes de légende</string>
     <string name="expedition_lock_level">Nécessite %1$s niveau %2$d</string>
     <string name="expedition_lock_notes">Trouvez toutes les notes dans %1$s</string>
-    <string name="expedition_started">%1$s started.</string> <!-- untranslated -->
+    <string name="expedition_started">%1$s a commencé.</string>
     <string name="expedition_lock_prerequisite">Remplissez un prérequis</string>
     <string name="label_notes">Notes</string>
 
@@ -1342,10 +1342,10 @@
     <!-- ===== Carnival ===== -->
     <string name="carnival_title">Kermesse</string>
     <string name="carnival_desc">Jeux, prix et festivités !</string>
-    <string name="carnival_prize_xp_lamp_small_name">Small XP Lamp</string> <!-- untranslated -->
-    <string name="carnival_prize_xp_lamp_small_desc">Grants 10,000 XP to a chosen skill.</string> <!-- untranslated -->
-    <string name="carnival_prize_xp_lamp_large_name">Large XP Lamp</string> <!-- untranslated -->
-    <string name="carnival_prize_xp_lamp_large_desc">Grants 50,000 XP to a chosen skill.</string> <!-- untranslated -->
+    <string name="carnival_prize_xp_lamp_small_name">Petite Lampe d\'XP</string>
+    <string name="carnival_prize_xp_lamp_small_desc">Donne 10 000 XP à une aptitude choisie.</string>
+    <string name="carnival_prize_xp_lamp_large_name">Grande Lampe d\'XP</string>
+    <string name="carnival_prize_xp_lamp_large_desc">Donne 50 000 XP à une aptitude choisie.</string>
     <string name="carnival_ticket_balance">Tickets : %1$d</string>
     <string name="carnival_idle_tab">Jeux en File</string>
     <string name="carnival_active_tab">Jeux Actifs</string>
@@ -1435,8 +1435,8 @@
     <string name="farming_bean_ready">Le haricot magique s\'étend au-delà des nuages. Prêt à grimper ?</string>
     <string name="farming_bean_climb">Grimper</string>
     <string name="farming_bean_climbed">Vous avez grimpé le haricot magique. Quelque chose vous attend…</string>
-    <string name="farming_bean_climbed_title">Beanstalk Climbed!</string> <!-- untranslated -->
-    <string name="farming_bean_unlock_hint">New dungeon unlocked: %1$s. Find it under Combat, in the Dungeons list.</string> <!-- untranslated -->
+    <string name="farming_bean_climbed_title">Tige d\'Haricot Grimpée !</string>
+    <string name="farming_bean_unlock_hint">Nouveau donjon débloqué : %1$s. Trouvez-le sous Combat, dans la liste des Donjons.</string>
     <string name="farming_bean_cleared">L\'Haricot Magique est retourné dans votre inventaire</string>
 
     <string name="farming_magic_bean_one_plot">Les Haricots Magiques ne peuvent être plantés que sur une parcelle</string>
@@ -1563,14 +1563,14 @@
     <string name="combat_select_spell">Choisis un sort avant d\'entrer.</string>
     <string name="combat_spell_level_required">Besoin de %1$d magie pour %2$s.</string>
     <string name="guild_daily_reward_claimed">Récompense quotidienne récupérée !</string>
-    <string name="reward_part_coins">+%1$s coins</string> <!-- untranslated -->
-    <string name="reward_part_coins_plain">%1$s coins</string> <!-- untranslated -->
-    <string name="reward_part_combat_xp">+%1$s combat XP (split across 7 skills)</string> <!-- untranslated -->
-    <string name="quest_claimed_suffix">Claimed: %1$s</string> <!-- untranslated -->
+    <string name="reward_part_coins">+%1$s pièces</string>
+    <string name="reward_part_coins_plain">%1$s pièces</string>
+    <string name="reward_part_combat_xp">+%1$s XP de Combat (partagé entre 7 aptitudes)</string>
+    <string name="quest_claimed_suffix">Obtenu : %1$s</string>
     <plurals name="plural_reward_items">
-        <item quantity="one">×%1$d item</item>
-        <item quantity="other">×%1$d items</item>
-    </plurals> <!-- untranslated -->
+        <item quantity="one">×%1$d objet</item>
+        <item quantity="other">×%1$d objets</item>
+    </plurals>
     <string name="monument_title">Grand Monument</string>
     <string name="monument_desc">Une merveille civique élevée pièce par pièce. Chaque étape est un cadeau à la ville.</string>
     <string name="monument_your_coins">Vos pièces : %1$s</string>
