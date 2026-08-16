@@ -1678,7 +1678,7 @@
     <string name="seasonal_bounty_sunspire_wisps_hint">Disponible uniquement dans L\'Expédition de la Flèche du Soleil</string>
     <string name="seasonal_bounty_sunspire_hounds_name">Chasser les Chiens de Braise</string>
     <string name="seasonal_bounty_sunspire_hounds_hint">Disponible uniquement dans L\'Expédition de la Flèche du Soleil</string>
-    <string name="seasonal_bounty_sunspire_colossus_name">Abattez les Colosses d’Escarbille</string>
+    <string name="seasonal_bounty_sunspire_colossus_name">Abattez les Colosses d\'Escarbille</string>
     <string name="seasonal_bounty_sunspire_colossus_hint">On ne le trouve que dans L\'Expédition de la Flèche du Soleil — rare</string>
     <string name="seasonal_rewards_title">Récompenses</string>
     <string name="seasonal_reward_tier_requirement">%1$d jetons</string>
