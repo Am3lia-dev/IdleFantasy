@@ -104,6 +104,7 @@ fun CombatScreen(
     initialDungeonKey:  String?            = null,
     initialBossKey:     String?            = null,
     onNavigateToTower:  () -> Unit         = {},
+    onNavigateToPrestige: (String) -> Unit = {},
 ) {
     val state            by viewModel.uiState.collectAsState()
     val invState         by inventoryVm.uiState.collectAsState()
@@ -204,7 +205,7 @@ fun CombatScreen(
                             bosses         = viewModel.bossList(state.monumentComplete),
                             enemies        = viewModel.enemyMap,
                             skillLevels    = state.skillLevels,
-                            skillPrestige  = state.skillPrestige,
+                            hpPrestigeBonus = state.hpPrestigeBonus,
                             towerHpBonus   = state.towerHpBonus,
                             attackBonus    = state.totalAttackBonus,
                             strengthBonus  = state.totalStrengthBonus,
@@ -262,7 +263,7 @@ fun CombatScreen(
                             totalStrengthBonus = state.totalStrengthBonus,
                             totalDefenseBonus  = state.totalDefenseBonus,
                             skillPrestige      = state.skillPrestige,
-                            onPrestige         = if (state.ironman) null else viewModel::prestigeSkill,
+                            onOpenPrestige     = onNavigateToPrestige,
                         )
                     }
                 }
@@ -340,7 +341,7 @@ fun CombatScreen(
                             totalStrengthBonus = state.totalStrengthBonus,
                             totalDefenseBonus  = state.totalDefenseBonus,
                             skillPrestige      = state.skillPrestige,
-                            onPrestige         = if (state.ironman) null else viewModel::prestigeSkill,
+                            onOpenPrestige     = onNavigateToPrestige,
                         )
                     }
                 }
@@ -708,7 +709,7 @@ private fun CombatSkillsTab(
     totalStrengthBonus: Int,
     totalDefenseBonus: Int,
     skillPrestige: Map<String, Int> = emptyMap(),
-    onPrestige: ((String) -> Unit)? = null,
+    onOpenPrestige: ((String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     var tappedSkill by remember { mutableStateOf<String?>(null) }
@@ -740,7 +741,7 @@ private fun CombatSkillsTab(
                 xp            = skillXp[key]     ?: 0L,
                 gearBonus     = gearBonus,
                 prestigeLevel = skillPrestige[key] ?: 0,
-                onPrestige    = onPrestige?.let { cb -> { cb(key) } },
+                onOpenPrestige = onOpenPrestige?.let { cb -> { cb(key) } },
                 onClick       = { tappedSkill = key },
             )
         }
@@ -755,34 +756,13 @@ private fun CombatSkillRow(
     xp: Long,
     gearBonus: Int = 0,
     prestigeLevel: Int = 0,
-    onPrestige: (() -> Unit)? = null,
+    onOpenPrestige: (() -> Unit)? = null,
     onClick: () -> Unit = {},
 ) {
     val context  = LocalContext.current
     val name     = GameStrings.skillName(context, skillKey)
     val emoji    = GameStrings.skillEmoji(skillKey)
     val progress = xpProgressFraction(xp)
-    var showPrestigeConfirm by remember { mutableStateOf(false) }
-
-    if (showPrestigeConfirm) {
-        val nextPrestige = prestigeLevel + 1
-        AlertDialog(
-            onDismissRequest = { showPrestigeConfirm = false },
-            title = { Text(stringResource(R.string.prestige_confirm_title, name)) },
-            text  = { Text(stringResource(R.string.prestige_confirm_message_stat, name, nextPrestige * 5)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    showPrestigeConfirm = false
-                    onPrestige?.invoke()
-                }) { Text(stringResource(R.string.prestige)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showPrestigeConfirm = false }) {
-                    Text(stringResource(R.string.btn_cancel))
-                }
-            },
-        )
-    }
 
     Column(Modifier.fillMaxWidth()) {
         Row(
@@ -871,7 +851,7 @@ private fun CombatSkillRow(
                 color            = MaterialTheme.colorScheme.primary,
                 trackColor       = MaterialTheme.colorScheme.surfaceVariant,
             )
-            if (prestigeLevel > 0 || (onPrestige != null && level >= 99)) {
+            if (prestigeLevel > 0 || (onOpenPrestige != null && level >= 99)) {
                 Spacer(Modifier.height(4.dp))
                 Row(
                     modifier              = Modifier.fillMaxWidth(),
@@ -879,32 +859,24 @@ private fun CombatSkillRow(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text  = "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
+                        text  = if (prestigeLevel > 3) "★×$prestigeLevel"
+                                else "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.primary,
                     )
-                    when {
-                        onPrestige != null && level >= 99 && prestigeLevel < 3 -> {
-                            CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
-                                TextButton(
-                                    onClick = { showPrestigeConfirm = true },
-                                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
-                                    modifier = Modifier.height(24.dp),
-                                ) {
-                                    Text(
-                                        text  = stringResource(R.string.prestige),
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
+                    if (onOpenPrestige != null) {
+                        CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 0.dp) {
+                            TextButton(
+                                onClick = { onOpenPrestige() },
+                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                                modifier = Modifier.height(24.dp),
+                            ) {
+                                Text(
+                                    text  = stringResource(R.string.prestige),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
                             }
-                        }
-                        prestigeLevel >= 3 -> {
-                            Text(
-                                text  = stringResource(R.string.prestige_max),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
                         }
                     }
                 }
