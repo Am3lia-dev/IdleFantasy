@@ -1812,7 +1812,7 @@
     <string name="title_seasonal_champion_of">Champion von %1$s</string>
     <string name="title_seasonal_requirement">Schließt das Saisonereignis %1$s ab</string>
     <string name="home_welcome_greeting">Willkommen zurück,</string>
-
+    <string name="home_welcome_name">%1$s!</string> <!-- untranslated -->
     <string name="home_welcome_title">Der %1$s!</string>
 
     <!-- Pet names and descriptions -->
