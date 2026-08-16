@@ -99,7 +99,7 @@
     <string name="equip_slot_legs">Beine</string>
     <string name="equip_slot_boots">Stiefel</string>
     <string name="equip_slot_cape">Umhang</string>
-    <string name="equip_slot_ring">Ring</string> <!-- untranslated -->
+    <string name="equip_slot_ring">Ring</string>
     <string name="equip_slot_necklace">Halskette</string>
     <string name="equip_slot_shield">Schild</string>
     <string name="equip_slot_pickaxe">Spitzhacke</string>
@@ -108,7 +108,7 @@
     <string name="equip_slot_hoe">Hacke</string>
     <string name="equip_slot_frying_pan">Bratpfanne</string>
     <string name="equip_slot_grappling_hook">Greifhaken</string>
-    <string name="equip_slot_hammer">Hammer</string> <!-- untranslated -->
+    <string name="equip_slot_hammer">Hammer</string>
     <string name="equip_slot_tinderbox">Zunderbüchse</string>
     <string name="equip_slot_lockpick">Dietrich</string>
 </resources>
