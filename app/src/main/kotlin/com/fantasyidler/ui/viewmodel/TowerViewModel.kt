@@ -93,7 +93,7 @@ class TowerViewModel @Inject constructor(
                     playerRepo.addItems(mapOf("tower_boots" to 1))
                 }
                 if ("tower_plateskirt" !in inventory) {
-                	playerRepo.addItems(mapOf("tower_plateskirt" to 1))
+                    playerRepo.addItems(mapOf("tower_plateskirt" to 1))
                 }
             }
         }

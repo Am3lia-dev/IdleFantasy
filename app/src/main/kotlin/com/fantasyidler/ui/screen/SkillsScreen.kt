@@ -205,7 +205,7 @@ fun SkillsScreen(
         val scope = rememberCoroutineScope()
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             TabRow(selectedTabIndex = pagerState.currentPage) {
-                val prestigeReadyCount = if (state.ironman) 0 else NON_COMBAT_PRESTIGE_SKILLS.count { key ->
+                val prestigeReadyCount = if (state.ironman || !state.showPrestigeNotifications) 0 else NON_COMBAT_PRESTIGE_SKILLS.count { key ->
                     (state.skillLevels[key] ?: 1) >= 99 && (state.skillPrestige[key] ?: 0) < 3
                 }
                 Tab(
