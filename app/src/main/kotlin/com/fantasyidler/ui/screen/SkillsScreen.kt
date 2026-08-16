@@ -426,7 +426,6 @@ fun SkillActivitySheet(
                             craftState        = craftState,
                             craftingViewModel = craftingViewModel,
                             hasActiveSession  = state.anySessionActive,
-                            isQueueFull       = state.queueSize >= state.maxQueueSize,
                             sessionDurationMs = state.sessionDurationMs,
                             context           = context,
                             onDismiss         = {

@@ -47,7 +47,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -244,10 +243,8 @@ internal fun PrayerSheet(
                                 }
                             }
                         }
-
-
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                     }
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
             }
         } else {
@@ -342,30 +339,18 @@ internal fun PrayerSheet(
                 )
             }
 
-            val queueFullMessage = stringResource(R.string.snackbar_queue_full)
-            Box(
+            Button(
+                onClick  = { onStart(selectedKey!!, qty) },
+                enabled  = !isStarting && qty > 0 && maxQty > 0 && !isQueueFull,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             ) {
-                Button(
-                    onClick  = { onStart(selectedKey!!, qty) },
-                    enabled  = !isStarting && qty > 0 && maxQty > 0 && !isQueueFull,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    if (isStarting) CircularProgressIndicator(Modifier.size(20.dp))
-                    else Text(if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(R.string.btn_start_burying))
-                }
-                if (isQueueFull) {
-                    Box(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication        = null,
-                                onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
-                            ),
-                    )
+                when {
+                    isStarting  -> CircularProgressIndicator(Modifier.size(20.dp))
+                    isQueueFull -> Text(stringResource(R.string.snackbar_queue_full))
+                    hasActiveSession -> Text(stringResource(R.string.skills_add_to_queue))
+                    else        -> Text(stringResource(R.string.btn_start_burying))
                 }
             }
         }

@@ -4,7 +4,6 @@ package com.fantasyidler.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,7 +48,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -127,7 +125,6 @@ internal fun CraftSkillSheet(
     craftState: CraftingUiState,
     craftingViewModel: CraftingViewModel,
     hasActiveSession: Boolean,
-    isQueueFull: Boolean,
     sessionDurationMs: Long,
     context: android.content.Context,
     onDismiss: () -> Unit,
@@ -182,7 +179,6 @@ internal fun CraftSkillSheet(
             recipe            = selected,
             state             = craftState,
             hasActiveSession  = hasActiveSession,
-            isQueueFull       = isQueueFull,
             sessionDurationMs = sessionDurationMs,
             context           = context,
             onSetAsh          = if (selected.skillName == Skills.HERBLORE) craftingViewModel::setHerbloreAsh else null,
@@ -283,7 +279,6 @@ internal fun CraftSkillSheet(
                         recipe     = recipe,
                         craftState = craftState,
                         context    = context,
-                        isQueueFull=isQueueFull,
                         onTap      = { craftingViewModel.openRecipe(recipe) },
                     )
                 }
@@ -298,7 +293,6 @@ private fun CraftRecipeRow(
     recipe: CraftableRecipe,
     craftState: CraftingUiState,
     context: android.content.Context,
-    isQueueFull: Boolean,
     onTap: () -> Unit,
 ) {
     val meetsLvl = craftState.meetsLevel(recipe)
@@ -419,7 +413,7 @@ private fun CraftRecipeRow(
                     color = dim,
                 )
             }
-            if (isQueueFull) {
+            if (craftState.isQueueFull) {
                 Text(
                     text  = context.getString(R.string.snackbar_queue_full),
                     style = MaterialTheme.typography.labelSmall,
@@ -436,7 +430,6 @@ private fun CraftQuantityContent(
     recipe: CraftableRecipe,
     state: CraftingUiState,
     hasActiveSession: Boolean,
-    isQueueFull: Boolean,
     sessionDurationMs: Long,
     context: android.content.Context,
     onSetAsh: ((String?) -> Unit)? = null,
@@ -488,7 +481,9 @@ private fun CraftQuantityContent(
             val needed = perItem * qty
             val have   = state.inventory[item] ?: 0
             Row(
-                modifier              = Modifier.fillMaxWidth().padding(vertical = 2.dp),
+                modifier              = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 2.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(GameStrings.itemName(context, item), style = MaterialTheme.typography.bodyMedium)
@@ -567,7 +562,10 @@ private fun CraftQuantityContent(
                 val selectedAsh = state.herbloreAshKey
                 (listOf(null) + availableAshes).forEach { ashKey ->
                     Row(
-                        modifier          = Modifier.fillMaxWidth().clickable { onSetAsh(ashKey) }.padding(vertical = 4.dp),
+                        modifier          = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSetAsh(ashKey) }
+                            .padding(vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -592,30 +590,18 @@ private fun CraftQuantityContent(
             }
         }
         Spacer(Modifier.height(20.dp))
-        val queueFullMessage = stringResource(R.string.snackbar_queue_full)
-        Box(modifier = Modifier.fillMaxWidth()) {
-            Button(
-                onClick = { onCraft(qty) },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !isQueueFull,
-            ) {
-                Text(
-                    if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(
-                        R.string.btn_craft
-                    )
-                )
-            }
-            if (isQueueFull) {
-                Box(
-                    modifier = Modifier
-                        .matchParentSize()
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { AppBannerCenter.enqueue(queueFullMessage) },
-                        ),
-                )
-            }
+        Button(
+            onClick = { onCraft(qty) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !state.isQueueFull,
+        ) {
+            Text(
+                when {
+                    state.isQueueFull -> stringResource(R.string.snackbar_queue_full)
+                    hasActiveSession -> stringResource(R.string.skills_add_to_queue)
+                    else -> stringResource(R.string.btn_craft)
+                }
+            )
         }
     }
 }

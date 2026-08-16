@@ -3,7 +3,6 @@ package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -162,104 +161,97 @@ internal fun RunecraftingSheet(
                     .fillMaxWidth()
                     .verticalScroll(runeScrollState),
             ) {
-            Text(
-                text     = stringResource(R.string.skill_runecrafting_name),
-                style    = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            )
-            Text(
-                text     = stringResource(R.string.skill_runecrafting_desc),
-                style    = MaterialTheme.typography.bodySmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
-            )
-            guildDailyButton?.invoke()
-            Text(
-                text     = stringResource(R.string.skills_essence_qty, sheet.essenceQty),
-                style    = MaterialTheme.typography.bodySmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-            )
-            HorizontalDivider()
-            if (sheet.availableRunes.isEmpty()) {
-                Box(
-                    modifier         = Modifier.fillMaxWidth().padding(32.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text  = stringResource(R.string.skills_no_runes),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else if (sheet.essenceQty == 0) {
-                Box(
-                    modifier         = Modifier.fillMaxWidth().padding(32.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text  = stringResource(R.string.skills_no_essence),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else {
-                sheet.availableRunes.forEach { (key, rune) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selectedKey = key }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top,
+                // ── Rune type selection ──────────────────────────────────────
+                Text(
+                    text     = stringResource(R.string.skill_runecrafting_name),
+                    style    = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                )
+                Text(
+                    text     = stringResource(R.string.skill_runecrafting_desc),
+                    style    = MaterialTheme.typography.bodySmall,
+                    color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+                )
+                guildDailyButton?.invoke()
+                Text(
+                    text     = stringResource(R.string.skills_essence_qty, sheet.essenceQty),
+                    style    = MaterialTheme.typography.bodySmall,
+                    color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+                HorizontalDivider()
+                if (sheet.availableRunes.isEmpty()) {
+                    Box(
+                        modifier         = Modifier.fillMaxWidth().padding(32.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Column(Modifier.weight(1f)) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text  = stringResource(R.string.skills_no_runes),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                } else if (sheet.essenceQty == 0) {
+                    Box(
+                        modifier         = Modifier.fillMaxWidth().padding(32.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text  = stringResource(R.string.skills_no_essence),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                } else {
+                    sheet.availableRunes.forEach { (key, rune) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { selectedKey = key }
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Top,
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge)
+                                    val questIndicators = activeQuests["${Skills.RUNECRAFTING}:$key"] ?: emptyList()
+                                    if (questIndicators.isNotEmpty()) {
+                                        QuestIndicatorIcons(questIndicators)
+                                    }
+                                }
+                                val runeOwned = inventory[key] ?: 0
                                 Text(
-                                    GameStrings.itemName(context, key),
-                                    style = MaterialTheme.typography.bodyLarge
+                                    text  = stringResource(R.string.skills_rune_desc, rune.xpPerRune.toInt(), rune.levelRequired),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
-                                val questIndicators =
-                                    activeQuests["${Skills.RUNECRAFTING}:$key"] ?: emptyList()
-                                if (questIndicators.isNotEmpty()) {
-                                    QuestIndicatorIcons(questIndicators)
+                                Text(
+                                    text  = stringResource(R.string.crafting_owned, runeOwned),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (runeOwned > 0) MaterialTheme.colorScheme.primary else dim,
+                                )
+                            }
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(text = " ", style = MaterialTheme.typography.bodyLarge)
+                                Text(
+                                    text  = stringResource(R.string.btn_select),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                                if (isQueueFull) {
+                                    Text(
+                                        text  = context.getString(R.string.snackbar_queue_full),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = dim,
+                                    )
                                 }
                             }
-                            val runeOwned = inventory[key] ?: 0
-                            Text(
-                                text = stringResource(
-                                    R.string.skills_rune_desc,
-                                    rune.xpPerRune.toInt(),
-                                    rune.levelRequired
-                                ),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                            Text(
-                                text = stringResource(R.string.crafting_owned, runeOwned),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = if (runeOwned > 0) MaterialTheme.colorScheme.primary else dim,
-                            )
                         }
-                        Column(horizontalAlignment = Alignment.End) {
-                            Text(text = " ", style = MaterialTheme.typography.bodyLarge)
-                            Text(
-                                text = stringResource(R.string.btn_select),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            if (isQueueFull) {
-                                Text(
-                                    text = context.getString(R.string.snackbar_queue_full),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = dim,
-                                )
-                            }
-                        }
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                     }
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
-            }
             }
         } else {
             val detailScrollState = rememberScrollState()
@@ -404,30 +396,18 @@ internal fun RunecraftingSheet(
                 }
             }
 
-            val queueFullMessage = stringResource(R.string.snackbar_queue_full)
-            Box(
+            Button(
+                onClick  = { onStart(selectedKey!!, qty, selectedAshKey) },
+                enabled  = !isStarting && qty > 0 && maxQty > 0 && !isQueueFull,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             ) {
-                Button(
-                    onClick  = { onStart(selectedKey!!, qty, selectedAshKey) },
-                    enabled  = !isStarting && qty > 0 && maxQty > 0 && !isQueueFull,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    if (isStarting) CircularProgressIndicator(Modifier.size(20.dp))
-                    else Text(if (hasActiveSession) stringResource(R.string.skills_add_to_queue) else stringResource(R.string.btn_start_crafting))
-                }
-                if (isQueueFull) {
-                    Box(
-                        modifier = Modifier
-                            .matchParentSize()
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication        = null,
-                                onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
-                            ),
-                    )
+                when {
+                    isStarting  -> CircularProgressIndicator(Modifier.size(20.dp))
+                    isQueueFull -> Text(stringResource(R.string.snackbar_queue_full))
+                    hasActiveSession -> Text(stringResource(R.string.skills_add_to_queue))
+                    else        -> Text(stringResource(R.string.btn_start_crafting))
                 }
             }
         }
