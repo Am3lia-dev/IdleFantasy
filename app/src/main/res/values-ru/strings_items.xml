@@ -321,6 +321,8 @@
     <string name="item_slayer_platebody_desc">Тяжёлая броня, покрытая рунами убийц.</string>
     <string name="item_slayer_platelegs_name">Поножи убийцы</string>
     <string name="item_slayer_platelegs_desc">Защитные поножи, созданные для длительных походов в подземелья.</string>
+    <string name="item_slayer_plateskirt_name">Slayer Plateskirt</string> <!-- untranslated -->
+    <string name="item_slayer_plateskirt_desc">Protective skirt crafted for extended dungeon runs.</string> <!-- untranslated -->
 
     <!-- ===== Tools — pickaxes ===== -->
     <string name="item_bronze_pickaxe_name">Бронзовая кирка</string>
@@ -1063,6 +1065,8 @@
     <string name="item_tower_body_desc">Непробиваемая броня из внутреннего святилища башни.</string>
     <string name="item_tower_legs_name">Поножи башни</string>
     <string name="item_tower_legs_desc">Поножи, выкованные в самой глубокой кузнице башни.</string>
+    <string name="item_tower_plateskirt_name">Tower Plateskirt</string> <!-- untranslated -->
+    <string name="item_tower_plateskirt_desc">A plateskirt forged in the tower\'s deepest forge.</string> <!-- untranslated -->
     <string name="item_tower_boots_name">Сапоги башни</string>
     <string name="item_tower_boots_desc">Сапоги, выкованные в самой глубокой кузнице башни.</string>
     <string name="item_tower_shield_name">Щит башни</string>

@@ -149,6 +149,7 @@
     <string name="label_available_quests">Verfügbar</string>
     <string name="label_stats">Statistiken</string>
     <string name="label_skills">Fähigkeiten</string>
+    <string name="tab_label_with_count">%1$s (%2$d)</string> <!-- untranslated -->
     <string name="label_shop">Krämer</string>
     <string name="label_sell_items">Gegenstände verkaufen</string>
     <string name="label_total_level">Gesamtlevel</string>
@@ -302,6 +303,8 @@
     <string name="settings_profile_layout_tabs">Reiter</string>
     <string name="settings_quest_dots">Quest-Punkte für Fähigkeiten</string>
     <string name="settings_quest_dots_desc">Goldenen Punkt auf Fähigkeiten mit offenen Quests anzeigen.</string>
+    <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Nummern abkürzen</string>
     <string name="settings_compact_numbers_desc">Große Mengenangaben abkürzen (z. B. 2,46M statt 2.461.940).</string>
     <string name="settings_home_screen">Startbildschirm</string>

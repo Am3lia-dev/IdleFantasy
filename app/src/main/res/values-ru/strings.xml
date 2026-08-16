@@ -149,6 +149,7 @@
     <string name="label_available_quests">Доступно</string>
     <string name="label_stats">Характеристики</string>
     <string name="label_skills">Навыки</string>
+    <string name="tab_label_with_count">%1$s (%2$d)</string> <!-- untranslated -->
     <string name="label_shop">Магазин</string>
     <string name="label_sell_items">Продать предметы</string>
     <string name="label_total_level">Общий уровень</string>
@@ -316,6 +317,8 @@
     <string name="settings_profile_layout_tabs">Вкладки</string>
     <string name="settings_quest_dots">Точки квестов на навыке</string>
     <string name="settings_quest_dots_desc">Показывает золотую точку на навыках, для которых открыт квест</string>
+    <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Компактные числа</string>
     <string name="settings_compact_numbers_desc">Сокращать большие значения (например, 2,46М вместо 2 461 940)</string>
     <string name="settings_home_screen">Главный экран</string>

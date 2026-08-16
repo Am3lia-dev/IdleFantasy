@@ -149,6 +149,7 @@
     <string name="label_available_quests">Disponibili</string>
     <string name="label_stats">Statistiche</string>
     <string name="label_skills">Abilità</string>
+    <string name="tab_label_with_count">%1$s (%2$d)</string> <!-- untranslated -->
     <string name="label_shop">Emporio</string>
     <string name="label_sell_items">Vendi Oggetti</string>
     <string name="label_total_level">Livello Totale</string>
@@ -302,6 +303,8 @@
     <string name="settings_profile_layout_tabs">Schede</string>
     <string name="settings_quest_dots">Indicatori missione</string>
     <string name="settings_quest_dots_desc">Mostra un indicatore quando una missione è disponibile</string>
+    <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Numeri Compatti</string>
     <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Schermata Principale</string>

@@ -149,6 +149,7 @@
     <string name="label_available_quests">Disponible</string>
     <string name="label_stats">Stats</string>
     <string name="label_skills">Aptitudes</string>
+    <string name="tab_label_with_count">%1$s (%2$d)</string> <!-- untranslated -->
     <string name="label_shop">Magasin</string>
     <string name="label_sell_items">Vendre des Objets</string>
     <string name="label_total_level">Total des Niveaux</string>
@@ -302,6 +303,8 @@
     <string name="settings_profile_layout_tabs">Onglets</string>
     <string name="settings_quest_dots">Point de quête sur aptitudes</string>
     <string name="settings_quest_dots_desc">Montre un point doré sur les aptitudes qui ont une quête possible</string>
+    <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Nombres Compacts</string>
     <string name="settings_compact_numbers_desc">Abréger les grands nombres d\'éléments (par ex. 2,46 M au lieu de 2 461 940).</string>
     <string name="settings_home_screen">Écran d\'Accueil</string>
