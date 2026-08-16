@@ -190,11 +190,11 @@
     <string name="quest_goblin_slayer_1_objective">Vaincre 50 gobelins</string>
     <string name="quest_goblin_slayer_2_name">Chasseur de Gobelins II</string>
     <string name="quest_goblin_slayer_2_objective">Vaincre 100 gobelins</string>
-    <string name="quest_spider_slayer_1_name">Chasseur d\'Araignées I</string>
+    <string name="quest_spider_slayer_1_name">Chasseur d\'araignées I</string>
     <string name="quest_spider_slayer_1_objective">Vaincre 40 araignées géantes</string>
-    <string name="quest_spider_slayer_2_name">Chasseur d\'Araignées II</string>
+    <string name="quest_spider_slayer_2_name">Chasseur d\'araignées II</string>
     <string name="quest_spider_slayer_2_objective">Vaincre 80 araignées géantes</string>
-    <string name="quest_skeleton_slayer_1_name">Chasseur d\'Ossements I</string>
+    <string name="quest_skeleton_slayer_1_name">Chasseur d\'ossements I</string>
     <string name="quest_skeleton_slayer_1_objective">Vaincre 35 squelettes</string>
     <string name="quest_skeleton_slayer_2_name">Chasseur d\'Ossements II</string>
     <string name="quest_skeleton_slayer_2_objective">Vaincre 70 squelettes</string>
@@ -202,9 +202,9 @@
     <string name="quest_bandit_hunter_1_objective">Vaincre 30 bandits</string>
     <string name="quest_bandit_hunter_2_name">Chasseur de Bandits II</string>
     <string name="quest_bandit_hunter_2_objective">Vaincre 60 bandits</string>
-    <string name="quest_orc_slayer_1_name">Chasseur d’Orques I</string>
+    <string name="quest_orc_slayer_1_name">Chasseur d\'orcs I</string>
     <string name="quest_orc_slayer_1_objective">Vaincre 25 guerriers orcs</string>
-    <string name="quest_orc_slayer_2_name">Chasseur d’Orques II</string>
+    <string name="quest_orc_slayer_2_name">Chasseur d\'orcs II</string>
     <string name="quest_orc_slayer_2_objective">Vaincre 50 guerriers orcs</string>
     <string name="quest_demon_slayer_1_name">Chasseur de Démons I</string>
     <string name="quest_demon_slayer_1_objective">Vaincre le Seigneur Démon</string>
@@ -218,24 +218,24 @@
     <string name="quest_dragon_slayer_2_objective">Vaincre 25 dragons verts</string>
 
     <!-- Combat style challenges -->
-    <string name="quest_melee_warrior_1_name">Guerrier au Corps à Corps I</string>
-    <string name="quest_melee_warrior_1_objective">Terminer la Caverne des Gobelins en utilisant uniquement le combat au corps à corps</string>
-    <string name="quest_melee_warrior_2_name">Guerrier au Corps à Corps II</string>
-    <string name="quest_melee_warrior_2_objective">Terminer le Camp des Bandits en utilisant uniquement le combat au corps à corps</string>
-    <string name="quest_melee_warrior_3_name">Guerrier au Corps à Corps III</string>
-    <string name="quest_melee_warrior_3_objective">Terminer les Ruines de la Forteresse en utilisant uniquement le combat au corps à corps</string>
-    <string name="quest_ranger_elite_1_name">Ranger d\'Élite I</string>
-    <string name="quest_ranger_elite_1_objective">Terminer la Grotte des Gobelins en utilisant uniquement l\'arc</string>
-    <string name="quest_ranger_elite_2_name">Ranger d\'Élite II</string>
-    <string name="quest_ranger_elite_2_objective">Terminer le Camp des Bandits en utilisant uniquement l’arc</string>
-    <string name="quest_ranger_elite_3_name">Ranger d\'Élite III</string>
-    <string name="quest_ranger_elite_3_objective">Terminer les Ruines de la Forteresse en utilisant uniquement l’arc</string>
-    <string name="quest_mage_master_1_name">Maître Magicien I</string>
-    <string name="quest_mage_master_1_objective">Terminer la Caverne des Gobelins en utilisant uniquement la magie</string>
-    <string name="quest_mage_master_2_name">Maître Magicien II</string>
-    <string name="quest_mage_master_2_objective">Terminer le Camp des Bandits en utilisant uniquement la magie</string>
-    <string name="quest_mage_master_3_name">Maître Magicien III</string>
-    <string name="quest_mage_master_3_objective">Terminer les Ruines de la Forteresse en utilisant uniquement la magie</string>
+    <string name="quest_melee_warrior_1_name">Guerrier au corps à corps I</string>
+    <string name="quest_melee_warrior_1_objective">Terminer la Caverne des gobelins en utilisant uniquement le combat au corps à corps</string>
+    <string name="quest_melee_warrior_2_name">Guerrier au corps à corps II</string>
+    <string name="quest_melee_warrior_2_objective">Terminer le Camp des bandits en utilisant uniquement le combat au corps à corps</string>
+    <string name="quest_melee_warrior_3_name">Guerrier au corps à corps III</string>
+    <string name="quest_melee_warrior_3_objective">Terminer les Ruines de la forteresse en utilisant uniquement le combat au corps à corps</string>
+    <string name="quest_ranger_elite_1_name">Ranger d\'élite I</string>
+    <string name="quest_ranger_elite_1_objective">Terminer la Grotte des gobelins en utilisant uniquement l\'arc</string>
+    <string name="quest_ranger_elite_2_name">Ranger d\'élite II</string>
+    <string name="quest_ranger_elite_2_objective">Terminer le Camp des bandits en utilisant uniquement l\'arc</string>
+    <string name="quest_ranger_elite_3_name">Ranger d\'élite III</string>
+    <string name="quest_ranger_elite_3_objective">Terminer les Ruines de la forteresse en utilisant uniquement l\'arc</string>
+    <string name="quest_mage_master_1_name">Maître magicien I</string>
+    <string name="quest_mage_master_1_objective">Terminer la Caverne des gobelins en utilisant uniquement la magie</string>
+    <string name="quest_mage_master_2_name">Maître magicien II</string>
+    <string name="quest_mage_master_2_objective">Terminer le Camp des bandits en utilisant uniquement la magie</string>
+    <string name="quest_mage_master_3_name">Maître magicien III</string>
+    <string name="quest_mage_master_3_objective">Terminer les Ruines de la forteresse en utilisant uniquement la magie</string>
 
     <!-- Iron Stomach (no food) challenges -->
     <string name="quest_iron_stomach_1_name">Estomac en Fer I</string>
@@ -248,9 +248,9 @@
     <string name="quest_iron_stomach_4_objective">Terminer la Grotte du dragon sans utiliser de nourriture</string>
 
     <!-- Treasure Hunter -->
-    <string name="quest_treasure_hunter_1_name">Chasseur de Trésors I</string>
+    <string name="quest_treasure_hunter_1_name">Chasseur de trésors I</string>
     <string name="quest_treasure_hunter_1_objective">Collecter 20 soies d\'araignée lors de combats</string>
-    <string name="quest_treasure_hunter_2_name">Chasseur de Trésors II</string>
+    <string name="quest_treasure_hunter_2_name">Chasseur de trésors II</string>
     <string name="quest_treasure_hunter_2_objective">Collecter 10 cœurs de gobelin lors de combats</string>
     <string name="quest_treasure_hunter_3_name">Chasseur de Trésors III</string>
     <string name="quest_treasure_hunter_3_objective">Collecter 5 cornes de démon lors de combats</string>
@@ -264,25 +264,25 @@
     <string name="quest_firemaking_2_objective">Brûler 750 bûches de chêne</string>
     <string name="quest_firemaking_3_name">Incinération III</string>
     <string name="quest_firemaking_3_objective">Brûler 1100 bûches de saule</string>
-    <string name="quest_firemaking_4_name">Incinération IV</string>
+    <string name="quest_firemaking_4_name">Fabrication de Feu IV</string>
     <string name="quest_firemaking_4_objective">Brûler 1650 bûches d\'érable</string>
-    <string name="quest_firemaking_5_name">Incinération V</string>
+    <string name="quest_firemaking_5_name">Fabrication de Feu V</string>
     <string name="quest_firemaking_5_objective">Brûler 2450 bûches de if</string>
     <string name="quest_firemaking_6_name">Incinération VI</string>
     <string name="quest_firemaking_6_objective">Brûler 3650 bûches magiques</string>
 
     <!-- Runecrafting -->
-    <string name="quest_runecrafting_1_name">Gravure de Runes I</string>
+    <string name="quest_runecrafting_1_name">Création de Runes I</string>
     <string name="quest_runecrafting_1_objective">Créer 500 Runes d\'Air</string>
-    <string name="quest_runecrafting_2_name">Gravure de Runes II</string>
+    <string name="quest_runecrafting_2_name">Création de Runes II</string>
     <string name="quest_runecrafting_2_objective">Créer 750 Runes d\'Eau</string>
-    <string name="quest_runecrafting_3_name">Gravure de Runes III</string>
+    <string name="quest_runecrafting_3_name">Création de Runes III</string>
     <string name="quest_runecrafting_3_objective">Créer 1100 Runes de Terre</string>
     <string name="quest_runecrafting_4_name">Gravure de Runes IV</string>
     <string name="quest_runecrafting_4_objective">Créer 1650 Runes de Feu</string>
-    <string name="quest_runecrafting_5_name">Gravure de Runes V</string>
-    <string name="quest_runecrafting_5_objective">Créer 2450 Runes d\'Esprit</string>
-    <string name="quest_runecrafting_6_name">Gravure de Runes VI</string>
+    <string name="quest_runecrafting_5_name">Création de Runes V</string>
+    <string name="quest_runecrafting_5_objective">Créer 2450 Runes de l\'Esprit</string>
+    <string name="quest_runecrafting_6_name">Création de Runes VI</string>
     <string name="quest_runecrafting_6_objective">Créer 3650 Runes du Chaos</string>
 
     <!-- Herblore -->
@@ -414,9 +414,9 @@
     <string name="quest_melee_warrior_4_name">Guerrier au Corps à Corps IV</string>
     <string name="quest_melee_warrior_4_objective">Terminer la Forteresse des Orques en utilisant uniquement le corps à corps</string>
     <string name="quest_melee_warrior_5_name">Guerrier au Corps à Corps V</string>
-    <string name="quest_melee_warrior_5_objective">Terminer la Galerie du Dragon en utilisant uniquement le corps à corps</string>
+    <string name="quest_melee_warrior_5_objective">Terminer la Galerie du Dragon en utilisant uniquement le mêlée</string>
     <string name="quest_ranger_elite_4_name">Chasseur d\'Élite IV</string>
-    <string name="quest_ranger_elite_4_objective">Terminer la Forteresse des Orques en utilisant uniquement l\'arc</string>
+    <string name="quest_ranger_elite_4_objective">Terminer la Forteresse Orc en utilisant uniquement l\'arc</string>
     <string name="quest_ranger_elite_5_name">Chasseur d\'Élite V</string>
     <string name="quest_ranger_elite_5_objective">Terminer la Galerie du Dragon en utilisant uniquement l\'arc</string>
     <string name="quest_mage_master_4_name">Maître Mage IV</string>
@@ -447,28 +447,28 @@
     <!-- Daily quest names -->
     <string name="quest_daily_mine_iron_name">Mineur de Fer</string>
     <string name="quest_daily_mine_coal_name">Charbonnier</string>
-    <string name="quest_daily_mine_mithril_name">Prospecteur de Mithril</string>
-    <string name="quest_daily_mine_runite_name">Ruée du Runite</string>
-    <string name="quest_daily_fish_salmon_name">Remontée du Saumon</string>
-    <string name="quest_daily_fish_lobster_name">Prise de Homards</string>
-    <string name="quest_daily_fish_swordfish_name">Chasseur d\'Espadons</string>
-    <string name="quest_daily_fish_shark_name">Dompteur de Requins</string>
-    <string name="quest_daily_wc_oak_name">Coupeur de Chêne</string>
-    <string name="quest_daily_wc_willow_name">Travailleur du Saule</string>
-    <string name="quest_daily_wc_yew_name">Bûcheron d\'If</string>
-    <string name="quest_daily_wc_magic_name">Bûcheron Magique</string>
-    <string name="quest_daily_smith_iron_name">Forgeron de Fer</string>
-    <string name="quest_daily_smith_mithril_name">Forgeron de Mithril</string>
-    <string name="quest_daily_smith_adamantite_name">Artisan d\'Adamantite</string>
-    <string name="quest_daily_smith_runite_name">Fondeur de Runite</string>
-    <string name="quest_daily_cook_trout_name">Chef de la Truite</string>
-    <string name="quest_daily_cook_salmon_name">Grilleur de Saumon</string>
-    <string name="quest_daily_cook_lobster_name">Cuisinier de Homard</string>
-    <string name="quest_daily_cook_swordfish_name">Cuisinier d\'Espadon</string>
-    <string name="quest_daily_kill_goblin_name">Tueur de Gobelins</string>
-    <string name="quest_daily_kill_bandit_name">Briseur de Bandits</string>
-    <string name="quest_daily_kill_demon_name">Chasseur de Démons</string>
-    <string name="quest_daily_kill_dragon_name">Tueur de Dragons</string>
+    <string name="quest_daily_mine_mithril_name">Prospecteur de mithril</string>
+    <string name="quest_daily_mine_runite_name">Ruée du runite</string>
+    <string name="quest_daily_fish_salmon_name">Remontée du saumon</string>
+    <string name="quest_daily_fish_lobster_name">Prise de homards</string>
+    <string name="quest_daily_fish_swordfish_name">Chasseur d\'espadons</string>
+    <string name="quest_daily_fish_shark_name">Dompteur de requins</string>
+    <string name="quest_daily_wc_oak_name">Coupeur de chêne</string>
+    <string name="quest_daily_wc_willow_name">Travailleur du saule</string>
+    <string name="quest_daily_wc_yew_name">Bûcheron d\'if</string>
+    <string name="quest_daily_wc_magic_name">Bûcheron magique</string>
+    <string name="quest_daily_smith_iron_name">Forgeron de fer</string>
+    <string name="quest_daily_smith_mithril_name">Forgeron de mithril</string>
+    <string name="quest_daily_smith_adamantite_name">Artisan d\'adamantite</string>
+    <string name="quest_daily_smith_runite_name">Fondeur de runite</string>
+    <string name="quest_daily_cook_trout_name">Chef de la truite</string>
+    <string name="quest_daily_cook_salmon_name">Grilleur de saumon</string>
+    <string name="quest_daily_cook_lobster_name">Cuisinier de homard</string>
+    <string name="quest_daily_cook_swordfish_name">Cuisinier d\'espadon</string>
+    <string name="quest_daily_kill_goblin_name">Tueur de gobelins</string>
+    <string name="quest_daily_kill_bandit_name">Briseur de bandits</string>
+    <string name="quest_daily_kill_demon_name">Chasseur de démons</string>
+    <string name="quest_daily_kill_dragon_name">Tueur de dragons</string>
 
     <!-- Daily quest objectives — override the generated verb+item text, whose item names
          read wrong for cooking/fishing (issue #1383: "Cook 20 Cooked Swordfish") -->
@@ -524,7 +524,7 @@
     <string name="quest_obj_collect">Collecter %1$d %2$s en combat</string>
     <string name="quest_obj_slayer_task">Terminer %1$d tâches du Tueur</string>
 
-    <string name="skilling_dungeon_shattered_spire_note_1">De la pierre calcinée et du verre fondu sur une centaine de mètres à la ronde. Quoi qu’il se soit passé ici, ça a été catastrophique.</string>
+    <string name="skilling_dungeon_shattered_spire_note_1">De la pierre calcinée et du verre fondu sur une centaine de mètres à la ronde. Quoi qu\'il se soit passé ici, ça a été catastrophique.</string>
     <string name="skilling_dungeon_shattered_spire_note_2">Une page arrachée d\'un journal de recherche : « L\'expérience de convergence dépasse toutes les prévisions. Nous devons poursuivre. »</string>
     <string name="skilling_dungeon_shattered_spire_note_3">Des matrices arcaniques gravées dans les pans de mur encore debout — un cercle de confinement mal conçu et manifestement soumis à une tension excessive.</string>
     <string name="skilling_dungeon_shattered_spire_note_4">Un passage a été ouvert par explosion vers le bas. Des Créatures se déplacent encore dans les ténèbres en contrebas, suivant d\'anciennes instructions.</string>
@@ -543,7 +543,7 @@
     <string name="skilling_dungeon_dwarven_depths_note_2">Une forge colossale se dresse au bout du passage, ses feux brûlant encore, on ne sait comment, après des siècles.</string>
     <string name="skilling_dungeon_dwarven_depths_note_3">Des Golems de Fer se tiennent immobiles dans les alcôves. Leurs yeux vacillent alors que vous extrayez des ressources à proximité.</string>
     <string name="skilling_dungeon_dwarven_depths_note_4">Les runes de forge sont un avertissement — quelque chose a été enchaîné ici, et cette chose s\'agite.</string>
-    <string name="skilling_dungeon_dwarven_depths_note_5">Les golems s’éveillent pleinement. L\'Ancienne Forge s\'éveille — ses gardiens attendent ceux qui auront le courage d\'y pénétrer.</string>
+    <string name="skilling_dungeon_dwarven_depths_note_5">Les golems s\'éveillent pleinement. L\'Ancienne Forge s\'éveille — ses gardiens attendent ceux qui auront le courage d\'y pénétrer.</string>
     <string name="skilling_dungeon_corrupted_canopy_note_1">Ici, les arbres saignent de l\'ombre là où ils sont entaillés. Le bois se tord et résiste à la lame.</string>
     <string name="skilling_dungeon_corrupted_canopy_note_2">Une bête d\'ombre guette depuis la canopée. Elle n\'attaque pas — elle se contente d\'observer.</string>
     <string name="skilling_dungeon_corrupted_canopy_note_3">De vieilles pierres sacrées sont visibles à travers les troncs tortueux. Quelque chose y vit encore...</string>

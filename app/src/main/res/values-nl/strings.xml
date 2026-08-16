@@ -1812,7 +1812,7 @@
     <string name="title_seasonal_champion_of">Kampioen van %1$s</string>
     <string name="title_seasonal_requirement">Voltooi het Seizoensevenement %1$s</string>
     <string name="home_welcome_greeting">Welkom terug,</string>
-
+    <string name="home_welcome_name">%1$s!</string> <!-- untranslated -->
     <string name="home_welcome_title">De %1$s!</string>
 
     <!-- Pet names and descriptions -->

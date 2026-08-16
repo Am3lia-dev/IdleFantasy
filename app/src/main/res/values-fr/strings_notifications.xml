@@ -2,8 +2,8 @@
 <resources>
     <!-- ===== Notification channel metadata ===== -->
     <string name="notif_channel_sessions_name">Alertes de session</string>
-    <string name="notif_channel_sessions_desc">Notifications à la fin de vos sessions d’entraînement</string>
-    <string name="notif_channel_farming_name">Alerte de Culture</string>
+    <string name="notif_channel_sessions_desc">Notifications à la fin de vos sessions d\'entraînement</string>
+    <string name="notif_channel_farming_name">Alerte culture</string>
     <string name="notif_channel_farming_desc">Des notifications lorsque vos cultures sont prêtes à être récoltées</string>
 
     <!-- ===== Session complete ===== -->
