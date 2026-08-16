@@ -228,7 +228,6 @@ internal fun PrayerSheet(
                                 )
                             }
                             Column(horizontalAlignment = Alignment.End) {
-                                Text(text = " ", style = MaterialTheme.typography.bodyLarge)
                                 Text(
                                     text  = stringResource(R.string.crafting_owned, qty),
                                     style = MaterialTheme.typography.labelSmall,
