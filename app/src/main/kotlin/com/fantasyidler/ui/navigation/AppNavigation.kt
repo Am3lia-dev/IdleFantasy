@@ -78,6 +78,8 @@ fun AppNavigation(
     val showOnboarding by onboardingVm.showOnboarding.collectAsState()
     val navBadgeVm: NavBadgeViewModel = hiltViewModel()
     val questsClaimable by navBadgeVm.questsClaimableCount.collectAsState()
+    val hasCombatPrestige by navBadgeVm.hasCombatPrestige.collectAsState()
+    val hasSkillPrestige by navBadgeVm.hasSkillPrestige.collectAsState()
 
     // Show onboarding as a full-screen overlay until complete.
     // null = still loading from DB; don't flash the overlay.
@@ -160,7 +162,9 @@ fun AppNavigation(
                                 }
                             } else {
                                 val showQuestBadge = screen is Screen.Quests && questsClaimable > 0
-                                if (showQuestBadge) {
+                                val showCombatBadge = screen is Screen.Combat && hasCombatPrestige
+                                val showSkillBadge = screen is Screen.Skills && hasSkillPrestige
+                                if (showQuestBadge || showCombatBadge || showSkillBadge) {
                                     BadgedBox(badge = { Badge() }) {
                                         Icon(
                                             imageVector        = if (selected) screen.selectedIcon else screen.icon,
