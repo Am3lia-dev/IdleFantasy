@@ -277,6 +277,8 @@
     <string name="settings_profile_layout_tabs">タブ</string>
     <string name="settings_quest_dots">Quest dots on skills</string> <!-- untranslated -->
     <string name="settings_quest_dots_desc">Show a gold dot on skills that have an open quest</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">ホーム画面</string>
     <string name="settings_home_screen_desc">ホーム画面に表示する内容を選択</string>
     <string name="settings_recent_activity">最近の活動ログ</string>
@@ -666,7 +668,7 @@
     <string name="quest_legend_gold_dot">Timed quest is available.</string> <!-- untranslated -->
     <string name="quest_legend_notes">薄いアイコンはまだ達成できません（レベルや素材が不足）。小さな上付き数字は、同じ対象を求めるクエストがその種類に複数あることを示します。</string>
     <!-- Translator note: %1$d = quantity -->
-    <string name="shop_qty_in_inv">インベントリ所持数: ×%1$d</string>
+    <string name="shop_qty_in_inv">インベントリ所持数: ×%1$s</string>
     <!-- Translator note: %1$s = formatted coin amount -->
     <string name="shop_price_each">各 %1$s コイン</string>
     <!-- Translator note: %1$s = item name -->

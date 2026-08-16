@@ -77,6 +77,7 @@ import com.fantasyidler.ui.viewmodel.ShopViewModel
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatCoins
+import com.fantasyidler.util.formatQuantity
 
 private fun localizedCategory(context: android.content.Context, raw: String): String {
     val resId = when (raw) {
@@ -180,6 +181,7 @@ fun ShopScreen(
                         equipped           = state.equipped,
                         lockedItems        = state.lockedItems,
                         context            = context,
+                        compactNumbers     = state.compactNumbers,
                         priceFor           = viewModel::sellPriceFor,
                         categoryFor        = viewModel::sellCategoryFor,
                         onSell             = { key -> viewModel.openSell(key, GameStrings.itemName(context, key)) },
@@ -192,6 +194,7 @@ fun ShopScreen(
                         coins              = state.coins,
                         xpBoostActive      = state.xpBoostActive,
                         inventory          = state.inventory,
+                        compactNumbers     = state.compactNumbers,
                         discountedPriceFor = viewModel::discountedPrice,
                         onBuy              = viewModel::openBuy,
                     )
@@ -230,9 +233,10 @@ fun ShopScreen(
         ) {
             ScaledSheetContent {
             BulkSellSheet(
-                preview   = preview,
-                onConfirm = viewModel::confirmBulkSell,
-                onDismiss = viewModel::dismissBulkSell,
+                preview        = preview,
+                compactNumbers = state.compactNumbers,
+                onConfirm      = viewModel::confirmBulkSell,
+                onDismiss      = viewModel::dismissBulkSell,
             )
             }
         }
@@ -249,6 +253,7 @@ private fun BuyList(
     coins: Long,
     xpBoostActive: Boolean,
     inventory: Map<String, Int>,
+    compactNumbers: Boolean = false,
     discountedPriceFor: (ShopEntry) -> Int,
     onBuy: (ShopEntry) -> Unit,
 ) {
@@ -304,7 +309,7 @@ private fun BuyList(
                         }
                         if (!isXpBoost) {
                             Text(
-                                text  = stringResource(R.string.shop_qty_in_inv, owned),
+                                text  = stringResource(R.string.shop_qty_in_inv, owned.formatQuantity(compactNumbers)),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             )
@@ -312,14 +317,14 @@ private fun BuyList(
                     }
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
-                            text       = stringResource(R.string.shop_total_amount, discounted.toString()),
+                            text       = stringResource(R.string.shop_total_amount, discounted.toLong().formatCoins()),
                             style      = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                             color      = if (canAfford) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.38f),
                         )
                         if (hasDiscount) {
                             Text(
-                                text           = stringResource(R.string.shop_total_amount, entry.price.toString()),
+                                text           = stringResource(R.string.shop_total_amount, entry.price.toLong().formatCoins()),
                                 style          = MaterialTheme.typography.bodySmall,
                                 textDecoration = TextDecoration.LineThrough,
                                 color          = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
@@ -347,6 +352,7 @@ private fun SellList(
     equipped: Map<String, String?>,
     lockedItems: Set<String>,
     context: android.content.Context,
+    compactNumbers: Boolean = false,
     priceFor: (String) -> Int,
     categoryFor: (String) -> String,
     onSell: (String) -> Unit,
@@ -435,13 +441,13 @@ private fun SellList(
                                 }
                             }
                             Text(
-                                text  = stringResource(R.string.shop_qty_in_inv, qty),
+                                text  = stringResource(R.string.shop_qty_in_inv, qty.formatQuantity(compactNumbers)),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                         Text(
-                            text       = stringResource(R.string.shop_price_each, sellPrice.toString()),
+                            text       = stringResource(R.string.shop_price_each, sellPrice.toLong().formatCoins()),
                             style      = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                             color      = MaterialTheme.colorScheme.primary.copy(alpha = lockedAlpha),
@@ -491,7 +497,7 @@ private fun TransactionSheet(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text  = stringResource(R.string.shop_price_each_long, transaction.priceEach.toString()),
+            text  = stringResource(R.string.shop_price_each_long, transaction.priceEach.toLong().formatCoins()),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -548,7 +554,7 @@ private fun TransactionSheet(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                text       = stringResource(R.string.shop_total_amount, total.toString()),
+                text       = stringResource(R.string.shop_total_amount, total.formatCoins()),
                 style      = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color      = MaterialTheme.colorScheme.primary,
@@ -592,6 +598,7 @@ private fun TransactionSheet(
 @Composable
 private fun BulkSellSheet(
     preview: BulkSellPreview,
+    compactNumbers: Boolean = false,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -623,7 +630,7 @@ private fun BulkSellSheet(
                         modifier = Modifier.weight(1f),
                     )
                     Text(
-                        text  = "×${item.qty}",
+                        text  = "×${item.qty.formatQuantity(compactNumbers)}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 12.dp),
