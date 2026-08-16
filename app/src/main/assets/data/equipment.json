@@ -814,7 +814,7 @@
     "requirements": {
       "ranged": 50
     },
-    "ranged_strength_bonus": 48  
+    "ranged_strength_bonus": 48
   },
   "magic_shortbow": {
     "name": "magic_shortbow",
@@ -886,7 +886,7 @@
     "defense_bonus": 2,
     "requirements": {
       "magic": 5
-    }  
+    }
   },
   "staff_of_air": {
     "name": "staff_of_air",
