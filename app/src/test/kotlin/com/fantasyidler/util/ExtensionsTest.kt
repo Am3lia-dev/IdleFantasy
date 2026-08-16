@@ -70,15 +70,29 @@ class ExtensionsTest {
         assertEquals("2.46M", 2_461_940.formatQuantity(compact = true))
     }
 
+    // The context overload just resolves string resources; the ladder logic under test lives in
+    // the lambda-based core, exercised here with the English unit templates.
+    private val englishUnits = mapOf(
+        com.fantasyidler.R.string.duration_months  to "mo",
+        com.fantasyidler.R.string.duration_weeks   to "w",
+        com.fantasyidler.R.string.duration_days    to "d",
+        com.fantasyidler.R.string.duration_hours   to "h",
+        com.fantasyidler.R.string.duration_minutes to "m",
+        com.fantasyidler.R.string.duration_seconds to "s",
+    )
+
+    private fun Long.formatDurationEn(): String =
+        formatDurationMs { resId, value -> "$value${englishUnits.getValue(resId)}" }
+
     @Test
     fun `formatDurationMs renders hours minutes and seconds`() {
-        assertEquals("45s", 45_000L.formatDurationMs())
-        assertEquals("1m", 60_000L.formatDurationMs())
-        assertEquals("1m", 90_000L.formatDurationMs())     // sub-minute remainder dropped
-        assertEquals("1h", 3_600_000L.formatDurationMs())
-        assertEquals("1h 1m", 3_660_000L.formatDurationMs())
-        assertEquals("1h 30m", 5_400_000L.formatDurationMs())
-        assertEquals("0s", 0L.formatDurationMs())
+        assertEquals("45s", 45_000L.formatDurationEn())
+        assertEquals("1m", 60_000L.formatDurationEn())
+        assertEquals("1m", 90_000L.formatDurationEn())     // sub-minute remainder dropped
+        assertEquals("1h", 3_600_000L.formatDurationEn())
+        assertEquals("1h 1m", 3_660_000L.formatDurationEn())
+        assertEquals("1h 30m", 5_400_000L.formatDurationEn())
+        assertEquals("0s", 0L.formatDurationEn())
     }
 
     @Test
@@ -95,7 +109,7 @@ class ExtensionsTest {
     }
 
     private fun assertEquals(expected: String, ms: Long) =
-        assertEquals(expected, ms.formatDurationMs())
+        assertEquals(expected, ms.formatDurationEn())
 
     @Test
     fun `clampLevel constrains to the 1-99 skill range`() {

@@ -27,10 +27,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -182,6 +186,8 @@ fun ShopScreen(
                         lockedItems        = state.lockedItems,
                         context            = context,
                         compactNumbers     = state.compactNumbers,
+                        keepOneOfEach      = state.keepOneOfEach,
+                        onKeepOneChange    = viewModel::setKeepOneOfEach,
                         priceFor           = viewModel::sellPriceFor,
                         categoryFor        = viewModel::sellCategoryFor,
                         onSell             = { key -> viewModel.openSell(key, GameStrings.itemName(context, key)) },
@@ -353,19 +359,32 @@ private fun SellList(
     lockedItems: Set<String>,
     context: android.content.Context,
     compactNumbers: Boolean = false,
+    keepOneOfEach: Boolean = false,
     priceFor: (String) -> Int,
     categoryFor: (String) -> String,
     onSell: (String) -> Unit,
     onToggleLock: (String) -> Unit,
     onSellJunk: () -> Unit,
     onSellOldEquipment: () -> Unit,
+    onKeepOneChange: (Boolean) -> Unit,
 ) {
-    val grouped = remember(inventory) {
+    var query by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf<String?>(null) }
+
+    val grouped = remember(inventory, query, selectedCategory) {
         inventory.entries
             .filter { it.key != "coins" }
-            .groupBy { categoryFor(it.key) }
+            .map { Triple(it.key, it.value, GameStrings.itemName(context, it.key)) }
+            .filter { (_, _, name) -> query.isBlank() || name.contains(query.trim(), ignoreCase = true) }
+            .groupBy { (key, _, _) -> categoryFor(key) }
+            .filterKeys { selectedCategory == null || it == selectedCategory }
             .entries
             .sortedBy { SELL_CATEGORY_ORDER.indexOf(it.key).let { i -> if (i < 0) Int.MAX_VALUE else i } }
+            .map { (category, entries) -> category to entries.sortedBy { (_, _, name) -> name } }
+    }
+    val presentCategories = remember(inventory) {
+        inventory.keys.filter { it != "coins" }.map(categoryFor).distinct()
+            .sortedBy { SELL_CATEGORY_ORDER.indexOf(it).let { i -> if (i < 0) Int.MAX_VALUE else i } }
     }
 
     LazyColumn(Modifier.fillMaxSize()) {
@@ -384,6 +403,52 @@ private fun SellList(
                     onClick  = onSellOldEquipment,
                     modifier = Modifier.weight(1f),
                 ) { Text(stringResource(R.string.shop_sell_old_gear)) }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment     = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text     = stringResource(R.string.shop_keep_one_toggle),
+                    style    = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.weight(1f),
+                )
+                Switch(
+                    checked         = keepOneOfEach,
+                    onCheckedChange = onKeepOneChange,
+                )
+            }
+            OutlinedTextField(
+                value         = query,
+                onValueChange = { query = it },
+                placeholder   = { Text(stringResource(R.string.shop_search_hint)) },
+                singleLine    = true,
+                modifier      = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FilterChip(
+                    selected = selectedCategory == null,
+                    onClick  = { selectedCategory = null },
+                    label    = { Text(stringResource(R.string.shop_filter_all)) },
+                )
+                presentCategories.forEach { category ->
+                    FilterChip(
+                        selected = selectedCategory == category,
+                        onClick  = { selectedCategory = if (selectedCategory == category) null else category },
+                        label    = { Text(localizedCategory(context, category)) },
+                    )
+                }
             }
             HorizontalDivider()
         }
@@ -405,7 +470,7 @@ private fun SellList(
         } else {
             grouped.forEach { (category, entries) ->
                 item(key = "sell_hdr_$category") { ShopSectionHeader(localizedCategory(context, category)) }
-                items(entries, key = { it.key }) { (key, qty) ->
+                items(entries, key = { it.first }) { (key, qty, _) ->
                     val sellPrice  = priceFor(key)
                     val isEquipped = equipped.values.any { it == key }
                     val isLocked   = key in lockedItems
