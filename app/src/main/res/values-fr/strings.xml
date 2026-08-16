@@ -347,8 +347,8 @@
     <string name="label_daily_info_complete">"Chaque quête quotidienne donne des pièces. Vous possédez déjà tout l'équipement nain ! "</string>
     <string name="label_weekly_info">Chaque défi hebdomadaire rapporte des pièces selon son niveau requis. Complétez les 5 pour gagner un bonus : 100 000 pièces, ou %1$s de chance d\'obtenir un équipement divin.</string>
     <string name="label_weekly_info_complete">Chaque défi hebdomadaire rapporte des pièces selon son niveau requis. Complétez les 5 pour gagner un bonus : 100 000 pièces. Vous possédez déjà tout l\'équipement divin !</string>
-    <string name="label_daily_reward_pity">2,000 pièces (1/%1$d: équipement nain)</string>
-    <string name="label_daily_reward_complete">2,000 pièces</string>
+    <string name="label_daily_reward_pity">2 000 pièces (1/%1$d : équipement nain)</string>
+    <string name="label_daily_reward_complete">2 000 pièces</string>
     <string name="msg_daily_claimed_coins">Quête quotidienne terminée ! +2 000 pièces.</string>
     <string name="msg_daily_claimed_dwarven">Quête quotidienne terminée ! Vous avez trouvé %1$s !</string>
     <string name="label_hide_completed">Masquer les tâches terminées</string>
@@ -672,9 +672,9 @@
     <!-- Translator note: %1$d = required level, %2$s = skill name, %3$d = player level, %4$s = skill name again -->
     <string name="skills_req_with_have">Requiert %1$d %2$s (vous en avez %3$d %4$s)</string>
     <!-- Translator note: %1$d = owned quantity -->
-    <string name="crafting_owned">Possédé: %1$d</string>
-    <string name="crafting_owned_detail">Présent dans l\'inventaire: %1$d</string>
-    <string name="firemaking_ashes_owned">Cendres possédées: %1$d</string>
+    <string name="crafting_owned">Possédé : %1$d</string>
+    <string name="crafting_owned_detail">Présent dans l\'inventaire : %1$d</string>
+    <string name="firemaking_ashes_owned">Cendres possédées : %1$d</string>
 
 
     <!-- ===== ShopScreen ===== -->
@@ -1275,7 +1275,7 @@
     <string name="town_upgrade_next_label">Prochaine Amélioration</string>
     <string name="town_upgrade_constr_req">Construction Nv. %1$d requis</string>
     <string name="town_upgrade_cost">Coût : %1$s pièces</string>
-    <string name="town_builder_discount">Promotion du Constructeur: /%1$d%% en moins</string>
+    <string name="town_builder_discount">Promotion du Constructeur : /%1$d%% en moins</string>
     <string name="town_upgrade_materials_header">Matériaux :</string>
     <string name="town_upgrade_btn">Améliorer</string>
     <string name="town_upgrade_success">Bâtiment amélioré !</string>
@@ -1519,7 +1519,7 @@
     <string name="shop_bought_item">%1$d× %2$s acheté</string>
     <string name="shop_sold_item">%1$d× %2$s vendu pour %3$d pièces</string>
     <string name="quest_complete_notification">Quête terminée : %1$s!</string>
-    <string name="quest_complete_with_rewards">Quête terminée : %1$s! Réclamé: %2$s</string>
+    <string name="quest_complete_with_rewards">Quête terminée : %1$s! Réclamé : %2$s</string>
     <string name="quest_daily_complete_coins">Quête journalière terminée! +%1$s pièces</string>
     <string name="quest_daily_complete_dwarven">Quête journalière terminée! Vous avez trouvé de l\'équipement nain!</string>
     <string name="quest_weekly_complete">Défi hebdomadaire terminé! +%1$s pièces</string>
@@ -1527,8 +1527,8 @@
     <string name="quest_weekly_bonus_complete_divine">Tous les défis hebdomadaires terminés! Vous avez trouvé de l\'équipement divin!</string>
     <string name="guild_contributed_items">%1$d objets contribués.</string>
     <string name="mercantile_not_enough_coins">Pas assez de pièces (besoin de %1$s pièces).</string>
-    <string name="mercantile_route_start_failed">Impossible de démarrer la route: %1$s</string>
-    <string name="mercantile_added_to_queue">Ajouté à la file: Commerce — %1$s.</string>
+    <string name="mercantile_route_start_failed">Impossible de démarrer la route : %1$s</string>
+    <string name="mercantile_added_to_queue">Ajouté à la file : Commerce — %1$s.</string>
     <string name="inventory_requires_to_equip">Nécessite %1$s pour équiper.</string>
     <string name="home_found_pet">Vous avez trouvé un familier : %1$s !</string>
     <string name="pet_found_title">Nouveau familier!</string>
@@ -1632,7 +1632,7 @@
     <string name="tower_milestone_claim">Réclamer</string>
     <string name="tower_milestone_claimed">Réclamé</string>
     <string name="tower_enemies_this_floor">Ennemis</string>
-    <string name="tower_enemy_strength">Puissance ennemie: %1$s%%</string>
+    <string name="tower_enemy_strength">Puissance ennemie : %1$s%%</string>
     <string name="tower_entry_card_desc">Des étages sans fin. Jusqu\'où peux-tu grimper ?</string>
     <string name="tower_collect_prompt">Enregistrez votre parcours dans Tour de l\'Infini</string>
     <string name="tower_home_collect_hint">Ouvre l\'écran « Tour » pour enregistrer cette partie</string>
@@ -1928,5 +1928,5 @@
     <string name="carnival_potion_letter_orange">O</string>
     <string name="carnival_potion_letter_cyan">C</string>
     <string name="farming_crop_picker_stats">Niv. %1$d  •  %2$s  •  %3$d XP/récolte</string>
-    <string name="farming_seeds_owned">Graines: %1$d  •  Possédé: %2$d</string>
+    <string name="farming_seeds_owned">Graines : %1$d  •  Possédé : %2$d</string>
 </resources>
