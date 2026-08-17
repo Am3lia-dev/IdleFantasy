@@ -176,6 +176,21 @@ class PlayerRepository @Inject constructor(
         ))
     }
 
+    /** Add XP to a skill with no boosts or multipliers. Recalculates level. */
+    suspend fun debugAddSkillXp(skillName: String, amount: Long) {
+        if (amount <= 0L) return
+        val player = getOrCreatePlayer()
+        val levels: MutableMap<String, Int> = json.decodeFromString(player.skillLevels)
+        val xpMap: MutableMap<String, Long> = json.decodeFromString(player.skillXp)
+        val newXp = (xpMap[skillName] ?: 0L) + amount
+        xpMap[skillName] = newXp
+        levels[skillName] = XpTable.levelForXp(newXp)
+        playerDao.upsert(player.copy(
+            skillLevels = json.encode<Map<String, Int>>(levels),
+            skillXp     = json.encode<Map<String, Long>>(xpMap),
+        ))
+    }
+
     data class BuryBonesResult(val buried: Int, val xpGained: Long, val awardedCape: String?)
 
     /**

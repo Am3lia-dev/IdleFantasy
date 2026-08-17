@@ -61,6 +61,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -374,13 +375,17 @@ fun ProfileScreen(
     }
 
     if (BuildConfig.DEBUG && showAddItemSheet) {
-        DebugModifyItemCountSheet(
-            onAddItem    = { itemId, amount ->
-                viewModel.debugAddItem(itemId, amount)
+        DebugModifyAmountSheet(
+            onAddAmount    = { itemId, amount ->
+                viewModel.debugAddItem(itemId, amount.toInt())
                 showAddItemSheet = false
             },
-            onRemoveItem = { itemId, amount ->
-                viewModel.debugRemoveItem(itemId, amount)
+            onSetAmount =  { itemId, amount ->
+                viewModel.debugSetItem(itemId, amount.toInt())
+                showAddItemSheet = false
+            },
+            onRemoveAmount = { itemId, amount ->
+                viewModel.debugRemoveItem(itemId, amount.toInt())
                 showAddItemSheet = false
             },
             onDismiss    = { showAddItemSheet = false },
@@ -512,6 +517,9 @@ private fun SkillsTab(
     val milestones = remember(selectedSkill) {
         selectedSkill?.let { buildUnlockMilestones(it, viewModel, context) } ?: emptyList()
     }
+    var debugSelectedSkill by remember { mutableStateOf("") }
+    var debugSelectedXp by remember { mutableLongStateOf(0L) }
+    var debugShowAddXpSheet by remember { mutableStateOf(false) }
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         for ((categoryRes, skills) in SKILL_CATEGORY_GROUPS) {
@@ -535,7 +543,15 @@ private fun SkillsTab(
                                 context  = context,
                                 onClick  = { selectedSkill = key },
                                 modifier = Modifier.weight(1f),
-                            )
+                            ) {
+                                TextButton(onClick = {
+                                    debugShowAddXpSheet = true
+                                    debugSelectedSkill = key
+                                    debugSelectedXp = skillXp[key] ?: 0L
+                                }) {
+                                    Text("[Debug] Set XP")
+                                }
+                            }
                         }
                         repeat(3 - rowSkills.size) { Spacer(Modifier.weight(1f)) }
                     }
@@ -561,6 +577,26 @@ private fun SkillsTab(
             )
             }
         }
+    }
+
+    if (BuildConfig.DEBUG && debugShowAddXpSheet) {
+        DebugModifyAmountSheet(
+            initialId      = debugSelectedSkill,
+            initialAmount  = debugSelectedXp.toInt().toString(),
+            onAddAmount    = { skill, xp ->
+                viewModel.debugAddXp(skill, xp)
+                debugShowAddXpSheet = false
+            },
+            onSetAmount    = { skill, xp ->
+                viewModel.debugSetXp(skill, xp)
+                debugShowAddXpSheet = false
+            },
+            onRemoveAmount = { skill, xp ->
+                viewModel.debugRemoveXp(skill, xp)
+                debugShowAddXpSheet = false
+            },
+            onDismiss = { debugShowAddXpSheet = false }
+        )
     }
 }
 
@@ -617,6 +653,7 @@ private fun SkillGridCard(
     context: android.content.Context,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    debugButton: @Composable () -> Unit,
 ) {
     val progress = xpProgressFraction(xp)
     ElevatedCard(
@@ -649,6 +686,9 @@ private fun SkillGridCard(
             )
             Spacer(Modifier.height(6.dp))
             CircularSkillProgress(level = level, progressFraction = progress)
+            if (BuildConfig.DEBUG) {
+                debugButton()
+            }
         }
     }
 }
