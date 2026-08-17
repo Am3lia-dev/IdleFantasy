@@ -49,4 +49,10 @@ data class SessionFrame(
     @SerialName("enemy_hits") val enemyHits: List<Int> = emptyList(),
     /** Boss only — combat style used during this session ("melee"|"strength"|"ranged"|"magic"). Empty for non-boss frames. */
     @SerialName("combat_style") val combatStyle: String = "",
+    /** Combat only — player's max HP when the session was simulated (0 = not recorded;
+     *  display falls back to live stats). Keeps the banner stable if HP levels mid-run (issue #1411). */
+    @SerialName("max_hp") val maxHp: Int = 0,
+    /** Combat only — food supply captured at simulation time, set on frame 0 only
+     *  (empty = not recorded). Keeps the banner stable if gear food changes mid-run (issue #1411). */
+    @SerialName("food_at_start") val foodAtStart: Map<String, Int> = emptyMap(),
 )
