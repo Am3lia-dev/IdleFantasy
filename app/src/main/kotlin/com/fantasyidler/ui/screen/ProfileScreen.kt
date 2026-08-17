@@ -365,6 +365,7 @@ fun ProfileScreen(
             )
         }
         CharacterSetupSheet(
+            raceProficiencies = viewModel.raceProficiencies,
             isFirstTime      = false,
             initialName      = state.characterName,
             initialGender    = state.characterGender,
@@ -739,7 +740,7 @@ private fun SkillUnlockSheet(
                         if (prestigeCount > 0) {
                             Spacer(Modifier.width(6.dp))
                             Text(
-                                text  = if (prestigeCount > 3) "★×$prestigeCount" else "★".repeat(prestigeCount),
+                                text  = "★×$prestigeCount",
                                 style = MaterialTheme.typography.labelMedium,
                                 color = MaterialTheme.colorScheme.primary,
                             )
