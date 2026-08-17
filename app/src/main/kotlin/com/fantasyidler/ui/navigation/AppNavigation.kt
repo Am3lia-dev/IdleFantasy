@@ -140,7 +140,7 @@ fun AppNavigation(
                                         saveState = true
                                     }
                                     launchSingleTop = true
-                                    restoreState = !isHome && screen !is Screen.Profile
+                                    restoreState = !isHome
                                 }
                             }
                         },
