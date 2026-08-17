@@ -677,6 +677,16 @@ private fun CombatGearTab(
                 }
             }
         }
+        if (foodEatThresholdPct <= 30) {
+            item {
+                Text(
+                    text     = stringResource(R.string.combat_eat_threshold_warning),
+                    style    = MaterialTheme.typography.labelSmall,
+                    color    = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+        }
         item { Spacer(Modifier.height(16.dp)) }
     }
 }

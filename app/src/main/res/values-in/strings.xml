@@ -540,6 +540,8 @@
     <string name="combat_log_player_miss">→ Anda meleset %1$s</string>
     <string name="combat_log_enemy_hit">← %1$s mengenai anda: %2$d dmg</string>
     <string name="combat_log_enemy_miss">← %1$s meleset</string>
+    <string name="combat_log_heal">✚ You eat: +%1$d HP</string> <!-- untranslated -->
+    <string name="combat_eat_threshold_warning">Risky: at a low threshold a hard hit can drop you to 0 HP before your character eats.</string> <!-- untranslated -->
     <string name="combat_rec_level">Level tempur yang direkomendasikan</string>
     <string name="combat_your_level">Level tempur Anda</string>
     <string name="combat_no_strength_bonus">tak ada (tak ada bonus kekuatan)</string>

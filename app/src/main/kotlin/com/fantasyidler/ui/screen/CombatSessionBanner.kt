@@ -115,6 +115,8 @@ internal data class CombatLogEntry(
     val damage: Int,
     val enemyName: String,
     val isKill: Boolean = false,
+    /** HP restored by eating this tick; > 0 renders as an eat line (issue #1431). */
+    val heal: Int = 0,
 )
 
 @Composable
@@ -293,7 +295,10 @@ internal fun CombatSessionBanner(
                 val enemyTicksShown = tickInFrame + if (halfTickInFrame >= 2 * tickInFrame + 1) 1 else 0
                 val currentPlayerHp = if (currentFrame?.enemyHits?.isNotEmpty() == true) {
                     val base = frames.getOrNull(currentFrameIdx - 1)?.hpAfter ?: maxHp
-                    (base - currentFrame.enemyHits.take(enemyTicksShown).sum()).coerceAtLeast(0)
+                    // Heals thread per tick alongside enemy damage so HP no longer sags all
+                    // frame and snaps up at the boundary (issue #1431).
+                    (base - currentFrame.enemyHits.take(enemyTicksShown).sum() +
+                        currentFrame.playerHeals.take(enemyTicksShown).sum()).coerceAtLeast(0)
                 } else {
                     frames.getOrNull(currentFrameIdx - 1)?.hpAfter ?: maxHp
                 }
@@ -339,6 +344,8 @@ internal fun CombatSessionBanner(
                                 }
                                 if (i < currentFrameIdx || 2 * t + 1 <= halfTickInFrame) {
                                     f.enemyHits.getOrNull(t)?.let { add(CombatLogEntry(false, it, eName)) }
+                                    f.playerHeals.getOrNull(t)?.takeIf { it > 0 }
+                                        ?.let { add(CombatLogEntry(true, 0, eName, heal = it)) }
                                 }
                             }
                         }
@@ -580,7 +587,13 @@ internal fun CombatSessionBanner(
                             Spacer(Modifier.height(2.dp))
                             Column {
                                 for (entry in combatLog) {
-                                    if (entry.isKill) {
+                                    if (entry.heal > 0) {
+                                        Text(
+                                            text  = stringResource(R.string.combat_log_heal, entry.heal),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = Color(0xFF4CAF50),
+                                        )
+                                    } else if (entry.isKill) {
                                         Text(
                                             text  = stringResource(R.string.combat_log_kill, entry.enemyName),
                                             style = MaterialTheme.typography.bodySmall,

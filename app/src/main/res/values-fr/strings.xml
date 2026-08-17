@@ -549,6 +549,8 @@
     <string name="combat_log_player_miss">→ Vous avez raté %1$s</string>
     <string name="combat_log_enemy_hit">← %1$s vous inflige %2$d dégâts</string>
     <string name="combat_log_enemy_miss">← %1$s a raté</string>
+    <string name="combat_log_heal">✚ You eat: +%1$d HP</string> <!-- untranslated -->
+    <string name="combat_eat_threshold_warning">Risky: at a low threshold a hard hit can drop you to 0 HP before your character eats.</string> <!-- untranslated -->
     <string name="combat_rec_level">Niveau de combat recommandé</string>
     <string name="combat_your_level">Votre niveau de combat</string>
     <string name="combat_no_strength_bonus">Aucun (pas de bonus de force)</string>
