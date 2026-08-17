@@ -50,25 +50,44 @@ For more information, see {page_types_link}.
 
 ## Building/Compiling the Wiki
 
-To build the wiki, you'll need to set up an appropriate Python environment in the root directory. For information about setting up virtual environments, see [this tutorial](https://www.geeksforgeeks.org/python/create-virtual-environment-using-venv-python/) (make sure to call it .venv to have it be gitignored).
+To build the wiki, you'll need to set up an appropriate Python environment in the root directory. For information about setting up virtual environments, see [this tutorial](https://www.geeksforgeeks.org/python/create-virtual-environment-using-venv-python/). 
+*Make sure to call your virtual environment `.venv` to have it be gitignored).*
 
-Then, make sure you've installed all packages shown in `wiki/requirements.txt`.
+### 1. Activate the virtual environment
+- If you are using Mac or Gnu/Linux you are probably POSIX. 
+- If your shell is missing, see [Python venv documentation](https://docs.python.org/3/library/venv.html#how-venvs-work).
 
-From there, you can run the following command to see what you can do:
+| Platform | Shell      | Command to activate virtual environment   |
+| -------- | ---------- | ----------------------------------------- |
+| POSIX    | bash/zsh   | ```$ source .venv/bin/activate```        |
+| Windows  | cmd.exe    | ```C:\> .venv\Scripts\activate.bat```    |
+| Windows  | Powershell | ```PS C:\> .venv\Scripts\Activate.ps1``` |
 
+### 2. Install dependencies / required packages
 ```bash
-# Ensure you are currently at the root folder for the repository
-# Activate the virtual environment (Only run in Windows terminal)
-.venv/Scripts/activate
-# Activate the virtual environment (Only run in bash terminal)
-source .venv/bin/activate
-# See help information for program
+pip install -r wiki/requirements.txt
+```
+Make sure you've installed all packages shown in `wiki/requirements.txt`. You can do this by running the above command from the root of the repository.
+
+### 3. Building the wiki 
+```bash
+python -m wiki.src write-html
+```
+The main command you'll need use is `write-html`, this creates the HTML version of the wiki in `out/IdleFantasy-site`. You can then open any of the HTML pages and the website should come up. 
+
+If you're using Pycharm, I'd recommend opening it using the live preview option, which should update things more seamlessly.
+
+### 4. Validating the wiki
+```bash
+python -m wiki.src validity
+```
+You can use the above command to validate the wiki and perform several tests that can help you pick up errors.
+
+### 5. Additional commands, command usage & help
+```bash
 python -m wiki.src -h
 ```
-
-The main command you'll need use is `python -m wiki.src write-html`. This writes out the HTML version of the wiki into `out/IdleFantasy-site`. You can then open any of the HTML pages and the website should come up. If you're using Pycharm, I'd recommend opening it using the Live Preview option which should update things more seamlessly.
-
-`python -m wiki.src validity` is the next most common command which you can use to validate the wiki and perform several tests that can help you pick up errors
+You can use the above command to display a list of what else you can do.
 
 ## Wiki code structure
 
