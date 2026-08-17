@@ -479,7 +479,8 @@ class ShopViewModel @Inject constructor(
         val have          = state.inventory[itemKey] ?: 0
         val equippedCount = state.equipped.values.count { it == itemKey }
         val reserved      = state.reservedItems[itemKey] ?: 0
-        val keptForCollection = if (state.keepOneOfEach) 1 else 0
+        // The equipped copy already serves as the collection keeper (issue #1419)
+        val keptForCollection = if (state.keepOneOfEach && equippedCount == 0) 1 else 0
         val sellable      = (have - equippedCount - reserved - keptForCollection).coerceAtLeast(0)
         if (sellable == 0) {
             val reason = when {
