@@ -91,4 +91,13 @@
     <string name="skill_expedition_name">探险</string>
     <string name="skill_boss_name">首领</string>
     <string name="skill_mercantile_name">贸易</string>
+    <string name="armory_req_level">等级 %1$d</string>
+    <string name="skills_projected_xp_level">+%1$s 经验 → 等级 %2$d</string>
+    <string name="tree_tree_name">普通树</string>
+    <string name="tree_oak_tree_name">橡树</string>
+    <string name="tree_willow_tree_name">柳树</string>
+    <string name="tree_maple_tree_name">枫树</string>
+    <string name="tree_yew_tree_name">紫杉</string>
+    <string name="tree_magic_tree_name">魔法树</string>
+    <string name="tree_redwood_tree_name">红木</string>
 </resources>
