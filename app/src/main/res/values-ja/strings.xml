@@ -1552,7 +1552,7 @@
     <string name="bonus_combined_xp">経験値合算</string>
     <string name="bonus_yield">+%1$d%% 収穫量</string>
     <string name="bonus_boost">+%1$d%% 強化</string>
-    <string name="bonus_session_shorter">セッション時間を %1$d 分短縮</string>
+    <string name="bonus_agility_prestige_detail">From prestige: %1$dm sessions at level %2$d become %3$dm</string> <!-- untranslated -->
     <string name="bonus_coin_return">+%1$d%% コイン獲得</string>
     <string name="bonus_tower">Tower</string> <!-- untranslated -->
     <string name="bonus_builder_discount_detail" formatted="false">0.5% off building upgrade costs per level</string> <!-- untranslated -->
@@ -1635,6 +1635,7 @@
     <string name="tower_not_enough_runes">%1$s が不足しているため、最大数での攻撃が行えません。</string>
     <string name="tower_milestone_claim">回収</string>
     <string name="tower_milestone_claimed">回収済み</string>
+    <!-- Tower milestone reward descriptions; %s placeholders are item display names -->
     <string name="tower_milestone_ring">%1$s (attack +6, strength +6)</string> <!-- untranslated -->
     <string name="tower_milestone_xp_1pct" formatted="false">+1% tower XP all skills</string> <!-- untranslated -->
     <string name="tower_milestone_coins_5k">5,000 coins</string> <!-- untranslated -->

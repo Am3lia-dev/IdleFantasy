@@ -1572,7 +1572,7 @@
     <string name="bonus_combined_xp">Суммарный XP</string>
     <string name="bonus_yield">+%1$d%% выход</string>
     <string name="bonus_boost">+%1$d%% усиление</string>
-    <string name="bonus_session_shorter">На %1$d мин короче сессии</string>
+    <string name="bonus_agility_prestige_detail">From prestige: %1$dm sessions at level %2$d become %3$dm</string> <!-- untranslated -->
     <string name="bonus_coin_return">+%1$d%% возврат монет</string>
     <string name="bonus_tower">Башня</string>
     <string name="bonus_builder_discount_detail" formatted="false">Скидка 0.5% на модернизацию здания каждый уровень</string>
@@ -1655,6 +1655,7 @@
     <string name="tower_not_enough_runes">Недостаточно %1$s для максимального количества атак.</string>
     <string name="tower_milestone_claim">Получить</string>
     <string name="tower_milestone_claimed">Получено</string>
+    <!-- Tower milestone reward descriptions; %s placeholders are item display names -->
     <string name="tower_milestone_ring">%1$s (attack +6, strength +6)</string> <!-- untranslated -->
     <string name="tower_milestone_xp_1pct" formatted="false">+1% tower XP all skills</string> <!-- untranslated -->
     <string name="tower_milestone_coins_5k">5,000 coins</string> <!-- untranslated -->

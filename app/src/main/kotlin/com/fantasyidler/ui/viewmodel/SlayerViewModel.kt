@@ -105,6 +105,14 @@ class SlayerViewModel @Inject constructor(
                 gameData.dungeons.entries
                     .filter { (_, d) -> d.enemySpawns.any { it.enemy == key } }
                     .filter { (k, d) -> !d.loreUnlockOnly || k in unlockedDungeons }
+                    // Best hunting ground first: the queue shortcut takes the head of this
+                    // list, which was previously just map iteration order and could pick a
+                    // dungeon where the task enemy barely spawns (hellhound report)
+                    .sortedByDescending { (_, d) ->
+                        val total = d.enemySpawns.sumOf { it.weight }
+                        if (total == 0) 0.0
+                        else d.enemySpawns.first { it.enemy == key }.weight.toDouble() / total
+                    }
             } ?: emptyList()
             val taskDungeons     = taskDungeonEntries.map { (key, _) -> GameStrings.dungeonName(context.withAppLocale(), key) }
             val taskDungeonKeys  = taskDungeonEntries.map { (k, _) -> k }

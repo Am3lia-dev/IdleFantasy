@@ -1552,7 +1552,7 @@
     <string name="bonus_combined_xp">XP combinata</string>
     <string name="bonus_yield">+%1$d%% alla resa</string>
     <string name="bonus_boost">+%1$d%% bonus</string>
-    <string name="bonus_session_shorter">%1$d min in meno per sessione</string>
+    <string name="bonus_agility_prestige_detail">From prestige: %1$dm sessions at level %2$d become %3$dm</string> <!-- untranslated -->
     <string name="bonus_coin_return">+%1$d%% ritorno in monete</string>
     <string name="bonus_tower">Torre</string>
     <string name="bonus_builder_discount_detail" formatted="false">Sconto del 0,5% agli edifici per ogni livello</string>
@@ -1635,6 +1635,7 @@
     <string name="tower_not_enough_runes">Non hai abbastanza %1$s per attaccare.</string>
     <string name="tower_milestone_claim">Ottieni</string>
     <string name="tower_milestone_claimed">Ottenuto</string>
+    <!-- Tower milestone reward descriptions; %s placeholders are item display names -->
     <string name="tower_milestone_ring">%1$s (attack +6, strength +6)</string> <!-- untranslated -->
     <string name="tower_milestone_xp_1pct" formatted="false">+1% tower XP all skills</string> <!-- untranslated -->
     <string name="tower_milestone_coins_5k">5,000 coins</string> <!-- untranslated -->

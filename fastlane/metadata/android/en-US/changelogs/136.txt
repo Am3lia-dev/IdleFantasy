@@ -16,3 +16,5 @@
 • Guild hall sections now list skills in the same order as the Skills page (thanks Michaelomh!)
 • Combat style chips on the Gear tab and skill headers on the Expeditions screen now show their skill icons (thanks Michaelomh!)
 • More French translations
+• The agility bonus on the Bonuses page now explains it is the extra saving from prestige on top of the level reduction, instead of looking like the total
+• The slayer task's queue button now picks the dungeon where the target spawns most often (hellhounds now hunt in Volcanic Depths, not Infernal Stronghold)

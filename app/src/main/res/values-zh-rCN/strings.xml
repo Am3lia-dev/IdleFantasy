@@ -1552,7 +1552,7 @@
     <string name="bonus_combined_xp">综合经验</string>
     <string name="bonus_yield">+%1$d%% 产量</string>
     <string name="bonus_boost">提升+%1$d%%</string>
-    <string name="bonus_session_shorter">活动时间缩短 %1$d 分钟</string>
+    <string name="bonus_agility_prestige_detail">From prestige: %1$dm sessions at level %2$d become %3$dm</string> <!-- untranslated -->
     <string name="bonus_coin_return">+%1$d%% 金币回报</string>
     <string name="bonus_tower">塔楼</string>
     <string name="bonus_builder_discount_detail" formatted="false">建筑折扣详情</string>
@@ -1635,6 +1635,7 @@
     <string name="tower_not_enough_runes">%1$s 不足以发挥最大潜在攻击次数。</string>
     <string name="tower_milestone_claim">领取</string>
     <string name="tower_milestone_claimed">已领取</string>
+    <!-- Tower milestone reward descriptions; %s placeholders are item display names -->
     <string name="tower_milestone_ring">%1$s (attack +6, strength +6)</string> <!-- untranslated -->
     <string name="tower_milestone_xp_1pct" formatted="false">+1% tower XP all skills</string> <!-- untranslated -->
     <string name="tower_milestone_coins_5k">5,000 coins</string> <!-- untranslated -->
