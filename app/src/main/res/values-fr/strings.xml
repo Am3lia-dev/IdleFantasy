@@ -346,7 +346,7 @@
     <string name="label_weekly_reset">Se réinitialise le lundi à %1$s</string>
     <string name="weekly_bonus_title">Bonus hebdomadaire !</string>
     <string name="weekly_bonus_claim">Réclamer le bonus hebdomadaire</string>
-    <string name="label_daily_info_pity">Chaque quête quotidienne donne des pièces. Chaque quête a aussi une chance sur %1$d de lâcher une pièce d\'un équipement nain que vous ne possédez pas. Chaque récompense sans objet lâché augment les chances ; un objet lâché les réinitialisent à 1 sur 100.</string>
+    <string name="label_daily_info_pity">Chaque quête quotidienne donne des pièces. Chaque quête a aussi une chance sur %1$d de lâcher une pièce d\'un équipement nain que vous ne possédez pas. Chaque récompense sans objet lâché augment les chances ; un objet lâché les réinitialisent à 1 sur 100.</string>
     <string name="label_daily_info_complete">Chaque quête quotidienne donne des pièces. Vous possédez déjà tout l\'équipement nain !</string>
     <string name="label_weekly_info">Chaque défi hebdomadaire rapporte des pièces selon son niveau requis. Complétez les 5 pour gagner un bonus : 100 000 pièces, ou %1$s de chance d\'obtenir un équipement divin.</string>
     <string name="label_weekly_info_complete">Chaque défi hebdomadaire rapporte des pièces selon son niveau requis. Complétez les 5 pour gagner un bonus : 100 000 pièces. Vous possédez déjà tout l\'équipement divin !</string>
@@ -422,7 +422,7 @@
     <string name="theme_editor_sample_error">Texte d\'erreur</string>
     <string name="theme_editor_name_label">Nom du thème</string>
     <string name="theme_editor_name_reserved">Ce nom est réservé à un thème officiel</string>
-    <string name="theme_editor_overwrite_hint">Enregistrer remplacera « %1$s »</string>
+    <string name="theme_editor_overwrite_hint">Enregistrer remplacera « %1$s »</string>
     <string name="theme_editor_base_label">Style de base</string>
     <string name="theme_editor_palette_header">Palette</string>
     <string name="theme_editor_used_for">Utilisé pour : %1$s</string>
@@ -1659,7 +1659,7 @@
     <string name="tower_enemy_strength">Puissance ennemie : %1$s%%</string>
     <string name="tower_entry_card_desc">Des étages sans fin. Jusqu\'où peux-tu grimper ?</string>
     <string name="tower_collect_prompt">Enregistrez votre parcours dans Tour de l\'Infini</string>
-    <string name="tower_home_collect_hint">Ouvre l\'écran « Tour » pour enregistrer cette partie</string>
+    <string name="tower_home_collect_hint">Ouvre l\'écran « Tour » pour enregistrer cette partie</string>
 
     <!-- ===== Seasonal Events ===== -->
     <string name="seasonal_event_title">Évènement Saisonnier</string>
@@ -1896,7 +1896,7 @@
     <string name="settings_characters">Personnages</string>
     <string name="settings_characters_desc">Jusqu\'à 3 emplacements de sauvegarde. Créez, changez ou supprimez des personnages.</string>
     <string name="save_slots_title">Personnages</string>
-    <string name="save_slots_desc">Jusqu\'à trois personnages peuvent vivre sur cet appareil. Lors d\'un changement, votre personnage actuel est sauvegardé automatiquement ; les sessions d\'un personnage inactif sont en pause jusqu\'à votre retour.</string>
+    <string name="save_slots_desc">Jusqu\'à trois personnages peuvent vivre sur cet appareil. Lors d\'un changement, votre personnage actuel est sauvegardé automatiquement ; les sessions d\'un personnage inactif sont en pause jusqu\'à votre retour.</string>
     <string name="save_slot_label">Emplacement %1$d</string>
     <string name="save_slot_new">Nouveau personnage</string>
     <string name="save_slot_playing">En jeu</string>
