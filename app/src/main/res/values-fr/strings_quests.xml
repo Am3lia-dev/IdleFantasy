@@ -173,17 +173,17 @@
 
     <!-- Crafting -->
     <string name="quest_crafting_1_name">Artisanat I</string>
-    <string name="quest_crafting_1_objective">Créer 100 bagues en argent</string>
+    <string name="quest_crafting_1_objective">Fabriquer 100 bagues en argent</string>
     <string name="quest_crafting_2_name">Artisanat II</string>
-    <string name="quest_crafting_2_objective">Créer 250 bagues en or</string>
+    <string name="quest_crafting_2_objective">Fabriquer 250 bagues en or</string>
     <string name="quest_crafting_3_name">Artisanat III</string>
-    <string name="quest_crafting_3_objective">Créer 500 bagues en platine</string>
+    <string name="quest_crafting_3_objective">Fabriquer 500 bagues en platine</string>
     <string name="quest_crafting_4_name">Artisanat IV</string>
-    <string name="quest_crafting_4_objective">Créer 750 bagues en saphir argenté</string>
+    <string name="quest_crafting_4_objective">Fabriquer 750 bagues en saphir argenté</string>
     <string name="quest_crafting_5_name">Artisanat V</string>
-    <string name="quest_crafting_5_objective">Créer 1000 bagues en saphir doré</string>
+    <string name="quest_crafting_5_objective">Fabriquer 1000 bagues en saphir doré</string>
     <string name="quest_crafting_6_name">Artisanat VI</string>
-    <string name="quest_crafting_6_objective">Créer 1500 bagues en diamant en platine</string>
+    <string name="quest_crafting_6_objective">Fabriquer 1500 bagues en diamant en platine</string>
 
     <!-- Monster slayer chains -->
     <string name="quest_goblin_slayer_1_name">Chasseur de Gobelins I</string>
@@ -252,9 +252,9 @@
     <string name="quest_treasure_hunter_1_objective">Collecter 20 soies d\'araignée lors de combats</string>
     <string name="quest_treasure_hunter_2_name">Chasseur de trésors II</string>
     <string name="quest_treasure_hunter_2_objective">Collecter 10 cœurs de gobelin lors de combats</string>
-    <string name="quest_treasure_hunter_3_name">Chasseur de Trésors III</string>
+    <string name="quest_treasure_hunter_3_name">Chasseur de trésors III</string>
     <string name="quest_treasure_hunter_3_objective">Collecter 5 cornes de démon lors de combats</string>
-    <string name="quest_treasure_hunter_4_name">Chasseur de Trésors IV</string>
+    <string name="quest_treasure_hunter_4_name">Chasseur de trésors IV</string>
     <string name="quest_treasure_hunter_4_objective">Collecter 3 écailles de dragon lors de combats</string>
 
     <!-- Firemaking -->
@@ -264,9 +264,9 @@
     <string name="quest_firemaking_2_objective">Brûler 750 bûches de chêne</string>
     <string name="quest_firemaking_3_name">Incinération III</string>
     <string name="quest_firemaking_3_objective">Brûler 1100 bûches de saule</string>
-    <string name="quest_firemaking_4_name">Fabrication de Feu IV</string>
+    <string name="quest_firemaking_4_name">Incinération IV</string>
     <string name="quest_firemaking_4_objective">Brûler 1650 bûches d\'érable</string>
-    <string name="quest_firemaking_5_name">Fabrication de Feu V</string>
+    <string name="quest_firemaking_5_name">Incinération V</string>
     <string name="quest_firemaking_5_objective">Brûler 2450 bûches de if</string>
     <string name="quest_firemaking_6_name">Incinération VI</string>
     <string name="quest_firemaking_6_objective">Brûler 3650 bûches magiques</string>
@@ -502,7 +502,7 @@
     <string name="daily_verb_firemaking">Brûler</string>
     <string name="daily_verb_fletching">Empenner</string>
     <string name="daily_verb_herblore">Brasser</string>
-    <string name="daily_verb_runecrafting">Runes</string>
+    <string name="daily_verb_runecrafting">Fabriquer</string>
     <string name="daily_verb_prayer">Enterrer</string>
     <string name="daily_verb_construction">Construire</string>
     <string name="daily_verb_farming">Récolter</string>
