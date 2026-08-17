@@ -127,6 +127,7 @@ data class CraftingUiState(
     val recipeQuests: Map<String, List<QuestIndicator>> = emptyMap(),
     /** Actual per-item craft duration for [selectedRecipe], tool efficiency applied. 0 if nothing selected. */
     val craftPerItemMs: Long = 0L,
+    val isQueueFull: Boolean = false,
 ) {
     /** Returns how many times [recipe] can be crafted given [effectiveInventory]. */
     fun maxCraftable(recipe: CraftableRecipe): Int {
@@ -209,6 +210,7 @@ class CraftingViewModel @Inject constructor(
                 questFills         = computeQuestFills(extra.selectedRecipe, questProgress, flags),
                 recipeQuests       = computeRecipeQuests(allRecipes, questProgress, flags, effInv),
                 craftPerItemMs     = perItemMs,
+                isQueueFull        = flags.sessionQueue.size >= playerRepo.maxQueueSize(flags),
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CraftingUiState())
