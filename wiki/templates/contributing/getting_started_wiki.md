@@ -67,7 +67,7 @@ To build the wiki, you'll need to set up an appropriate Python environment in th
 ```bash
 pip install -r wiki/requirements.txt
 ```
-Make sure you've installed all packages shown in `wiki/requirements.txt`. You can do this by running the above command from the root of the repository.
+Make sure you've installed all packages shown in `wiki/requirements.txt`. You can do this by running the above command in root folder for the repository.
 
 ### 3. Building the wiki 
 ```bash
