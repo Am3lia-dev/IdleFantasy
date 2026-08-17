@@ -6,3 +6,9 @@
 • Fixed the in-game changelog listing the same version twice
 • Combat sessions now record your HP and packed food at the start of the run, so leveling Hitpoints or changing gear food mid-run no longer shifts the live combat log
 • Fixed food eaten in the same combat tick reviving a character whose HP had already hit 0; hitting 0 HP now counts as a death
+• Fixed item names, session summaries, and notifications following the system language instead of the in-game language setting
+• Queued boss and dungeon sessions now use your current armor when they start; the weapon style, spell, and arrows chosen when queueing are kept
+• Eating now shows in the live combat log as it happens, and the HP bar reflects each bite instead of snapping up once a minute
+• Added a risk note when the eat-at threshold is set to 30% or lower
+• The active session card now shows boss artwork instead of an emoji
+• Fixed banner names wrapping mid-word on the Profile Banners page and cramped text on the character selection cards
