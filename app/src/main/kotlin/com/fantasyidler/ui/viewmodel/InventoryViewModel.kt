@@ -516,6 +516,59 @@ class InventoryViewModel @Inject constructor(
         gameData.crops.keys.toSet()
     }
 
+    fun debugAddXp(skill: String, xp: Long) {
+        viewModelScope.launch {
+            val key = skill.trim()
+            if (key.isEmpty() || xp <= 0) return@launch
+
+            if (key !in Skills.ALL) {
+                _extra.update { it.copy(snackbarMessage = "$key not found") }
+                return@launch
+            }
+
+            playerRepo.applySessionResults(key, xp, emptyMap())
+            val name = GameStrings.skillName(context.withAppLocale(), key)
+            _extra.update { it.copy(snackbarMessage = "$xp XP added to $name") }
+        }
+    }
+
+    fun debugSetXp(skill: String, xp: Long) {
+        viewModelScope.launch {
+            val key = skill.trim()
+            if (key.isEmpty() || xp <= 0) return@launch
+
+            if (key !in Skills.ALL) {
+                _extra.update { it.copy(snackbarMessage = "$key not found") }
+                return@launch
+            }
+
+            val currXp = playerRepo.getSkillXp()[key] ?: 0L
+            if (currXp > xp) {
+                playerRepo.deductSkillXp(key, currXp - xp)
+            } else {
+                playerRepo.debugAddSkillXp(key, xp - currXp)
+            }
+            val name = GameStrings.skillName(context.withAppLocale(), key)
+            _extra.update { it.copy(snackbarMessage = "Set $name XP to $xp") }
+        }
+    }
+
+    fun debugRemoveXp(skill: String, xp: Long) {
+        viewModelScope.launch {
+            val key = skill.trim()
+            if (key.isEmpty() || xp <= 0) return@launch
+
+            if (key !in Skills.ALL) {
+                _extra.update { it.copy(snackbarMessage = "$key not found") }
+                return@launch
+            }
+
+            playerRepo.deductSkillXp(key, xp)
+            val name = GameStrings.skillName(context.withAppLocale(), key)
+            _extra.update { it.copy(snackbarMessage = "Removed up to $xp XP from $name") }
+        }
+    }
+
     fun debugAddItem(itemId: String, amount: Int) {
         viewModelScope.launch {
             val key = itemId.trim()
@@ -529,6 +582,27 @@ class InventoryViewModel @Inject constructor(
             playerRepo.addItem(key, amount)
             val name = GameStrings.itemName(context.withAppLocale(), key)
             _extra.update { it.copy(snackbarMessage = "$amount $name added") }
+        }
+    }
+
+    fun debugSetItem(itemId: String, amount: Int) {
+        viewModelScope.launch {
+            val key = itemId.trim()
+            if (key.isEmpty() || amount <= 0) return@launch
+
+            if (!isKnownItemId(key)) {
+                _extra.update { it.copy(snackbarMessage = "$key not found") }
+                return@launch
+            }
+
+            val currAmount = playerRepo.getInventory()[itemId] ?: 0
+            if (currAmount > amount) {
+                playerRepo.sellItem(key, currAmount - amount, 0)
+            } else {
+                playerRepo.addItem(key, amount - currAmount)
+            }
+            val name = GameStrings.itemName(context.withAppLocale(), key)
+            _extra.update { it.copy(snackbarMessage = "Set $name to $amount") }
         }
     }
 
