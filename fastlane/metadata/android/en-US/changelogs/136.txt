@@ -1,3 +1,8 @@
 • New Slayer Plateskirt in the slayer shop and Tower Plateskirt in the floor 150 milestone, granted retroactively if you already claimed it (thanks wallsocket-boop!)
 • The Skills and Combat tabs now show a badge and count when a skill is ready to prestige, with a toggle in Settings to turn it off (thanks Michaelomh!)
 • Updated French, German, Italian, Russian, and Chinese translations (thanks MarcMush and all translators!)
+• Infinite Tower milestone descriptions are now translatable and use your language's item names
+• "Keep one of each item" now counts an equipped copy as the one kept, so spares sell down to the equipped one
+• Fixed the in-game changelog listing the same version twice
+• Combat sessions now record your HP and packed food at the start of the run, so leveling Hitpoints or changing gear food mid-run no longer shifts the live combat log
+• Fixed food eaten in the same combat tick reviving a character whose HP had already hit 0; hitting 0 HP now counts as a death
