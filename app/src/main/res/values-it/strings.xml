@@ -67,7 +67,7 @@
     <string name="bestiary_not_encountered">Non ancora incontrato</string>
     <string name="bestiary_qty_header">Qty</string> <!-- untranslated -->
     <string name="bestiary_chance_header">Chance</string> <!-- untranslated -->
-    <string name="bestiary_encountered_progress">%1$d / %2$d encountered</string> <!-- untranslated -->
+    <string name="bestiary_encountered_progress">%1$d / %2$d incontrati</string>
     <string name="bestiary_always_drops">Bottino garantito</string>
     <string name="bestiary_rare_drops">Bottino raro</string>
     <string name="bestiary_common_loot">Bottino tipico</string>
@@ -83,8 +83,8 @@
     <string name="home_sessions_complete_title">%1$d Sessions Complete!</string> <!-- untranslated -->
     <string name="home_boss_defeated_title">Defeated %1$s!</string> <!-- untranslated -->
     <string name="home_boss_defeated_by_title">Defeated by %1$s.</string> <!-- untranslated -->
-    <string name="home_dungeon_died_title">%1$s — You Died</string> <!-- untranslated -->
-    <string name="home_dungeon_complete_title">%1$s Complete!</string> <!-- untranslated -->
+    <string name="home_dungeon_died_title">%1$s — Sei Morto</string>
+    <string name="home_dungeon_complete_title">%1$s Completato!</string>
     <string name="home_expedition_complete_title">%1$s Expedition Complete</string> <!-- untranslated -->
     <string name="home_skill_session_complete_title">%1$s Session Complete</string> <!-- untranslated -->
     <string name="home_bones_buried_row">%1$s buried</string> <!-- untranslated -->
@@ -149,6 +149,7 @@
     <string name="label_available_quests">Disponibili</string>
     <string name="label_stats">Statistiche</string>
     <string name="label_skills">Abilità</string>
+    <string name="tab_label_with_count">%1$s (%2$d)</string> <!-- untranslated -->
     <string name="label_shop">Emporio</string>
     <string name="label_sell_items">Vendi Oggetti</string>
     <string name="label_total_level">Livello Totale</string>
@@ -302,7 +303,9 @@
     <string name="settings_profile_layout_tabs">Schede</string>
     <string name="settings_quest_dots">Indicatori missione</string>
     <string name="settings_quest_dots_desc">Mostra un indicatore quando una missione è disponibile</string>
-    <string name="settings_compact_numbers">Compact Numbers</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
+    <string name="settings_compact_numbers">Numeri Compatti</string>
     <string name="settings_compact_numbers_desc">Abbreviate large item quantities (e.g. 2.46M instead of 2,461,940)</string> <!-- untranslated -->
     <string name="settings_home_screen">Schermata Principale</string>
     <string name="settings_home_screen_desc">Scegli cosa mostrare nella schermata principale</string>
@@ -545,6 +548,8 @@
     <string name="combat_log_player_miss">→ Hai mancato %1$s</string>
     <string name="combat_log_enemy_hit">← %1$s ti ha colpito: %2$d danno</string>
     <string name="combat_log_enemy_miss">← %1$s manca il bersaglio</string>
+    <string name="combat_log_heal">✚ You eat: +%1$d HP</string> <!-- untranslated -->
+    <string name="combat_eat_threshold_warning">Risky: at a low threshold a hard hit can drop you to 0 HP before your character eats.</string> <!-- untranslated -->
     <string name="combat_rec_level">Livello di combattimento consigliato</string>
     <string name="combat_your_level">Il tuo livello di combattimento</string>
     <string name="combat_no_strength_bonus">Nessuno (nessun bonus sulla forza)</string>
@@ -681,11 +686,11 @@
     <string name="shop_sell_junk">Vendi Spazzatura</string>
     <string name="shop_keep_one_toggle">Keep one of each item</string> <!-- untranslated -->
     <string name="shop_search_hint">Search items</string> <!-- untranslated -->
-    <string name="shop_filter_all">All</string> <!-- untranslated -->
+    <string name="shop_filter_all">Tutti</string>
     <string name="shop_sell_blocked_equipped">%1$s is equipped. Unequip it first to sell.</string> <!-- untranslated -->
     <string name="shop_sell_blocked_reserved">%1$s is reserved for a queued task.</string> <!-- untranslated -->
     <string name="shop_sell_blocked_keep_one">Keeping your last %1$s (Keep one of each item is on).</string> <!-- untranslated -->
-    <string name="shop_sell_blocked_none">Nothing to sell.</string> <!-- untranslated -->
+    <string name="shop_sell_blocked_none">Niente da vendere.</string>
     <string name="shop_sell_old_gear">Vendi Vecchi Armamenti</string>
     <string name="shop_equipped_label">(equipaggiato)</string>
     <string name="shop_item_locked">%1$s è bloccato. Tieni premuto per sbloccare.</string>
@@ -1547,7 +1552,7 @@
     <string name="bonus_combined_xp">XP combinata</string>
     <string name="bonus_yield">+%1$d%% alla resa</string>
     <string name="bonus_boost">+%1$d%% bonus</string>
-    <string name="bonus_session_shorter">%1$d min in meno per sessione</string>
+    <string name="bonus_agility_prestige_detail">From prestige: %1$dm sessions at level %2$d become %3$dm</string> <!-- untranslated -->
     <string name="bonus_coin_return">+%1$d%% ritorno in monete</string>
     <string name="bonus_tower">Torre</string>
     <string name="bonus_builder_discount_detail" formatted="false">Sconto del 0,5% agli edifici per ogni livello</string>
@@ -1630,6 +1635,25 @@
     <string name="tower_not_enough_runes">Non hai abbastanza %1$s per attaccare.</string>
     <string name="tower_milestone_claim">Ottieni</string>
     <string name="tower_milestone_claimed">Ottenuto</string>
+    <!-- Tower milestone reward descriptions; %s placeholders are item display names -->
+    <string name="tower_milestone_ring">%1$s (attack +6, strength +6)</string> <!-- untranslated -->
+    <string name="tower_milestone_xp_1pct" formatted="false">+1% tower XP all skills</string> <!-- untranslated -->
+    <string name="tower_milestone_coins_5k">5,000 coins</string> <!-- untranslated -->
+    <string name="tower_milestone_shield">%1$s (defense +80)</string> <!-- untranslated -->
+    <string name="tower_milestone_amulet">%1$s (attack +15, strength +15, defense +10, all styles)</string> <!-- untranslated -->
+    <string name="tower_milestone_hp_50">+50 max HP</string> <!-- untranslated -->
+    <string name="tower_milestone_xp_2pct" formatted="false">+2% tower XP all skills</string> <!-- untranslated -->
+    <string name="tower_milestone_coins_25k">25,000 coins</string> <!-- untranslated -->
+    <string name="tower_milestone_helm">%1$s (defense +82, strength +8)</string> <!-- untranslated -->
+    <string name="tower_milestone_pet" formatted="false">Tower Pet (5% combat XP)</string> <!-- untranslated -->
+    <string name="tower_milestone_coin_drops_1pct" formatted="false">+1% tower coin drops</string> <!-- untranslated -->
+    <string name="tower_milestone_plate">%1$s (defense +132)</string> <!-- untranslated -->
+    <string name="tower_milestone_coins_100k">100,000 coins</string> <!-- untranslated -->
+    <string name="tower_milestone_legs_set">%1$s (defense +125) + %2$s (defense +58) + %3$s (defense +125)</string> <!-- untranslated -->
+    <string name="tower_milestone_sword">%1$s (attack +72, strength +75)</string> <!-- untranslated -->
+    <string name="tower_milestone_cape">%1$s (attack/str/def +14, ranged/magic +12) + 500,000 coins</string> <!-- untranslated -->
+    <string name="tower_milestone_crossbow">%1$s (ranged attack +78, ranged strength +52)</string> <!-- untranslated -->
+    <string name="tower_milestone_staff">%1$s (magic attack +68, magic damage +18, infinite runes) + 1,000,000 coins</string> <!-- untranslated -->
     <string name="tower_enemies_this_floor">Nemici</string>
     <string name="tower_enemy_strength">Forza nemica: %1$s%%</string>
     <string name="tower_entry_card_desc">Nessun limite. Per quanto riuscirai a salire?</string>
@@ -1812,7 +1836,7 @@
     <string name="title_seasonal_champion_of">Campione di %1$s</string>
     <string name="title_seasonal_requirement">Completa l\'Evento Stagionale %1$s</string>
     <string name="home_welcome_greeting">Bentornato,</string>
-
+    <string name="home_welcome_name">%1$s!</string> <!-- untranslated -->
     <string name="home_welcome_title">Il %1$s!</string>
 
     <!-- Pet names and descriptions -->
