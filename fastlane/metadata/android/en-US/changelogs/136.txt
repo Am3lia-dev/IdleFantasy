@@ -12,3 +12,7 @@
 • Added a risk note when the eat-at threshold is set to 30% or lower
 • The active session card now shows boss artwork instead of an emoji
 • Fixed banner names wrapping mid-word on the Profile Banners page and cramped text on the character selection cards
+• Massive Chinese translation update: about 4,000 strings translated or revised (thanks LawrenZzz!)
+• Guild hall sections now list skills in the same order as the Skills page (thanks Michaelomh!)
+• Combat style chips on the Gear tab and skill headers on the Expeditions screen now show their skill icons (thanks Michaelomh!)
+• More French translations
