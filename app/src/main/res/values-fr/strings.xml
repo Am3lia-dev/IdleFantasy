@@ -1119,12 +1119,12 @@
     <string name="slayer_owned">Possédé</string>
     <string name="slayer_lamp_purchased">+%1$s XP ajoutée à %2$s !</string>
     <string name="slayer_lamp_pick_skill">Choisissez une aptitude</string>
-    <string name="slayer_lamp_max_level_warning">⚠ l'XP sera gâchée</string>
+    <string name="slayer_lamp_max_level_warning">⚠ l\'XP sera gâchée</string>
     <!-- Translator note: %1$d = level after using the lamp, %2$d = level gain, last value = progress percent into the level -->
     <string name="slayer_lamp_level_preview">→ Niveau %1$d (%2$d%%)</string>
     <string name="slayer_lamp_level_preview_gain">→ Niveau %1$d (+%2$d, %3$d%%)</string>
-    <string name="slayer_lamp_small">Lampe d'XP (Petite)</string>
-    <string name="slayer_lamp_large">Lampe d'XP (Grande)</string>
+    <string name="slayer_lamp_small">Lampe d\'XP (Petite)</string>
+    <string name="slayer_lamp_large">Lampe d\'XP (Grande)</string>
     <string name="slayer_lamp_small_desc">+10 000 XP à n\'importe quelle aptitude</string>
     <string name="slayer_lamp_large_desc">+50 000 XP à n\'importe quelle aptitude</string>
     <string name="slayer_found_in">Trouvé dans : %1$s</string>
