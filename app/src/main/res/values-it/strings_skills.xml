@@ -60,11 +60,11 @@
     <!-- ===== Tree names ===== -->
     <string name="tree_tree_name">Albero</string>
     <string name="tree_oak_tree_name">Quercia</string>
-    <string name="tree_willow_tree_name">Willow Tree</string> <!-- untranslated -->
-    <string name="tree_maple_tree_name">Maple Tree</string> <!-- untranslated -->
-    <string name="tree_yew_tree_name">Yew Tree</string> <!-- untranslated -->
+    <string name="tree_willow_tree_name">Salice</string>
+    <string name="tree_maple_tree_name">Acero</string>
+    <string name="tree_yew_tree_name">Tasso</string>
     <string name="tree_magic_tree_name">Albero Magico</string>
-    <string name="tree_redwood_tree_name">Redwood Tree</string> <!-- untranslated -->
+    <string name="tree_redwood_tree_name">Sequoia</string>
 
     <!-- ===== Agility course names and descriptions ===== -->
     <string name="agility_beginner_course_name">Percorso per Principianti</string>
