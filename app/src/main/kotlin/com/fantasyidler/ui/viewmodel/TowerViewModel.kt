@@ -1,5 +1,7 @@
 package com.fantasyidler.ui.viewmodel
 
+import com.fantasyidler.util.withAppLocale
+
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
@@ -216,8 +218,8 @@ class TowerViewModel @Inject constructor(
 
     private fun buildFloorDungeon(floor: Int): DungeonData = DungeonData(
         name             = "tower_floor_$floor",
-        displayName      = context.getString(R.string.tower_floor_label, floor),
-        description      = context.getString(R.string.tower_floor_desc, floor),
+        displayName      = context.withAppLocale().getString(R.string.tower_floor_label, floor),
+        description      = context.withAppLocale().getString(R.string.tower_floor_desc, floor),
         recommendedLevel = (floor * 2).coerceAtMost(200),
         encounterRate    = 0.65,
         enemySpawns      = tierFor(floor),
@@ -296,9 +298,9 @@ class TowerViewModel @Inject constructor(
                 _extra.update {
                     it.copy(
                         snackbarMessage = if (enqueued)
-                            context.getString(R.string.snackbar_added_to_queue, "Infinite Tower")
+                            context.withAppLocale().getString(R.string.snackbar_added_to_queue, "Infinite Tower")
                         else
-                            context.getString(R.string.snackbar_queue_full),
+                            context.withAppLocale().getString(R.string.snackbar_queue_full),
                     )
                 }
                 return@launch
@@ -377,7 +379,7 @@ class TowerViewModel @Inject constructor(
                 val neededRunes = 60 * CombatSimulator.playerTicksPerFrame(weaponAttackSpeed) * runeCost
                 if (runeKey != null && (inventory[runeKey] ?: 0) < neededRunes) {
                     _extra.update { it.copy(
-                        snackbarMessage = context.getString(R.string.tower_not_enough_runes, GameStrings.itemName(context, runeKey)),
+                        snackbarMessage = context.withAppLocale().getString(R.string.tower_not_enough_runes, GameStrings.itemName(context, runeKey)),
                         startingSession = false,
                     ) }
                     return@launch
@@ -429,7 +431,7 @@ class TowerViewModel @Inject constructor(
                     alarmOffsetMs    = alarmOffsetMs,
                 )
             } catch (e: Exception) {
-                _extra.update { it.copy(snackbarMessage = context.getString(R.string.skill_session_start_failed, e.message ?: "")) }
+                _extra.update { it.copy(snackbarMessage = context.withAppLocale().getString(R.string.skill_session_start_failed, e.message ?: "")) }
             } finally {
                 _extra.update { it.copy(startingSession = false, selectedPotionKey = null) }
             }
@@ -574,14 +576,14 @@ class TowerViewModel @Inject constructor(
                 val checkpointFloor = (updatedFlags.towerBestFloor / TOWER_CHECKPOINT_INTERVAL) * TOWER_CHECKPOINT_INTERVAL
                 playerRepo.updateFlags(updatedFlags.copy(towerCurrentFloor = checkpointFloor))
                 sessionRepo.deleteSession(session.sessionId)
-                _extra.update { it.copy(snackbarMessage = context.getString(R.string.tower_death_reset, floor, checkpointFloor + 1)) }
+                _extra.update { it.copy(snackbarMessage = context.withAppLocale().getString(R.string.tower_death_reset, floor, checkpointFloor + 1)) }
             } else {
                 val newBest  = maxOf(updatedFlags.towerBestFloor, floor)
                 val isNewBest = floor > updatedFlags.towerBestFloor
                 val msg = if (isNewBest)
-                    context.getString(R.string.tower_new_best, floor)
+                    context.withAppLocale().getString(R.string.tower_new_best, floor)
                 else
-                    context.getString(R.string.tower_floor_cleared, floor)
+                    context.withAppLocale().getString(R.string.tower_floor_cleared, floor)
                 playerRepo.updateFlags(updatedFlags.copy(
                     towerCurrentFloor = floor,
                     towerBestFloor    = newBest,
@@ -590,7 +592,7 @@ class TowerViewModel @Inject constructor(
                 _extra.update { it.copy(snackbarMessage = msg) }
             }
             if (!grantXp) {
-                _extra.update { it.copy(snackbarMessage = context.getString(R.string.combat_session_voided_prestige)) }
+                _extra.update { it.copy(snackbarMessage = context.withAppLocale().getString(R.string.combat_session_voided_prestige)) }
             }
             session = sessionRepo.getAllCompletedSessions().firstOrNull { it.skillName == "tower" }
             }
@@ -606,7 +608,7 @@ class TowerViewModel @Inject constructor(
                 towerBestFloor    = flags.towerBestFloor + 1
             ))
             _extra.update {
-                it.copy(snackbarMessage = context.getString(R.string.tower_floor_cleared, flags.towerCurrentFloor))
+                it.copy(snackbarMessage = context.withAppLocale().getString(R.string.tower_floor_cleared, flags.towerCurrentFloor))
             }
         }
     }
