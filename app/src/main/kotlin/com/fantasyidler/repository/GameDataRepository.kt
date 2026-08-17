@@ -30,11 +30,13 @@ import com.fantasyidler.data.json.RuneData
 import com.fantasyidler.data.json.SkillData
 import com.fantasyidler.data.json.SmithingRecipe
 import com.fantasyidler.data.json.ConstructionRecipe
+import com.fantasyidler.data.json.ThemeData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.SpellData
 import com.fantasyidler.data.json.TownBuildingData
 import com.fantasyidler.data.json.TradeRouteData
 import com.fantasyidler.data.json.TreeData
+import com.fantasyidler.util.GameStrings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -82,7 +84,7 @@ class GameDataRepository @Inject constructor(
         val map = mutableMapOf<String, MutableList<String>>()
         dungeons.values.forEach { dungeon ->
             dungeon.enemySpawns.forEach { spawn ->
-                map.getOrPut(spawn.enemy) { mutableListOf() }.add(dungeon.displayName)
+                map.getOrPut(spawn.enemy) { mutableListOf() }.add(GameStrings.dungeonName(context, dungeon.name))
             }
         }
         map.mapValues { (_, v) -> v.sorted() }
@@ -311,6 +313,12 @@ class GameDataRepository @Inject constructor(
             .filter { it.endsWith(".json") }
             .map { filename -> asset<TradeRouteData>("data/trade_routes/$filename") }
             .sortedBy { it.levelRequired }
+    }
+
+    // ------------------------------------------------------------------ official themes
+
+    val officialThemes: Map<String, ThemeData> by lazy {
+        asset("data/official_themes.json")
     }
 
     // ------------------------------------------------------------------ sell helpers

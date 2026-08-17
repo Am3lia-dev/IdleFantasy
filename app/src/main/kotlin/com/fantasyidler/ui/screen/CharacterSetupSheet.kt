@@ -22,6 +22,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -30,16 +31,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.fantasyidler.R
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
 
 internal val CHARACTER_GENDERS = listOf("Male", "Female", "Other")
 internal val CHARACTER_RACES   = listOf("Human", "Elf", "Dwarf", "Orc", "Halfling", "Gnome")
+internal const val CHARACTER_NAME_MAX_LENGTH = 256
 
 /** A title option ready to render — display strings already resolved, whether static or seasonal. */
 data class TitleOption(
@@ -59,7 +61,9 @@ fun CharacterSetupSheet(
     titles: List<TitleOption> = emptyList(),
     equippedTitleId: String? = null,
     onEquipTitle: (String?) -> Unit = {},
-    onSave: (name: String, gender: String, race: String) -> Unit,
+    /** Show the permanent Ironman choice — creation flows only, never the edit sheet. */
+    showIronmanOption: Boolean = false,
+    onSave: (name: String, gender: String, race: String, ironman: Boolean) -> Unit,
     onDismiss: () -> Unit,
 ) {
     var draftName   by remember { mutableStateOf(initialName) }
@@ -67,6 +71,7 @@ fun CharacterSetupSheet(
     var draftGender by remember { mutableStateOf(if (isCustomGender) "Other" else initialGender) }
     var customGenderText by remember { mutableStateOf(if (isCustomGender) initialGender else "") }
     var draftRace   by remember { mutableStateOf(initialRace) }
+    var draftIronman by remember { mutableStateOf(false) }
     val sheetState  = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
@@ -89,11 +94,16 @@ fun CharacterSetupSheet(
                 style = MaterialTheme.typography.titleLarge,
             )
 
+            val nameTooLong = draftName.length > CHARACTER_NAME_MAX_LENGTH
             OutlinedTextField(
                 value         = draftName,
                 onValueChange = { draftName = it },
                 label         = { Text(stringResource(R.string.character_name_label)) },
                 singleLine    = true,
+                isError       = nameTooLong,
+                supportingText = if (nameTooLong) {
+                    { Text(stringResource(R.string.character_name_too_long, CHARACTER_NAME_MAX_LENGTH)) }
+                } else null,
                 modifier      = Modifier.fillMaxWidth(),
             )
 
@@ -149,6 +159,31 @@ fun CharacterSetupSheet(
                 }
             }
 
+            if (showIronmanOption) {
+                Row(
+                    modifier          = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            text  = stringResource(R.string.character_ironman_title),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            text  = stringResource(R.string.character_ironman_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (draftIronman) MaterialTheme.colorScheme.tertiary
+                                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Switch(
+                        checked         = draftIronman,
+                        onCheckedChange = { draftIronman = it },
+                    )
+                }
+            }
+
             if (!isFirstTime && titles.isNotEmpty()) {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(stringResource(R.string.character_title_label),
@@ -181,7 +216,7 @@ fun CharacterSetupSheet(
                                     Text(
                                         text       = stringResource(R.string.character_title_none),
                                         fontWeight = if (equippedTitleId == null) FontWeight.SemiBold else FontWeight.Normal,
-                                        color      = if (equippedTitleId == null) GoldPrimary else MaterialTheme.colorScheme.onSurface,
+                                        color      = if (equippedTitleId == null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                                     )
                                 },
                                 onClick = {
@@ -198,7 +233,7 @@ fun CharacterSetupSheet(
                                                 fontWeight = if (option.id == equippedTitleId) FontWeight.SemiBold else FontWeight.Normal,
                                                 color      = when {
                                                     !option.unlocked            -> MaterialTheme.colorScheme.onSurfaceVariant
-                                                    option.id == equippedTitleId -> GoldPrimary
+                                                    option.id == equippedTitleId -> MaterialTheme.colorScheme.primary
                                                     else                         -> MaterialTheme.colorScheme.onSurface
                                                 },
                                             )
@@ -238,7 +273,7 @@ fun CharacterSetupSheet(
                     onClick  = {
                         val gender = if (draftGender == "Other" && customGenderText.isNotBlank())
                             customGenderText.trim() else draftGender
-                        onSave(draftName.trim(), gender, draftRace)
+                        onSave(draftName.trim().take(CHARACTER_NAME_MAX_LENGTH), gender, draftRace, draftIronman)
                     },
                     enabled  = draftName.isNotBlank(),
                 ) {

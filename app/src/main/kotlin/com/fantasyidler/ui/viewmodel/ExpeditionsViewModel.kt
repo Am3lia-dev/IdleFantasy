@@ -14,6 +14,7 @@ import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.QueuedSessionStarter
 import com.fantasyidler.repository.SessionRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.simulator.SkillingDungeonSimulator
 import com.fantasyidler.util.GameStrings
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,6 +53,7 @@ class ExpeditionsViewModel @Inject constructor(
     private val sessionRepo: SessionRepository,
     private val gameData: GameDataRepository,
     private val queuedSessionStarter: QueuedSessionStarter,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -94,10 +96,13 @@ class ExpeditionsViewModel @Inject constructor(
                             dungeon.levelRequired,
                         )
                         !prevOk  -> {
-                            val prereq = gameData.skillingDungeons.values
-                                .firstOrNull { it.unlockDungeon == dungeon.requiresPreviousUnlock }
+                            val prereq = gameData.skillingDungeons.entries
+                                .firstOrNull { it.value.unlockDungeon == dungeon.requiresPreviousUnlock }
                             if (prereq != null)
-                                context.getString(R.string.expedition_lock_notes, prereq.displayName)
+                                context.getString(
+                                    R.string.expedition_lock_notes,
+                                    GameStrings.skillingDungeonName(context, prereq.key, prereq.value.displayName),
+                                )
                             else
                                 context.getString(R.string.expedition_lock_prerequisite)
                         }
@@ -136,11 +141,11 @@ class ExpeditionsViewModel @Inject constructor(
                         skillName           = "expedition",
                         activityKey         = key,
                         skillDisplayName    = dungeon.displayName,
-                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agilityLevel, agilityPrestige),
+                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agilityLevel, agilityPrestige, townRepo.playerSessionDurationMultiplier(flags)),
                     )
                 )
                 _extra.update {
-                    it.copy(snackbarMessage = if (enqueued) context.getString(R.string.snackbar_added_to_queue, dungeon.displayName) else context.getString(R.string.snackbar_queue_full))
+                    it.copy(snackbarMessage = if (enqueued) context.getString(R.string.snackbar_added_to_queue, GameStrings.skillingDungeonName(context, key, dungeon.displayName)) else context.getString(R.string.snackbar_queue_full))
                 }
                 return@launch
             }
@@ -160,6 +165,7 @@ class ExpeditionsViewModel @Inject constructor(
                 agilityLevel    = agilityLevel,
                 agilityPrestige = agilityPrestige,
                 toolEfficiency  = toolEfficiency,
+                chronosMultiplier = townRepo.playerSessionDurationMultiplier(flags),
             )
             sessionRepo.startSession(
                 skillName        = "expedition",
@@ -168,7 +174,7 @@ class ExpeditionsViewModel @Inject constructor(
                 durationMs       = result.durationMs,
                 skillDisplayName = dungeon.displayName,
             )
-            _extra.update { it.copy(snackbarMessage = "${dungeon.displayName} started.") }
+            _extra.update { it.copy(snackbarMessage = context.getString(R.string.expedition_started, GameStrings.skillingDungeonName(context, key, dungeon.displayName))) }
         }
     }
 

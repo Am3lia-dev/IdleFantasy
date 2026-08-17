@@ -44,6 +44,7 @@ import com.fantasyidler.ui.screen.BoneAltarScreen
 import com.fantasyidler.ui.screen.CarnivalScreen
 import com.fantasyidler.ui.screen.TowerScreen
 import com.fantasyidler.ui.screen.ChurchScreen
+import com.fantasyidler.ui.screen.MonumentScreen
 import com.fantasyidler.ui.screen.BuilderScreen
 import com.fantasyidler.ui.screen.CombatScreen
 import com.fantasyidler.ui.screen.FarmingScreen
@@ -56,13 +57,18 @@ import com.fantasyidler.ui.screen.ProfileScreen
 import com.fantasyidler.ui.screen.QuestsScreen
 import com.fantasyidler.ui.screen.SeasonalEventScreen
 import com.fantasyidler.ui.screen.HomeScreenSettingsScreen
+import com.fantasyidler.ui.screen.ArtCreditsScreen
+import com.fantasyidler.ui.screen.SaveSlotsScreen
 import com.fantasyidler.ui.screen.SettingsScreen
+import com.fantasyidler.ui.screen.ThemeEditorScreen
+import com.fantasyidler.ui.screen.ThemeSettingsScreen
 import com.fantasyidler.ui.screen.ShopScreen
 import com.fantasyidler.ui.screen.SkillsScreen
 import com.fantasyidler.ui.screen.SlayerScreen
 import com.fantasyidler.ui.screen.WorkerSkillsScreen
 import com.fantasyidler.ui.viewmodel.NavBadgeViewModel
 import com.fantasyidler.ui.viewmodel.OnboardingViewModel
+import com.fantasyidler.ui.viewmodel.SettingsViewModel
 
 @Composable
 fun AppNavigation(
@@ -73,6 +79,10 @@ fun AppNavigation(
     val showOnboarding by onboardingVm.showOnboarding.collectAsState()
     val navBadgeVm: NavBadgeViewModel = hiltViewModel()
     val questsClaimable by navBadgeVm.questsClaimableCount.collectAsState()
+    val hasCombatPrestige by navBadgeVm.hasCombatPrestige.collectAsState()
+    val hasSkillPrestige by navBadgeVm.hasSkillPrestige.collectAsState()
+    val settingsVm: SettingsViewModel = hiltViewModel()
+    val showPrestigeNotifications by settingsVm.showPrestigeNotifications.collectAsState()
 
     // Show onboarding as a full-screen overlay until complete.
     // null = still loading from DB; don't flash the overlay.
@@ -101,6 +111,7 @@ fun AppNavigation(
     val tabSubScreens: Map<String, Set<String>> = mapOf(
         "home"   to setOf("shop", "settings", "inn", Screen.WorkerSkills.route, "guild_hall", "guild_detail/{guild}", "church", "slayer", "carnival", Screen.SeasonalEvent.route),
         "skills" to setOf("farming", "mercantile", Screen.Slayer.route, Screen.BoneAltar.route),
+        "combat" to setOf(Screen.Tower.route),
     )
 
     Scaffold(
@@ -154,7 +165,9 @@ fun AppNavigation(
                                 }
                             } else {
                                 val showQuestBadge = screen is Screen.Quests && questsClaimable > 0
-                                if (showQuestBadge) {
+                                val showCombatBadge = screen is Screen.Combat && hasCombatPrestige && showPrestigeNotifications
+                                val showSkillBadge = screen is Screen.Skills && hasSkillPrestige && showPrestigeNotifications
+                                if (showQuestBadge || showCombatBadge || showSkillBadge) {
                                     BadgedBox(badge = { Badge() }) {
                                         Icon(
                                             imageVector        = if (selected) screen.selectedIcon else screen.icon,
@@ -198,6 +211,7 @@ fun AppNavigation(
                     onNavigateToWorkerSkills = { slot -> navController.navigate(Screen.WorkerSkills.routeWithSlot(slot)) },
                     onNavigateToGuildHall    = { navController.navigate(Screen.GuildHall.route) },
                     onNavigateToChurch       = { navController.navigate(Screen.Church.route) },
+                    onNavigateToMonument     = { navController.navigate(Screen.Monument.route) },
                     onNavigateToSlayer       = { navController.navigate(Screen.Slayer.route) },
                     onNavigateToBuilder      = { navController.navigate(Screen.Builder.route) },
                     onNavigateToCarnival     = { navController.navigate(Screen.Carnival.route) },
@@ -224,11 +238,49 @@ fun AppNavigation(
                     onBack                         = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
                     onReopenTutorial               = { onboardingVm.reopen() },
                     onNavigateToHomeScreenSettings = { navController.navigate(Screen.Settings.homeScreenRoute) },
+                    onNavigateToThemeSettings      = { navController.navigate(Screen.Settings.themeSettingsRoute) },
+                    onNavigateToSaveSlots          = { navController.navigate(Screen.Settings.saveSlotsRoute) },
+                    onNavigateToArtCredits         = { navController.navigate(Screen.Settings.artCreditsRoute) },
                 )
             }
             composable(Screen.Settings.homeScreenRoute) { entry ->
                 HomeScreenSettingsScreen(
                     onBack = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
+                )
+            }
+            composable(Screen.Settings.saveSlotsRoute) { entry ->
+                SaveSlotsScreen(
+                    onBack     = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
+                    onSwitched = {
+                        // Rebuild the whole back stack on the new character.
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+                        }
+                    },
+                )
+            }
+            composable(Screen.Settings.artCreditsRoute) { entry ->
+                ArtCreditsScreen(
+                    onBack = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
+                )
+            }
+            composable(Screen.Settings.themeSettingsRoute) { entry ->
+                ThemeSettingsScreen(
+                    onBack = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
+                    onNavigateToThemeEditor = { source, blank -> navController.navigate(Screen.Settings.themeEditorRouteWithSource(source, blank)) },
+                )
+            }
+            composable(
+                route     = Screen.Settings.themeEditorRoute,
+                arguments = listOf(
+                    navArgument("source") { type = NavType.StringType; defaultValue = "dark" },
+                    navArgument("blank")  { type = NavType.BoolType; defaultValue = false },
+                ),
+            ) { entry ->
+                ThemeEditorScreen(
+                    source    = entry.arguments?.getString("source") ?: "dark",
+                    blankName = entry.arguments?.getBoolean("blank") ?: false,
+                    onBack    = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
                 )
             }
             composable(Screen.Shop.route) { entry ->
@@ -266,6 +318,11 @@ fun AppNavigation(
             }
             composable(Screen.Church.route) { entry ->
                 ChurchScreen(
+                    onBack = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
+                )
+            }
+            composable(Screen.Monument.route) { entry ->
+                MonumentScreen(
                     onBack = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
                 )
             }

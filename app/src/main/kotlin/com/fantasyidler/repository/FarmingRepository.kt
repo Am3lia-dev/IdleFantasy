@@ -27,6 +27,7 @@ class FarmingRepository @Inject constructor(
     private val patchDao: FarmingPatchDao,
     private val playerRepo: PlayerRepository,
     private val gameData: GameDataRepository,
+    private val seasonalEventRepo: SeasonalEventRepository,
     private val json: Json,
 ) {
     fun observePatches(): Flow<List<FarmingPatch>> = patchDao.observeAllPatches()
@@ -127,7 +128,7 @@ class FarmingRepository @Inject constructor(
         val player   = playerRepo.getOrCreatePlayer()
         val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
 
-        val hoeBonus    = equipped[EquipSlot.HOE]?.let { gameData.equipment[it]?.farmingEfficiency } ?: 0f
+        val hoeMult     = equipped[EquipSlot.HOE]?.let { gameData.equipment[it]?.farmingEfficiency } ?: 1f
         val capedDouble = equipped[EquipSlot.CAPE] == "farming_cape"
 
         val flags = playerRepo.getFlags()
@@ -135,7 +136,7 @@ class FarmingRepository @Inject constructor(
         val ashMult = ashYieldMultiplier(ashKey)
 
         var yield = kotlin.random.Random.nextInt(crop.yieldMin, crop.yieldMax + 1)
-        yield = (yield * (1f + hoeBonus) * ashMult).roundToInt()
+        yield = (yield * hoeMult * ashMult).roundToInt()
         if (capedDouble) yield *= 2
 
         val items = buildMap<String, Int> {
@@ -148,8 +149,9 @@ class FarmingRepository @Inject constructor(
             xpGained    = crop.harvestXp.toLong() * yield,
             itemsGained = items,
         )
-        
+
         playerRepo.recordWeeklyProgress("farming", "any", 1)
+        seasonalEventRepo.recordGathering(items)
 
         val farmingPet = gameData.pets.values.firstOrNull { it.boostedSkill == Skills.FARMING }
         if (farmingPet != null && kotlin.random.Random.nextDouble() < 1.0 / 1000.0) {

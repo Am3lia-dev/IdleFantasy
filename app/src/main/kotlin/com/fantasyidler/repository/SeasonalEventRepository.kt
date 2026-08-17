@@ -14,6 +14,7 @@ import kotlinx.coroutines.sync.withLock
 
 data class SeasonalBountyTaskWithProgress(
     val task: SeasonalBountyTaskData,
+    /** For "turn_in" tasks this is how many of the target the player currently holds (capped at the ask). */
     val progress: Int,
     /** Non-null while this slot is waiting for a new task to rotate in after a claim. */
     val cooldownUntilMs: Long?,
@@ -30,6 +31,7 @@ sealed class SeasonalMinigameResult {
 class SeasonalEventRepository @Inject constructor(
     private val playerRepo: PlayerRepository,
     private val gameData: GameDataRepository,
+    private val dailyQuestRepo: DailyQuestRepository,
     @ApplicationContext private val context: Context,
 ) {
 
@@ -37,13 +39,18 @@ class SeasonalEventRepository @Inject constructor(
     fun activeEvent(): SeasonalEventData? =
         gameData.seasonalEvents.values.firstOrNull { it.isActiveAt(System.currentTimeMillis()) }
 
-    fun bountyTasksWithProgress(event: SeasonalEventData, flags: PlayerFlags): List<SeasonalBountyTaskWithProgress> {
+    fun bountyTasksWithProgress(
+        event: SeasonalEventData,
+        flags: PlayerFlags,
+        inventory: Map<String, Int> = emptyMap(),
+    ): List<SeasonalBountyTaskWithProgress> {
         val byId = event.bountyTasks.associateBy { it.id }
         return flags.seasonalBountySlots.mapIndexedNotNull { index, taskId ->
             val task = byId[taskId] ?: return@mapIndexedNotNull null
             SeasonalBountyTaskWithProgress(
                 task            = task,
-                progress        = flags.seasonalBountyProgress[taskId] ?: 0,
+                progress        = if (task.type == "turn_in") minOf(inventory[task.target] ?: 0, task.amount)
+                                  else flags.seasonalBountyProgress[taskId] ?: 0,
                 cooldownUntilMs = flags.seasonalBountySlotCooldownUntil[index.toString()],
             )
         }
@@ -56,42 +63,112 @@ class SeasonalEventRepository @Inject constructor(
 
     suspend fun ensureBountySlotsRefreshed() = playerRepo.playerMutex.withLock { ensureBountySlotsRefreshedUnlocked() }
 
+    private val combatSkillNames = listOf("attack", "strength", "defense", "ranged", "magic", "hitpoints")
+
+    /** Level the player needs before [task]'s activity is even available, or null when unknown. */
+    private fun requiredLevelFor(event: SeasonalEventData, task: SeasonalBountyTaskData): Pair<String, Int>? {
+        if (task.type == "kill") {
+            // Event kill targets only spawn in the event expedition; gate on its recommended level.
+            val rec = event.expeditionKeys().mapNotNull { gameData.dungeons[it]?.recommendedLevel }.minOrNull()
+            return rec?.let { "combat" to it }
+        }
+        val skill = task.skill ?: return null
+        val level = when (skill) {
+            "woodcutting"  -> gameData.trees.values.firstOrNull { it.logName == task.target }?.levelRequired
+            "mining"       -> gameData.ores[task.target]?.levelRequired
+            "fishing"      -> gameData.fish[task.target]?.levelRequired
+            "farming"      -> gameData.crops[task.target]?.levelRequired
+            "herblore"     -> gameData.herbloreRecipes[task.target]?.levelRequired
+            "fletching"    -> gameData.fletchingRecipes[task.target]?.levelRequired
+            "smithing"     -> gameData.smithingRecipes[task.target]?.levelRequired
+            "crafting"     -> gameData.craftingRecipes[task.target]?.levelRequired
+            "runecrafting" -> gameData.runes[task.target]?.levelRequired
+            "cooking"      -> gameData.cookingRecipes.values
+                .firstOrNull { it.cookedItem == task.target || it.rawItem == task.target }?.levelRequired
+            else           -> null
+        }
+        return level?.let { skill to it }
+    }
+
+    private fun taskReachable(event: SeasonalEventData, task: SeasonalBountyTaskData, skillLevels: Map<String, Int>): Boolean {
+        val (skill, required) = requiredLevelFor(event, task) ?: return true
+        val playerLevel = if (skill == "combat") combatSkillNames.maxOf { skillLevels[it] ?: 1 }
+                          else skillLevels[skill] ?: 1
+        return playerLevel >= required
+    }
+
+    /** Picks a task the player can actually work on; falls back to the full pool so a slot is never empty. */
+    private fun pickTask(
+        event: SeasonalEventData,
+        candidates: List<SeasonalBountyTaskData>,
+        skillLevels: Map<String, Int>,
+        excludeId: String? = null,
+    ): SeasonalBountyTaskData? {
+        val fresh = candidates.filter { it.id != excludeId }
+        val reachable = fresh.filter { taskReachable(event, it, skillLevels) }
+        return (reachable.ifEmpty { fresh }).randomOrNull()
+            ?: candidates.firstOrNull { it.id == excludeId }
+    }
+
     private suspend fun ensureBountySlotsRefreshedUnlocked(): PlayerFlags {
         val flags = playerRepo.getFlags()
         val event = activeEvent() ?: return flags
         val byType = event.bountyTasks.groupBy { it.type }
         val validIds = event.bountyTasks.map { it.id }.toSet()
+        val skillLevels: Map<String, Int> =
+            kotlinx.serialization.json.Json.decodeFromString(playerRepo.getOrCreatePlayer().skillLevels)
+        val now = System.currentTimeMillis()
 
         val slotsValid = flags.seasonalBountyEventId == event.id &&
             flags.seasonalBountySlots.size == byType.size &&
             flags.seasonalBountySlots.all { it in validIds }
 
         if (!slotsValid) {
-            val freshSlots = byType.values.mapNotNull { it.randomOrNull()?.id }
+            val freshSlots = byType.values.mapNotNull { pickTask(event, it, skillLevels)?.id }
             val reseeded = flags.copy(
                 seasonalBountyEventId           = event.id,
                 seasonalBountySlots             = freshSlots,
                 seasonalBountyProgress          = emptyMap(),
                 seasonalBountySlotCooldownUntil = emptyMap(),
+                seasonalBountyDailyStamp        = now,
             )
             playerRepo.updateFlagsUnlocked(reseeded)
             return reseeded
         }
 
-        val now = System.currentTimeMillis()
         val slots = flags.seasonalBountySlots.toMutableList()
         var progress = flags.seasonalBountyProgress
         var cooldowns = flags.seasonalBountySlotCooldownUntil
+        var dailyStamp = flags.seasonalBountyDailyStamp
         var changed = false
 
+        // Claimed slots rotate once their post-claim cooldown expires.
         for ((index, taskId) in flags.seasonalBountySlots.withIndex()) {
             val cooldownUntil = cooldowns[index.toString()] ?: continue
             if (now < cooldownUntil) continue
             val currentTask = event.bountyTasks.first { it.id == taskId }
-            val nextTask = byType[currentTask.type].orEmpty().filter { it.id != taskId }.randomOrNull() ?: currentTask
+            val nextTask = pickTask(event, byType[currentTask.type].orEmpty(), skillLevels, excludeId = taskId) ?: currentTask
             slots[index] = nextTask.id
             progress = progress - taskId
             cooldowns = cooldowns - index.toString()
+            changed = true
+        }
+
+        // Daily 6am rotation: untouched slots re-roll so an out-of-reach bounty never
+        // squats for the whole event. Slots with any progress (or a pending post-claim
+        // cooldown) are left alone to protect in-flight work.
+        if (dailyQuestRepo.shouldRefresh(dailyStamp)) {
+            for ((index, taskId) in slots.withIndex()) {
+                if (cooldowns.containsKey(index.toString())) continue
+                if ((progress[taskId] ?: 0) > 0) continue
+                val currentTask = event.bountyTasks.first { it.id == taskId }
+                val nextTask = pickTask(event, byType[currentTask.type].orEmpty(), skillLevels, excludeId = taskId) ?: continue
+                if (nextTask.id == taskId) continue
+                slots[index] = nextTask.id
+                progress = progress - taskId
+                changed = true
+            }
+            dailyStamp = now
             changed = true
         }
 
@@ -100,6 +177,7 @@ class SeasonalEventRepository @Inject constructor(
             seasonalBountySlots             = slots,
             seasonalBountyProgress          = progress,
             seasonalBountySlotCooldownUntil = cooldowns,
+            seasonalBountyDailyStamp        = dailyStamp,
         )
         playerRepo.updateFlagsUnlocked(rotated)
         return rotated
@@ -134,7 +212,11 @@ class SeasonalEventRepository @Inject constructor(
         if (changed) playerRepo.updateFlagsUnlocked(flags.copy(seasonalBountyProgress = updated))
     }
 
-    /** Claims a completed Bounty Board task, awarding one token and starting that slot's rotation cooldown. */
+    /**
+     * Claims a completed Bounty Board task, awarding one token and starting that slot's rotation
+     * cooldown. "turn_in" tasks have no tracked progress — the asked-for items are consumed from
+     * the player's inventory here instead.
+     */
     suspend fun claimBountyTask(taskId: String): Boolean = playerRepo.playerMutex.withLock {
         val event = activeEvent() ?: return@withLock false
         if ("bounty" !in event.pillars) return@withLock false
@@ -142,8 +224,12 @@ class SeasonalEventRepository @Inject constructor(
         val flags = ensureBountySlotsRefreshedUnlocked()
         val slotIndex = flags.seasonalBountySlots.indexOf(taskId)
         if (slotIndex < 0 || flags.seasonalBountySlotCooldownUntil.containsKey(slotIndex.toString())) return@withLock false
-        val progress = flags.seasonalBountyProgress[taskId] ?: 0
-        if (progress < task.amount) return@withLock false
+        if (task.type == "turn_in") {
+            if (!playerRepo.consumeItemsUnlocked(mapOf(task.target to task.amount))) return@withLock false
+        } else {
+            val progress = flags.seasonalBountyProgress[taskId] ?: 0
+            if (progress < task.amount) return@withLock false
+        }
         val claimedFlags = flags.copy(
             seasonalBountySlotCooldownUntil = flags.seasonalBountySlotCooldownUntil +
                 (slotIndex.toString() to (System.currentTimeMillis() + event.bountyRotationMs)),
@@ -159,7 +245,7 @@ class SeasonalEventRepository @Inject constructor(
 
     suspend fun recordExpeditionCompletion(activityKey: String) = playerRepo.playerMutex.withLock {
         val event = activeEvent() ?: return@withLock
-        if ("expedition" !in event.pillars || event.expeditionDungeonKey != activityKey) return@withLock
+        if ("expedition" !in event.pillars || activityKey !in event.expeditionKeys()) return@withLock
         playerRepo.updateFlagsUnlocked(awardTokenUnlocked(playerRepo.getFlags(), event))
     }
 
@@ -167,6 +253,67 @@ class SeasonalEventRepository @Inject constructor(
         val event = activeEvent() ?: return@withLock
         if ("boss" !in event.pillars || event.bossKey != bossKey) return@withLock
         playerRepo.updateFlagsUnlocked(awardTokenUnlocked(playerRepo.getFlags(), event))
+    }
+
+    // -------------------------------------------------------------------------
+    // Reward tiers — claimable payouts along the token track. The final banner +
+    // title tier stays on the automatic path in awardTokenUnlocked.
+    // -------------------------------------------------------------------------
+
+    /** Claims the reward tier at [tierTokens] tokens: grants its payload and records the claim. */
+    suspend fun claimRewardTier(tierTokens: Int): Boolean = playerRepo.playerMutex.withLock {
+        val event = activeEvent() ?: return@withLock false
+        val tier = event.rewardTiers.firstOrNull { it.tokens == tierTokens } ?: return@withLock false
+        if (tier.coins <= 0 && tier.items.isEmpty() && tier.petId == null && !tier.xpBoost) return@withLock false
+        val flags = playerRepo.getFlagsUnlocked()
+        val claimed = flags.seasonalRewardTiersClaimed[event.id].orEmpty()
+        if ((flags.seasonalTokensByEvent[event.id] ?: 0) < tier.tokens || tier.tokens in claimed) return@withLock false
+
+        if (tier.coins > 0) playerRepo.addCoinsUnlocked(tier.coins)
+        if (tier.items.isNotEmpty()) playerRepo.addItemsUnlocked(tier.items)
+        tier.petId?.let { petId ->
+            playerRepo.addPetIfNewUnlocked(petId, gameData.pets[petId]?.boostPercent ?: 0)
+        }
+        // Ironman characters never receive the XP boost component (boosts are inert for them);
+        // the tier's other rewards are still granted.
+        if (tier.xpBoost && !flags.ironman) playerRepo.grantXpBoost(PlayerRepository.XP_BOOST_DURATION_MS)
+
+        // The grants above rewrite the flags column (seen items, boost expiry) — re-read before recording the claim.
+        val latest = playerRepo.getFlagsUnlocked()
+        playerRepo.updateFlagsUnlocked(latest.copy(
+            seasonalRewardTiersClaimed = latest.seasonalRewardTiersClaimed + (event.id to (claimed + tier.tokens)),
+        ))
+        true
+    }
+
+    // -------------------------------------------------------------------------
+    // Night Market — coin-priced item bundles and utility effects.
+    // -------------------------------------------------------------------------
+
+    /** Buys a Night Market offer: spends coins, then grants its items or applies its effect. */
+    suspend fun purchaseMarketOffer(offerId: String): Boolean = playerRepo.playerMutex.withLock {
+        val event = activeEvent() ?: return@withLock false
+        val offer = event.nightMarket.firstOrNull { it.id == offerId } ?: return@withLock false
+        val flags = playerRepo.getFlagsUnlocked()
+        val purchaseKey = "${event.id}:${offer.id}"
+        val bought = flags.seasonalMarketPurchases[purchaseKey] ?: 0
+        if (offer.limit != null && bought >= offer.limit) return@withLock false
+        if (!playerRepo.spendCoinsUnlocked(offer.coinCost)) return@withLock false
+
+        if (offer.items.isNotEmpty()) playerRepo.addItemsUnlocked(offer.items)
+
+        val latest = playerRepo.getFlagsUnlocked()
+        var updated = when (offer.effect) {
+            // Mark every waiting slot as already expired (not cleared — clearing would leave the
+            // claimed task in place, re-claimable); the refresh below then rotates new tasks in.
+            "skip_bounty_cooldowns"  -> latest.copy(seasonalBountySlotCooldownUntil = latest.seasonalBountySlotCooldownUntil.mapValues { 0L })
+            "skip_minigame_cooldown" -> latest.copy(seasonalMinigameCooldownAt = 0L)
+            else                     -> latest
+        }
+        updated = updated.copy(seasonalMarketPurchases = updated.seasonalMarketPurchases + (purchaseKey to bought + 1))
+        playerRepo.updateFlagsUnlocked(updated)
+        if (offer.effect == "skip_bounty_cooldowns") ensureBountySlotsRefreshedUnlocked()
+        true
     }
 
     // -------------------------------------------------------------------------

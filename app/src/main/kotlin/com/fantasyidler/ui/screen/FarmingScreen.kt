@@ -67,7 +67,6 @@ import com.fantasyidler.data.json.CropData
 import com.fantasyidler.data.model.FarmingPatch
 import com.fantasyidler.repository.FarmingRepository
 import com.fantasyidler.simulator.XpTable
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.viewmodel.FarmingUiState
 import com.fantasyidler.ui.viewmodel.FarmingViewModel
@@ -182,14 +181,14 @@ fun FarmingScreen(
                     Text(
                         text  = "+${result.xpGained.formatXp()} XP",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
                     )
                     if (result.itemsGained.isNotEmpty()) {
                         Spacer(Modifier.height(8.dp))
                         result.itemsGained.forEach { (key, qty) ->
                             Text(
-                                text  = "${GameStrings.cropName(context, key)}: ×$qty",
+                                text  = "${GameStrings.itemName(context, key)}: ×$qty",
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
@@ -203,6 +202,35 @@ fun FarmingScreen(
             },
         )
     }
+
+    if (state.showBeanClimbDialog) {
+        BeanClimbDialog(onDismiss = viewModel::beanClimbDialogConsumed)
+    }
+}
+
+// The beanstalk unlock stays up until dismissed; a transient banner was too easy
+// to miss after the bean's month-long grow.
+@Composable
+private fun BeanClimbDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.farming_bean_climbed_title)) },
+        text = {
+            Text(
+                stringResource(R.string.farming_bean_climbed) + "\n\n" +
+                    stringResource(
+                        R.string.farming_bean_unlock_hint,
+                        GameStrings.dungeonName(context, "cloud_kingdom"),
+                    )
+            )
+        },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text(stringResource(R.string.btn_close))
+            }
+        },
+    )
 }
 
 // ---------------------------------------------------------------------------
@@ -220,7 +248,8 @@ fun FarmingSheetContent(
 
     AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
 
-    Box(Modifier.fillMaxWidth()) {
+    // Full height even while loading, so the sheet's anchors don't shift when content arrives
+    Box(Modifier.fillMaxSize()) {
         if (state.isLoading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         } else LazyColumn(
@@ -286,14 +315,14 @@ fun FarmingSheetContent(
                     Text(
                         text  = "+${result.xpGained.formatXp()} XP",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
                     )
                     if (result.itemsGained.isNotEmpty()) {
                         Spacer(Modifier.height(8.dp))
                         result.itemsGained.forEach { (key, qty) ->
                             Text(
-                                text  = "${GameStrings.cropName(context, key)}: ×$qty",
+                                text  = "${GameStrings.itemName(context, key)}: ×$qty",
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
@@ -306,6 +335,10 @@ fun FarmingSheetContent(
                 }
             },
         )
+    }
+
+    if (state.showBeanClimbDialog) {
+        BeanClimbDialog(onDismiss = viewModel::beanClimbDialogConsumed)
     }
 }
 
@@ -342,9 +375,11 @@ private fun FarmingXpBar(state: FarmingUiState) {
             }
             Spacer(Modifier.height(8.dp))
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress = { progress },
                 modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
-                color    = GoldPrimary,
+                color    = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(4.dp))
             Text(
@@ -433,9 +468,11 @@ private fun PatchCard(
                         )
                         Spacer(Modifier.height(6.dp))
                         LinearProgressIndicator(
+                            gapSize = 0.dp,
+                            drawStopIndicator = {},
                             progress = { progress },
                             modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
-                            color    = GoldPrimary,
+                            color    = MaterialTheme.colorScheme.primary,
                         )
                         if (BuildConfig.DEBUG) {
                             TextButton(onClick = onClimb) {
@@ -454,18 +491,20 @@ private fun PatchCard(
                             Text(
                                 text  = "🌿 ${context.getString(R.string.farming_fertilizer_yield, pct)}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = GoldPrimary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                         Spacer(Modifier.height(4.dp))
                         LinearProgressIndicator(
+                            gapSize = 0.dp,
+                            drawStopIndicator = {},
                             progress = { progress },
                             modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
-                            color    = GoldPrimary,
+                            color    = MaterialTheme.colorScheme.primary,
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            text  = context.getString(R.string.farming_ready_in, remaining.formatDurationMs()),
+                            text  = context.getString(R.string.farming_ready_in, remaining.formatDurationMs(context)),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -491,7 +530,7 @@ private fun PatchCard(
                         Text(
                             text  = stringResource(R.string.farming_bean_ready),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                         )
                         Spacer(Modifier.height(8.dp))
@@ -512,7 +551,7 @@ private fun PatchCard(
                         Text(
                             text  = stringResource(R.string.label_ready_to_harvest),
                             style = MaterialTheme.typography.bodySmall,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold,
                         )
                         Spacer(Modifier.height(8.dp))
@@ -541,7 +580,12 @@ private fun PatchCard(
         AlertDialog(
             onDismissRequest = { showClearConfirm = false },
             title = { Text(stringResource(R.string.farming_clear_patch)) },
-            text  = { Text(stringResource(R.string.farming_clear_desc)) },
+            text  = {
+                Text(
+                    if (patch?.cropType == "magic_bean") stringResource(R.string.farming_clear_desc_bean)
+                    else stringResource(R.string.farming_clear_desc_named, GameStrings.cropName(context, patch?.cropType ?: ""))
+                )
+            },
             confirmButton = {
                 Button(
                     onClick = { showClearConfirm = false; onClear() },
@@ -636,14 +680,14 @@ private fun PlantSheet(
                         )
                         Text(
                             text  = if (crop.id == "magic_bean") stringResource(R.string.farming_bean_picker_stats)
-                                    else "Lv. ${crop.levelRequired}  •  ${crop.growthTimeHours}h  •  ${crop.harvestXp} XP/crop",
+                                    else stringResource(R.string.farming_crop_picker_stats, crop.levelRequired, (crop.growthTimeHours * 3_600_000L).formatDurationMs(context), crop.harvestXp),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
-                            text  = "Seeds: $seedCount  •  Owned: $ownedCount",
+                            text  = stringResource(R.string.farming_seeds_owned, seedCount, ownedCount),
                             style = MaterialTheme.typography.labelSmall,
-                            color = if (enabled) GoldPrimary else MaterialTheme.colorScheme.error,
+                            color = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
                         )
                     }
                     Spacer(Modifier.width(8.dp))

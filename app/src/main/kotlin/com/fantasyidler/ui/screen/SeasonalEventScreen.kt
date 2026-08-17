@@ -45,6 +45,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -61,13 +62,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
+import com.fantasyidler.data.json.NightMarketOfferData
 import com.fantasyidler.data.json.SeasonalMinigameConfig
+import com.fantasyidler.data.json.SeasonalRewardTierData
 import com.fantasyidler.repository.SeasonalBountyTaskWithProgress
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.CraftingViewModel
 import com.fantasyidler.ui.viewmodel.SeasonalEventViewModel
 import com.fantasyidler.ui.viewmodel.SkillsViewModel
 import com.fantasyidler.util.GameStrings
+import com.fantasyidler.util.formatCoins
 import com.fantasyidler.util.formatDurationMs
 import kotlinx.coroutines.delay
 
@@ -133,9 +136,27 @@ fun SeasonalEventScreen(
                     )
                     Spacer(Modifier.height(8.dp))
                     LinearProgressIndicator(
+                        gapSize = 0.dp,
+                        drawStopIndicator = {},
                         progress = { (state.tokens.toFloat() / event.tokenGoal).coerceIn(0f, 1f) },
                         modifier = Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(4.dp)),
                     )
+                }
+            }
+
+            if (event.rewardTiers.isNotEmpty()) {
+                SectionCard(title = stringResource(R.string.seasonal_rewards_title)) {
+                    val tiers = event.rewardTiers.sortedBy { it.tokens }
+                    tiers.forEachIndexed { index, tier ->
+                        RewardTierRow(
+                            tier    = tier,
+                            eventId = event.id,
+                            tokens  = state.tokens,
+                            claimed = tier.tokens in state.claimedRewardTiers,
+                            onClaim = { viewModel.claimRewardTier(tier.tokens) },
+                        )
+                        if (index != tiers.lastIndex) HorizontalDivider()
+                    }
                 }
             }
 
@@ -146,7 +167,7 @@ fun SeasonalEventScreen(
                             taskProgress       = taskProgress,
                             onClaim            = { viewModel.claimBountyTask(taskProgress.task.id) },
                             onGo               = {
-                                if (taskProgress.task.type == "kill") event.expeditionDungeonKey?.let(onNavigateToExpedition)
+                                if (taskProgress.task.type == "kill") event.expeditionKeys().firstOrNull()?.let(onNavigateToExpedition)
                                 else taskProgress.task.skill?.let(skillsViewModel::onSkillTapped)
                             },
                             onCooldownExpired  = viewModel::refreshBountySlots,
@@ -156,19 +177,23 @@ fun SeasonalEventScreen(
                 }
             }
 
-            if ("expedition" in event.pillars && event.expeditionDungeonKey != null) {
+            val expeditionKeys = event.expeditionKeys()
+            if ("expedition" in event.pillars && expeditionKeys.isNotEmpty()) {
                 SectionCard(title = stringResource(R.string.label_dungeon)) {
-                    Text(viewModel.dungeonDisplayName(event.expeditionDungeonKey), style = MaterialTheme.typography.bodyLarge)
-                    Spacer(Modifier.height(8.dp))
-                    Button(onClick = { onNavigateToExpedition(event.expeditionDungeonKey) }, modifier = Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.seasonal_go_to_combat))
+                    expeditionKeys.forEachIndexed { index, dungeonKey ->
+                        if (index > 0) Spacer(Modifier.height(12.dp))
+                        Text(GameStrings.dungeonName(context, dungeonKey), style = MaterialTheme.typography.bodyLarge)
+                        Spacer(Modifier.height(8.dp))
+                        Button(onClick = { onNavigateToExpedition(dungeonKey) }, modifier = Modifier.fillMaxWidth()) {
+                            Text(stringResource(R.string.seasonal_go_to_combat))
+                        }
                     }
                 }
             }
 
             if ("boss" in event.pillars && event.bossKey != null) {
                 SectionCard(title = stringResource(R.string.seasonal_boss_title)) {
-                    Text(viewModel.bossDisplayName(event.bossKey), style = MaterialTheme.typography.bodyLarge)
+                    Text(GameStrings.bossName(context, event.bossKey), style = MaterialTheme.typography.bodyLarge)
                     Spacer(Modifier.height(8.dp))
                     Button(onClick = { onNavigateToBoss(event.bossKey) }, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(R.string.seasonal_go_to_combat))
@@ -184,6 +209,7 @@ fun SeasonalEventScreen(
                         onModeChange  = viewModel::setMinigameEasyMode,
                         visibleMs     = if (state.minigameEasyMode) minigame.visibleMsEasy else minigame.visibleMs,
                         cooldownMs    = if (state.minigameEasyMode) minigame.cooldownMsEasy else minigame.cooldownMs,
+                        sequenceMode  = minigame.type == "sequence",
                     )
                     Spacer(Modifier.height(8.dp))
                     val now = System.currentTimeMillis()
@@ -192,12 +218,38 @@ fun SeasonalEventScreen(
                             resumesAtMs   = state.minigameCooldownAt,
                             onDebugFinish = viewModel::debugStopMinigameCooldown
                         )
+                    } else if (minigame.type == "sequence") {
+                        LanternSequenceGame(
+                            config   = minigame,
+                            easyMode = state.minigameEasyMode,
+                            onSubmit = viewModel::submitMinigameAttempt,
+                        )
                     } else {
                         BonfireRhythmGame(
                             config   = minigame,
                             easyMode = state.minigameEasyMode,
                             onSubmit = viewModel::submitMinigameAttempt,
                         )
+                    }
+                }
+            }
+
+            if (event.nightMarket.isNotEmpty()) {
+                SectionCard(title = stringResource(R.string.seasonal_market_title)) {
+                    event.nightMarket.forEachIndexed { index, offer ->
+                        val effectUseful = when (offer.effect) {
+                            "skip_bounty_cooldowns"  -> state.bountyTasks.any { it.cooldownUntilMs != null }
+                            "skip_minigame_cooldown" -> state.minigameCooldownAt > System.currentTimeMillis()
+                            else                     -> true
+                        }
+                        MarketOfferRow(
+                            offer        = offer,
+                            purchases    = state.marketPurchases[offer.id] ?: 0,
+                            coins        = state.coins,
+                            effectUseful = effectUseful,
+                            onBuy        = { viewModel.purchaseMarketOffer(offer.id) },
+                        )
+                        if (index != event.nightMarket.lastIndex) HorizontalDivider()
                     }
                 }
             }
@@ -217,7 +269,9 @@ private fun MinigameModeSelector(
     onModeChange: (Boolean) -> Unit,
     visibleMs: Long,
     cooldownMs: Long,
+    sequenceMode: Boolean = false,
 ) {
+    val context = LocalContext.current
     Column {
         Row(
             modifier              = Modifier.fillMaxWidth(),
@@ -243,10 +297,101 @@ private fun MinigameModeSelector(
             }
         }
         Text(
-            text  = stringResource(R.string.seasonal_minigame_mode_caption, visibleMs, cooldownMs.formatDurationMs()),
+            text  = stringResource(
+                if (sequenceMode) R.string.seasonal_minigame_sequence_mode_caption else R.string.seasonal_minigame_mode_caption,
+                visibleMs, cooldownMs.formatDurationMs(context),
+            ),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+    }
+}
+
+/** One row on the reward track: locked (padlock), claimable (button), or claimed. Tiers with no payload (the final banner tier) flip to "Claimed" automatically once reached. */
+@Composable
+private fun RewardTierRow(
+    tier: SeasonalRewardTierData,
+    eventId: String,
+    tokens: Int,
+    claimed: Boolean,
+    onClaim: () -> Unit,
+) {
+    val context = LocalContext.current
+    val hasPayload = tier.coins > 0 || tier.items.isNotEmpty() || tier.petId != null || tier.xpBoost
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text  = GameStrings.seasonalRewardDesc(context, eventId, tier.tokens, tier.description),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(
+                text  = stringResource(R.string.seasonal_reward_tier_requirement, tier.tokens),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
+        when {
+            claimed || (!hasPayload && tokens >= tier.tokens) -> Text(
+                text       = stringResource(R.string.seasonal_reward_claimed),
+                style      = MaterialTheme.typography.labelMedium,
+                color      = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+            )
+            hasPayload && tokens >= tier.tokens -> Button(onClick = onClaim) { Text(stringResource(R.string.seasonal_claim)) }
+            else -> Text("🔒", style = MaterialTheme.typography.titleMedium)
+        }
+    }
+}
+
+@Composable
+private fun MarketOfferRow(
+    offer: NightMarketOfferData,
+    purchases: Int,
+    coins: Long,
+    effectUseful: Boolean,
+    onBuy: () -> Unit,
+) {
+    val context = LocalContext.current
+    val soldOut = offer.limit != null && purchases >= offer.limit
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text  = GameStrings.seasonalMarketName(context, offer.id, offer.displayName),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text(
+                text  = stringResource(R.string.seasonal_market_price, offer.coinCost.formatCoins()),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            val limit = offer.limit
+            if (limit != null && !soldOut) {
+                Text(
+                    text  = stringResource(R.string.seasonal_market_limit_left, limit - purchases),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        if (soldOut) {
+            Text(
+                text  = stringResource(R.string.seasonal_market_sold_out),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            Button(onClick = onBuy, enabled = coins >= offer.coinCost && effectUseful) {
+                Text(stringResource(R.string.seasonal_market_buy))
+            }
+        }
     }
 }
 
@@ -280,7 +425,7 @@ private fun BountyTaskRow(
             Text(
                 text  = GameStrings.seasonalBountyHint(context, task.id, task.hint),
                 style = MaterialTheme.typography.labelSmall,
-                color = GoldPrimary,
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text  = "${taskProgress.progress}/${task.amount}",
@@ -291,7 +436,9 @@ private fun BountyTaskRow(
         val cooldownUntilMs = taskProgress.cooldownUntilMs
         when {
             cooldownUntilMs != null -> BountyCooldownRow(cooldownUntilMs, onCooldownExpired)
-            taskProgress.progress >= task.amount -> Button(onClick = onClaim) { Text(stringResource(R.string.seasonal_claim)) }
+            taskProgress.progress >= task.amount -> Button(onClick = onClaim) {
+                Text(stringResource(if (task.type == "turn_in") R.string.seasonal_donate else R.string.seasonal_claim))
+            }
             else -> TextButton(onClick = onGo) { Text(stringResource(R.string.seasonal_go)) }
         }
     }
@@ -364,7 +511,7 @@ private fun BonfireRhythmGame(
     Text(
         text  = stringResource(R.string.seasonal_minigame_hint, config.hitsRequired, config.rounds),
         style = MaterialTheme.typography.bodySmall,
-        color = GoldPrimary,
+        color = MaterialTheme.colorScheme.primary,
     )
     Spacer(Modifier.height(8.dp))
 
@@ -389,7 +536,7 @@ private fun BonfireRhythmGame(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(if (isLit) GoldPrimary else MaterialTheme.colorScheme.surface)
+                            .background(if (isLit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
                             .clickable(enabled = isPlaying) {
                                 if (litHole == index) {
                                     haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -398,7 +545,7 @@ private fun BonfireRhythmGame(
                             },
                         contentAlignment = Alignment.Center,
                     ) {
-                        if (isLit) Text("🔥", style = MaterialTheme.typography.titleLarge)
+                        if (isLit) Text(config.emoji, style = MaterialTheme.typography.titleLarge)
                     }
                 }
             }
@@ -410,7 +557,7 @@ private fun BonfireRhythmGame(
             text       = "$c",
             style      = MaterialTheme.typography.displayMedium,
             fontWeight = FontWeight.Bold,
-            color      = GoldPrimary,
+            color      = MaterialTheme.colorScheme.primary,
             textAlign  = TextAlign.Center,
             modifier   = Modifier.fillMaxWidth(),
         )
@@ -456,5 +603,138 @@ private fun BonfireRhythmGame(
         }
         isPlaying = false
         onSubmit(localHits >= config.hitsRequired)
+    }
+}
+
+/**
+ * A Simon-style memory minigame: each round the lanterns flash a sequence one step longer
+ * ([easyMode] slows the flashes in exchange for a longer cooldown), then the player taps it
+ * back in order. One wrong tap ends the run — completing [SeasonalMinigameConfig.hitsRequired]
+ * rounds (of [SeasonalMinigameConfig.rounds]) is a win either way.
+ */
+@Composable
+private fun LanternSequenceGame(
+    config: SeasonalMinigameConfig,
+    easyMode: Boolean,
+    onSubmit: (Boolean) -> Unit,
+) {
+    var isPlaying by remember { mutableStateOf(false) }
+    var countdown by remember { mutableStateOf<Int?>(null) }
+    var round by remember { mutableIntStateOf(1) }
+    var showingSequence by remember { mutableStateOf(false) }
+    var litLantern by remember { mutableIntStateOf(-1) }
+    var inputIndex by remember { mutableIntStateOf(0) }
+    val sequence = remember { mutableStateListOf<Int>() }
+    val haptic = LocalHapticFeedback.current
+    val flashMs = if (easyMode) config.visibleMsEasy else config.visibleMs
+
+    Text(
+        text  = stringResource(R.string.seasonal_minigame_sequence_hint, config.hitsRequired, config.rounds),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.primary,
+    )
+    Spacer(Modifier.height(8.dp))
+
+    if (isPlaying) {
+        Text(
+            text  = stringResource(R.string.seasonal_minigame_sequence_round, round, config.rounds),
+            style = MaterialTheme.typography.labelMedium,
+        )
+        Text(
+            text  = stringResource(if (showingSequence) R.string.seasonal_minigame_watch else R.string.seasonal_minigame_your_turn),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(8.dp))
+    }
+
+    val columns = 3
+    val rows = (config.holeCount + columns - 1) / columns
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        for (r in 0 until rows) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                for (c in 0 until columns) {
+                    val index = r * columns + c
+                    if (index >= config.holeCount) continue
+                    val isLit = isPlaying && litLantern == index
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(CircleShape)
+                            .background(if (isLit) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
+                            .clickable(enabled = isPlaying && !showingSequence) {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                if (index == sequence.getOrNull(inputIndex)) {
+                                    inputIndex++
+                                    if (inputIndex == sequence.size) {
+                                        if (round == config.rounds) {
+                                            isPlaying = false
+                                            onSubmit(true)
+                                        } else {
+                                            round++
+                                            showingSequence = true
+                                        }
+                                    }
+                                } else {
+                                    isPlaying = false
+                                    onSubmit(round - 1 >= config.hitsRequired)
+                                }
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        if (isLit) Text(config.emoji, style = MaterialTheme.typography.titleLarge)
+                    }
+                }
+            }
+        }
+    }
+    Spacer(Modifier.height(8.dp))
+    countdown?.let { c ->
+        Text(
+            text       = "$c",
+            style      = MaterialTheme.typography.displayMedium,
+            fontWeight = FontWeight.Bold,
+            color      = MaterialTheme.colorScheme.primary,
+            textAlign  = TextAlign.Center,
+            modifier   = Modifier.fillMaxWidth(),
+        )
+    }
+    if (!isPlaying && countdown == null) {
+        Button(
+            onClick  = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); countdown = 3 },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(stringResource(R.string.seasonal_tap))
+        }
+    }
+
+    LaunchedEffect(countdown) {
+        val c = countdown ?: return@LaunchedEffect
+        delay(1000L)
+        if (c > 1) {
+            countdown = c - 1
+        } else {
+            countdown = null
+            sequence.clear()
+            round = 1
+            showingSequence = true
+            isPlaying = true
+        }
+    }
+
+    // Plays the sequence back at the start of every round, then hands control to the player.
+    LaunchedEffect(isPlaying, round, showingSequence) {
+        if (!isPlaying || !showingSequence) return@LaunchedEffect
+        if (sequence.isEmpty()) sequence.add(kotlin.random.Random.nextInt(config.holeCount))
+        sequence.add(kotlin.random.Random.nextInt(config.holeCount))
+        delay(500L)
+        for (index in sequence) {
+            litLantern = index
+            delay(flashMs)
+            litLantern = -1
+            delay(250L)
+        }
+        inputIndex = 0
+        showingSequence = false
     }
 }

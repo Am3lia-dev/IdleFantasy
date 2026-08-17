@@ -9,6 +9,8 @@ import com.fantasyidler.data.model.QueuedAction
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.PlayerRepository
+import com.fantasyidler.repository.WeeklyQuestRepository
+import com.fantasyidler.repository.XpBoostPurchaseResult
 import com.fantasyidler.repository.resolveCapeMultiplier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,15 +77,23 @@ data class ShopUiState(
     val inventory: Map<String, Int> = emptyMap(),
     val equipped: Map<String, String?> = emptyMap(),
     val xpBoostExpiresAt: Long = 0L,
+    val xpBoostLastPurchaseAt: Long = 0L,
     val transaction: ShopTransaction? = null,
     val pendingBulkSell: BulkSellPreview? = null,
     val snackbarMessage: String? = null,
     val isLoading: Boolean = true,
     /** Items reserved by queued actions — cannot be sold. */
     val reservedItems: Map<String, Int> = emptyMap(),
+    /** Items the player locked against selling. */
+    val lockedItems: Set<String> = emptySet(),
     val mercantileLevel: Int = 0,
     val townBuildingTiers: Map<String, Int> = emptyMap(),
     val skillPrestige: Map<String, Int> = emptyMap(),
+    /** Ironman characters can only sell — every buy path is blocked. */
+    val ironman: Boolean = false,
+    val compactNumbers: Boolean = false,
+    /** Bulk and manual sells always leave one of each item (collector safety). */
+    val keepOneOfEach: Boolean = false,
 ) {
     val xpBoostActive: Boolean get() = xpBoostExpiresAt > System.currentTimeMillis()
 }
@@ -97,6 +107,7 @@ class ShopViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val playerRepo: PlayerRepository,
     private val gameData: GameDataRepository,
+    private val weeklyQuestRepo: WeeklyQuestRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -115,11 +126,16 @@ class ShopViewModel @Inject constructor(
                 inventory        = json.decodeFromString(player.inventory),
                 equipped         = json.decodeFromString(player.equipped),
                 xpBoostExpiresAt = flags.xpBoostExpiresAt,
+                xpBoostLastPurchaseAt = flags.xpBoostLastPurchaseAt,
                 isLoading        = false,
                 reservedItems    = computeReserved(flags.sessionQueue),
+                lockedItems      = flags.lockedItems.toSet(),
                 mercantileLevel  = levels[Skills.MERCANTILE] ?: 0,
                 townBuildingTiers = flags.townBuildingTiers,
                 skillPrestige     = flags.skillPrestige,
+                ironman           = flags.ironman,
+                compactNumbers    = flags.compactNumbers,
+                keepOneOfEach     = flags.shopKeepOneOfEach,
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ShopUiState())
@@ -146,8 +162,8 @@ class ShopViewModel @Inject constructor(
 
         val boost = ShopEntry(
             key          = XP_BOOST_KEY,
-            displayName  = "2× XP Boost (48h)",
-            description  = "Double all XP gained for 48 hours",
+            displayName  = context.getString(R.string.shop_xp_boost_name),
+            description  = context.getString(R.string.item_xp_boost_48h_desc),
             price        = PlayerRepository.XP_BOOST_COST.toInt(),
             categoryName = "Special",
         )
@@ -233,6 +249,7 @@ class ShopViewModel @Inject constructor(
             val gem  = gameData.gems[itemKey]
             val crop = gameData.crops[itemKey]
             when {
+                itemKey in CONSTRUCTION_SELL -> CONSTRUCTION_SELL.getValue(itemKey)
                 "arrow_shaft" in itemKey -> 1
                 "_arrow_tip" in itemKey -> when {
                     "runite"     in itemKey -> 8
@@ -330,7 +347,8 @@ class ShopViewModel @Inject constructor(
             inventoryKeys = uiState.value.inventory.keys,
             townBuildingTiers = uiState.value.townBuildingTiers,
             skillPrestige = uiState.value.skillPrestige,
-            allEquipment = gameData.equipment
+            allEquipment = gameData.equipment,
+            ironman = uiState.value.ironman,
         )
         return mult - 1.0f
     }
@@ -343,7 +361,9 @@ class ShopViewModel @Inject constructor(
         viewModelScope.launch {
             val inventory = uiState.value.inventory
             val useful    = gameData.usefulItemKeys
-            val junk      = inventory.filterKeys { it != "coins" && it !in useful }
+            val locked    = uiState.value.lockedItems
+            val junk      = inventory.filterKeys { it != "coins" && it !in useful && it !in locked }
+                .let { if (uiState.value.keepOneOfEach) it.mapValues { (_, qty) -> qty - 1 }.filterValues { qty -> qty > 0 } else it }
             if (junk.isEmpty()) {
                 _extra.update { it.copy(snackbarMessage = context.getString(R.string.shop_no_junk)) }
                 return@launch
@@ -363,6 +383,8 @@ class ShopViewModel @Inject constructor(
             val allEquip  = gameData.equipment
 
             val toSell = computeOldEquipmentToSell(equipped, inventory, allEquip)
+                .filterKeys { it !in state.lockedItems }
+                .let { if (state.keepOneOfEach) it.mapValues { (_, qty) -> qty - 1 }.filterValues { qty -> qty > 0 } else it }
 
             if (toSell.isEmpty()) {
                 _extra.update { it.copy(snackbarMessage = context.getString(R.string.shop_no_old_equipment)) }
@@ -372,6 +394,24 @@ class ShopViewModel @Inject constructor(
                 BulkSellItem(key, GameStrings.itemName(context.withAppLocale(), key), qty, sellPriceFor(key))
             }.sortedBy { it.displayName }
             _extra.update { it.copy(pendingBulkSell = BulkSellPreview(R.string.shop_sell_old_gear, R.string.shop_sold_old_equipment, items)) }
+        }
+    }
+
+    fun setKeepOneOfEach(enabled: Boolean) {
+        viewModelScope.launch {
+            val flags = playerRepo.getFlags()
+            playerRepo.updateFlags(flags.copy(shopKeepOneOfEach = enabled))
+        }
+    }
+
+    fun toggleItemLock(itemKey: String) {
+        viewModelScope.launch {
+            val nowLocked = playerRepo.toggleItemLock(itemKey)
+            val name = GameStrings.itemName(context.withAppLocale(), itemKey)
+            _extra.update {
+                it.copy(snackbarMessage = context.getString(
+                    if (nowLocked) R.string.shop_item_lock_on else R.string.shop_item_lock_off, name))
+            }
         }
     }
 
@@ -395,6 +435,24 @@ class ShopViewModel @Inject constructor(
     // ------------------------------------------------------------------
 
     fun openBuy(entry: ShopEntry) {
+        if (uiState.value.ironman) {
+            _extra.update { it.copy(snackbarMessage = context.getString(R.string.ironman_shop_buy_blocked)) }
+            return
+        }
+        val isXpBoost = entry.key == XP_BOOST_KEY
+        if (isXpBoost) {
+            val state = uiState.value
+            if (state.xpBoostActive) {
+                _extra.update { it.copy(snackbarMessage = context.getString(R.string.shop_xp_boost_already_active)) }
+                return
+            }
+            if (state.xpBoostLastPurchaseAt > 0 &&
+                System.currentTimeMillis() < weeklyQuestRepo.nextResetMs(state.xpBoostLastPurchaseAt)
+            ) {
+                _extra.update { it.copy(snackbarMessage = context.getString(R.string.shop_xp_boost_weekly_limit)) }
+                return
+            }
+        }
         val discount  = mercantileBuyDiscount()
         val discPrice = (entry.price * discount).toInt().coerceAtLeast(1)
         val maxAffordable = (uiState.value.coins / discPrice).coerceIn(1L, Int.MAX_VALUE.toLong()).toInt()
@@ -404,7 +462,7 @@ class ShopViewModel @Inject constructor(
                     key         = entry.key,
                     displayName = entry.displayName,
                     priceEach   = discPrice,
-                    maxQty      = maxAffordable,
+                    maxQty      = if (isXpBoost) 1 else maxAffordable,
                     qty         = 1,
                     isBuy       = true,
                 )
@@ -414,15 +472,21 @@ class ShopViewModel @Inject constructor(
 
     fun openSell(itemKey: String, displayName: String) {
         val state         = uiState.value
+        if (itemKey in state.lockedItems) {
+            _extra.update { it.copy(snackbarMessage = context.getString(R.string.shop_item_locked, displayName)) }
+            return
+        }
         val have          = state.inventory[itemKey] ?: 0
         val equippedCount = state.equipped.values.count { it == itemKey }
         val reserved      = state.reservedItems[itemKey] ?: 0
-        val sellable      = (have - equippedCount - reserved).coerceAtLeast(0)
+        val keptForCollection = if (state.keepOneOfEach) 1 else 0
+        val sellable      = (have - equippedCount - reserved - keptForCollection).coerceAtLeast(0)
         if (sellable == 0) {
             val reason = when {
-                equippedCount > 0 -> "$displayName is equipped — unequip it first to sell."
-                reserved > 0      -> "$displayName is reserved for a queued task."
-                else              -> "Nothing to sell."
+                equippedCount > 0     -> context.getString(R.string.shop_sell_blocked_equipped, displayName)
+                reserved > 0          -> context.getString(R.string.shop_sell_blocked_reserved, displayName)
+                keptForCollection > 0 && have > 0 -> context.getString(R.string.shop_sell_blocked_keep_one, displayName)
+                else                  -> context.getString(R.string.shop_sell_blocked_none)
             }
             _extra.update { it.copy(snackbarMessage = reason) }
             return
@@ -451,15 +515,23 @@ class ShopViewModel @Inject constructor(
 
     fun confirmTransaction() {
         val t = _extra.value.transaction ?: return
+        if (t.isBuy && uiState.value.ironman) {
+            _extra.update { it.copy(transaction = null, snackbarMessage = context.getString(R.string.ironman_shop_buy_blocked)) }
+            return
+        }
         viewModelScope.launch {
             // Special handling for XP boost
             if (t.key == XP_BOOST_KEY) {
-                val activated = playerRepo.activateXpBoost(PlayerRepository.XP_BOOST_DURATION_MS, t.qty, t.priceEach.toLong())
+                val result = playerRepo.activateXpBoost(PlayerRepository.XP_BOOST_DURATION_MS, t.priceEach.toLong())
                 _extra.update {
                     it.copy(
                         transaction     = null,
-                        snackbarMessage = if (activated) context.getString(R.string.shop_xp_boost_activated, t.qty * 48)
-                                          else           context.getString(R.string.error_not_enough_coins),
+                        snackbarMessage = when (result) {
+                            XpBoostPurchaseResult.SUCCESS              -> context.getString(R.string.shop_xp_boost_activated, 48)
+                            XpBoostPurchaseResult.NOT_ENOUGH_COINS     -> context.getString(R.string.error_not_enough_coins)
+                            XpBoostPurchaseResult.ALREADY_ACTIVE       -> context.getString(R.string.shop_xp_boost_already_active)
+                            XpBoostPurchaseResult.WEEKLY_LIMIT_REACHED -> context.getString(R.string.shop_xp_boost_weekly_limit)
+                        },
                     )
                 }
                 return@launch
@@ -474,8 +546,8 @@ class ShopViewModel @Inject constructor(
                 it.copy(
                     transaction = null,
                     snackbarMessage = if (success) {
-                        if (t.isBuy) context.getString(R.string.shop_bought_item, t.qty, t.displayName)
-                        else         context.getString(R.string.shop_sold_item, t.qty, t.displayName, t.priceEach * t.qty)
+                        if (t.isBuy) context.getString(R.string.shop_bought_item, t.qty, GameStrings.itemName(context, t.key))
+                        else         context.getString(R.string.shop_sold_item, t.qty, GameStrings.itemName(context, t.key), t.priceEach * t.qty)
                     } else {
                         if (t.isBuy) context.getString(R.string.error_not_enough_coins) else context.getString(R.string.shop_not_enough_in_inventory)
                     },
@@ -519,6 +591,28 @@ class ShopViewModel @Inject constructor(
 
     companion object {
         const val XP_BOOST_KEY = "xp_boost_48h"
+
+        /**
+         * Construction furniture otherwise falls to the generic 5-coin fallback (issue #1337).
+         * Values are the salvage sum of each recipe's materials at their own sell prices,
+         * matching how bars price against ore+coal. Kept below buy-material cost so max
+         * Mercantile sell bonuses can't turn buy-craft-sell into a coin loop.
+         */
+        private val CONSTRUCTION_SELL = mapOf(
+            "wooden_rack"    to 10,
+            "wooden_shelf"   to 15,
+            "carved_stone"   to 4,
+            "oak_table"      to 30,
+            "oak_bookshelf"  to 40,
+            "stone_block"    to 10,
+            "willow_cabinet" to 75,
+            "maple_dresser"  to 160,
+            "yew_wardrobe"   to 340,
+            "magic_throne"   to 850,
+            "redwood_bench"  to 1050,
+            "redwood_bookcase" to 1400,
+            "redwood_grand_bed" to 1800,
+        )
 
         private val TOOL_SLOTS = setOf(
             EquipSlot.PICKAXE, EquipSlot.AXE, EquipSlot.FISHING_ROD, EquipSlot.HOE,

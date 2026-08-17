@@ -1,6 +1,8 @@
 package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -77,6 +79,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlin.math.roundToInt
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
+import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.simulator.CombatSimulator
 import com.fantasyidler.data.json.BossData
 import com.fantasyidler.data.json.CookingRecipe
@@ -90,8 +93,6 @@ import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
-import com.fantasyidler.ui.theme.SuccessGreen
 import com.fantasyidler.ui.viewmodel.CombatViewModel
 import com.fantasyidler.ui.viewmodel.CombatViewModel.Companion.MAX_BOSS_REPEAT_COUNT
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
@@ -124,7 +125,9 @@ internal fun BossInfoSheet(
     potionEffects: Map<String, Map<String, Int>>,
     selectedPotionKey: String?,
     isStarting: Boolean,
+    isQueueFull: Boolean = false,
     repeatCount: Int,
+    fullCoinKillsLeft: Int = PlayerRepository.BOSS_FULL_COIN_KILLS_PER_DAY,
     onWeaponSlotSelected: (String) -> Unit,
     onPotionSelected: (String?) -> Unit,
     onRepeatCountChanged: (Int) -> Unit,
@@ -141,7 +144,7 @@ internal fun BossInfoSheet(
         else       -> "attack"
     }
     val styleLabel = GameStrings.skillName(context, combatStyle)
-    val canStart = canFight && !isStarting &&
+    val canStart = canFight && !isStarting && !isQueueFull &&
         (combatStyle != "magic" || selectedSpell != null)
 
     Column(
@@ -153,11 +156,19 @@ internal fun BossInfoSheet(
         Column(modifier = Modifier
             .weight(1f, fill = false)
             .verticalScroll(rememberScrollState())) {
-        Text(
-            text       = "${boss.emoji} ${GameStrings.bossName(context, boss.id)}",
-            style      = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            BossIcon(
+                bossId        = boss.id,
+                modifier      = Modifier.size(48.dp),
+                fallbackEmoji = boss.emoji,
+            )
+            Spacer(Modifier.width(12.dp))
+            Text(
+                text       = GameStrings.bossName(context, boss.id),
+                style      = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+            )
+        }
         Text(
             text  = GameStrings.bossDesc(context, boss.id).takeIf { it.isNotBlank() } ?: boss.description,
             style = MaterialTheme.typography.bodyMedium,
@@ -175,7 +186,7 @@ internal fun BossInfoSheet(
                 text       = boss.combatLevelRequired.toString(),
                 style      = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold,
-                color      = if (canFight) GoldPrimary else MaterialTheme.colorScheme.error,
+                color      = if (canFight) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
             )
         }
         Row(
@@ -196,7 +207,7 @@ internal fun BossInfoSheet(
             Text(stringResource(R.string.combat_duration_min, boss.durationMinutes), style = MaterialTheme.typography.bodySmall,
                 fontWeight = FontWeight.SemiBold)
         }
-        StatRow(label = stringResource(R.string.label_combat_style), value = styleLabel, valueColor = GoldPrimary)
+        StatRow(label = stringResource(R.string.label_combat_style), value = styleLabel, valueColor = MaterialTheme.colorScheme.primary)
 
         // Weapon picker
         if (equippedWeapons.isNotEmpty()) {
@@ -259,7 +270,7 @@ internal fun BossInfoSheet(
                     Text(GameStrings.skillName(context, skill),
                         style = MaterialTheme.typography.bodySmall)
                     Text("+$xp ${stringResource(R.string.label_xp)}", style = MaterialTheme.typography.bodySmall,
-                        color = GoldPrimary, fontWeight = FontWeight.SemiBold)
+                        color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                 }
             }
         }
@@ -339,6 +350,14 @@ internal fun BossInfoSheet(
             }
         }
 
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text  = if (fullCoinKillsLeft > 0) stringResource(R.string.boss_coin_cap_remaining, fullCoinKillsLeft)
+                    else stringResource(R.string.boss_coin_cap_spent),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+
         // Fight count picker (queue this boss N times in one queue slot)
         Spacer(Modifier.height(12.dp))
         Text(
@@ -386,15 +405,29 @@ internal fun BossInfoSheet(
             OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.btn_cancel))
             }
-            Button(
-                onClick  = onStart,
-                modifier = Modifier.weight(1f),
-                enabled  = canStart,
-            ) {
-                if (isStarting) CircularProgressIndicator(
-                    modifier    = Modifier.height(20.dp).width(20.dp),
-                    strokeWidth = 2.dp,
-                ) else Text(stringResource(R.string.btn_fight))
+            val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+            Box(modifier = Modifier.weight(1f)) {
+                Button(
+                    onClick  = onStart,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled  = canStart,
+                ) {
+                    if (isStarting) CircularProgressIndicator(
+                        modifier    = Modifier.height(20.dp).width(20.dp),
+                        strokeWidth = 2.dp,
+                    ) else Text(stringResource(R.string.btn_fight))
+                }
+                if (isQueueFull) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication        = null,
+                                onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
+                            ),
+                    )
+                }
             }
         }
     }

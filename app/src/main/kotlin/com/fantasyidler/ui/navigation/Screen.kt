@@ -2,6 +2,7 @@ package com.fantasyidler.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Celebration
 import androidx.compose.material.icons.filled.Explore
@@ -73,6 +74,12 @@ sealed class Screen(
         selectedIcon = Icons.Filled.Settings,
     ) {
         const val homeScreenRoute = "settings/home_screen"
+        const val saveSlotsRoute = "settings/save_slots"
+        const val artCreditsRoute = "settings/art_credits"
+        const val themeSettingsRoute = "settings/theme"
+        const val themeEditorRoute = "settings/theme_editor?source={source}&blank={blank}"
+        fun themeEditorRouteWithSource(source: String, blankName: Boolean) =
+            "settings/theme_editor?source=$source&blank=$blankName"
     }
 
     object Shop : Screen(
@@ -111,6 +118,12 @@ sealed class Screen(
         route    = "church",
         labelRes = R.string.church_title,
         icon     = Icons.Filled.Star,
+    )
+
+    object Monument : Screen(
+        route    = "monument",
+        labelRes = R.string.monument_title,
+        icon     = Icons.Filled.AccountBalance,
     )
 
     object GuildDetail : Screen(

@@ -81,7 +81,6 @@ import com.fantasyidler.data.json.OreData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.TreeData
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -112,18 +111,22 @@ import com.fantasyidler.ui.viewmodel.QuestIndicator
 
 @Composable
 internal fun AgilitySheet(
+    guildDailyButton: (@Composable () -> Unit)? = null,
     courses: Map<String, AgilityCourseData>,
     isStarting: Boolean,
     hasActiveSession: Boolean,
     isQueueFull: Boolean,
     sessionDurationMs: Long,
     currentXp: Long = 0L,
+    efficiency: Float = 1f,
+    petBoostPct: Int = 0,
     xpBonusMult: Float = 1f,
     activeQuests: Map<String, List<QuestIndicator>> = emptyMap(),
     onSelect: (String) -> Unit,
 ) {
     val context = LocalContext.current
     var selectedKey by remember { mutableStateOf<String?>(null) }
+    val scrollState = rememberScrollState()
     val currentAgilityLevel = XpTable.levelForXp(currentXp)
     Column(Modifier.padding(bottom = 24.dp)) {
         Text(
@@ -137,6 +140,7 @@ internal fun AgilitySheet(
             color    = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
         )
+        guildDailyButton?.invoke()
         if (sessionDurationMs > 0) {
             Text(
                 text     = stringResource(R.string.skills_session_duration, sessionDurationMs / 60_000),
@@ -146,13 +150,13 @@ internal fun AgilitySheet(
             )
         }
         HorizontalDivider()
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column(Modifier.verticalScroll(scrollState)) {
             courses.entries
                 .sortedBy { it.value.levelRequired }
                 .forEach { (key, course) ->
-                    val xpGain = (SkillSimulator.estimateAgilityXp(course.xpPerSuccess, course.levelRequired, currentAgilityLevel) * xpBonusMult).toLong()
+                    val xpGain = (SkillSimulator.estimateAgilityXp(course.xpPerSuccess, course.levelRequired, currentAgilityLevel, efficiency) * (1 + petBoostPct / 100f) * xpBonusMult).toLong()
                     ActivityRow(
-                        name             = course.displayName,
+                        name             = GameStrings.agilityCourse(context, key),
                         detail           = context.getString(R.string.skills_agility_course_detail, course.levelRequired, course.xpPerSuccess),
                         projectedLabel   = projectedXpLabel(currentXp, xpGain),
                         isStarting       = isStarting,
@@ -167,8 +171,8 @@ internal fun AgilitySheet(
     selectedKey?.let { key ->
         val course = courses[key] ?: return@let
         ActivityDetailDialog(
-            name             = course.displayName,
-            detail           = "Lv. ${course.levelRequired}  •  ${course.xpPerSuccess} XP/lap",
+            name             = GameStrings.agilityCourse(context, key),
+            detail           = context.getString(R.string.skills_agility_course_detail, course.levelRequired, course.xpPerSuccess),
             description      = GameStrings.agilityCourseDesc(context, key),
             hasActiveSession = hasActiveSession,
             isQueueFull      = isQueueFull,

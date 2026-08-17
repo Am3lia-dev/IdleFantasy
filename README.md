@@ -21,17 +21,16 @@ Pick a skill or dungeon, start a session, then put your phone down. Your hero ke
 
 Train **23 skills** at your own pace:
 
-- **Gathering** (7): Mining, Fishing, Woodcutting, Farming, Firemaking, Agility, Thieving
-- **Crafting** (7): Smithing, Cooking, Fletching, Crafting, Runecrafting, Herblore, Construction
-- **Combat** (7): Attack, Strength, Defense, Ranged, Magic, Hitpoints, Prayer
-- **Support** (2): Mercantile, Slayer
+- **Gathering** (5): Mining, Fishing, Woodcutting, Farming, and Thieving
+- **Crafting** (8): Smithing, Cooking, Fletching, Crafting, Firemaking, Runecrafting, Herblore, and Construction
+- **Support** (3): Prayer, Mercantile, and Agility
+- **Combat** (7): Slayer, Attack, Strength, Defense, Ranged, Magic, and Hitpoints
 
-Better equipment means faster gathering and surviving tougher dungeons. Craft your own gear or buy it from the Shop. Crafting windows display required ingredients alongside your currently owned item count (`Owned: X`). The **Mercantile** skill levels through trade routes and unlocks better prices. **Slayer** tasks are assigned by the Slayer Master in town and are completed by fighting specific enemies in dungeons.
-
+Better equipment means faster gathering and surviving tougher dungeons. Craft your own gear or buy it from the Shop. The **Mercantile** skill levels through trade routes and unlocks better prices. **Slayer** tasks are assigned by the Slayer Master in town and are completed by fighting specific enemies in dungeons.
 
 ## Combat and dungeons
 
-Explore **20 dungeons** from the starter Farm all the way to late-game Fortress Ruins and beyond. Each dungeon has its own enemy roster, difficulty rating, and potential drops. Before you go in, the game tells you how your current gear stacks up. Choose from Melee, Ranged, or Magic; each style levels its own combat skills.
+Explore **29 dungeons** from the starter Farm all the way to late-game Fortress Ruins and beyond. Each dungeon has its own enemy roster, difficulty rating, and potential drops. Before you go in, the game tells you how your current gear stacks up. Choose from Melee, Ranged, or Magic; each style levels its own combat skills.
 
 ## Infinite Tower
 
@@ -43,15 +42,15 @@ Explore non-combat skilling dungeons to uncover lore notes. Finding enough notes
 
 ## Quests
 
-Over **170 quests** span all skills. Daily quests reset every morning for a quick goal to aim at. Long-term quests track cumulative progress over many sessions. Completing quests earns XP, coins, and item rewards.
+Over **189 quests** span all skills. Daily quests reset every morning for a quick goal to aim at. Long-term quests track cumulative progress over many sessions. Completing quests earns XP, coins, and item rewards.
 
 ## Guild System
 
-**17 guilds** cover every skill and combat style (Warriors, Archers, and Mages guilds for combat). Each guild has up to 10 rank levels. Advance by completing progression quests and earning reputation through daily requests. Higher ranks unlock harder dailies and better cross-skill rewards, letting specialists access resources from skills they don't personally train.
+**20 guilds** cover every skill and combat style (Warriors, Archers, and Mages guilds for combat). Each guild has up to 10 rank levels. Advance by completing progression quests and earning reputation through daily requests. Higher ranks unlock harder dailies and better cross-skill rewards, letting specialists access resources from skills they don't personally train.
 
 ## Builder's Workshop
 
-Spend Construction materials to upgrade the Inn, Guild Hall, and Church, unlocking better worker slots, guild perks, and stronger blessings.
+Spend Construction materials to upgrade various town buildings, unlocking better worker slots, guild perks, and more.
 
 ## Church
 
@@ -77,7 +76,7 @@ Or grab the latest APK from the [Releases page](https://github.com/tristinbaker/
 
 ## Translating
 
-The game is available in English, German, French, Spanish, and Turkish. Translations live in standard Android string resource files and are Weblate-compatible. See [TRANSLATING.md](TRANSLATING.md) to add a new language or improve an existing one.
+The game is available in 17 languages translated through community contributions. Translations live in standard Android string resource files and are Weblate-compatible. See [Translating](/TRANSLATING.md) to add a new language or improve an existing one.
 
 ## Contributing
 
@@ -89,21 +88,21 @@ See the [contributors graph](https://github.com/tristinbaker/IdleFantasy/graphs/
 
 ## For developers
 
-**Language:** Kotlin  
+**Language:** Kotlin
 **UI:** Jetpack Compose + Material 3  
 **Database:** Room (SQLite)  
-**Background work:** WorkManager  
+**Background work:** AlarmManager  
 **JSON parsing:** kotlinx.serialization  
 **Architecture:** MVVM + Repository  
 **Dependency injection:** Hilt  
 **Notifications:** NotificationCompat  
-**Localization:** Android string resources (Weblate-compatible)  
+**Localization:** Android string resources (Weblate-compatible)
 
 No Google Play Services dependency. F-Droid compatible.
 
 ### Building from source
 
-Requirements: Android Studio Hedgehog or newer, JDK 17+, Android SDK 34
+Requirements: Android Studio Hedgehog or newer, JDK 17+, Android SDK 35
 
 ```bash
 git clone https://github.com/tristinbaker/IdleFantasy.git
@@ -115,4 +114,4 @@ The debug APK will be at `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## License
 
-GPL-3.0. See [LICENSE](LICENSE) for details.
+GPL-3.0. See [LICENSE](/LICENSE) for details.

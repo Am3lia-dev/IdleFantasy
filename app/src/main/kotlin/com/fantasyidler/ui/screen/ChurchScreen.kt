@@ -46,7 +46,6 @@ import com.fantasyidler.R
 import com.fantasyidler.data.json.BlessingData
 import com.fantasyidler.data.json.BlessingType
 import com.fantasyidler.repository.ChurchRepository
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.ChurchViewModel
 import com.fantasyidler.util.formatDurationMs
 import kotlin.math.roundToInt
@@ -174,11 +173,27 @@ fun ChurchScreen(
             }
 
             // ── Blessing rows grouped by type ───────────────────────────
-            val groups = listOf(
-                R.string.church_section_xp      to BlessingType.XP,
-                R.string.church_section_defense to BlessingType.DEFENSE,
-                R.string.church_section_coins   to BlessingType.COINS,
-            )
+            // Ironman characters can only use defensive blessings; the XP and coin
+            // groups are hidden entirely and a short notice explains why.
+            val groups = if (state.ironman) {
+                listOf(R.string.church_section_defense to BlessingType.DEFENSE)
+            } else {
+                listOf(
+                    R.string.church_section_xp      to BlessingType.XP,
+                    R.string.church_section_defense to BlessingType.DEFENSE,
+                    R.string.church_section_coins   to BlessingType.COINS,
+                )
+            }
+            if (state.ironman) {
+                item {
+                    Text(
+                        text     = stringResource(R.string.ironman_blessing_blocked),
+                        style    = MaterialTheme.typography.bodySmall,
+                        color    = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                    )
+                }
+            }
             groups.forEach { (headerRes, type) ->
                 val blessings = state.allBlessings.filter { it.type == type }
                 item {
@@ -238,7 +253,7 @@ private fun ActiveBlessingBanner(
                 text       = name,
                 style      = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text  = effectText,
@@ -247,7 +262,7 @@ private fun ActiveBlessingBanner(
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text  = stringResource(R.string.church_expires_in, remainingMs.formatDurationMs()),
+                text  = stringResource(R.string.church_expires_in, remainingMs.formatDurationMs(context)),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

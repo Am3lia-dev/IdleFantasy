@@ -60,7 +60,6 @@ data class WorkerSkillsUiState(
     val maxCraftQty: Int = Int.MAX_VALUE,
     val inventory: Map<String, Int> = emptyMap(),
     val selectedRecipe: CraftableRecipe? = null,
-    val craftQuantity: Int = 1,
     val herbloreAshKey: String? = null,
     val showSessionEndTime: Boolean = true,
     /** Total items this session is assigned to produce (from its single pre-simulated batch frame), keyed by item. */
@@ -210,12 +209,16 @@ class WorkerSkillsViewModel @Inject constructor(
     val fletchingRecipes: List<CraftableRecipe> by lazy {
         gameData.fletchingRecipes.map { (_, r) ->
             val isPlank = r.itemName == "plank" || r.itemName.endsWith("_plank")
+            val isStaff = r.itemName.startsWith("staff_of_")
+            // Base items with no material prefix would leak product words into the tier chips
+            val untiered = isPlank || isStaff || r.itemName == "arrow_shaft" || r.itemName == "shortbow"
             val category = when {
-                isPlank                -> "Plank"
-                r.type == "component"  -> "Component"
-                r.type == "ammunition" -> "Ammunition"
-                r.type == "weapon"     -> "Weapon"
-                else                   -> ""
+                isPlank                                               -> "Plank"
+                isStaff                                               -> "Staff"
+                r.type == "ammunition" || r.itemName == "arrow_shaft" -> "Arrow"
+                r.type == "weapon"                                    -> "Bow"
+                r.type == "component"                                 -> "Component"
+                else                                                  -> ""
             }
             CraftableRecipe(
                 key                 = r.itemName,
@@ -231,7 +234,7 @@ class WorkerSkillsViewModel @Inject constructor(
                 outputStrengthBonus = r.strengthBonus ?: 0,
                 outputCombatStyle   = gameData.equipment[r.itemName]?.combatStyle,
                 category            = category,
-                tier                = tierFromKey(r.itemName),
+                tier                = if (untiered) "" else tierFromKey(r.itemName),
             )
         }.sortedBy { it.levelRequired }
     }
@@ -511,24 +514,18 @@ class WorkerSkillsViewModel @Inject constructor(
     // Crafting sheet (consumes materials at queue time)
     // ------------------------------------------------------------------
 
-    fun openRecipe(recipe: CraftableRecipe) {
-        val state = uiState.value
-        val max = minOf(state.maxCraftable(recipe), state.maxCraftQty).coerceAtLeast(1)
-        _uiState.update { it.copy(selectedRecipe = recipe, craftQuantity = max) }
-    }
+    fun openRecipe(recipe: CraftableRecipe) =
+        _uiState.update { it.copy(selectedRecipe = recipe) }
 
     fun dismissRecipe() = _uiState.update { it.copy(selectedRecipe = null, herbloreAshKey = null) }
 
     fun setHerbloreAsh(key: String?) = _uiState.update { it.copy(herbloreAshKey = key) }
 
-    fun setQuantity(qty: Int, max: Int) =
-        _uiState.update { it.copy(craftQuantity = qty.coerceIn(1, max.coerceAtLeast(1))) }
-
-    fun craft() {
+    fun craft(requestedQty: Int) {
         val state  = uiState.value
         val recipe = state.selectedRecipe ?: return
         val max    = state.maxCraftable(recipe).coerceAtLeast(1)
-        val qty    = state.craftQuantity.coerceIn(1, max)
+        val qty    = requestedQty.coerceIn(1, max)
 
         viewModelScope.launch {
             val slot      = _uiState.value.selectedSlot

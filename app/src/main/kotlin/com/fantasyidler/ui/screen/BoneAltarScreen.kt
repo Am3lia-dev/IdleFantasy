@@ -37,13 +37,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.changedToDown
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.BoneAltarUiState
 import com.fantasyidler.ui.viewmodel.BoneAltarViewModel
 import com.fantasyidler.util.GameStrings
@@ -144,7 +145,7 @@ private fun BoneSelectionContent(
                         Text(
                             text  = stringResource(R.string.btn_select),
                             style = MaterialTheme.typography.labelMedium,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -166,7 +167,7 @@ private fun BoneTapContent(
     val bone        = state.availableBones[boneKey] ?: return
     val boneName    = GameStrings.itemName(context, boneKey)
     val comboActive = state.combo >= BoneAltarViewModel.COMBO_THRESHOLD
-    val comboColor  = if (comboActive) GoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+    val comboColor  = if (comboActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
     val qty         = state.inventory[boneKey] ?: 0
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -198,7 +199,7 @@ private fun BoneTapContent(
             Text(
                 text       = stringResource(R.string.bone_altar_session_xp, state.sessionXp.formatXp()),
                 style      = MaterialTheme.typography.bodyMedium,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
                 modifier   = Modifier.weight(1f),
             )
@@ -227,7 +228,7 @@ private fun BoneTapContent(
                     Text(
                         text  = stringResource(R.string.bone_altar_bonus_active),
                         style = MaterialTheme.typography.labelMedium,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -240,7 +241,21 @@ private fun BoneTapContent(
                 .weight(1f)
                 .fillMaxWidth()
                 .padding(24.dp)
-                .clickable(enabled = qty > 0, onClick = onTap),
+                // Raw pointer handling instead of clickable: each finger-down counts as its
+                // own bury, so two-thumb tapping doesn't drop every other tap.
+                .pointerInput(qty > 0) {
+                    if (qty <= 0) return@pointerInput
+                    awaitPointerEventScope {
+                        while (true) {
+                            awaitPointerEvent().changes.forEach { change ->
+                                if (change.changedToDown()) {
+                                    change.consume()
+                                    onTap()
+                                }
+                            }
+                        }
+                    }
+                },
             shape          = MaterialTheme.shapes.large,
             color          = if (qty > 0) MaterialTheme.colorScheme.primaryContainer
                              else MaterialTheme.colorScheme.surfaceVariant,

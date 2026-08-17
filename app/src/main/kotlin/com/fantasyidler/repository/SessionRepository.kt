@@ -8,6 +8,7 @@ import com.fantasyidler.data.db.dao.SkillSessionDao
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.receiver.SessionAlarmReceiver
+import com.fantasyidler.simulator.CombatSimulator
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
@@ -118,6 +119,7 @@ class SessionRepository @Inject constructor(
     }
 
     suspend fun markCompleted(sessionId: String) {
+        cancelAlarm(sessionId)
         sessionDao.markCompleted(sessionId)
     }
 
@@ -127,12 +129,10 @@ class SessionRepository @Inject constructor(
      */
     fun bossFightEndMs(session: SkillSession): Long = try {
         val frames: List<SessionFrame> = json.decodeFromString(session.frames)
-        val durMin      = (gameData.bosses[session.activityKey]?.durationMinutes ?: 60).coerceAtLeast(1)
-        val perFrameMs  = ((session.endsAt - session.startedAt) / durMin).coerceAtLeast(1L)
-        val lastTicks   = frames.lastOrNull()?.let { maxOf(it.playerHits.size, it.enemyHits.size) } ?: 0
-        val tickMs      = if (lastTicks > 0) perFrameMs / lastTicks else 2_400L
-        val lastFrameMs = if (lastTicks > 0) minOf(lastTicks * tickMs, perFrameMs) else perFrameMs
-        minOf(session.endsAt, session.startedAt + (frames.size - 1).coerceAtLeast(0) * perFrameMs + lastFrameMs + 2_000L)
+        val durMin     = (gameData.bosses[session.activityKey]?.durationMinutes ?: 60).coerceAtLeast(1)
+        val perFrameMs = ((session.endsAt - session.startedAt) / durMin).coerceAtLeast(1L)
+        val offset     = CombatSimulator.bossEndAlarmOffsetMs(frames, durMin, perFrameMs)
+        if (offset != null) minOf(session.endsAt, session.startedAt + offset) else session.endsAt
     } catch (_: Exception) { session.endsAt }
 
     private val watchdogMutex = Mutex()
@@ -195,7 +195,8 @@ class SessionRepository @Inject constructor(
             return
         }
         if (session.completed) {
-            var catchUpMs = maxOf(0L, System.currentTimeMillis() - session.endsAt)
+            val endMs = if (session.skillName == "boss") bossFightEndMs(session) else session.endsAt
+            var catchUpMs = maxOf(0L, System.currentTimeMillis() - endMs)
             while (catchUpMs > 0) {
                 val used = try { starter.insertNextQueuedAsOffline(catchUpMs) } catch (_: Exception) { 0L }
                 if (used == 0L) break
@@ -211,7 +212,16 @@ class SessionRepository @Inject constructor(
             val fightEndMs = bossFightEndMs(session)
             if (System.currentTimeMillis() >= fightEndMs) {
                 markCompleted(session.sessionId)
-                starter.startNextQueued()
+                // Fast-forward the offline window like the generic path below, or a repeat
+                // chain (x100 boss runs) advances only one fight per app launch when the OS
+                // suppresses alarms for a killed app (Discord report, Aug 2026).
+                var catchUpMs = System.currentTimeMillis() - fightEndMs
+                while (catchUpMs > 0) {
+                    val used = try { starter.insertNextQueuedAsOffline(catchUpMs) } catch (_: Exception) { 0L }
+                    if (used == 0L) break
+                    catchUpMs -= used
+                }
+                try { starter.startNextQueued(backdateMs = catchUpMs) } catch (_: Exception) { }
             } else {
                 scheduleAlarm(session.sessionId, fightEndMs, session.skillName)
             }
@@ -267,6 +277,7 @@ class SessionRepository @Inject constructor(
 
     /** Delete a completed session after rewards have been applied. */
     suspend fun deleteSession(sessionId: String) {
+        cancelAlarm(sessionId)
         sessionDao.delete(sessionId)
     }
 
@@ -318,10 +329,13 @@ class SessionRepository @Inject constructor(
         }
     }
 
-    private fun cancelAlarm(sessionId: String) {
-        val am      = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pending = cancelIntent(sessionId)
-        am.cancel(pending)
+    internal fun cancelAlarm(sessionId: String) {
+        try {
+            val am      = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val pending = cancelIntent(sessionId)
+            am.cancel(pending)
+            pending.cancel()
+        } catch (_: Exception) {}
     }
 
     companion object {

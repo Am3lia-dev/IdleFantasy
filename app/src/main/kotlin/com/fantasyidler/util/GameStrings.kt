@@ -26,7 +26,9 @@ object GameStrings {
             ?: key.toTitleCase()
 
     fun itemDesc(context: Context, key: String): String =
-        context.stringByName("item_${key}_desc") ?: ""
+        context.stringByName("item_${key}_desc")
+            ?: context.stringByName("crop_${key}_desc")
+            ?: ""
 
     fun skillName(context: Context, key: String): String =
         context.stringByName("skill_${key}_name") ?: key.toTitleCase()
@@ -45,6 +47,10 @@ object GameStrings {
 
     fun skillingDungeonDesc(context: Context, key: String, fallback: String): String =
         context.stringByName("skilling_dungeon_${key}_desc") ?: fallback
+
+    /** Lore note [index] (0-based) for a skilling dungeon; falls back to the JSON text. */
+    fun skillingDungeonNote(context: Context, key: String, index: Int, fallback: String): String =
+        context.stringByName("skilling_dungeon_${key}_note_${index + 1}") ?: fallback
 
     fun enemyName(context: Context, key: String): String =
         context.stringByName("enemy_${key}_name") ?: key.toTitleCase()
@@ -100,6 +106,20 @@ object GameStrings {
     fun boneName(context: Context, key: String): String =
         context.stringByName("bone_${key}_name") ?: key.toTitleCase()
 
+    fun treeName(context: Context, key: String, fallback: String = key.toTitleCase()): String =
+        context.stringByName("tree_${key}_name") ?: fallback
+
+    /** Localised activity name; each skill keys its activities in a different string domain. */
+    fun activityName(context: Context, skillName: String, activityKey: String): String = when (skillName) {
+        "combat"      -> dungeonName(context, activityKey)
+        "boss"        -> bossName(context, activityKey)
+        "mercantile"  -> tradeRouteName(context, activityKey)
+        "agility"     -> agilityCourse(context, activityKey)
+        "woodcutting" -> treeName(context, activityKey)
+        "thieving"    -> thievingNpcName(context, activityKey)
+        else          -> itemName(context, activityKey)
+    }
+
     fun agilityCourse(context: Context, key: String): String =
         context.stringByName("agility_${key}_name") ?: key.toTitleCase()
 
@@ -126,6 +146,9 @@ object GameStrings {
 
     fun seasonalRewardDesc(context: Context, eventId: String, tokens: Int, fallback: String): String =
         context.stringByName("seasonal_reward_${eventId}_${tokens}_desc") ?: fallback
+
+    fun seasonalMarketName(context: Context, id: String, fallback: String): String =
+        context.stringByName("seasonal_market_${id}_name") ?: fallback
 
     fun skillEmoji(key: String): String = when (key) {
         "mining"      -> "⛏️"
@@ -186,6 +209,32 @@ object GameStrings {
         "expedition"   -> R.drawable.skill_expedition
         else           -> null
     }
+
+    fun guildName(context: Context, guild: String): String =
+        context.stringByName("guild_name_${guild}") ?: guild.toTitleCase()
+
+    fun guildQuestVerb(context: Context, guild: String, fallback: String): String =
+        context.stringByName("daily_verb_${guild}") ?: fallback
+
+    fun guildQuestCombatStyle(context: Context, guild: String): String =
+        context.stringByName("guild_combat_${guild}") ?: guild
+
+    fun carnivalPrizeName(context: Context, prizeType: String, prize: String, fallback: String): String =
+        when (prizeType) {
+            "equipment" -> itemName(context, prize)
+            "pet" -> petName(context, prize)
+            else -> context.stringByName("carnival_prize_${prize}_name") ?: fallback
+        }
+
+    fun carnivalPrizeDesc(context: Context, prizeType: String, prize: String, fallback: String): String =
+        when (prizeType) {
+            "equipment" -> itemDesc(context, prize)
+            "pet" -> petDesc(context, prize)
+            else -> context.stringByName("carnival_prize_${prize}_desc") ?: fallback
+        }
+
+    fun themeName(context: Context, theme: String): String =
+        context.stringByName("settings_theme_${theme}") ?: theme.toTitleCase()
 }
 
 // ---------------------------------------------------------------------------

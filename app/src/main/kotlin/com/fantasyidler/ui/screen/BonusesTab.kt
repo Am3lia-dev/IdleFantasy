@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.fantasyidler.R
 import com.fantasyidler.data.json.EquipmentData
@@ -27,8 +28,8 @@ import com.fantasyidler.data.json.PetData
 import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.simulator.SkillSimulator
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.repository.resolveCapeMultiplier
 import com.fantasyidler.repository.isGuildCapeForSkill
 import com.fantasyidler.repository.resolveOwnedCapeKeysForSkill
@@ -65,9 +66,26 @@ internal fun BonusesTab(
     val context = LocalContext.current
     val now     = System.currentTimeMillis()
 
+    // Ironman: every XP/yield/coin multiplier is inert, so there is nothing to list.
+    if (state.ironman) {
+        Box(
+            modifier         = Modifier.fillMaxSize().padding(32.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text      = stringResource(R.string.ironman_bonuses_notice),
+                style     = MaterialTheme.typography.bodyLarge,
+                color     = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+        }
+        return
+    }
+
     val boostActive    = state.xpBoostExpiresAt > now
     val blessingActive = state.activeBlessingXpPct > 0 && state.activeBlessingExpiresAt > now
-    val cape           = state.equipped[EquipSlot.CAPE]?.let { allEquipment[it] }?.takeIf { it.capeBonus > 0f }
+    val capeKey        = state.equipped[EquipSlot.CAPE]
+    val cape           = capeKey?.let { allEquipment[it] }?.takeIf { it.capeBonus > 0f }
     val bonusPets      = allPets.values.filter { it.id in state.ownedPetIds && it.boostPercent > 0 }
     val prestigeEntries = state.skillPrestige.entries.filter { it.value > 0 }
 
@@ -106,8 +124,10 @@ internal fun BonusesTab(
             allEquipment = allEquipment
         )
         val isCombatStat = skillKey in COMBAT_STAT_SKILLS
-        val yieldPct = if (!isCombatStat && skillKey != "slayer") ((capeMult - 1f) * 100 + 0.5f).toInt() else 0
-        val capeXpPct = if (isCombatStat || skillKey == "slayer") ((capeMult - 1f) * 100 + 0.5f).toInt() else 0
+        // Agility's cape boosts XP, not yield (agility produces no items)
+        val isXpCape  = isCombatStat || skillKey == "slayer" || skillKey == "agility"
+        val yieldPct  = if (!isXpCape) ((capeMult - 1f) * 100 + 0.5f).toInt() else 0
+        val capeXpPct = if (isXpCape) ((capeMult - 1f) * 100 + 0.5f).toInt() else 0
 
         val specificPetPct = specificBonusPets.filter { it.boostedSkill == skillKey }.sumOf { it.boostPercent }
         val totalPetPct    = specificPetPct + allPetBoostPct
@@ -117,20 +137,38 @@ internal fun BonusesTab(
 
         val activeCapeName = run {
             if (capeMult <= 1.0f) return@run null
-            val equippedCapeSkill = cape?.capeSkill
-            if (equippedCapeSkill != null && (equippedCapeSkill == skillKey || isGuildCapeForSkill(equippedCapeSkill, skillKey))) {
-                return@run cape.displayName
+            val activeNames = mutableListOf<String>()
+            val rackTier = state.townBuildingTiers["cape_rack"] ?: 0
+            val isCategoryUnlocked = when {
+                skillKey in Skills.GATHERING -> rackTier >= 1
+                skillKey in Skills.CRAFTING_SKILLS -> rackTier >= 2
+                else -> rackTier >= 3
             }
             val candidateKeys = resolveOwnedCapeKeysForSkill(skillKey)
-            val bestCapeKey = candidateKeys.filter { state.inventory.containsKey(it) }
+            val availableKeys = mutableSetOf<String>()
+            if (isCategoryUnlocked) {
+                candidateKeys.filterTo(availableKeys) { state.inventory.containsKey(it) }
+            }
+            if (cape?.capeSkill != null) {
+                val capeSkill = cape.capeSkill!!
+                if (capeSkill == skillKey || isGuildCapeForSkill(capeSkill, skillKey)) {
+                    availableKeys.add(cape.name)
+                }
+            }
+            val skillCapeKey = availableKeys.filter { !it.endsWith("_guild_cape") && allEquipment[it]?.capeSkill !in setOf("warriors", "archers", "mages") }
                 .maxByOrNull { allEquipment[it]?.capeBonus ?: 0f }
-            bestCapeKey?.let { allEquipment[it]?.displayName }
+            val guildCapeKey = availableKeys.filter { it.endsWith("_guild_cape") || allEquipment[it]?.capeSkill in setOf("warriors", "archers", "mages") }
+                .maxByOrNull { allEquipment[it]?.capeBonus ?: 0f }
+
+            skillCapeKey?.let { activeNames.add(GameStrings.itemName(context, it)) }
+            guildCapeKey?.let { activeNames.add(GameStrings.itemName(context, it)) }
+            if (activeNames.isNotEmpty()) activeNames.distinct().joinToString(" + ") else null
         }
 
         val xpSources = buildList {
             if (totalPetPct > 0)  add(context.getString(R.string.label_pets) to totalPetPct)
             if (prestigePct > 0)  add(context.getString(R.string.prestige) to prestigePct)
-            if (capeXpPct > 0)    add((activeCapeName ?: "Cape") to capeXpPct)
+            if (capeXpPct > 0)    add((activeCapeName ?: GameStrings.slotName(context, EquipSlot.CAPE)) to capeXpPct)
         }
         SkillBonusEntry(
             skillKey    = skillKey,
@@ -145,11 +183,12 @@ internal fun BonusesTab(
 
     val agilityPrestige    = state.skillPrestige[Skills.AGILITY] ?: 0
     val mercantilePrestige = state.skillPrestige[Skills.MERCANTILE] ?: 0
+    val builderDiscountPct = (TownRepository.builderDiscount(state.skillLevels[Skills.CONSTRUCTION] ?: 1) * 100).toInt()
 
     // "all" pets with no skill-specific rows: surface them in the Boosts section
     val showAllPetsInBoosts = allPetBoostPct > 0 && specificSkillKeys.isEmpty()
 
-    if (!boostActive && !blessingActive && cape == null && bonusPets.isEmpty() && prestigeEntries.isEmpty()) {
+    if (!boostActive && !blessingActive && cape == null && bonusPets.isEmpty() && prestigeEntries.isEmpty() && builderDiscountPct <= 0) {
         Box(
             modifier         = Modifier.fillMaxSize().padding(32.dp),
             contentAlignment = Alignment.Center,
@@ -173,7 +212,7 @@ internal fun BonusesTab(
             item { SlotSectionHeader(stringResource(R.string.bonus_section_boosts)) }
             if (boostActive) {
                 item {
-                    val remaining = (state.xpBoostExpiresAt - now).formatDurationMs()
+                    val remaining = (state.xpBoostExpiresAt - now).formatDurationMs(context)
                     BonusRow(
                         name   = stringResource(R.string.label_xp_boost),
                         pct    = "+100%",
@@ -186,7 +225,7 @@ internal fun BonusesTab(
                 item {
                     val blessingName = context.stringByName("blessing_${state.activeBlessingKey}_name")
                         ?: state.activeBlessingKey.toTitleCase()
-                    val remaining = (state.activeBlessingExpiresAt - now).formatDurationMs()
+                    val remaining = (state.activeBlessingExpiresAt - now).formatDurationMs(context)
                     BonusRow(
                         name   = blessingName,
                         pct    = "+${state.activeBlessingXpPct}%",
@@ -208,7 +247,7 @@ internal fun BonusesTab(
             if (showAllPetsInBoosts) {
                 items(bonusPets.filter { it.boostedSkill == "all" }, key = { it.id }) { pet ->
                     BonusRow(
-                        name  = pet.displayName,
+                        name  = GameStrings.petName(context, pet.id),
                         pct   = "+${pet.boostPercent}%",
                         scope = stringResource(R.string.bonus_all_skills),
                     )
@@ -221,7 +260,7 @@ internal fun BonusesTab(
             item {
                 val pct = (cape!!.capeBonus * 100 + 0.5f).toInt()
                 BonusRow(
-                    name   = cape.displayName,
+                    name   = GameStrings.itemName(context, capeKey!!),
                     pct    = "+$pct%",
                     scope  = GameStrings.skillName(context, cape.capeSkill ?: ""),
                     detail = stringResource(R.string.bonus_combat_stat_boost),
@@ -229,7 +268,7 @@ internal fun BonusesTab(
             }
         }
 
-        if (skillEntries.isNotEmpty() || agilityPrestige > 0 || mercantilePrestige > 0) {
+        if (skillEntries.isNotEmpty() || agilityPrestige > 0 || mercantilePrestige > 0 || builderDiscountPct > 0) {
             item { SlotSectionHeader(stringResource(R.string.bonus_section_skills)) }
             items(skillEntries, key = { it.skillKey }) { entry ->
                 if (entry.xpPct > 0) {
@@ -242,9 +281,11 @@ internal fun BonusesTab(
                     )
                 }
                 if (entry.yieldPct > 0) {
+                    // Prayer's cape boosts burial XP rather than item yield
+                    val yieldLabelRes = if (entry.skillKey == "prayer") R.string.bonus_boost else R.string.bonus_yield
                     BonusRow(
                         name   = entry.skillName,
-                        pct    = stringResource(R.string.bonus_yield, entry.yieldPct),
+                        pct    = stringResource(yieldLabelRes, entry.yieldPct),
                         scope  = "",
                         detail = entry.yieldSource,
                     )
@@ -265,9 +306,10 @@ internal fun BonusesTab(
                         SkillSimulator.sessionDurationMs(agilityLevel, agilityPrestige)) / 60_000L).toInt()
                     if (savedMinutes > 0) {
                         BonusRow(
-                            name  = GameStrings.skillName(context, Skills.AGILITY),
-                            pct   = stringResource(R.string.bonus_session_shorter, savedMinutes),
-                            scope = stringResource(R.string.bonus_all_skills),
+                            name   = GameStrings.skillName(context, Skills.AGILITY),
+                            pct    = "-" + stringResource(R.string.combat_duration_min, savedMinutes),
+                            scope  = stringResource(R.string.bonus_all_skills),
+                            detail = stringResource(R.string.bonus_session_shorter, savedMinutes),
                         )
                     }
                 }
@@ -278,6 +320,16 @@ internal fun BonusesTab(
                         name  = GameStrings.skillName(context, Skills.MERCANTILE),
                         pct   = stringResource(R.string.bonus_coin_return, mercantilePrestige * 10),
                         scope = "",
+                    )
+                }
+            }
+            if (builderDiscountPct > 0) {
+                item {
+                    BonusRow(
+                        name   = GameStrings.skillName(context, Skills.CONSTRUCTION),
+                        pct    = "-$builderDiscountPct%",
+                        scope  = stringResource(R.string.builder_title),
+                        detail = stringResource(R.string.bonus_builder_discount_detail),
                     )
                 }
             }
@@ -303,7 +355,7 @@ internal fun BonusesTab(
                 item {
                     BonusRow(
                         name  = stringResource(R.string.tower_title),
-                        pct   = stringResource(R.string.bonus_hp, state.towerHpBonus),
+                        pct   = stringResource(R.string.bonus_hp, state.towerHpBonus * 10),
                         scope = stringResource(R.string.bonus_tower)
                     )
                 }
@@ -344,7 +396,7 @@ private fun BonusRow(
         Text(
             text  = pct,
             style = MaterialTheme.typography.labelLarge,
-            color = GoldPrimary,
+            color = MaterialTheme.colorScheme.primary,
         )
         Spacer(Modifier.width(8.dp))
         Text(

@@ -2,6 +2,7 @@ package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,8 +88,6 @@ import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
-import com.fantasyidler.ui.theme.SuccessGreen
 import com.fantasyidler.ui.viewmodel.CombatViewModel
 import com.fantasyidler.ui.viewmodel.CombatViewModel.Companion.MAX_DUNGEON_REPEAT_COUNT
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
@@ -121,6 +120,7 @@ internal fun DungeonInfoSheet(
     potionEffects: Map<String, Map<String, Int>>,
     selectedPotionKey: String?,
     isStarting: Boolean,
+    isQueueFull: Boolean = false,
     repeatCount: Int,
     enemies: Map<String, EnemyData> = emptyMap(),
     onWeaponSlotSelected: (String) -> Unit,
@@ -137,7 +137,7 @@ internal fun DungeonInfoSheet(
         if (enemy != null) {
             AlertDialog(
                 onDismissRequest = { tappedEnemyKey = null },
-                title = { Text(enemy.displayName) },
+                title = { Text(GameStrings.enemyName(context, enemyKey)) },
                 text  = {
                     val drops = buildString {
                         if (enemy.alwaysDrops.isNotEmpty()) {
@@ -179,7 +179,7 @@ internal fun DungeonInfoSheet(
         else       -> "attack"
     }
     val styleLabel = GameStrings.skillName(context, combatStyle)
-    val canStart   = canEnter && !isStarting &&
+    val canStart   = canEnter && !isStarting && !isQueueFull &&
         (combatStyle != "magic" || selectedSpell != null)
 
     Column(
@@ -206,9 +206,9 @@ internal fun DungeonInfoSheet(
         // Level and combat style rows
         StatRow(label = stringResource(R.string.combat_rec_level),
             value = dungeon.recommendedLevel.toString(),
-            valueColor = if (canEnter) GoldPrimary else MaterialTheme.colorScheme.error)
+            valueColor = if (canEnter) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
         StatRow(label = stringResource(R.string.combat_your_level), value = combatLvl.toString())
-        StatRow(label = stringResource(R.string.label_combat_style), value = styleLabel, valueColor = GoldPrimary)
+        StatRow(label = stringResource(R.string.label_combat_style), value = styleLabel, valueColor = MaterialTheme.colorScheme.primary)
 
         Spacer(Modifier.height(12.dp))
 
@@ -287,7 +287,7 @@ internal fun DungeonInfoSheet(
                                          else GameStrings.itemName(context, key),
                             style      = MaterialTheme.typography.bodyMedium,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                            color      = if (isSelected) GoldPrimary else MaterialTheme.colorScheme.onSurface,
+                            color      = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                         )
                         if (key != null) {
                             val effectStr = potionEffects[key]?.entries
@@ -310,7 +310,7 @@ internal fun DungeonInfoSheet(
                     }
                     if (isSelected) {
                         Text("✓", style = MaterialTheme.typography.bodyMedium,
-                            color = GoldPrimary, fontWeight = FontWeight.Bold)
+                            color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -361,16 +361,30 @@ internal fun DungeonInfoSheet(
             OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.btn_cancel))
             }
-            Button(
-                onClick  = onStart,
-                modifier = Modifier.weight(1f),
-                enabled  = canStart,
-            ) {
-                if (isStarting) CircularProgressIndicator(
-                    modifier  = Modifier.height(20.dp).width(20.dp),
-                    strokeWidth = 2.dp,
-                )
-                else Text(stringResource(R.string.btn_enter_dungeon))
+            val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+            Box(modifier = Modifier.weight(1f)) {
+                Button(
+                    onClick  = onStart,
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled  = canStart,
+                ) {
+                    if (isStarting) CircularProgressIndicator(
+                        modifier  = Modifier.height(20.dp).width(20.dp),
+                        strokeWidth = 2.dp,
+                    )
+                    else Text(stringResource(R.string.btn_enter_dungeon))
+                }
+                if (isQueueFull) {
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication        = null,
+                                onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
+                            ),
+                    )
+                }
             }
         }
     }

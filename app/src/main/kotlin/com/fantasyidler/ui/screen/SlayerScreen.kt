@@ -1,6 +1,9 @@
 package com.fantasyidler.ui.screen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +22,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -39,7 +41,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -52,11 +53,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.platform.LocalContext
 import com.fantasyidler.R
 import com.fantasyidler.data.json.EquipmentData
-import com.fantasyidler.data.model.Skills
 import com.fantasyidler.data.model.SlayerTask
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.util.GameStrings
-import com.fantasyidler.ui.viewmodel.PendingLamp
+import com.fantasyidler.ui.components.LampSkillDialog
 import com.fantasyidler.ui.viewmodel.SlayerViewModel
 import com.fantasyidler.ui.viewmodel.xpProgressFraction
 import com.fantasyidler.ui.theme.ScaledSheetContent
@@ -78,6 +77,7 @@ private val SHOP_ITEMS = listOf(
     ShopItem("abyssal_whip",       R.string.item_abyssal_whip_name, R.string.item_abyssal_whip_desc,  cost = 300, isEquipment = true),
     ShopItem("slayer_platebody",   R.string.item_slayer_platebody_name, R.string.item_slayer_platebody_desc, cost = 350, isEquipment = true),
     ShopItem("slayer_platelegs",   R.string.item_slayer_platelegs_name, R.string.item_slayer_platelegs_desc, cost = 250, isEquipment = true),
+    ShopItem("slayer_plateskirt",   R.string.item_slayer_plateskirt_name, R.string.item_slayer_plateskirt_desc, cost = 250, isEquipment = true),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,7 +93,7 @@ fun SlayerScreen(
     state.pendingSlayerDungeonKey?.let { dungeonKey ->
         val context = LocalContext.current
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        val dungeonName = viewModel.gameData.dungeons[dungeonKey]?.displayName ?: dungeonKey
+        val dungeonName = GameStrings.dungeonName(context, dungeonKey)
         ModalBottomSheet(
             onDismissRequest = viewModel::dismissSlayerDungeonPicker,
             sheetState       = sheetState,
@@ -164,12 +164,27 @@ fun SlayerScreen(
             if (currentTask != null) {
                 TaskCard(task = currentTask, dungeons = state.taskDungeons)
                 if (state.taskDungeons.isNotEmpty() && !state.taskIsStuck) {
-                    OutlinedButton(
-                        onClick  = viewModel::queueTaskDungeon,
-                        enabled  = state.queueSize < state.maxQueueSize,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(stringResource(R.string.slayer_add_dungeon_to_queue))
+                    val isQueueFull = state.queueSize >= state.maxQueueSize
+                    val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        OutlinedButton(
+                            onClick  = viewModel::queueTaskDungeon,
+                            enabled  = !isQueueFull,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(stringResource(R.string.slayer_add_dungeon_to_queue))
+                        }
+                        if (isQueueFull) {
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication        = null,
+                                        onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
+                                    ),
+                            )
+                        }
                     }
                 }
                 if (state.taskIsStuck) {
@@ -244,7 +259,8 @@ fun SlayerScreen(
                 inventory            = state.inventory,
                 queueSize            = state.queueSize,
                 maxQueueSize         = state.maxQueueSize,
-                onForetell           = viewModel::foretelTask,
+                hasActiveTask        = state.activeTask != null,
+                onForetell           = viewModel::foretellTask,
                 onQueueTask          = viewModel::queueForetelledTaskDungeon,
             )
 
@@ -287,11 +303,11 @@ fun SlayerScreen(
             )
         }
 
-        val pendingLamp = state.pendingLamp
-        if (pendingLamp != null) {
-            LampSkillPickerDialog(
-                pendingLamp     = pendingLamp,
+        state.pendingLamp?.let { pendingLamp ->
+            LampSkillDialog(
                 skillLevels     = state.skillLevels,
+                skillXp         = state.skillXp,
+                sessionXpGain   = pendingLamp.xpAmount,
                 onSkillSelected = viewModel::selectLampSkill,
                 onDismiss       = viewModel::dismissLampPicker,
             )
@@ -325,12 +341,14 @@ private fun SlayerSkillHeader(
                 Text(
                     text  = stringResource(R.string.slayer_level_label, level),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
             Spacer(Modifier.height(6.dp))
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress    = { progress },
                 modifier    = Modifier.fillMaxWidth(),
                 trackColor  = MaterialTheme.colorScheme.surface,
@@ -348,7 +366,7 @@ private fun SlayerSkillHeader(
                 Text(
                     text  = stringResource(R.string.slayer_points, slayerPoints),
                     style = MaterialTheme.typography.bodySmall,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
@@ -381,6 +399,8 @@ private fun TaskCard(task: SlayerTask, dungeons: List<String>) {
             }
             Spacer(Modifier.height(8.dp))
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress   = { task.killsCompleted.toFloat() / task.targetKills.toFloat() },
                 modifier   = Modifier.fillMaxWidth(),
                 trackColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.2f),
@@ -417,6 +437,7 @@ private fun ForetellSection(
     inventory: Map<String, Int>,
     queueSize: Int,
     maxQueueSize: Int,
+    hasActiveTask: Boolean,
     onForetell: () -> Unit,
     onQueueTask: (SlayerTask) -> Unit,
 ) {
@@ -472,6 +493,7 @@ private fun ForetellSection(
             if (foretelledTasks.size < 3) {
                 Button(
                     onClick  = onForetell,
+                    enabled  = hasActiveTask,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(stringResource(R.string.slayer_foretell_btn, nextCostUnits))
@@ -516,7 +538,7 @@ private fun ShopRow(
                     Text(
                         text  = statParts.joinToString("  "),
                         style = MaterialTheme.typography.bodySmall,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
                 val reqs = equipData.requirements
@@ -545,7 +567,7 @@ private fun ShopRow(
             Text(
                 text       = stringResource(R.string.slayer_shop_cost, item.cost),
                 style      = MaterialTheme.typography.bodyMedium,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
             )
             Spacer(Modifier.height(4.dp))
@@ -560,58 +582,6 @@ private fun ShopRow(
             }
         }
     }
-}
-
-@Composable
-private fun LampSkillPickerDialog(
-    pendingLamp: PendingLamp,
-    skillLevels: Map<String, Int>,
-    onSkillSelected: (String) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    val context = LocalContext.current
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.slayer_lamp_pick_skill)) },
-        text = {
-            Column(
-                modifier            = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                Skills.ALL.forEach { skillKey ->
-                    val level = skillLevels[skillKey] ?: 1
-                    val name  = GameStrings.skillName(context, skillKey)
-                    Surface(
-                        onClick  = { onSkillSelected(skillKey) },
-                        shape    = RoundedCornerShape(8.dp),
-                        color    = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Row(
-                            modifier              = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment     = Alignment.CenterVertically,
-                        ) {
-                            Text(name, style = MaterialTheme.typography.bodyMedium)
-                            Text(
-                                text  = stringResource(R.string.slayer_level_label, level),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = GoldPrimary,
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {},
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.btn_cancel))
-            }
-        },
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)

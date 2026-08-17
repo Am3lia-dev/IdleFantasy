@@ -1,9 +1,12 @@
 package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -53,17 +56,28 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.zIndex
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -79,7 +93,6 @@ import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.WorkerTier
 import com.fantasyidler.data.json.BlessingType
 import com.fantasyidler.repository.ChurchRepository
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.HomeViewModel
 import com.fantasyidler.ui.viewmodel.SessionSummary
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
@@ -121,6 +134,7 @@ internal fun HomeSessionCard(
     bossEmoji: String? = null,
     repeatIndex: Int = 0,
     repeatTotal: Int = 0,
+    assignedItems: Map<String, Int> = emptyMap(),
     onRepeat: () -> Unit,
     onAbandon: () -> Unit,
     onDebugFinish: () -> Unit,
@@ -144,9 +158,17 @@ internal fun HomeSessionCard(
     }
     val skillEmoji = bossEmoji ?: GameStrings.skillEmoji(session.skillName)
     val activityLabel = when (session.skillName) {
-        "combat"     -> GameStrings.dungeonName(context, session.activityKey)
-        "boss"       -> GameStrings.bossName(context, session.activityKey)
-        "expedition" -> GameStrings.skillingDungeonName(context, session.activityKey, session.activityKey.toTitleCase())
+        "combat"      -> GameStrings.dungeonName(context, session.activityKey)
+        "boss"        -> GameStrings.bossName(context, session.activityKey)
+        "expedition"  -> GameStrings.skillingDungeonName(context, session.activityKey, session.activityKey.toTitleCase())
+        "mercantile"  -> GameStrings.tradeRouteName(context, session.activityKey)
+        "agility"     -> GameStrings.agilityCourse(context, session.activityKey)
+        "woodcutting" -> GameStrings.treeName(context, session.activityKey)
+        "thieving"    -> GameStrings.thievingNpcName(context, session.activityKey)
+        "tower"      -> context.getString(R.string.tower_title) + ": " + context.getString(
+            R.string.tower_floor_label,
+            session.activityKey.removePrefix("tower_floor_").toIntOrNull() ?: 0,
+        )
         else         -> GameStrings.itemName(context, session.activityKey)
     }.takeIf { session.activityKey.isNotEmpty() }
 
@@ -201,7 +223,7 @@ internal fun HomeSessionCard(
                                  else stringResource(R.string.combat_run_progress, repeatIndex.coerceAtLeast(1), repeatTotal),
                     style      = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color      = GoldPrimary,
+                    color      = MaterialTheme.colorScheme.primary,
                 )
             }
 
@@ -223,7 +245,7 @@ internal fun HomeSessionCard(
                         val levelGain   = levelAfter - levelBefore
                         val pct         = (XpTable.progressFraction(endXp) * 100).toInt()
                         buildString {
-                            append("+${sessionXpGain.formatXp()} XP  →  Lv $levelAfter")
+                            append("+${sessionXpGain.formatXp()} XP  →  ${context.getString(R.string.label_lv, levelAfter)}")
                             if (levelGain > 0) append(" (+$levelGain, $pct%)")
                             else append(" ($pct%)")
                         }
@@ -233,6 +255,17 @@ internal fun HomeSessionCard(
                     Spacer(Modifier.height(2.dp))
                     Text(
                         text  = xpLineText,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
+                    )
+                }
+                if (assignedItems.isNotEmpty()) {
+                    val assignedTemplate = stringResource(R.string.worker_session_assigned)
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text  = assignedItems.entries.joinToString("  ") { (key, qty) ->
+                            assignedTemplate.format("%,d".format(qty), GameStrings.itemName(context, key))
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
                     )
@@ -325,7 +358,7 @@ internal fun QueueCard(
                                 append("+${a.estimatedXpGain.formatXp()} XP")
                             }
                             else -> buildString {
-                                append("+${a.estimatedXpGain.formatXp()} XP  →  Lv $levelAfter")
+                                append("+${a.estimatedXpGain.formatXp()} XP  →  ${context.getString(R.string.label_lv, levelAfter)}")
                                 if (levelGain > 0) append(" (+$levelGain, $pct%)")
                                 else append(" ($pct%)")
                             }
@@ -340,13 +373,75 @@ internal fun QueueCard(
                 var next = towerCurrentFloor + if (activeSessionSkill == "tower") 1 else 0
                 queue.map { a -> if (a.skillName != "tower") null else { next += 1; next } }
             }
+            val haptic = LocalHapticFeedback.current
+            var draggingIndex by remember { mutableIntStateOf(-1) }
+            var dragOffsetY by remember { mutableFloatStateOf(0f) }
+            val rowHeights = remember { mutableStateMapOf<Int, Int>() }
+            // A completed session can consume a queue entry mid-drag; abandon the drag rather
+            // than dropping against stale indices.
+            LaunchedEffect(queue.size) { draggingIndex = -1; dragOffsetY = 0f }
+
+            fun dropTargetIndex(from: Int, offset: Float): Int {
+                var target = from
+                var remaining = offset
+                while (remaining < 0 && target > 0) {
+                    val h = rowHeights[target - 1] ?: break
+                    if (remaining <= -h / 2f) { remaining += h; target-- } else break
+                }
+                while (remaining > 0 && target < queue.size - 1) {
+                    val h = rowHeights[target + 1] ?: break
+                    if (remaining >= h / 2f) { remaining -= h; target++ } else break
+                }
+                return target
+            }
+
             queue.forEachIndexed { index, action ->
                 if (index > 0) HorizontalDivider(
                     modifier = Modifier.padding(vertical = 4.dp),
                     color    = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
                 )
                 Row(
-                    modifier          = Modifier.fillMaxWidth(),
+                    modifier          = Modifier
+                        .fillMaxWidth()
+                        .onGloballyPositioned { rowHeights[index] = it.size.height }
+                        .zIndex(if (index == draggingIndex) 1f else 0f)
+                        .graphicsLayer {
+                            if (index == draggingIndex) {
+                                translationY    = dragOffsetY
+                                shadowElevation = 8f
+                            }
+                        }
+                        .then(
+                            if (index == draggingIndex)
+                                Modifier.background(MaterialTheme.colorScheme.surfaceVariant)
+                            else Modifier
+                        )
+                        .pointerInput(queue.size) {
+                            detectDragGesturesAfterLongPress(
+                                onDragStart = {
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    draggingIndex = index
+                                    dragOffsetY   = 0f
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    dragOffsetY += dragAmount.y
+                                },
+                                onDragEnd = {
+                                    val target = dropTargetIndex(index, dragOffsetY)
+                                    if (target != index) {
+                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        onMove(index, target)
+                                    }
+                                    draggingIndex = -1
+                                    dragOffsetY   = 0f
+                                },
+                                onDragCancel = {
+                                    draggingIndex = -1
+                                    dragOffsetY   = 0f
+                                },
+                            )
+                        },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val emoji = GameStrings.skillEmoji(action.skillName)
@@ -354,27 +449,41 @@ internal fun QueueCard(
                     val labelDungeon    = stringResource(R.string.label_dungeon)
                     val labelBoss       = stringResource(R.string.label_boss)
                     val (prefix, suffix) = when (action.skillName) {
-                        "expedition" -> labelExpedition to GameStrings.skillingDungeonName(context, action.activityKey, action.skillDisplayName)
-                        "combat"     -> labelDungeon    to GameStrings.dungeonName(context, action.activityKey)
-                        "boss"       -> labelBoss       to GameStrings.bossName(context, action.activityKey)
-                        "farming"    -> action.skillDisplayName to null
-                        "tower"      -> GameStrings.skillName(context, "tower") to "Tower Floor ${towerFloorLabels.getOrNull(index)}"
+                        "expedition"  -> labelExpedition to GameStrings.skillingDungeonName(context, action.activityKey, action.skillDisplayName)
+                        "combat"      -> labelDungeon    to GameStrings.dungeonName(context, action.activityKey)
+                        "boss"        -> labelBoss       to GameStrings.bossName(context, action.activityKey)
+                        "farming"     -> action.skillDisplayName to null
+                        "tower"       -> stringResource(R.string.tower_title) to stringResource(R.string.tower_floor_label, towerFloorLabels.getOrNull(index) ?: 0)
+                        "mercantile"  -> GameStrings.skillName(context, action.skillName) to GameStrings.tradeRouteName(context, action.activityKey)
+                        "agility"     -> GameStrings.skillName(context, action.skillName) to GameStrings.agilityCourse(context, action.activityKey)
+                        "woodcutting" -> GameStrings.skillName(context, action.skillName) to GameStrings.treeName(context, action.activityKey)
+                        "thieving"    -> GameStrings.skillName(context, action.skillName) to GameStrings.thievingNpcName(context, action.activityKey)
                         else         -> GameStrings.skillName(context, action.skillName) to
                             GameStrings.itemName(context, action.activityKey)
                                 .takeIf { action.activityKey.isNotEmpty() }
                     }
+                    // Every row gets the same leading 20dp icon slot (issue #1391): boss art for
+                    // bosses, the skill drawable when one exists, and the emoji otherwise (tower).
                     val iconRes = GameStrings.skillIconRes(action.skillName)
-                    if (iconRes != null) {
-                        Image(
-                            painter            = painterResource(iconRes),
-                            contentDescription = null,
-                            modifier           = Modifier.size(20.dp),
-                        )
-                        Spacer(Modifier.width(6.dp))
+                    Box(Modifier.size(20.dp), contentAlignment = Alignment.Center) {
+                        when {
+                            action.skillName == "boss" -> BossIcon(
+                                bossId        = action.activityKey,
+                                modifier      = Modifier.size(20.dp),
+                                fallbackEmoji = emoji,
+                            )
+                            iconRes != null -> Image(
+                                painter            = painterResource(iconRes),
+                                contentDescription = null,
+                                modifier           = Modifier.size(20.dp),
+                            )
+                            else -> Text(emoji, style = MaterialTheme.typography.labelMedium)
+                        }
                     }
+                    Spacer(Modifier.width(6.dp))
                     Column(Modifier.weight(1f)) {
                         Text(
-                            text  = "${if (iconRes == null) "$emoji " else ""}$prefix${if (suffix != null) " — $suffix" else ""}",
+                            text  = "$prefix${if (suffix != null) " — $suffix" else ""}",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                         )
@@ -420,7 +529,10 @@ internal fun QueueCard(
                     }
                     if (queue.size > 1) {
                         IconButton(
-                            onClick  = { onMove(index, index - 1) },
+                            onClick  = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                onMove(index, index - 1)
+                            },
                             enabled  = index > 0,
                             modifier = Modifier.size(32.dp),
                         ) {
@@ -433,7 +545,10 @@ internal fun QueueCard(
                             )
                         }
                         IconButton(
-                            onClick  = { onMove(index, index + 1) },
+                            onClick  = {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                onMove(index, index + 1)
+                            },
                             enabled  = index < queue.size - 1,
                             modifier = Modifier.size(32.dp),
                         ) {
@@ -466,9 +581,9 @@ internal fun QueueCard(
                 )
                 val remaining = (queueEndsAt - System.currentTimeMillis()).coerceAtLeast(0L)
                 val queueEndsText = if (showEndTime) {
-                    "${stringResource(R.string.home_queue_ends_in, remaining.formatDurationMs())} (${queueEndsAt.toClockTime(context)})"
+                    "${stringResource(R.string.home_queue_ends_in, remaining.formatDurationMs(context))} (${queueEndsAt.toClockTime(context)})"
                 } else {
-                    stringResource(R.string.home_queue_ends_in, remaining.formatDurationMs())
+                    stringResource(R.string.home_queue_ends_in, remaining.formatDurationMs(context))
                 }
                 Text(
                     text  = queueEndsText,
@@ -480,6 +595,7 @@ internal fun QueueCard(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun WorkerSessionCard(
     slot: Int,
@@ -556,7 +672,7 @@ internal fun WorkerSessionCard(
                 Text(
                     text       = "$tierLabel · ${hiredWorker.dailyName}",
                     style      = MaterialTheme.typography.labelMedium,
-                    color      = GoldPrimary,
+                    color      = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
@@ -662,7 +778,10 @@ internal fun WorkerSessionCard(
             Spacer(Modifier.height(12.dp))
             HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
             Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement   = Arrangement.spacedBy(4.dp),
+            ) {
                 if (isDone) {
                     Button(onClick = onCollect) {
                         Text(stringResource(R.string.worker_collect_btn))
@@ -673,8 +792,12 @@ internal fun WorkerSessionCard(
                         Text(stringResource(R.string.worker_add_sessions))
                     }
                 }
-                OutlinedButton(onClick = { showDismissConfirm = true }) {
-                    Text(stringResource(R.string.worker_dismiss_btn))
+                // Hidden while a finished session awaits collection: dismissing there
+                // abandons the uncollected rewards on a single confirm (issue #1202).
+                if (!isDone) {
+                    OutlinedButton(onClick = { showDismissConfirm = true }) {
+                        Text(stringResource(R.string.worker_dismiss_btn))
+                    }
                 }
                 if (BuildConfig.DEBUG && session != null && !isDone) {
                     TextButton(onClick = onDebugFinish) {

@@ -27,8 +27,10 @@ import com.fantasyidler.repository.QueuedSessionStarter
 import com.fantasyidler.repository.SeasonalEventRepository
 import com.fantasyidler.repository.SessionRepository
 import com.fantasyidler.repository.SlayerRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.simulator.CombatSimulator
 import com.fantasyidler.simulator.SkillSimulator
+import com.fantasyidler.util.GameStrings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -83,6 +85,9 @@ data class CombatUiState(
     val dungeonLastRunStats: Map<String, DungeonRunStats> = emptyMap(),
     val unlockedDungeons: List<String> = emptyList(),
     val skillPrestige: Map<String, Int> = emptyMap(),
+    val ironman: Boolean = false,
+    val showPrestigeNotifications: Boolean = true,
+    val towerHpBonus: Int = 0,
     val towerBestFloor: Int = 0,
     val showSessionEndTime: Boolean = true,
     val bossKillCounts: Map<String, Int> = emptyMap(),
@@ -98,6 +103,11 @@ data class CombatUiState(
     val activeDungeonRepeatIndex: Int = 0,
     /** Total runs requested for the current dungeon repeat run. */
     val activeDungeonRepeatTotal: Int = 0,
+    /** Boss kills that still pay full coin drops today (daily soft cap). */
+    val bossFullCoinKillsLeft: Int = PlayerRepository.BOSS_FULL_COIN_KILLS_PER_DAY,
+    /** True once the Grand Monument's Eternal Flame is lit (unlocks monument-gated bosses). */
+    val monumentComplete: Boolean = false,
+    val isQueueFull: Boolean = false,
 )
 
 // ---------------------------------------------------------------------------
@@ -115,6 +125,7 @@ class CombatViewModel @Inject constructor(
     private val slayerRepo: SlayerRepository,
     private val seasonalEventRepo: SeasonalEventRepository,
     private val queuedSessionStarter: QueuedSessionStarter,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -231,6 +242,9 @@ class CombatViewModel @Inject constructor(
                 unlockedDungeons        = flags.unlockedDungeons,
                 selectedArrowKey        = if (extra.selectedArrowKey == null) flags.equippedArrows else extra.selectedArrowKey,
                 skillPrestige           = flags.skillPrestige,
+                ironman                 = flags.ironman,
+                showPrestigeNotifications = flags.showPrestigeNotifications,
+                towerHpBonus            = flags.towerHpBonus,
                 towerBestFloor          = flags.towerBestFloor,
                 showSessionEndTime      = flags.showSessionEndTime,
                 bossKillCounts          = flags.enemyKills,
@@ -240,6 +254,9 @@ class CombatViewModel @Inject constructor(
                 activeBossRepeatTotal   = flags.activeBossRepeatTotal,
                 activeDungeonRepeatIndex = flags.activeDungeonRepeatIndex,
                 activeDungeonRepeatTotal = flags.activeDungeonRepeatTotal,
+                bossFullCoinKillsLeft   = playerRepo.bossFullCoinKillsLeft(flags, extra.selectedBoss?.id ?: ""),
+                monumentComplete        = flags.monumentTier >= 5,
+                isQueueFull             = flags.sessionQueue.size >= playerRepo.maxQueueSize(flags),
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CombatUiState())
@@ -251,10 +268,12 @@ class CombatViewModel @Inject constructor(
             .sortedBy { it.recommendedLevel }
     }
 
-    val bossList: List<BossData> by lazy {
+    /** Monument-gated bosses appear only once the Eternal Flame is lit, so this reads flags per call. */
+    fun bossList(monumentComplete: Boolean): List<BossData> {
         val activeEventId = seasonalEventRepo.activeEvent()?.id
-        gameData.bosses.values
+        return gameData.bosses.values
             .filter { it.eventKey == null || it.eventKey == activeEventId }
+            .filter { !it.requiresMonument || monumentComplete }
             .sortedBy { it.combatLevelRequired }
     }
 
@@ -359,7 +378,7 @@ class CombatViewModel @Inject constructor(
         viewModelScope.launch {
             val repeatCount = _extra.value.selectedDungeonRepeatCount.coerceIn(1, MAX_DUNGEON_REPEAT_COUNT)
             if (sessionRepo.getActiveSession() != null) {
-                val dungeonName = gameData.dungeons[dungeonKey]?.displayName ?: dungeonKey
+                val dungeonName = GameStrings.dungeonName(context, dungeonKey)
                 val player      = playerRepo.getOrCreatePlayer()
                 val queuedLevels: Map<String, Int> = json.decodeFromString(player.skillLevels)
                 val agility     = queuedLevels[Skills.AGILITY] ?: 1
@@ -390,7 +409,7 @@ class CombatViewModel @Inject constructor(
                         skillName           = "combat",
                         activityKey         = dungeonKey,
                         skillDisplayName    = dungeonName,
-                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, dungeonFlags.skillPrestige[Skills.AGILITY] ?: 0),
+                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, dungeonFlags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(dungeonFlags)),
                         estimatedXpGain     = previewXp,
                         equippedSnapshot    = player.equipped,
                         arrowsKey           = _extra.value.selectedArrowKey ?: dungeonFlags.equippedArrows,
@@ -527,7 +546,7 @@ class CombatViewModel @Inject constructor(
                     playerStrength      = (levels[Skills.STRENGTH]  ?: 1) + (prestigeMap[Skills.STRENGTH]  ?: 0) * 5,
                     playerDefence       = (levels[Skills.DEFENSE]   ?: 1) + totalDefenseBonus + (prestigeMap[Skills.DEFENSE] ?: 0) * 5,
                     blessingDefBonus    = ChurchRepository.defBonus(flags),
-                    playerHp            = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMap[Skills.HITPOINTS] ?: 0) * 5,
+                    playerHp            = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMap[Skills.HITPOINTS] ?: 0) * 5 + flags.towerHpBonus,
                     weaponAttackBonus   = totalAttackBonus,
                     weaponStrengthBonus = totalStrengthBonus,
                     combatStyle         = combatStyle,
@@ -537,7 +556,7 @@ class CombatViewModel @Inject constructor(
                     spellMaxHit         = (selectedSpell?.maxHit ?: 0) + totalMagicDmgBonus,
                     agilityLevel        = levels[Skills.AGILITY]   ?: 1,
                     agilityPrestige     = prestigeMap[Skills.AGILITY] ?: 0,
-                    petBoostPct         = petBoostFor(player.pets),
+                    petBoostPct         = petBoostFor(player.pets, flags.ironman),
                     equippedFood        = availableFood,
                     foodHealValues      = foodHealValues,
                     potionBonuses       = potionBonuses,
@@ -548,30 +567,27 @@ class CombatViewModel @Inject constructor(
                     availableRunes      = if (simulatorRuneKey != null) inventory[simulatorRuneKey] ?: 0 else Int.MAX_VALUE,
                     attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
                     eatThresholdPct     = flags.foodEatThresholdPct,
+                    chronosMultiplier   = townRepo.playerSessionDurationMultiplier(flags),
                 )
 
                 val framesJson = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),
                     result.frames,
                 )
-                val deathFrameIdx = result.frames.indexOfFirst { it.died }
-                val alarmOffsetMs = if (deathFrameIdx >= 0) {
-                    val perFrameMs = result.durationMs / 60L
-                    perFrameMs * (deathFrameIdx + 1)
-                } else null
+                val alarmOffsetMs = CombatSimulator.deathAlarmOffsetMs(result.frames, result.durationMs / 60L)
                 sessionRepo.startSession(
                     skillName        = "combat",
                     activityKey      = dungeonKey,
                     frames           = framesJson,
                     durationMs       = result.durationMs,
-                    skillDisplayName = dungeon.displayName,
+                    skillDisplayName = GameStrings.dungeonName(context, dungeonKey),
                     alarmOffsetMs    = alarmOffsetMs,
                 )
                 if (repeatCount > 1) {
                     val dungeonSnapshot = QueuedAction(
                         skillName        = "combat",
                         activityKey      = dungeonKey,
-                        skillDisplayName = dungeon.displayName,
+                        skillDisplayName = GameStrings.dungeonName(context, dungeonKey),
                         equippedSnapshot = player.equipped,
                         arrowsKey        = _extra.value.selectedArrowKey ?: flags.equippedArrows,
                         spellName        = if (combatStyle == "magic" && selectedSpell != null) selectedSpell.name else flags.activeSpell,
@@ -599,7 +615,7 @@ class CombatViewModel @Inject constructor(
         viewModelScope.launch {
             val repeatCount = _extra.value.selectedBossRepeatCount.coerceIn(1, MAX_BOSS_REPEAT_COUNT)
             if (sessionRepo.getActiveSession() != null) {
-                val bossName     = gameData.bosses[bossKey]?.displayName ?: bossKey
+                val bossName     = GameStrings.bossName(context, bossKey)
                 val bossMs       = (gameData.bosses[bossKey]?.durationMinutes ?: 1) * 60_000L
                 val queuedPlayer = playerRepo.getOrCreatePlayer()
                 val queuedFlags: PlayerFlags          = json.decodeFromString(queuedPlayer.flags)
@@ -734,7 +750,7 @@ class CombatViewModel @Inject constructor(
                     playerAttack       = (levels[Skills.ATTACK]    ?: 1) + (potionBonuses["attack"]   ?: 0) + (prestigeMapBoss[Skills.ATTACK]    ?: 0) * 5,
                     playerStrength     = (levels[Skills.STRENGTH]  ?: 1) + (potionBonuses["strength"] ?: 0) + (prestigeMapBoss[Skills.STRENGTH]  ?: 0) * 5,
                     playerDefence      = (levels[Skills.DEFENSE]   ?: 1) + totalDefBonus + (potionBonuses["defense"] ?: 0) + (prestigeMapBoss[Skills.DEFENSE] ?: 0) * 5,
-                    playerHp           = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMapBoss[Skills.HITPOINTS] ?: 0) * 5,
+                    playerHp           = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMapBoss[Skills.HITPOINTS] ?: 0) * 5 + flags.towerHpBonus,
                     weaponAttackBonus  = totalAtkBonus,
                     weaponStrBonus     = totalStrBonus,
                     combatStyle        = combatStyle,
@@ -759,28 +775,23 @@ class CombatViewModel @Inject constructor(
                     bossFrames,
                 )
                 val agilityLevel   = levels[Skills.AGILITY] ?: 1
-                val frameMs        = SkillSimulator.sessionDurationMs(agilityLevel, flags.skillPrestige[Skills.AGILITY] ?: 0) / 60L
+                val frameMs        = SkillSimulator.sessionDurationMs(agilityLevel, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)) / 60L
                 val bossDurationMs = boss.durationMinutes * frameMs
                 sessionRepo.startSession(
                     skillName        = "boss",
                     activityKey      = bossKey,
                     frames           = framesJson,
                     durationMs       = bossDurationMs,
-                    skillDisplayName = boss.displayName,
+                    skillDisplayName = GameStrings.bossName(context, bossKey),
                     // endsAt is cosmetic (full duration, no outcome spoiler); the alarm
                     // ends the session at the exact death tick within the final frame.
-                    alarmOffsetMs    = if (bossFrames.size < boss.durationMinutes) {
-                        val lastTicks   = bossFrames.lastOrNull()?.let { maxOf(it.playerHits.size, it.enemyHits.size) } ?: 0
-                        val tickMs      = if (lastTicks > 0) frameMs / lastTicks else 2_400L
-                        val lastFrameMs = if (lastTicks > 0) minOf(lastTicks * tickMs, frameMs) else frameMs
-                        (bossFrames.size - 1).coerceAtLeast(0) * frameMs + lastFrameMs + 2_000L
-                    } else null,
+                    alarmOffsetMs    = CombatSimulator.bossEndAlarmOffsetMs(bossFrames, boss.durationMinutes, frameMs),
                 )
                 if (repeatCount > 1) {
                     val bossSnapshot = QueuedAction(
                         skillName        = "boss",
                         activityKey      = bossKey,
-                        skillDisplayName = boss.displayName,
+                        skillDisplayName = GameStrings.bossName(context, bossKey),
                         equippedSnapshot = player.equipped,
                         arrowsKey        = _extra.value.selectedArrowKey ?: flags.equippedArrows,
                         spellName        = if (combatStyle == "magic" && selectedSpell != null) selectedSpell.name else flags.activeSpell,
@@ -853,25 +864,11 @@ class CombatViewModel @Inject constructor(
 
     fun prestigeSkill(skillName: String) {
         viewModelScope.launch {
-            val activeSession = sessionRepo.getActiveSession()
-            // A combat/boss fight's frames are locked in at start using the pre-prestige stats
-            // (e.g. Hitpoints level). Prestiging resets that skill to level 1, so an active fight
-            // left running would later fail its post-completion combat-level eligibility check
-            // and get silently voided -- but still show a misleading "Defeated by X" result
-            // (issue #1144). Abandoning it here, matching a manual abandon, avoids that entirely.
-            val abandonedCombatSession = activeSession?.takeIf {
-                skillName in Skills.COMBAT && (it.skillName == "combat" || it.skillName == "boss")
-            }
-            val abandonedSession = abandonedCombatSession
-                ?: activeSession?.takeIf { it.skillName == skillName }
-            if (abandonedCombatSession != null) {
-                abandonCombatSession(abandonedCombatSession)
-            } else if (abandonedSession != null) {
-                val frames: List<SessionFrame> = json.decodeFromString(abandonedSession.frames)
-                playerSessionMaterials(abandonedSession.skillName, abandonedSession.activityKey, frames.sumOf { it.kills }, gameData)
-                    ?.let { playerRepo.addItems(it) }
-                sessionRepo.abandonSession(abandonedSession.sessionId)
-            }
+            // The active session (fight included) is deliberately left running: it completes
+            // with its real result and pays out loot without XP (the eligibility check at
+            // collection zeroes it), so the misleading silently-voided outcome that the old
+            // abandon-on-prestige workaround existed for (issue #1144) can't occur anymore.
+            // Only queued actions are evicted — they haven't started and can't start at level 1.
             val evicted = playerRepo.evictQueueForSkill(skillName)
             for (action in evicted) {
                 if (action.coinRefund > 0) playerRepo.addCoins(action.coinRefund)
@@ -879,7 +876,9 @@ class CombatViewModel @Inject constructor(
                     ?.let { playerRepo.addItems(it) }
             }
             playerRepo.prestigeSkill(skillName)
-            if (abandonedSession != null) queuedSessionStarter.startNextQueued()
+            // The repository resets flags.activeSpell if it now outlevels the player; drop the
+            // in-memory pick too or the Gear tab keeps showing the stale spell (issue #1256).
+            if (skillName == Skills.MAGIC) _extra.update { it.copy(selectedSpell = null) }
         }
     }
 
@@ -899,7 +898,7 @@ class CombatViewModel @Inject constructor(
 
     private fun buildCapeMessage(capes: List<String>): String? {
         if (capes.isEmpty()) return null
-        val names = capes.joinToString(", ") { gameData.itemDisplayName(it) }
+        val names = capes.joinToString(", ") { GameStrings.itemName(context, it) }
         return context.getString(R.string.home_congratulations_received, names)
     }
 
@@ -964,7 +963,7 @@ class CombatViewModel @Inject constructor(
         val atk     = (levels[Skills.ATTACK]    ?: 1) + (prestigeMap[Skills.ATTACK]    ?: 0) * 5
         val str     = (levels[Skills.STRENGTH]  ?: 1) + (prestigeMap[Skills.STRENGTH]  ?: 0) * 5
         val def     = (levels[Skills.DEFENSE]   ?: 1) + totalDef + (prestigeMap[Skills.DEFENSE] ?: 0) * 5
-        val hp      = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMap[Skills.HITPOINTS] ?: 0) * 5
+        val hp      = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMap[Skills.HITPOINTS] ?: 0) * 5 + flags.towerHpBonus
         val rng     = (levels[Skills.RANGED]    ?: 1) + (prestigeMap[Skills.RANGED]    ?: 0) * 5
         val mgc     = (levels[Skills.MAGIC]     ?: 1) + (prestigeMap[Skills.MAGIC]     ?: 0) * 5
         val agility = levels[Skills.AGILITY]    ?: 1
@@ -995,6 +994,7 @@ class CombatViewModel @Inject constructor(
                     arrowStrengthBonuses = ARROW_STRENGTH_BONUS,
                     attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
                     eatThresholdPct     = flags.foodEatThresholdPct,
+                    chronosMultiplier   = townRepo.playerSessionDurationMultiplier(flags),
                     random              = Random.Default,
                 )
                 if (result.frames.none { it.died }) survived++
@@ -1029,7 +1029,8 @@ class CombatViewModel @Inject constructor(
     )
 
     /** Returns the combined XP boost % from all "combat" and "all" pets the player owns. */
-    private fun petBoostFor(petsJson: String): Int {
+    private fun petBoostFor(petsJson: String, ironman: Boolean = false): Int {
+        if (ironman) return 0
         val pets = try {
             json.decodeFromString<List<OwnedPet>>(petsJson)
         } catch (_: Exception) { return 0 }
@@ -1099,7 +1100,7 @@ class CombatViewModel @Inject constructor(
             playerStrength      = (levels[Skills.STRENGTH]  ?: 1) + (prestigeMap[Skills.STRENGTH]  ?: 0) * 5,
             playerDefence       = (levels[Skills.DEFENSE]   ?: 1) + totalDefenseBonus + (prestigeMap[Skills.DEFENSE] ?: 0) * 5,
             blessingDefBonus    = ChurchRepository.defBonus(flags),
-            playerHp            = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMap[Skills.HITPOINTS] ?: 0) * 5,
+            playerHp            = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMap[Skills.HITPOINTS] ?: 0) * 5 + flags.towerHpBonus,
             weaponAttackBonus   = totalAttackBonus,
             weaponStrengthBonus = totalStrengthBonus,
             combatStyle         = combatStyle,
@@ -1109,7 +1110,7 @@ class CombatViewModel @Inject constructor(
             spellMaxHit         = (selectedSpell?.maxHit ?: 0) + totalMagicDmgBonus,
             agilityLevel        = levels[Skills.AGILITY]   ?: 1,
             agilityPrestige     = prestigeMap[Skills.AGILITY] ?: 0,
-            petBoostPct         = petBoostFor(petsJson),
+            petBoostPct         = petBoostFor(petsJson, flags.ironman),
             equippedFood        = flags.equippedFood.keys.associateWith { Int.MAX_VALUE },
             foodHealValues      = gameData.foodHealValues,
             potionBonuses       = potionBonuses,
@@ -1120,6 +1121,7 @@ class CombatViewModel @Inject constructor(
             availableRunes      = Int.MAX_VALUE,
             attackSpeedSec      = weapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
             eatThresholdPct     = flags.foodEatThresholdPct,
+            chronosMultiplier   = townRepo.playerSessionDurationMultiplier(flags),
         )
         return result.frames.sumOf { it.xpGain.toLong() }
     }
@@ -1177,7 +1179,7 @@ class CombatViewModel @Inject constructor(
             playerAttack       = (levels[Skills.ATTACK]    ?: 1) + (potionBonuses["attack"]   ?: 0) + (prestigeMapBoss[Skills.ATTACK]    ?: 0) * 5,
             playerStrength     = (levels[Skills.STRENGTH]  ?: 1) + (potionBonuses["strength"] ?: 0) + (prestigeMapBoss[Skills.STRENGTH]  ?: 0) * 5,
             playerDefence      = (levels[Skills.DEFENSE]   ?: 1) + totalDefBonus + (potionBonuses["defense"] ?: 0) + (prestigeMapBoss[Skills.DEFENSE] ?: 0) * 5,
-            playerHp           = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMapBoss[Skills.HITPOINTS] ?: 0) * 5,
+            playerHp           = (levels[Skills.HITPOINTS] ?: 1) + (prestigeMapBoss[Skills.HITPOINTS] ?: 0) * 5 + flags.towerHpBonus,
             weaponAttackBonus  = totalAtkBonus,
             weaponStrBonus     = totalStrBonus,
             combatStyle        = combatStyle,

@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -72,9 +74,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
 import com.fantasyidler.ui.viewmodel.ExpeditionsViewModel
@@ -86,17 +90,19 @@ import com.fantasyidler.data.json.OreData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.TreeData
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.text.style.TextAlign
 import com.fantasyidler.ui.viewmodel.CraftableRecipe
 import com.fantasyidler.ui.viewmodel.CraftingUiState
 import com.fantasyidler.ui.viewmodel.CraftingViewModel
+import com.fantasyidler.ui.viewmodel.SheetQuestSource
+import com.fantasyidler.ui.viewmodel.SheetQuestSummary
 import com.fantasyidler.ui.viewmodel.SheetState
 import com.fantasyidler.ui.viewmodel.levelDisplay
 import com.fantasyidler.ui.viewmodel.SkillsUiState
@@ -112,7 +118,11 @@ import com.fantasyidler.util.formatDurationMs
 import com.fantasyidler.util.formatXp
 import com.fantasyidler.util.toCountdown
 import java.util.Locale
+import com.fantasyidler.ui.viewmodel.QuestCategory
 import com.fantasyidler.ui.viewmodel.QuestFillSuggestion
+import com.fantasyidler.ui.viewmodel.QuestIndicator
+
+private val NON_COMBAT_PRESTIGE_SKILLS = Skills.GATHERING + Skills.CRAFTING_SKILLS + Skills.SUPPORT + listOf(Skills.SLAYER)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -130,10 +140,53 @@ fun SkillsScreen(
     AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
     AppBannerEffect(craftSnackState.snackbarMessage, craftingViewModel::snackbarConsumed)
 
+    var showLegend by remember { mutableStateOf(false) }
+    if (showLegend) {
+        AlertDialog(
+            onDismissRequest = { showLegend = false },
+            title = { Text(stringResource(R.string.quest_legend_title)) },
+            text  = {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    listOf(
+                        QuestCategory.DAILY       to R.string.quest_legend_daily,
+                        QuestCategory.WEEKLY      to R.string.quest_legend_weekly,
+                        QuestCategory.GUILD_DAILY to R.string.quest_legend_guild_daily,
+                        QuestCategory.GUILD       to R.string.quest_legend_guild,
+                        QuestCategory.MAIN        to R.string.quest_legend_quest,
+                    ).forEach { (category, labelRes) ->
+                        Text("${category.emoji}  ${stringResource(labelRes)}")
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("●  ", color = MaterialTheme.colorScheme.primary)
+                        Text(stringResource(R.string.quest_legend_gold_dot))
+                    }
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text  = stringResource(R.string.quest_legend_notes),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showLegend = false }) { Text(stringResource(R.string.btn_close)) }
+            },
+        )
+    }
+
     Scaffold(
         contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.nav_skills)) })
+            TopAppBar(
+                title   = { Text(stringResource(R.string.nav_skills)) },
+                actions = {
+                    // dropUnlessResumed: ignore ghost taps that land on this screen while it is
+                    // fading out of a nav transition (issue #1345 — overlaps Home's settings gear)
+                    IconButton(onClick = dropUnlessResumed { showLegend = true }) {
+                        Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.quest_legend_title))
+                    }
+                },
+            )
         },
     ) { padding ->
         if (state.isLoading) {
@@ -152,10 +205,20 @@ fun SkillsScreen(
         val scope = rememberCoroutineScope()
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
             TabRow(selectedTabIndex = pagerState.currentPage) {
+                val prestigeReadyCount = if (state.ironman || !state.showPrestigeNotifications) 0 else NON_COMBAT_PRESTIGE_SKILLS.count { key ->
+                    (state.skillLevels[key] ?: 1) >= 99 && (state.skillPrestige[key] ?: 0) < 3
+                }
                 Tab(
                     selected = pagerState.currentPage == 0,
                     onClick  = { scope.launch { pagerState.animateScrollToPage(0) } },
-                    text     = { Text(stringResource(R.string.nav_skills)) },
+                    text     = {
+                        Text(
+                            if (prestigeReadyCount > 0)
+                                stringResource(R.string.tab_label_with_count, stringResource(R.string.nav_skills), prestigeReadyCount)
+                            else
+                                stringResource(R.string.nav_skills)
+                        )
+                    },
                 )
                 Tab(
                     selected = pagerState.currentPage == 1,
@@ -163,6 +226,7 @@ fun SkillsScreen(
                     text     = { Text(stringResource(R.string.nav_expeditions)) },
                 )
             }
+            val skillsListState = rememberLazyListState()
             HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
                 if (page == 1) {
                     ExpeditionsScreen(viewModel = expeditionsViewModel, showTitle = false)
@@ -171,6 +235,7 @@ fun SkillsScreen(
                         state                 = state,
                         viewModel             = viewModel,
                         context               = context,
+                        listState             = skillsListState,
                         onNavigateToSlayer    = onNavigateToSlayer,
                         onNavigateToBoneAltar = onNavigateToBoneAltar,
                     )
@@ -217,17 +282,47 @@ fun SkillActivitySheet(
     val context = LocalContext.current
     state.sheetSkill?.let { sheet ->
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        // Sheets with an internal quantity page register how to step back one level here, so
+        // the system back button matches the in-sheet back link instead of closing the whole
+        // sheet (issue #1330). Back press and scrim tap fire onDismissRequest while the sheet
+        // is still visible; a swipe-down has already settled hidden and always closes.
+        val sheetBackStep = remember { mutableStateOf<(() -> Unit)?>(null) }
         ModalBottomSheet(
             onDismissRequest = {
-                viewModel.dismissSheet()
-                craftingViewModel.dismissRecipe()
+                val stepBack = sheetBackStep.value
+                if (sheetState.isVisible && stepBack != null) {
+                    stepBack()
+                } else {
+                    viewModel.dismissSheet()
+                    craftingViewModel.dismissRecipe()
+                }
             },
             sheetState = sheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
+            // Rendered by each sheet under its skill description; only the sheets without
+            // a description header (Mercantile, Farming) show it above their content.
+            val dailyBanner: @Composable () -> Unit = {
+                GuildDailySheetBanner(sheet, state.sheetQuests) { daily ->
+                    val remaining = (daily.amount - daily.progress).coerceAtLeast(1)
+                    val craftGuilds = setOf(
+                        Skills.SMITHING, Skills.COOKING, Skills.FLETCHING,
+                        Skills.CRAFTING, Skills.HERBLORE, Skills.CONSTRUCTION,
+                    )
+                    if (daily.type == "craft" && daily.guild in craftGuilds) {
+                        craftingViewModel.queueCraftForDaily(daily.target, remaining)
+                    } else {
+                        viewModel.queueDailySession(daily)
+                    }
+                }
+            }
+            if (sheet is SheetState.Mercantile || sheet is SheetState.Farming) {
+                ScaledSheetContent { dailyBanner() }
+            }
             ScaledSheetContent {
                 when (sheet) {
                     is SheetState.Mining -> MiningSheet(
+                        guildDailyButton  = dailyBanner,
                         ores              = sheet.ores,
                         isStarting        = state.startingSession,
                         hasActiveSession  = state.anySessionActive,
@@ -235,11 +330,14 @@ fun SkillActivitySheet(
                         sessionDurationMs = state.sessionDurationMs,
                         currentXp         = state.skillXp[Skills.MINING] ?: 0L,
                         efficiency        = state.miningEfficiency,
+                        petBoostPct       = state.petBoosts[Skills.MINING] ?: 0,
                         xpBonusMult       = state.xpBonusMult,
                         activeQuests      = state.activeQuests,
+                        inventory         = state.inventory,
                         onSelect          = { oreKey -> viewModel.startMiningSession(oreKey) },
                     )
                     is SheetState.Woodcutting -> WoodcuttingSheet(
+                        guildDailyButton  = dailyBanner,
                         trees             = sheet.trees,
                         isStarting        = state.startingSession,
                         hasActiveSession  = state.anySessionActive,
@@ -247,11 +345,14 @@ fun SkillActivitySheet(
                         sessionDurationMs = state.sessionDurationMs,
                         currentXp         = state.skillXp[Skills.WOODCUTTING] ?: 0L,
                         efficiency        = state.woodcuttingEfficiency,
+                        petBoostPct       = state.petBoosts[Skills.WOODCUTTING] ?: 0,
                         xpBonusMult       = state.xpBonusMult,
                         activeQuests      = state.activeQuests,
+                        inventory         = state.inventory,
                         onSelect          = { treeKey -> viewModel.startWoodcuttingSession(treeKey) },
                     )
                     is SheetState.Fishing -> FishingSheet(
+                        guildDailyButton  = dailyBanner,
                         fish              = sheet.fish,
                         isStarting        = state.startingSession,
                         hasActiveSession  = state.anySessionActive,
@@ -259,22 +360,29 @@ fun SkillActivitySheet(
                         sessionDurationMs = state.sessionDurationMs,
                         currentXp         = state.skillXp[Skills.FISHING] ?: 0L,
                         efficiency        = state.fishingEfficiency,
+                        petBoostPct       = state.petBoosts[Skills.FISHING] ?: 0,
                         xpBonusMult       = state.xpBonusMult,
                         activeQuests      = state.activeQuests,
+                        inventory         = state.inventory,
                         onSelect          = { fishKey -> viewModel.startFishingSession(fishKey) },
                     )
                     is SheetState.Agility -> AgilitySheet(
+                        guildDailyButton  = dailyBanner,
                         courses           = sheet.courses,
                         isStarting        = state.startingSession,
                         hasActiveSession  = state.anySessionActive,
                         isQueueFull       = state.queueSize >= state.maxQueueSize,
                         sessionDurationMs = state.sessionDurationMs,
                         currentXp         = state.skillXp[Skills.AGILITY] ?: 0L,
+                        efficiency        = state.agilityEfficiency,
+                        petBoostPct       = state.petBoosts[Skills.AGILITY] ?: 0,
                         xpBonusMult       = state.xpBonusMult,
                         activeQuests      = state.activeQuests,
                         onSelect          = { courseKey -> viewModel.startAgilitySession(courseKey) },
                     )
                     is SheetState.Firemaking -> FiremakingSheet(
+                        guildDailyButton  = dailyBanner,
+                        backStep          = sheetBackStep,
                         availableLogs     = sheet.availableLogs,
                         inventory         = state.inventory,
                         currentXp         = state.skillXp[Skills.FIREMAKING] ?: 0L,
@@ -289,6 +397,8 @@ fun SkillActivitySheet(
                         activeQuests      = state.activeQuests,
                     )
                     is SheetState.Runecrafting -> RunecraftingSheet(
+                        guildDailyButton  = dailyBanner,
+                        backStep          = sheetBackStep,
                         sheet             = sheet,
                         inventory         = state.inventory,
                         isStarting        = state.startingSession,
@@ -301,6 +411,8 @@ fun SkillActivitySheet(
                         activeQuests      = state.activeQuests,
                     )
                     is SheetState.Prayer -> PrayerSheet(
+                        guildDailyButton  = dailyBanner,
+                        backStep          = sheetBackStep,
                         availableBones        = sheet.availableBones,
                         inventory             = sheet.inventory,
                         prayerLevel           = state.skillLevels[Skills.PRAYER] ?: 1,
@@ -320,6 +432,8 @@ fun SkillActivitySheet(
                     is SheetState.Crafting -> {
                         val craftState by craftingViewModel.uiState.collectAsState()
                         CraftSkillSheet(
+                            guildDailyButton  = dailyBanner,
+                            backStep          = sheetBackStep,
                             skillName         = sheet.skillName,
                             craftState        = craftState,
                             craftingViewModel = craftingViewModel,
@@ -334,6 +448,7 @@ fun SkillActivitySheet(
                         )
                     }
                     is SheetState.Thieving -> ThievingSheet(
+                        guildDailyButton  = dailyBanner,
                         npcs              = sheet.npcs,
                         thievingLevel     = state.skillLevels[com.fantasyidler.data.model.Skills.THIEVING] ?: 1,
                         currentXp         = state.skillXp[com.fantasyidler.data.model.Skills.THIEVING] ?: 0L,
@@ -354,6 +469,159 @@ fun SkillActivitySheet(
     }
 }
 
+/**
+ * Compact guild-daily status line shown above a skill sheet's activity list, so the
+ * player can see whether this skill still has a daily worth doing without leaving
+ * for the Guild Hall. Hidden while the skill's guild is locked (no daily assigned).
+ */
+/** Quest types the sheet's quick-add "+" can turn into a queued session. */
+private fun SheetQuestSummary.canQueue(): Boolean = when {
+    type == "gather" && guild in setOf(Skills.MINING, Skills.WOODCUTTING, Skills.FISHING) -> true
+    type == "pickpocket"                       -> true
+    type == "sessions" && guild == Skills.AGILITY -> true
+    type == "craft"                            -> true
+    else                                       -> false
+}
+
+@Composable
+private fun GuildDailySheetBanner(
+    sheet: SheetState,
+    guildDailies: Map<String, List<SheetQuestSummary>>,
+    onQueueDaily: (SheetQuestSummary) -> Unit,
+) {
+    val skillKey = when (sheet) {
+        is SheetState.Mining       -> Skills.MINING
+        is SheetState.Woodcutting  -> Skills.WOODCUTTING
+        is SheetState.Fishing      -> Skills.FISHING
+        is SheetState.Agility      -> Skills.AGILITY
+        is SheetState.Firemaking   -> Skills.FIREMAKING
+        is SheetState.Runecrafting -> Skills.RUNECRAFTING
+        is SheetState.Prayer       -> Skills.PRAYER
+        is SheetState.Crafting     -> sheet.skillName
+        is SheetState.Thieving     -> Skills.THIEVING
+        SheetState.Mercantile      -> Skills.MERCANTILE
+        SheetState.Farming         -> Skills.FARMING
+        SheetState.ComingSoon      -> null
+    } ?: return
+    val quests = guildDailies[skillKey]?.takeIf { it.isNotEmpty() } ?: return
+    val context = LocalContext.current
+    val guildMaxed = quests.any { it.source == SheetQuestSource.GUILD && it.guildMaxed }
+    val anyOpen = quests.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) }
+    var showDialog by remember { mutableStateOf(false) }
+
+    if (showDialog) {
+        val sections = listOf(
+            SheetQuestSource.GUILD  to R.string.guild_daily_button,
+            SheetQuestSource.DAILY  to R.string.label_daily,
+            SheetQuestSource.WEEKLY to R.string.label_weekly,
+        ).mapNotNull { (source, labelRes) ->
+            quests.filter { it.source == source }.takeIf { it.isNotEmpty() }?.let { labelRes to it }
+        }
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(stringResource(R.string.nav_quests)) },
+            text = {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    sections.forEachIndexed { sectionIndex, (labelRes, sectionQuests) ->
+                        if (sectionIndex > 0) {
+                            Spacer(Modifier.height(12.dp))
+                        }
+                        Text(
+                            text       = stringResource(labelRes),
+                            style      = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color      = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        sectionQuests.forEachIndexed { index, quest ->
+                            if (index > 0) {
+                                Spacer(Modifier.height(8.dp))
+                                HorizontalDivider()
+                                Spacer(Modifier.height(8.dp))
+                            }
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(
+                                        text       = GameStrings.questName(context, quest.questId, quest.questName),
+                                        style      = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.SemiBold,
+                                    )
+                                    Spacer(Modifier.height(2.dp))
+                                    Text(
+                                        text  = when (quest.source) {
+                                            SheetQuestSource.GUILD  -> localizedQuestDesc(quest.type, quest.target, quest.amount, quest.guild)
+                                            SheetQuestSource.DAILY  -> buildDailyObjective(context, quest.guild, quest.target, quest.amount, quest.description)
+                                            SheetQuestSource.WEEKLY -> GameStrings.questDesc(context, quest.questId)
+                                                .takeIf { it.isNotBlank() } ?: quest.description
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(
+                                        text  = when {
+                                            quest.claimed                  -> stringResource(R.string.guild_daily_banner_claimed)
+                                            quest.progress >= quest.amount -> stringResource(R.string.guild_daily_banner_claimable)
+                                            else                           -> "${quest.progress} / ${quest.amount}"
+                                        },
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                                if (!quest.claimed && quest.progress < quest.amount && quest.canQueue()) {
+                                    IconButton(onClick = {
+                                        onQueueDaily(quest)
+                                        showDialog = false
+                                    }) {
+                                        Icon(Icons.Filled.Add, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (guildMaxed) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text  = stringResource(R.string.guild_daily_rank_maxed),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(stringResource(R.string.btn_close))
+                }
+            },
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        TextButton(onClick = { showDialog = true }) {
+            Text(
+                text  = stringResource(R.string.nav_quests),
+                style = MaterialTheme.typography.labelMedium,
+                color = if (anyOpen) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        if (guildMaxed) {
+            Text(
+                text     = stringResource(R.string.guild_daily_rank_maxed),
+                style    = MaterialTheme.typography.labelSmall,
+                color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(end = 8.dp),
+            )
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Skills tab content (page 0 of the Skills/Expeditions pager)
 // ---------------------------------------------------------------------------
@@ -363,12 +631,13 @@ private fun SkillsTabContent(
     state: SkillsUiState,
     viewModel: SkillsViewModel,
     context: android.content.Context,
+    listState: LazyListState = rememberLazyListState(),
     onNavigateToSlayer: () -> Unit = {},
     onNavigateToBoneAltar: () -> Unit = {},
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
         state.activeSession?.let { session ->
-            item {
+            item(key = "active_session") {
                 ActiveSessionBanner(
                     skillName     = GameStrings.skillName(context, session.skillName),
                     activityLabel = when (session.skillName) {
@@ -386,8 +655,8 @@ private fun SkillsTabContent(
             }
         }
 
-        item { SectionHeader(stringResource(R.string.label_gathering_skills)) }
-        items(Skills.GATHERING.filter { it != Skills.AGILITY }) { key ->
+        item(key = "header_gathering") { SectionHeader(stringResource(R.string.label_gathering_skills)) }
+        items(Skills.GATHERING.filter { it != Skills.AGILITY }, key = { "gather_$it" }) { key ->
             val efficiency = when (key) {
                 Skills.MINING      -> state.miningEfficiency
                 Skills.WOODCUTTING -> state.woodcuttingEfficiency
@@ -405,13 +674,15 @@ private fun SkillsTabContent(
                 toolEfficiency = efficiency,
                 petBoostPct    = state.petBoostBySkill[key] ?: 0,
                 prestigeLevel  = state.skillPrestige[key] ?: 0,
-                onPrestige     = { viewModel.prestigeSkill(key) },
+                onPrestige     = if (state.ironman) null else ({ viewModel.prestigeSkill(key) }),
                 cropsReady     = if (key == Skills.FARMING) state.cropsReadyCount else 0,
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                questIndicators = state.timedQuestsBySkill[key] ?: emptyList(),
             )
         }
 
-        item { SectionHeader(stringResource(R.string.label_crafting_skills)) }
-        items(Skills.CRAFTING_SKILLS) { key ->
+        item(key = "header_crafting") { SectionHeader(stringResource(R.string.label_crafting_skills)) }
+        items(Skills.CRAFTING_SKILLS, key = { "craft_$it" }) { key ->
             val craftEfficiency = when (key) {
                 Skills.SMITHING   -> state.smithingEfficiency
                 Skills.FIREMAKING -> state.firemakingEfficiency
@@ -427,12 +698,14 @@ private fun SkillsTabContent(
                 toolEfficiency = craftEfficiency,
                 petBoostPct    = state.petBoostBySkill[key] ?: 0,
                 prestigeLevel  = state.skillPrestige[key] ?: 0,
-                onPrestige     = { viewModel.prestigeSkill(key) },
+                onPrestige     = if (state.ironman) null else ({ viewModel.prestigeSkill(key) }),
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                questIndicators = state.timedQuestsBySkill[key] ?: emptyList(),
             )
         }
 
-        item { SectionHeader(stringResource(R.string.label_support_skills)) }
-        items(Skills.SUPPORT + listOf(Skills.AGILITY)) { key ->
+        item(key = "header_support") { SectionHeader(stringResource(R.string.label_support_skills)) }
+        items(Skills.SUPPORT + listOf(Skills.AGILITY), key = { "support_$it" }) { key ->
             SkillRow(
                 skillKey       = key,
                 level          = state.skillLevels[key] ?: 1,
@@ -442,12 +715,14 @@ private fun SkillsTabContent(
                 toolEfficiency = if (key == Skills.AGILITY) state.agilityEfficiency else 1.0f,
                 petBoostPct    = state.petBoostBySkill[key] ?: 0,
                 prestigeLevel  = state.skillPrestige[key] ?: 0,
-                onPrestige     = { viewModel.prestigeSkill(key) },
+                onPrestige     = if (state.ironman) null else ({ viewModel.prestigeSkill(key) }),
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[key]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                questIndicators = state.timedQuestsBySkill[key] ?: emptyList(),
             )
         }
 
-        item { SectionHeader(stringResource(R.string.label_combat)) }
-        item {
+        item(key = "header_combat") { SectionHeader(stringResource(R.string.label_combat)) }
+        item(key = "combat_${Skills.SLAYER}") {
             SkillRow(
                 skillKey      = Skills.SLAYER,
                 level         = state.skillLevels[Skills.SLAYER] ?: 1,
@@ -456,7 +731,9 @@ private fun SkillsTabContent(
                 onClick       = onNavigateToSlayer,
                 petBoostPct   = state.petBoostBySkill[Skills.SLAYER] ?: 0,
                 prestigeLevel = state.skillPrestige[Skills.SLAYER] ?: 0,
-                onPrestige    = { viewModel.prestigeSkill(Skills.SLAYER) },
+                onPrestige    = if (state.ironman) null else ({ viewModel.prestigeSkill(Skills.SLAYER) }),
+                guildDailyOpen = state.showQuestDots && state.sheetQuests[Skills.SLAYER]?.any { !it.claimed && !(it.source == SheetQuestSource.GUILD && it.guildMaxed) } == true,
+                questIndicators = state.timedQuestsBySkill[Skills.SLAYER] ?: emptyList(),
             )
         }
     }
@@ -577,6 +854,10 @@ internal fun SkillRow(
     prestigeLevel: Int = 0,
     onPrestige: (() -> Unit)? = null,
     cropsReady: Int = 0,
+    /** Shows a gold dot when this skill's guild daily is still open and worth doing (guild not maxed). */
+    guildDailyOpen: Boolean = false,
+    /** Timed quest indicators (daily/weekly/guild daily) shown next to the skill name. */
+    questIndicators: List<QuestIndicator> = emptyList(),
 ) {
     val context  = LocalContext.current
     val name     = GameStrings.skillName(context, skillKey)
@@ -628,7 +909,7 @@ internal fun SkillRow(
                         .size(44.dp)
                         .clip(CircleShape)
                         .background(
-                            if (isActive) GoldPrimary
+                            if (isActive) MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.surfaceVariant
                         ),
                     contentAlignment = Alignment.Center,
@@ -663,6 +944,12 @@ internal fun SkillRow(
                 if (cropsReady > 0) {
                     Badge(modifier = Modifier.align(Alignment.TopEnd))
                 }
+                if (guildDailyOpen) {
+                    Badge(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        modifier       = Modifier.align(Alignment.TopStart),
+                    )
+                }
             }
 
             Spacer(Modifier.width(12.dp))
@@ -672,16 +959,19 @@ internal fun SkillRow(
                     modifier             = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text(
-                        text       = name,
-                        style      = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Medium,
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text       = name,
+                            style      = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium,
+                        )
+                        QuestIndicatorIcons(questIndicators)
+                    }
                     if (isActive) {
                         Text(
                             text  = stringResource(R.string.label_training),
                             style = MaterialTheme.typography.labelSmall,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     } else {
                         val xpText = if (xpToNextLevel(xp) > 0L)
@@ -697,62 +987,71 @@ internal fun SkillRow(
                 }
                 Spacer(Modifier.height(4.dp))
                 LinearProgressIndicator(
+                    gapSize = 0.dp,
+                    drawStopIndicator = {},
                     progress = { progress },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(4.dp)
                         .clip(RoundedCornerShape(2.dp)),
-                    color    = GoldPrimary,
+                    color    = MaterialTheme.colorScheme.primary,
                 )
-                if (toolEfficiency > 1.0f) {
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text  = stringResource(R.string.skills_tool_bonus, "%.2f".format(toolEfficiency)),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
-                if (petBoostPct > 0) {
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text  = stringResource(R.string.skills_pet_bonus, petBoostPct),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-                }
-            }
-        }
-
-        // Prestige section: stars and button, outside the clickable row
-        if (prestigeLevel > 0 || (onPrestige != null && level >= 99)) {
-            Row(
-                modifier              = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 72.dp, end = 16.dp, bottom = 6.dp),
-                verticalAlignment     = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text  = "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = GoldPrimary,
-                )
-                when {
-                    onPrestige != null && level >= 99 && prestigeLevel < 3 -> {
-                        TextButton(onClick = { showPrestigeConfirm = true }) {
+                if (toolEfficiency > 1.0f || petBoostPct > 0) {
+                    Spacer(Modifier.height(6.dp))
+                    Box(Modifier.fillMaxWidth()) {
+                        if (toolEfficiency > 1.0f) {
                             Text(
-                                text  = stringResource(R.string.prestige),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = GoldPrimary,
+                                text     = stringResource(R.string.skills_tool_bonus, "%.2f".format(toolEfficiency)),
+                                style    = MaterialTheme.typography.labelSmall,
+                                color    = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.align(Alignment.CenterStart),
+                            )
+                        }
+                        if (petBoostPct > 0) {
+                            Text(
+                                text     = stringResource(R.string.skills_pet_bonus, petBoostPct),
+                                style    = MaterialTheme.typography.labelSmall,
+                                color    = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.align(Alignment.CenterEnd),
                             )
                         }
                     }
-                    prestigeLevel >= 3 -> {
+                }
+                if (prestigeLevel > 0 || (onPrestige != null && level >= 99)) {
+                    Spacer(Modifier.height(4.dp))
+                    Row(
+                        modifier              = Modifier.fillMaxWidth(),
+                        verticalAlignment     = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
                         Text(
-                            text  = stringResource(R.string.prestige_max),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            text  = "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary,
                         )
+                        when {
+                            onPrestige != null && level >= 99 && prestigeLevel < 3 -> {
+                                // Padded + Role.Button instead of a bare clickable Text: keeps the
+                                // compact row from PR #1347 but restores a usable tap target,
+                                // ripple bounds, and TalkBack button semantics.
+                                Text(
+                                    text     = stringResource(R.string.prestige),
+                                    style    = MaterialTheme.typography.labelSmall,
+                                    color    = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .clickable(role = Role.Button) { showPrestigeConfirm = true }
+                                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                                )
+                            }
+                            prestigeLevel >= 3 -> {
+                                Text(
+                                    text  = stringResource(R.string.prestige_max),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
                     }
                 }
             }

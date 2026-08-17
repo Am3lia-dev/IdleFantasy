@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.platform.LocalContext
 import com.fantasyidler.R
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.ExpeditionsUiState
 import com.fantasyidler.ui.viewmodel.ExpeditionsViewModel
 import com.fantasyidler.ui.viewmodel.SkillingDungeonUiItem
@@ -150,15 +149,17 @@ private fun SkillingDungeonCard(
                 Text(
                     text = stringResource(R.string.expedition_lore_notes, item.notesFound, item.dungeon.noteThreshold),
                     style = MaterialTheme.typography.labelSmall,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 LinearProgressIndicator(
+                    gapSize = 0.dp,
+                    drawStopIndicator = {},
                     progress = { progress.coerceIn(0f, 1f) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 4.dp)
                         .height(6.dp),
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                 )
                 if (item.notesFound >= item.dungeon.noteThreshold) {

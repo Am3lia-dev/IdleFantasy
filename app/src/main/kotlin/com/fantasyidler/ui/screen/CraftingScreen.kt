@@ -52,6 +52,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,8 +65,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
+import com.fantasyidler.data.model.Skills
 import com.fantasyidler.simulator.XpTable
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.CraftableRecipe
 import com.fantasyidler.ui.viewmodel.CraftingUiState
 import com.fantasyidler.ui.viewmodel.CraftingViewModel
@@ -124,13 +125,12 @@ fun CraftingScreen(
                 else -> viewModel.constructionRecipes
             }
 
-            val scrollState = rememberLazyListState()
-            LaunchedEffect(selectedTab) {
-                scrollState.scrollToItem(viewModel.getScrollIndex(selectedTab))
+            val scrollStates = List(6) { index ->
+                rememberSaveable(key = "craft_tab_scroll_$index", saver = LazyListState.Saver) {
+                    LazyListState()
+                }
             }
-            LaunchedEffect(scrollState.firstVisibleItemIndex) {
-                viewModel.saveScrollIndex(selectedTab, scrollState.firstVisibleItemIndex)
-            }
+            val scrollState = scrollStates.getOrElse(selectedTab) { scrollStates[0] }
 
             RecipeList(
                 recipes    = recipes,
@@ -151,12 +151,13 @@ fun CraftingScreen(
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
             CraftSheet(
-                recipe        = recipe,
-                state         = state,
-                context       = context,
-                onSetQuantity = { viewModel.setQuantity(it, state.maxCraftable(recipe)) },
-                onCraft       = viewModel::craft,
-                onDismiss     = viewModel::dismissRecipe,
+                recipe    = recipe,
+                state     = state,
+                context   = context,
+                onCraft   = { qty ->
+                    viewModel.craft(recipe, qty, if (recipe.skillName == Skills.HERBLORE) state.herbloreAshKey else null)
+                },
+                onDismiss = viewModel::dismissRecipe,
             )
         }
     }
@@ -175,7 +176,7 @@ private fun RecipeList(
     listState: LazyListState = rememberLazyListState(),
 ) {
     LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
-        items(recipes) { recipe ->
+        items(recipes, key = { it.key }) { recipe ->
             RecipeRow(
                 recipe  = recipe,
                 state   = state,
@@ -183,7 +184,7 @@ private fun RecipeList(
                 onTap   = { onTap(recipe) },
             )
         }
-        item { Spacer(Modifier.height(16.dp)) }
+        item(key = "bottom_spacer") { Spacer(Modifier.height(16.dp)) }
     }
 }
 
@@ -209,7 +210,7 @@ private fun RecipeRow(
         Column(Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text       = recipe.displayName,
+                    text       = GameStrings.itemName(LocalContext.current, recipe.outputKey),
                     style      = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Medium,
                     color      = if (enabled) MaterialTheme.colorScheme.onSurface else dimColor,
@@ -223,18 +224,7 @@ private fun RecipeRow(
                 }
                 val questIndicators = state.recipeQuests[recipe.outputKey] ?: emptyList()
                 if (questIndicators.isNotEmpty()) {
-                    val categories = questIndicators.groupBy { it.category }
-                    val sortedCategories = categories.entries.sortedBy { it.key }
-                    sortedCategories.forEach { (category, indicators) ->
-                        val emoji = if (category == QuestCategory.DAILY) "⏰" else "📜"
-                        val isCompletable = indicators.any { it.isCompletable }
-                        val alpha = if (isCompletable) 1.0f else 0.38f
-                        Text(
-                            text     = " $emoji",
-                            style    = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.alpha(alpha),
-                        )
-                    }
+                    QuestIndicatorIcons(questIndicators)
                 }
             }
             // Materials row
@@ -250,7 +240,7 @@ private fun RecipeRow(
             // Combat style (weapons only)
             recipe.outputCombatStyle?.let { style ->
                 Text(
-                    text  = "${context.getString(R.string.label_combat_style)}: ${style.replaceFirstChar { it.uppercase() }}",
+                    text  = "${context.getString(R.string.label_combat_style)}: ${GameStrings.skillName(context, style)}",
                     style = MaterialTheme.typography.labelSmall,
                     color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else dimColor,
                 )
@@ -279,7 +269,7 @@ private fun RecipeRow(
                     Text(
                         text  = "×$canMake",
                         style = MaterialTheme.typography.labelMedium,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
@@ -308,15 +298,21 @@ private fun CraftSheet(
     recipe: CraftableRecipe,
     state: CraftingUiState,
     context: android.content.Context,
-    onSetQuantity: (Int) -> Unit,
-    onCraft: () -> Unit,
+    onCraft: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val qty       = state.craftQuantity
+    // Quantity is sheet-local state: pushing it through the ViewModel re-ran the
+    // full player-state combine (JSON decodes + quest scans) on every keystroke (issue #1310).
     val max       = state.maxCraftable(recipe)
+    var quantity by remember(recipe) { mutableIntStateOf(max.coerceAtLeast(1)) }
+    val qty       = quantity.coerceIn(1, max.coerceAtLeast(1))
     val totalXp   = recipe.xpPerItem * qty
     val currentXp = state.skillXp[recipe.skillName] ?: 0L
-    var textValue by remember(qty) { mutableStateOf(qty.toString()) }
+    var textValue by remember(recipe) { mutableStateOf(qty.toString()) }
+    fun setQuantity(value: Int) {
+        quantity  = value.coerceIn(1, max.coerceAtLeast(1))
+        textValue = quantity.toString()
+    }
 
     Column(
         modifier = Modifier
@@ -325,7 +321,7 @@ private fun CraftSheet(
             .padding(bottom = 40.dp),
     ) {
         Text(
-            text       = recipe.displayName,
+            text       = GameStrings.itemName(LocalContext.current, recipe.outputKey),
             style      = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
         )
@@ -394,7 +390,7 @@ private fun CraftSheet(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment     = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = { onSetQuantity(qty - 1) }, enabled = qty > 1) {
+            IconButton(onClick = { setQuantity(qty - 1) }, enabled = qty > 1) {
                 Icon(Icons.Filled.Remove, contentDescription = stringResource(R.string.crafting_decrease))
             }
             OutlinedTextField(
@@ -402,7 +398,7 @@ private fun CraftSheet(
                 onValueChange = { new ->
                     val filtered = new.filter { it.isDigit() }
                     textValue = filtered
-                    filtered.toIntOrNull()?.let { onSetQuantity(it) }
+                    filtered.toIntOrNull()?.let { quantity = it.coerceIn(1, max.coerceAtLeast(1)) }
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -411,8 +407,7 @@ private fun CraftSheet(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         val parsed = textValue.toIntOrNull()?.coerceIn(1, max.coerceAtLeast(1)) ?: 1
-                        onSetQuantity(parsed)
-                        textValue = parsed.toString()
+                        setQuantity(parsed)
                     },
                 ),
                 textStyle = MaterialTheme.typography.headlineSmall.copy(
@@ -422,24 +417,24 @@ private fun CraftSheet(
                 singleLine = true,
                 modifier   = Modifier.width(130.dp),
             )
-            IconButton(onClick = { onSetQuantity(qty + 1) }, enabled = qty < max) {
+            IconButton(onClick = { setQuantity(qty + 1) }, enabled = qty < max) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.crafting_increase))
             }
         }
         Spacer(Modifier.height(8.dp))
-        QtyQuickButtons(qty, max) { onSetQuantity(it) }
-        QuestFillRow(state.questFills, qty, max, onSet = onSetQuantity)
+        QtyQuickButtons(qty, max) { setQuantity(it) }
+        QuestFillRow(state.questFills, qty, max, onSet = { setQuantity(it) })
         Spacer(Modifier.height(8.dp))
 
         Text(
             text     = projectedXpLabel(currentXp, totalXp.toLong()),
             style    = MaterialTheme.typography.bodySmall,
-            color    = GoldPrimary,
+            color    = MaterialTheme.colorScheme.primary,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         if (recipe.outputQty > 1) {
             Text(
-                text     = stringResource(R.string.crafting_produces, recipe.outputQty * qty, recipe.displayName),
+                text     = stringResource(R.string.crafting_produces, recipe.outputQty * qty, GameStrings.itemName(LocalContext.current, recipe.outputKey)),
                 style    = MaterialTheme.typography.bodySmall,
                 color    = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -452,7 +447,7 @@ private fun CraftSheet(
             OutlinedButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.btn_cancel))
             }
-            Button(onClick = onCraft, modifier = Modifier.weight(1f)) {
+            Button(onClick = { onCraft(qty) }, modifier = Modifier.weight(1f)) {
                 Text(stringResource(R.string.btn_craft))
             }
         }

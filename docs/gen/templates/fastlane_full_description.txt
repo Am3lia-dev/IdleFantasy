@@ -1,0 +1,37 @@
+Idle Fantasy is a free and open source offline idle RPG inspired by classic MMORPGs. Train skills, fight in dungeons, craft gear, and complete quests. No internet connection, account, or ads required.
+
+<b>Features</b>
+
+• <b>{skill_count} trainable skills</b>: {all_skills}
+
+• <b>Session-based training</b>: Start a session and close the app. Come back up to an hour later to collect your loot and XP. Agility reduces session time.
+
+• <b>{dungeon_count} dungeons</b>: Fight solo bosses and enemies to earn combat XP, coins, and rare drops. Equip weapons and armour to deal more damage.
+
+• <b>Crafting system</b>: Smelt bars, cook fish, fletch bows and arrows, craft jewellery. Consume gathered materials and earn XP and items.
+
+• <b>Prayer</b>: Bury bones collected from combat to earn Prayer XP.
+
+• <b>Equipment system</b>: Equip weapons, armour, tools, and jewellery to boost stats and skill efficiency.
+
+• <b>Quest system</b>: {quest_count} quests spanning all skills. Earn XP rewards on completion.
+
+• <b>Pet system</b>: Rare pets can drop while training skills. Each pet provides a permanent XP boost to their linked skill.
+
+• <b>Achievements</b>: Track milestones across levelling, combat, quests, and collections.
+
+• <b>NPC Shop</b>: Buy supplies and sell your gathered resources for coins.
+
+• <b>No ads. No accounts. No internet required.</b> Your save data stays on your device.
+
+• <b>Translations</b>: Partial and full translations available for {language_count} languages.
+
+Idle Fantasy is free software released under the GPL-3.0 licence. Source code is available on the project repository.
+
+<b>Get updates faster</b>
+
+Add the official Idle Fantasy repository to F-Droid to receive updates as soon as they are released, instead of waiting for the main F-Droid index to catch up.
+
+1. Open F-Droid and go to Settings → Repositories
+2. Tap + and paste: https://idlefantasy.tristinbaker.xyz/fdroid/repo
+3. Search for Idle Fantasy, open the app page, and under Repositories set Idle Fantasy as the preferred source.

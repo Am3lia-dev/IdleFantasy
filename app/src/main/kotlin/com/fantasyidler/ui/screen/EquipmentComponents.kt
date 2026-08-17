@@ -75,7 +75,6 @@ import com.fantasyidler.data.json.SkillingDungeonData
 import com.fantasyidler.data.json.ConstructionRecipe
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.model.EquipSlot
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.Achievement
 import com.fantasyidler.ui.viewmodel.AchievementsViewModel
 import com.fantasyidler.ui.viewmodel.ArmoryViewModel
@@ -169,7 +168,7 @@ internal fun FoodRow(
             }
         } else {
             TextButton(onClick = onEquip) {
-                Text(stringResource(R.string.btn_equip), color = GoldPrimary)
+                Text(stringResource(R.string.btn_equip), color = MaterialTheme.colorScheme.primary)
             }
         }
     }
@@ -331,7 +330,7 @@ internal fun EquipPickerSheet(
                     Text(
                         text  = stringResource(R.string.btn_equip),
                         style = MaterialTheme.typography.labelMedium,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -358,7 +357,7 @@ internal fun buildEquipDetail(item: com.fantasyidler.data.json.EquipmentData, co
     item.miningEfficiency?.let      { parts.add("${context.getString(R.string.profile_stat_mining)} ×${"%.2f".format(it)}") }
     item.woodcuttingEfficiency?.let { parts.add("${context.getString(R.string.profile_stat_wc)} ×${"%.2f".format(it)}") }
     item.fishingEfficiency?.let     { parts.add("${context.getString(R.string.profile_stat_fishing)} ×${"%.2f".format(it)}") }
-    item.farmingEfficiency?.let     { parts.add("${context.getString(R.string.profile_stat_farming)} ${context.getString(R.string.farming_fertilizer_yield, (it * 100).toInt())}") }
+    item.farmingEfficiency?.let     { parts.add("${context.getString(R.string.profile_stat_farming)} ×${"%.2f".format(it)}") }
     item.smithingEfficiency?.let    { parts.add("${context.getString(R.string.profile_stat_smithing)} ×${"%.2f".format(it)}") }
     item.firemakingEfficiency?.let  { parts.add("${context.getString(R.string.profile_stat_firemaking)} ×${"%.2f".format(it)}") }
     item.agilityEfficiency?.let     { parts.add("${context.getString(R.string.profile_stat_agility)} ×${"%.2f".format(it)}") }
@@ -384,7 +383,7 @@ internal fun buildEquipDetail(item: com.fantasyidler.data.json.EquipmentData, co
     }
     if (showReq) {
         for ((skill, lvl) in item.requirements) {
-            parts.add("${context.getString(R.string.profile_req_lv)} $lvl ${skill.replaceFirstChar { it.uppercase() }}")
+            parts.add("${context.getString(R.string.profile_req_lv)} $lvl ${GameStrings.skillName(context, skill)}")
         }
     }
     return parts.joinToString("  •  ")

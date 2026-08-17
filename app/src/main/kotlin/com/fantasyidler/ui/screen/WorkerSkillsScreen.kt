@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -43,10 +44,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -67,7 +70,6 @@ import com.fantasyidler.R
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.simulator.XpTable
 import com.fantasyidler.data.model.WorkerTier
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.CraftableRecipe
 import com.fantasyidler.ui.viewmodel.SheetState
 import com.fantasyidler.ui.viewmodel.WorkerSkillsUiState
@@ -131,7 +133,9 @@ fun WorkerSkillsScreen(
             return@Scaffold
         }
 
+        val listState = rememberLazyListState()
         LazyColumn(
+            state = listState,
             contentPadding = padding,
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -139,7 +143,7 @@ fun WorkerSkillsScreen(
             val w1 = state.hiredWorker
             val w2 = state.hiredWorker2
             if (w1 != null && w2 != null) {
-                item {
+                item(key = "slot_selector") {
                     Row(
                         modifier              = Modifier
                             .fillMaxWidth()
@@ -170,11 +174,11 @@ fun WorkerSkillsScreen(
 
             // Tier badge
             if (tierLabel.isNotEmpty()) {
-                item {
+                item(key = "tier_badge") {
                     Text(
                         text  = stringResource(R.string.inn_worker_tier, tierLabel),
                         style = MaterialTheme.typography.labelMedium,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     )
@@ -183,7 +187,7 @@ fun WorkerSkillsScreen(
 
             // Active worker session banner
             state.currentSession?.let { session ->
-                item {
+                item(key = "active_worker_session") {
                     WorkerActiveSessionBanner(
                         session       = session,
                         showEndTime   = state.showSessionEndTime,
@@ -193,8 +197,8 @@ fun WorkerSkillsScreen(
             }
 
             // Gathering skills (no farming, no agility)
-            item { SectionHeader(stringResource(R.string.label_gathering_skills)) }
-            items(Skills.GATHERING.filter { it != Skills.FARMING && it != Skills.AGILITY }) { key ->
+            item(key = "header_gathering") { SectionHeader(stringResource(R.string.label_gathering_skills)) }
+            items(Skills.GATHERING.filter { it != Skills.FARMING && it != Skills.AGILITY }, key = { "worker_gather_$it" }) { key ->
                 val efficiency = when (key) {
                     Skills.MINING      -> state.miningEfficiency
                     Skills.WOODCUTTING -> state.woodcuttingEfficiency
@@ -212,8 +216,8 @@ fun WorkerSkillsScreen(
             }
 
             // Crafting skills
-            item { SectionHeader(stringResource(R.string.label_crafting_skills)) }
-            items(Skills.CRAFTING_SKILLS) { key ->
+            item(key = "header_crafting") { SectionHeader(stringResource(R.string.label_crafting_skills)) }
+            items(Skills.CRAFTING_SKILLS, key = { "worker_craft_$it" }) { key ->
                 SkillRow(
                     skillKey = key,
                     level    = state.skillLevels[key] ?: 1,
@@ -224,8 +228,8 @@ fun WorkerSkillsScreen(
             }
 
             // Support skills
-            item { SectionHeader(stringResource(R.string.label_support_skills)) }
-            item {
+            item(key = "header_support") { SectionHeader(stringResource(R.string.label_support_skills)) }
+            item(key = "worker_support_${Skills.AGILITY}") {
                 SkillRow(
                     skillKey = Skills.AGILITY,
                     level    = state.skillLevels[Skills.AGILITY] ?: 1,
@@ -236,8 +240,8 @@ fun WorkerSkillsScreen(
             }
 
             // Prayer
-            item { SectionHeader(stringResource(R.string.label_prayer)) }
-            item {
+            item(key = "header_prayer") { SectionHeader(stringResource(R.string.label_prayer)) }
+            item(key = "worker_prayer_${Skills.PRAYER}") {
                 SkillRow(
                     skillKey = Skills.PRAYER,
                     level    = state.skillLevels[Skills.PRAYER] ?: 1,
@@ -253,10 +257,22 @@ fun WorkerSkillsScreen(
     state.sheetSkill?.let { sheet ->
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ModalBottomSheet(
-            onDismissRequest = viewModel::dismissSheet,
+            onDismissRequest = {
+                // System back / scrim tap fire while the sheet is still visible; step back to
+                // the recipe list instead of closing the whole sheet (issue #1330). A swipe-down
+                // has already settled hidden and closes as before.
+                if (sheetState.isVisible && state.selectedRecipe != null) {
+                    viewModel.dismissRecipe()
+                } else {
+                    viewModel.dismissSheet()
+                }
+            },
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
         ) {
+            // Dialog-based sheets (material3 1.3+) deliver back presses to in-content handlers;
+            // the onDismissRequest interception above covers the older popup-based sheet.
+            BackHandler(enabled = state.selectedRecipe != null) { viewModel.dismissRecipe() }
             ScaledSheetContent {
             // For workers: always pass hasActiveSession=true so button says "Add to Queue",
             // and isQueueFull=state.workerQueueFull.
@@ -270,6 +286,7 @@ fun WorkerSkillsScreen(
                     sessionDurationMs = state.gatheringDurationMs,
                     currentXp         = state.skillXp[Skills.MINING] ?: 0L,
                     efficiency        = state.miningEfficiency,
+                    inventory         = state.inventory,
                     onSelect          = { viewModel.startMiningSession(it) },
                 )
                 is SheetState.Woodcutting -> WoodcuttingSheet(
@@ -280,6 +297,7 @@ fun WorkerSkillsScreen(
                     sessionDurationMs = state.gatheringDurationMs,
                     currentXp         = state.skillXp[Skills.WOODCUTTING] ?: 0L,
                     efficiency        = state.woodcuttingEfficiency,
+                    inventory         = state.inventory,
                     onSelect          = { viewModel.startWoodcuttingSession(it) },
                 )
                 is SheetState.Fishing -> FishingSheet(
@@ -290,6 +308,7 @@ fun WorkerSkillsScreen(
                     sessionDurationMs = state.gatheringDurationMs,
                     currentXp         = state.skillXp[Skills.FISHING] ?: 0L,
                     efficiency        = state.fishingEfficiency,
+                    inventory         = state.inventory,
                     onSelect          = { viewModel.startFishingSession(it) },
                 )
                 is SheetState.Agility -> AgilitySheet(
@@ -495,18 +514,22 @@ private fun WorkerCraftSkillSheet(
             else list
         }
 
+    val recipeListState = rememberLazyListState()
+    LaunchedEffect(selectedCategory, selectedTier, onlyCraftable) {
+        recipeListState.scrollToItem(0)
+    }
+
     val selected = state.selectedRecipe
 
     if (selected != null) {
         WorkerCraftQuantityContent(
-            recipe        = selected,
-            state         = state,
-            isQueueFull   = isQueueFull,
-            context       = context,
-            onSetQuantity = { viewModel.setQuantity(it, minOf(state.maxCraftable(selected), state.maxCraftQty)) },
-            onSetAsh      = if (selected.skillName == Skills.HERBLORE) viewModel::setHerbloreAsh else null,
-            onCraft       = viewModel::craft,
-            onBack        = viewModel::dismissRecipe,
+            recipe      = selected,
+            state       = state,
+            isQueueFull = isQueueFull,
+            context     = context,
+            onSetAsh    = if (selected.skillName == Skills.HERBLORE) viewModel::setHerbloreAsh else null,
+            onCraft     = viewModel::craft,
+            onBack      = viewModel::dismissRecipe,
         )
     } else {
         Column(
@@ -566,7 +589,7 @@ private fun WorkerCraftSkillSheet(
                                 selectedCategory = newCat
                                 if (selectedTier != null && selectedTier !in newTiers) selectedTier = null
                             },
-                            label    = { Text(cat) },
+                            label    = { Text(GameStrings.craftingCategory(context, cat)) },
                         )
                     }
                 }
@@ -588,13 +611,13 @@ private fun WorkerCraftSkillSheet(
                         FilterChip(
                             selected = selectedTier == tier,
                             onClick  = { selectedTier = if (selectedTier == tier) null else tier },
-                            label    = { Text(tier) },
+                            label    = { Text(GameStrings.craftingTier(context, tier)) },
                         )
                     }
                 }
             }
-            LazyColumn(Modifier.fillMaxWidth()) {
-                items(recipes) { recipe ->
+            LazyColumn(state = recipeListState, modifier = Modifier.fillMaxWidth()) {
+                items(recipes, key = { it.key }) { recipe ->
                     WorkerCraftRecipeRow(
                         recipe  = recipe,
                         state   = state,
@@ -602,7 +625,7 @@ private fun WorkerCraftSkillSheet(
                         onTap   = { viewModel.openRecipe(recipe) },
                     )
                 }
-                item { Spacer(Modifier.height(8.dp)) }
+                item(key = "bottom_spacer") { Spacer(Modifier.height(8.dp)) }
             }
         }
     }
@@ -652,16 +675,19 @@ private fun WorkerCraftRecipeRow(
                 style = MaterialTheme.typography.bodySmall,
                 color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else dim,
             )
-            val ownedQty = state.inventory[recipe.outputKey] ?: 0
+            // Ash-catalyst brews produce enhanced_* variants; count them too, same as
+            // quest/guild/event tallies (issue #1201).
+            val ownedQty = (state.inventory[recipe.outputKey] ?: 0) +
+                (state.inventory["enhanced_${recipe.outputKey}"] ?: 0)
             Text(
                 text  = stringResource(R.string.crafting_owned, ownedQty),
                 style = MaterialTheme.typography.labelSmall,
-                color = if (ownedQty > 0) GoldPrimary else dim,
+                color = if (ownedQty > 0) MaterialTheme.colorScheme.primary else dim,
             )
             recipe.outputCombatStyle?.let { style ->
 
                 Text(
-                    text  = "${context.getString(R.string.label_combat_style)}: ${style.replaceFirstChar { it.uppercase() }}",
+                    text  = "${context.getString(R.string.label_combat_style)}: ${GameStrings.skillName(context, style)}",
                     style = MaterialTheme.typography.labelSmall,
                     color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else dim,
                 )
@@ -712,7 +738,7 @@ private fun WorkerCraftRecipeRow(
                     Text(
                         text       = "×$canMake",
                         style      = MaterialTheme.typography.labelMedium,
-                        color      = GoldPrimary,
+                        color      = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
@@ -738,15 +764,21 @@ private fun WorkerCraftQuantityContent(
     state: WorkerSkillsUiState,
     isQueueFull: Boolean,
     context: android.content.Context,
-    onSetQuantity: (Int) -> Unit,
     onSetAsh: ((String?) -> Unit)?,
-    onCraft: () -> Unit,
+    onCraft: (Int) -> Unit,
     onBack: () -> Unit,
 ) {
-    val qty      = state.craftQuantity
+    // Quantity is sheet-local state: pushing it through the ViewModel re-ran the
+    // full player-state combine (JSON decodes) on every keystroke (issue #1310).
     val max      = minOf(state.maxCraftable(recipe), state.maxCraftQty)
+    var quantity by remember(recipe) { mutableIntStateOf(max.coerceAtLeast(1)) }
+    val qty      = quantity.coerceIn(1, max.coerceAtLeast(1))
     val totalXp  = recipe.xpPerItem * qty
-    var textValue by remember(qty) { mutableStateOf(qty.toString()) }
+    var textValue by remember(recipe) { mutableStateOf(qty.toString()) }
+    fun setQuantity(value: Int) {
+        quantity  = value.coerceIn(1, max.coerceAtLeast(1))
+        textValue = quantity.toString()
+    }
 
     Column(
         modifier = Modifier
@@ -797,21 +829,15 @@ private fun WorkerCraftQuantityContent(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment     = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = { onSetQuantity(qty - 1) }, enabled = qty > 1) {
+            IconButton(onClick = { setQuantity(qty - 1) }, enabled = qty > 1) {
                 Icon(Icons.Filled.Remove, contentDescription = "Decrease")
             }
             OutlinedTextField(
                 value         = textValue,
                 onValueChange = { new ->
                     val filtered = new.filter { it.isDigit() }
-                    val parsed   = filtered.toIntOrNull()
-                    if (parsed != null) {
-                        val clamped = parsed.coerceIn(1, max.coerceAtLeast(1))
-                        textValue = clamped.toString()
-                        onSetQuantity(clamped)
-                    } else {
-                        textValue = filtered
-                    }
+                    textValue = filtered
+                    filtered.toIntOrNull()?.let { quantity = it.coerceIn(1, max.coerceAtLeast(1)) }
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -820,8 +846,7 @@ private fun WorkerCraftQuantityContent(
                 keyboardActions = KeyboardActions(
                     onDone = {
                         val parsed = textValue.toIntOrNull()?.coerceIn(1, max.coerceAtLeast(1)) ?: 1
-                        onSetQuantity(parsed)
-                        textValue = parsed.toString()
+                        setQuantity(parsed)
                     },
                 ),
                 textStyle = MaterialTheme.typography.headlineSmall.copy(
@@ -831,22 +856,22 @@ private fun WorkerCraftQuantityContent(
                 singleLine = true,
                 modifier   = Modifier.width(90.dp),
             )
-            IconButton(onClick = { onSetQuantity(qty + 1) }, enabled = qty < max) {
+            IconButton(onClick = { setQuantity(qty + 1) }, enabled = qty < max) {
                 Icon(Icons.Filled.Add, contentDescription = "Increase")
             }
         }
         Spacer(Modifier.height(8.dp))
-        QtyQuickButtons(qty, max) { onSetQuantity(it) }
+        QtyQuickButtons(qty, max) { setQuantity(it) }
         Spacer(Modifier.height(8.dp))
         Text(
             text     = projectedXpLabel(state.skillXp[recipe.skillName] ?: 0L, totalXp.toLong()),
             style    = MaterialTheme.typography.bodySmall,
-            color    = GoldPrimary,
+            color    = MaterialTheme.colorScheme.primary,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         if (state.sessionDurationMs > 0) {
             Text(
-                text     = "~${(qty.toLong() * (state.sessionDurationMs / 60)).formatDurationMs()}",
+                text     = "~${(qty.toLong() * (state.sessionDurationMs / 60)).formatDurationMs(context)}",
                 style    = MaterialTheme.typography.bodySmall,
                 color    = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -869,7 +894,7 @@ private fun WorkerCraftQuantityContent(
                         Text(
                             text       = if (ashKey == null) stringResource(R.string.catalyst_none) else GameStrings.itemName(context, ashKey),
                             style      = MaterialTheme.typography.bodyMedium,
-                            color      = if (selectedAsh == ashKey) GoldPrimary else MaterialTheme.colorScheme.onSurface,
+                            color      = if (selectedAsh == ashKey) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             fontWeight = if (selectedAsh == ashKey) FontWeight.SemiBold else FontWeight.Normal,
                         )
                         if (ashKey != null) {
@@ -882,13 +907,13 @@ private fun WorkerCraftQuantityContent(
                     }
                 }
                 if (state.herbloreAshKey != null) {
-                    Text(stringResource(R.string.catalyst_enhanced_output), style = MaterialTheme.typography.labelSmall, color = GoldPrimary)
+                    Text(stringResource(R.string.catalyst_enhanced_output), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                 }
             }
         }
         Spacer(Modifier.height(20.dp))
         Button(
-            onClick  = onCraft,
+            onClick  = { onCraft(qty) },
             enabled  = !isQueueFull && max > 0,
             modifier = Modifier.fillMaxWidth(),
         ) {

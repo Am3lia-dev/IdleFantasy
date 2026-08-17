@@ -41,15 +41,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.GuildHallViewModel
 import com.fantasyidler.ui.viewmodel.GuildSummary
+import com.fantasyidler.util.GameStrings
 
 private data class GuildGroup(val headerRes: Int, val keys: List<String>)
 
@@ -60,40 +61,17 @@ private val GUILD_GROUPS = listOf(
     ),
     GuildGroup(
         headerRes = R.string.label_crafting_skills,
-        keys = listOf("smithing", "cooking", "fletching", "crafting", "runecrafting", "herblore", "firemaking"),
+        keys = listOf("smithing", "cooking", "fletching", "crafting", "runecrafting", "herblore", "firemaking", "construction"),
     ),
     GuildGroup(
         headerRes = R.string.label_combat,
-        keys = listOf("warriors", "archers", "mages"),
+        keys = listOf("warriors", "archers", "mages", "slayer"),
     ),
     GuildGroup(
         headerRes = R.string.label_support_skills,
         keys = listOf("prayer", "mercantile", "agility"),
     ),
 )
-
-@Composable
-fun guildDisplayName(guildKey: String): String = when (guildKey) {
-    "mining"      -> stringResource(R.string.guild_name_mining)
-    "fishing"     -> stringResource(R.string.guild_name_fishing)
-    "woodcutting" -> stringResource(R.string.guild_name_woodcutting)
-    "farming"     -> stringResource(R.string.guild_name_farming)
-    "firemaking"  -> stringResource(R.string.guild_name_firemaking)
-    "agility"     -> stringResource(R.string.guild_name_agility)
-    "smithing"    -> stringResource(R.string.guild_name_smithing)
-    "cooking"     -> stringResource(R.string.guild_name_cooking)
-    "fletching"   -> stringResource(R.string.guild_name_fletching)
-    "crafting"    -> stringResource(R.string.guild_name_crafting)
-    "runecrafting"-> stringResource(R.string.guild_name_runecrafting)
-    "herblore"    -> stringResource(R.string.guild_name_herblore)
-    "warriors"    -> stringResource(R.string.guild_name_warriors)
-    "archers"     -> stringResource(R.string.guild_name_archers)
-    "mages"       -> stringResource(R.string.guild_name_mages)
-    "prayer"      -> stringResource(R.string.guild_name_prayer)
-    "mercantile"  -> stringResource(R.string.guild_name_mercantile)
-    "thieving"    -> stringResource(R.string.guild_name_thieving)
-    else          -> guildKey
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -176,6 +154,7 @@ private fun GuildCard(
     summary: GuildSummary,
     onClick: () -> Unit,
 ) {
+    val context = LocalContext.current
     val claimable = summary.claimableQuestCount + summary.claimableDailyCount
 
     Column(
@@ -194,7 +173,7 @@ private fun GuildCard(
                     horizontalArrangement  = Arrangement.spacedBy(8.dp),
                 ) {
                     Text(
-                        text       = guildDisplayName(summary.guildKey),
+                        text       = GameStrings.guildName(context, summary.guildKey),
                         style      = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -210,15 +189,17 @@ private fun GuildCard(
                     Text(
                         text  = stringResource(R.string.guild_dailies_available),
                         style = MaterialTheme.typography.labelSmall,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
                 if (summary.level < 10) {
                     Spacer(Modifier.height(6.dp))
                     LinearProgressIndicator(
+                        gapSize = 0.dp,
+                        drawStopIndicator = {},
                         progress = { (summary.dailiesCompletedThisTier.toFloat() / summary.dailiesRequiredThisTier.toFloat()).coerceIn(0f, 1f) },
                         modifier = Modifier.fillMaxWidth(),
-                        color    = GoldPrimary,
+                        color    = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(

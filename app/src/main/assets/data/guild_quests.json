@@ -198,8 +198,7 @@
       "items": {
         "runite_bar": 40,
         "raw_sea_turtle": 20,
-        "diamond": 3,
-        "mining_guild_cape": 1
+        "diamond": 3
       },
       "reputation": 100000
     }
@@ -402,8 +401,7 @@
       "items": {
         "runite_ore": 60,
         "diamond": 4,
-        "redwood_log": 25,
-        "fishing_guild_cape": 1
+        "redwood_log": 25
       },
       "reputation": 100000
     }
@@ -604,8 +602,7 @@
       "items": {
         "runite_ore": 50,
         "diamond": 4,
-        "raw_sea_turtle": 30,
-        "woodcutting_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -809,8 +806,7 @@
       "items": {
         "runite_ore": 50,
         "redwood_log": 25,
-        "diamond": 4,
-        "farming_guild_cape": 1
+        "diamond": 4
       },
       "reputation": 100000
     }
@@ -1011,8 +1007,7 @@
       "items": {
         "redwood_log": 150,
         "diamond": 5,
-        "runite_ore": 40,
-        "firemaking_guild_cape": 1
+        "runite_ore": 40
       },
       "reputation": 100000
     }
@@ -1024,8 +1019,8 @@
     "name": "First Laps",
     "type": "sessions",
     "target": "beginner_course",
-    "amount": 3,
-    "description": "Complete 3 Beginner Course sessions for the Agility Guild.",
+    "amount": 1,
+    "description": "Complete 1 Beginner Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 1000,
       "xp": 3000,
@@ -1044,8 +1039,8 @@
     "name": "Dedicated Runner",
     "type": "sessions",
     "target": "novice_course",
-    "amount": 6,
-    "description": "Complete 6 Novice Course sessions for the Agility Guild.",
+    "amount": 4,
+    "description": "Complete 4 Novice Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 2500,
       "xp": 6000,
@@ -1063,9 +1058,9 @@
     "guild_level_required": 2,
     "name": "Endurance Run",
     "type": "sessions",
-    "target": "apprentice_course",
-    "amount": 12,
-    "description": "Complete 12 Apprentice Course sessions for the Agility Guild.",
+    "target": "intermediate_course",
+    "amount": 8,
+    "description": "Complete 8 Intermediate Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 5000,
       "xp": 12000,
@@ -1084,9 +1079,9 @@
     "guild_level_required": 3,
     "name": "Obstacle Expert",
     "type": "sessions",
-    "target": "intermediate_course",
-    "amount": 20,
-    "description": "Complete 20 Intermediate Course sessions for the Agility Guild.",
+    "target": "expert_course",
+    "amount": 12,
+    "description": "Complete 12 Expert Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 8000,
       "xp": 20000,
@@ -1104,9 +1099,9 @@
     "guild_level_required": 4,
     "name": "Swift Feet",
     "type": "sessions",
-    "target": "advanced_course",
-    "amount": 35,
-    "description": "Complete 35 Advanced Course sessions for the Agility Guild.",
+    "target": "master_course",
+    "amount": 18,
+    "description": "Complete 18 Master Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 15000,
       "xp": 35000,
@@ -1124,9 +1119,9 @@
     "guild_level_required": 5,
     "name": "Course Master",
     "type": "sessions",
-    "target": "expert_course",
-    "amount": 55,
-    "description": "Complete 55 Expert Course sessions for the Agility Guild.",
+    "target": "champion_course",
+    "amount": 25,
+    "description": "Complete 25 Champion Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 25000,
       "xp": 55000,
@@ -1145,9 +1140,9 @@
     "guild_level_required": 6,
     "name": "Elite Runner",
     "type": "sessions",
-    "target": "elite_course",
-    "amount": 80,
-    "description": "Complete 80 Elite Course sessions for the Agility Guild.",
+    "target": "legendary_course",
+    "amount": 34,
+    "description": "Complete 34 Legendary Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 40000,
       "xp": 90000,
@@ -1166,9 +1161,9 @@
     "guild_level_required": 7,
     "name": "Relentless",
     "type": "sessions",
-    "target": "master_course",
-    "amount": 120,
-    "description": "Complete 120 Master Course sessions for the Agility Guild.",
+    "target": "mythic_course",
+    "amount": 45,
+    "description": "Complete 45 Mythic Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 60000,
       "xp": 140000,
@@ -1186,9 +1181,9 @@
     "guild_level_required": 8,
     "name": "Indomitable",
     "type": "sessions",
-    "target": "veteran_course",
-    "amount": 170,
-    "description": "Complete 170 Veteran Course sessions for the Agility Guild.",
+    "target": "divine_course",
+    "amount": 60,
+    "description": "Complete 60 Divine Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 80000,
       "xp": 200000,
@@ -1207,9 +1202,9 @@
     "guild_level_required": 9,
     "name": "Master of Movement",
     "type": "sessions",
-    "target": "champion_course",
-    "amount": 250,
-    "description": "Prove your mastery \u2014 complete 250 Champion Course sessions for the Agility Guild.",
+    "target": "transcendent_course",
+    "amount": 75,
+    "description": "Prove your mastery \u2014 complete 75 Transcendent Course sessions for the Agility Guild.",
     "rewards": {
       "coins": 100000,
       "xp": 350000,
@@ -1217,8 +1212,7 @@
       "items": {
         "diamond": 5,
         "runite_ore": 50,
-        "raw_sea_turtle": 30,
-        "agility_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -1421,8 +1415,7 @@
       "items": {
         "runite_ore": 250,
         "diamond": 5,
-        "raw_manta_ray": 30,
-        "smithing_guild_cape": 1
+        "raw_manta_ray": 30
       },
       "reputation": 100000
     }
@@ -1623,8 +1616,7 @@
       "items": {
         "raw_sea_turtle": 250,
         "diamond": 5,
-        "runite_ore": 40,
-        "cooking_guild_cape": 1
+        "runite_ore": 40
       },
       "reputation": 100000
     }
@@ -1825,8 +1817,7 @@
       "items": {
         "runite_ore": 50,
         "magic_log": 80,
-        "diamond": 4,
-        "fletching_guild_cape": 1
+        "diamond": 4
       },
       "reputation": 100000
     }
@@ -2032,8 +2023,7 @@
       "items": {
         "diamond": 150,
         "runite_ore": 40,
-        "raw_sea_turtle": 30,
-        "crafting_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -2235,8 +2225,7 @@
       "items": {
         "rune_essence": 5000,
         "diamond": 5,
-        "runite_ore": 40,
-        "runecrafting_guild_cape": 1
+        "runite_ore": 40
       },
       "reputation": 100000
     }
@@ -2440,8 +2429,7 @@
       "items": {
         "diamond": 5,
         "runite_ore": 50,
-        "raw_sea_turtle": 30,
-        "herblore_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -2651,8 +2639,7 @@
       "items": {
         "runite_ore": 80,
         "diamond": 5,
-        "raw_sea_turtle": 30,
-        "warriors_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -2862,8 +2849,7 @@
       "items": {
         "magic_log": 60,
         "diamond": 5,
-        "raw_sea_turtle": 30,
-        "archers_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -3073,8 +3059,7 @@
       "items": {
         "blood_rune": 2000,
         "diamond": 5,
-        "raw_sea_turtle": 30,
-        "mages_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -3284,8 +3269,7 @@
       "items": {
         "diamond": 5,
         "runite_ore": 60,
-        "raw_sea_turtle": 30,
-        "prayer_guild_cape": 1
+        "raw_sea_turtle": 30
       },
       "reputation": 100000
     }
@@ -3314,8 +3298,8 @@
     "name": "Budding Merchant",
     "type": "trade",
     "target": "river_trading_post",
-    "amount": 5,
-    "description": "Complete 5 River Trading Post trades for the Merchants Guild.",
+    "amount": 4,
+    "description": "Complete 4 River Trading Post trades for the Merchants Guild.",
     "rewards": {
       "coins": 10000,
       "xp": 15000,
@@ -3331,8 +3315,8 @@
     "name": "River Trader",
     "type": "trade",
     "target": "river_trading_post",
-    "amount": 10,
-    "description": "Complete 10 River Trading Post trades for the Merchants Guild.",
+    "amount": 8,
+    "description": "Complete 8 River Trading Post trades for the Merchants Guild.",
     "rewards": {
       "coins": 25000,
       "xp": 40000,
@@ -3348,8 +3332,8 @@
     "name": "Caravan Master",
     "type": "trade",
     "target": "eastern_caravan",
-    "amount": 20,
-    "description": "Complete 20 Eastern Caravan trades for the Merchants Guild.",
+    "amount": 12,
+    "description": "Complete 12 Eastern Caravan trades for the Merchants Guild.",
     "rewards": {
       "coins": 60000,
       "xp": 90000,
@@ -3365,8 +3349,8 @@
     "name": "Port Authority",
     "type": "trade",
     "target": "eastern_caravan",
-    "amount": 40,
-    "description": "Complete 40 Eastern Caravan trades for the Merchants Guild.",
+    "amount": 18,
+    "description": "Complete 18 Eastern Caravan trades for the Merchants Guild.",
     "rewards": {
       "coins": 150000,
       "xp": 200000,
@@ -3382,8 +3366,8 @@
     "name": "Merchant Prince",
     "type": "trade",
     "target": "northern_ports",
-    "amount": 75,
-    "description": "Complete 75 Northern Ports trades for the Merchants Guild.",
+    "amount": 25,
+    "description": "Complete 25 Northern Ports trades for the Merchants Guild.",
     "rewards": {
       "coins": 400000,
       "xp": 500000,
@@ -3399,8 +3383,8 @@
     "name": "Trade Baron",
     "type": "trade",
     "target": "northern_ports",
-    "amount": 120,
-    "description": "Complete 120 Northern Ports trades for the Merchants Guild.",
+    "amount": 34,
+    "description": "Complete 34 Northern Ports trades for the Merchants Guild.",
     "rewards": {
       "coins": 800000,
       "xp": 1000000,
@@ -3416,8 +3400,8 @@
     "name": "Grand Merchant",
     "type": "trade",
     "target": "merchants_quarter",
-    "amount": 200,
-    "description": "Complete 200 Merchant's Quarter trades for the Merchants Guild.",
+    "amount": 45,
+    "description": "Complete 45 Merchant's Quarter trades for the Merchants Guild.",
     "rewards": {
       "coins": 2000000,
       "xp": 2500000,
@@ -3433,8 +3417,8 @@
     "name": "Legendary Trader",
     "type": "trade",
     "target": "merchants_quarter",
-    "amount": 350,
-    "description": "Complete 350 Merchant's Quarter trades for the Merchants Guild.",
+    "amount": 60,
+    "description": "Complete 60 Merchant's Quarter trades for the Merchants Guild.",
     "rewards": {
       "coins": 5000000,
       "xp": 6000000,
@@ -3450,15 +3434,13 @@
     "name": "Exchange Master",
     "type": "trade",
     "target": "grand_exchange",
-    "amount": 500,
-    "description": "Prove your mastery \u2014 complete 500 Grand Exchange trades for the Merchants Guild.",
+    "amount": 75,
+    "description": "Prove your mastery \u2014 complete 75 Grand Exchange trades for the Merchants Guild.",
     "rewards": {
       "coins": 10000000,
       "xp": 12000000,
       "xp_skill": "mercantile",
-      "items": {
-        "mercantile_guild_cape": 1
-      },
+      "items": {},
       "reputation": 100000
     }
   },
@@ -3657,10 +3639,380 @@
       "xp_skill": "thieving",
       "items": {
         "diamond": 10,
-        "blood_rune": 100,
-        "thieving_guild_cape": 1
+        "blood_rune": 100
       },
       "reputation": 100000
+    }
+  },
+  "construction_guild_1": {
+    "id": "construction_guild_1",
+    "guild": "construction",
+    "guild_level_required": 0,
+    "name": "Rack and Ruin",
+    "type": "craft",
+    "target": "wooden_rack",
+    "amount": 90,
+    "description": "Build 90 wooden racks for the Builders Guild.",
+    "rewards": {
+      "coins": 1000,
+      "xp": 6000,
+      "xp_skill": "construction",
+      "items": {
+        "plank": 120,
+        "iron_nail": 200
+      }
+    }
+  },
+  "construction_guild_2": {
+    "id": "construction_guild_2",
+    "guild": "construction",
+    "guild_level_required": 1,
+    "name": "Shelf Life",
+    "type": "craft",
+    "target": "wooden_shelf",
+    "amount": 120,
+    "description": "Build 120 wooden shelves for the Builders Guild.",
+    "rewards": {
+      "coins": 2500,
+      "xp": 12000,
+      "xp_skill": "construction",
+      "items": {
+        "plank": 150,
+        "iron_nail": 250
+      }
+    }
+  },
+  "construction_guild_3": {
+    "id": "construction_guild_3",
+    "guild": "construction",
+    "guild_level_required": 2,
+    "name": "Set in Stone",
+    "type": "craft",
+    "target": "carved_stone",
+    "amount": 180,
+    "description": "Build 180 carved stones for the Builders Guild.",
+    "rewards": {
+      "coins": 5000,
+      "xp": 24000,
+      "xp_skill": "construction",
+      "items": {
+        "stone": 200,
+        "iron_nail": 300
+      }
+    }
+  },
+  "construction_guild_4": {
+    "id": "construction_guild_4",
+    "guild": "construction",
+    "guild_level_required": 3,
+    "name": "Table Service",
+    "type": "craft",
+    "target": "oak_table",
+    "amount": 150,
+    "description": "Build 150 oak tables for the Builders Guild.",
+    "rewards": {
+      "coins": 8000,
+      "xp": 40000,
+      "xp_skill": "construction",
+      "items": {
+        "oak_plank": 150,
+        "steel_nail": 200
+      }
+    }
+  },
+  "construction_guild_5": {
+    "id": "construction_guild_5",
+    "guild": "construction",
+    "guild_level_required": 4,
+    "name": "Well Read",
+    "type": "craft",
+    "target": "oak_bookshelf",
+    "amount": 180,
+    "description": "Build 180 oak bookshelves for the Builders Guild.",
+    "rewards": {
+      "coins": 15000,
+      "xp": 70000,
+      "xp_skill": "construction",
+      "items": {
+        "oak_plank": 200,
+        "steel_nail": 250
+      }
+    }
+  },
+  "construction_guild_6": {
+    "id": "construction_guild_6",
+    "guild": "construction",
+    "guild_level_required": 5,
+    "name": "Block by Block",
+    "type": "craft",
+    "target": "stone_block",
+    "amount": 240,
+    "description": "Build 240 stone blocks for the Builders Guild.",
+    "rewards": {
+      "coins": 25000,
+      "xp": 110000,
+      "xp_skill": "construction",
+      "items": {
+        "stone": 300,
+        "steel_nail": 300
+      }
+    }
+  },
+  "construction_guild_7": {
+    "id": "construction_guild_7",
+    "guild": "construction",
+    "guild_level_required": 6,
+    "name": "Cabinet Meeting",
+    "type": "craft",
+    "target": "willow_cabinet",
+    "amount": 240,
+    "description": "Build 240 willow cabinets for the Builders Guild.",
+    "rewards": {
+      "coins": 40000,
+      "xp": 180000,
+      "xp_skill": "construction",
+      "items": {
+        "willow_plank": 250,
+        "steel_nail": 300
+      }
+    }
+  },
+  "construction_guild_8": {
+    "id": "construction_guild_8",
+    "guild": "construction",
+    "guild_level_required": 7,
+    "name": "Dressed to Impress",
+    "type": "craft",
+    "target": "maple_dresser",
+    "amount": 240,
+    "description": "Build 240 maple dressers for the Builders Guild.",
+    "rewards": {
+      "coins": 60000,
+      "xp": 280000,
+      "xp_skill": "construction",
+      "items": {
+        "maple_plank": 250,
+        "mithril_nail": 250
+      }
+    }
+  },
+  "construction_guild_9": {
+    "id": "construction_guild_9",
+    "guild": "construction",
+    "guild_level_required": 8,
+    "name": "Wardrobe Change",
+    "type": "craft",
+    "target": "yew_wardrobe",
+    "amount": 270,
+    "description": "Build 270 yew wardrobes for the Builders Guild.",
+    "rewards": {
+      "coins": 80000,
+      "xp": 400000,
+      "xp_skill": "construction",
+      "items": {
+        "yew_plank": 300,
+        "mithril_nail": 300
+      }
+    }
+  },
+  "construction_guild_10": {
+    "id": "construction_guild_10",
+    "guild": "construction",
+    "guild_level_required": 9,
+    "name": "Fit for a King",
+    "type": "craft",
+    "target": "magic_throne",
+    "amount": 300,
+    "description": "Build 300 magic thrones for the Builders Guild.",
+    "rewards": {
+      "coins": 100000,
+      "xp": 700000,
+      "xp_skill": "construction",
+      "items": {
+        "magic_plank": 300,
+        "mithril_nail": 400,
+        "diamond": 4
+      }
+    }
+  },
+  "slayer_guild_1": {
+    "id": "slayer_guild_1",
+    "guild": "slayer",
+    "guild_level_required": 0,
+    "name": "First Contract",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 3,
+    "description": "Complete 3 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 1000,
+      "xp": 6000,
+      "xp_skill": "slayer",
+      "items": {
+        "bones": 50
+      }
+    }
+  },
+  "slayer_guild_2": {
+    "id": "slayer_guild_2",
+    "guild": "slayer",
+    "guild_level_required": 1,
+    "name": "Culling Contract",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 150,
+    "description": "Defeat 150 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 2500,
+      "xp": 12000,
+      "xp_skill": "slayer",
+      "items": {
+        "bones": 80
+      }
+    }
+  },
+  "slayer_guild_3": {
+    "id": "slayer_guild_3",
+    "guild": "slayer",
+    "guild_level_required": 2,
+    "name": "Proven Hunter",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 8,
+    "description": "Complete 8 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 5000,
+      "xp": 25000,
+      "xp_skill": "slayer",
+      "items": {
+        "big_bones": 60
+      }
+    }
+  },
+  "slayer_guild_4": {
+    "id": "slayer_guild_4",
+    "guild": "slayer",
+    "guild_level_required": 3,
+    "name": "Bounty Board",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 375,
+    "description": "Defeat 375 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 10000,
+      "xp": 50000,
+      "xp_skill": "slayer",
+      "items": {
+        "big_bones": 100
+      }
+    }
+  },
+  "slayer_guild_5": {
+    "id": "slayer_guild_5",
+    "guild": "slayer",
+    "guild_level_required": 4,
+    "name": "Seasoned Tracker",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 15,
+    "description": "Complete 15 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 18000,
+      "xp": 90000,
+      "xp_skill": "slayer",
+      "items": {
+        "giant_bones": 60
+      }
+    }
+  },
+  "slayer_guild_6": {
+    "id": "slayer_guild_6",
+    "guild": "slayer",
+    "guild_level_required": 5,
+    "name": "Monster Purge",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 750,
+    "description": "Defeat 750 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 30000,
+      "xp": 150000,
+      "xp_skill": "slayer",
+      "items": {
+        "giant_bones": 100
+      }
+    }
+  },
+  "slayer_guild_7": {
+    "id": "slayer_guild_7",
+    "guild": "slayer",
+    "guild_level_required": 6,
+    "name": "Veteran Slayer",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 22,
+    "description": "Complete 22 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 45000,
+      "xp": 250000,
+      "xp_skill": "slayer",
+      "items": {
+        "dragon_bone": 40
+      }
+    }
+  },
+  "slayer_guild_8": {
+    "id": "slayer_guild_8",
+    "guild": "slayer",
+    "guild_level_required": 7,
+    "name": "A Thousand Fangs",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 1500,
+    "description": "Defeat 1500 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 60000,
+      "xp": 400000,
+      "xp_skill": "slayer",
+      "items": {
+        "dragon_bone": 80
+      }
+    }
+  },
+  "slayer_guild_9": {
+    "id": "slayer_guild_9",
+    "guild": "slayer",
+    "guild_level_required": 8,
+    "name": "Master of the Hunt",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 38,
+    "description": "Complete 38 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 80000,
+      "xp": 550000,
+      "xp_skill": "slayer",
+      "items": {
+        "dragon_bone": 120
+      }
+    }
+  },
+  "slayer_guild_10": {
+    "id": "slayer_guild_10",
+    "guild": "slayer",
+    "guild_level_required": 9,
+    "name": "Deathbringer",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 60,
+    "description": "Complete 60 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 100000,
+      "xp": 700000,
+      "xp_skill": "slayer",
+      "items": {
+        "dragon_bone": 200
+      }
     }
   }
 }

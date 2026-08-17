@@ -15,6 +15,7 @@ import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.QueuedSessionStarter
 import com.fantasyidler.repository.SlayerRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatXp
 import com.fantasyidler.util.withAppLocale
@@ -52,6 +53,7 @@ data class SlayerUiState(
     val unlockedDungeons: Set<String> = emptySet(),
     val inventory: Map<String, Int> = emptyMap(),
     val skillLevels: Map<String, Int> = emptyMap(),
+    val skillXp: Map<String, Long> = emptyMap(),
     val activeWeaponSlot: String? = null,
     /** Non-null when the player has tapped Buy on a lamp and needs to choose a skill. */
     val pendingLamp: PendingLamp? = null,
@@ -75,12 +77,13 @@ class SlayerViewModel @Inject constructor(
     val gameData: GameDataRepository,
     private val queuedSessionStarter: QueuedSessionStarter,
     @ApplicationContext private val context: Context,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
     /** Equipment data keyed by item key, for the shop stats display. */
     val shopEquipment: Map<String, EquipmentData> by lazy {
-        listOf("slayer_helm", "abyssal_whip", "slayer_platebody", "slayer_platelegs")
+        listOf("slayer_helm", "abyssal_whip", "slayer_platebody", "slayer_platelegs", "slayer_plateskirt")
             .mapNotNull { key -> gameData.equipment[key]?.let { key to it } }
             .toMap()
     }
@@ -131,6 +134,7 @@ class SlayerViewModel @Inject constructor(
                 unlockedDungeons      = unlockedDungeons,
                 inventory             = inventory,
                 skillLevels           = levels,
+                skillXp               = xpMap,
                 activeWeaponSlot      = flags.activeWeaponSlot,
                 slayerEquippedWeapons = equippedWeapons,
                 foretelledTasks       = flags.foretelledTasks,
@@ -246,7 +250,7 @@ class SlayerViewModel @Inject constructor(
     private fun doQueueTaskDungeon(dungeonKey: String, weaponSlot: String?) {
         viewModelScope.launch {
             val state = uiState.value
-            val dungeonName = gameData.dungeons[dungeonKey]?.displayName ?: dungeonKey
+            val dungeonName = GameStrings.dungeonName(context, dungeonKey)
             val player   = playerRepo.getOrCreatePlayer()
             val agility  = (json.decodeFromString<Map<String, Int>>(player.skillLevels))[Skills.AGILITY] ?: 1
             val flags: PlayerFlags             = json.decodeFromString(player.flags)
@@ -260,7 +264,7 @@ class SlayerViewModel @Inject constructor(
                     skillName           = "combat",
                     activityKey         = dungeonKey,
                     skillDisplayName    = dungeonName,
-                    estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0),
+                    estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)),
                     equippedSnapshot    = player.equipped,
                     arrowsKey           = flags.equippedArrows,
                     spellName           = flags.activeSpell,
@@ -297,12 +301,12 @@ class SlayerViewModel @Inject constructor(
         }
     }
 
-    fun foretelTask() {
+    fun foretellTask() {
         viewModelScope.launch {
             val state = uiState.value
             when (val result = slayerRepo.foretelTask(state.slayerLevel, state.unlockedDungeons)) {
                 is ForetelResult.Success ->
-                    _extra.update { it.copy(snackbarMessage = context.getString(R.string.slayer_foretell_success, result.task.displayName)) }
+                    _extra.update { it.copy(snackbarMessage = context.getString(R.string.slayer_foretell_success, GameStrings.enemyName(context, result.task.enemyKey))) }
                 ForetelResult.QueueFull ->
                     _extra.update { it.copy(snackbarMessage = context.getString(R.string.slayer_foretell_queue_full)) }
                 ForetelResult.NoEligibleTasks ->

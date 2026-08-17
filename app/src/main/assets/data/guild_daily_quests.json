@@ -2203,9 +2203,9 @@
     "guild_level_max": 3,
     "name": "Obstacle Circuit",
     "type": "sessions",
-    "target": "apprentice_course",
+    "target": "intermediate_course",
     "amount": 3,
-    "description": "Complete 3 Apprentice Course agility sessions for the Agility Guild.",
+    "description": "Complete 3 Intermediate Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 4500,
       "xp": 12000,
@@ -2224,9 +2224,9 @@
     "guild_level_max": 3,
     "name": "Circuit Reserve",
     "type": "sessions",
-    "target": "apprentice_course",
+    "target": "intermediate_course",
     "amount": 4,
-    "description": "Complete 4 Apprentice Course agility sessions for the Agility Guild.",
+    "description": "Complete 4 Intermediate Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 5500,
       "xp": 15000,
@@ -2287,9 +2287,9 @@
     "guild_level_max": 3,
     "name": "Obstacle Circuit Reserve",
     "type": "sessions",
-    "target": "apprentice_course",
+    "target": "intermediate_course",
     "amount": 5,
-    "description": "Complete 5 Apprentice Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Intermediate Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 7500,
       "xp": 20000,
@@ -2308,9 +2308,9 @@
     "guild_level_max": 6,
     "name": "Endurance Circuit",
     "type": "sessions",
-    "target": "advanced_course",
+    "target": "master_course",
     "amount": 2,
-    "description": "Complete 2 Advanced Course agility sessions for the Agility Guild.",
+    "description": "Complete 2 Master Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 8000,
       "xp": 20000,
@@ -2329,9 +2329,9 @@
     "guild_level_max": 6,
     "name": "Elite Sprint",
     "type": "sessions",
-    "target": "expert_course",
+    "target": "champion_course",
     "amount": 3,
-    "description": "Complete 3 Expert Course agility sessions for the Agility Guild.",
+    "description": "Complete 3 Champion Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 12000,
       "xp": 30000,
@@ -2350,9 +2350,9 @@
     "guild_level_max": 6,
     "name": "Advanced Run",
     "type": "sessions",
-    "target": "elite_course",
+    "target": "legendary_course",
     "amount": 4,
-    "description": "Complete 4 Elite Course agility sessions for the Agility Guild.",
+    "description": "Complete 4 Legendary Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 15000,
       "xp": 40000,
@@ -2371,9 +2371,9 @@
     "guild_level_max": 6,
     "name": "Endurance Reserve",
     "type": "sessions",
-    "target": "advanced_course",
+    "target": "master_course",
     "amount": 3,
-    "description": "Complete 3 Advanced Course agility sessions for the Agility Guild.",
+    "description": "Complete 3 Master Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 10000,
       "xp": 25000,
@@ -2392,9 +2392,9 @@
     "guild_level_max": 6,
     "name": "Endurance Circuit Reserve",
     "type": "sessions",
-    "target": "advanced_course",
+    "target": "master_course",
     "amount": 5,
-    "description": "Complete 5 Advanced Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Master Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 20000,
       "xp": 50000,
@@ -2413,9 +2413,9 @@
     "guild_level_max": 6,
     "name": "Elite Sprint Reserve",
     "type": "sessions",
-    "target": "expert_course",
+    "target": "champion_course",
     "amount": 5,
-    "description": "Complete 5 Expert Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Champion Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 20000,
       "xp": 50000,
@@ -2434,9 +2434,9 @@
     "guild_level_max": 6,
     "name": "Advanced Run Reserve",
     "type": "sessions",
-    "target": "elite_course",
+    "target": "legendary_course",
     "amount": 5,
-    "description": "Complete 5 Elite Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Legendary Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 19000,
       "xp": 50000,
@@ -2455,9 +2455,9 @@
     "guild_level_max": 10,
     "name": "Master Circuit",
     "type": "sessions",
-    "target": "master_course",
+    "target": "mythic_course",
     "amount": 1,
-    "description": "Complete 3 Master Course agility sessions for the Agility Guild.",
+    "description": "Complete 1 Mythic Course agility session for the Agility Guild.",
     "rewards": {
       "coins": 20000,
       "xp": 60000,
@@ -2476,9 +2476,9 @@
     "guild_level_max": 10,
     "name": "Champion Run",
     "type": "sessions",
-    "target": "veteran_course",
+    "target": "divine_course",
     "amount": 1,
-    "description": "Complete 5 Veteran Course agility sessions for the Agility Guild.",
+    "description": "Complete 1 Divine Course agility session for the Agility Guild.",
     "rewards": {
       "coins": 30000,
       "xp": 90000,
@@ -2497,9 +2497,9 @@
     "guild_level_max": 10,
     "name": "Legendary Sprint",
     "type": "sessions",
-    "target": "champion_course",
+    "target": "transcendent_course",
     "amount": 1,
-    "description": "Complete 7 Champion Course agility sessions for the Agility Guild.",
+    "description": "Complete 1 Transcendent Course agility session for the Agility Guild.",
     "rewards": {
       "coins": 40000,
       "xp": 120000,
@@ -2518,9 +2518,9 @@
     "guild_level_max": 10,
     "name": "Grandmaster Circuit",
     "type": "sessions",
-    "target": "master_course",
+    "target": "mythic_course",
     "amount": 2,
-    "description": "Complete 2 Master Course agility sessions for the Agility Guild.",
+    "description": "Complete 2 Mythic Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 25000,
       "xp": 75000,
@@ -2539,9 +2539,9 @@
     "guild_level_max": 10,
     "name": "Master Circuit Reserve",
     "type": "sessions",
-    "target": "master_course",
+    "target": "mythic_course",
     "amount": 5,
-    "description": "Complete 5 Master Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Mythic Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 100000,
       "xp": 300000,
@@ -2560,9 +2560,9 @@
     "guild_level_max": 10,
     "name": "Champion Run Reserve",
     "type": "sessions",
-    "target": "veteran_course",
+    "target": "divine_course",
     "amount": 5,
-    "description": "Complete 5 Veteran Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Divine Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 150000,
       "xp": 450000,
@@ -2581,9 +2581,9 @@
     "guild_level_max": 10,
     "name": "Legendary Sprint Reserve",
     "type": "sessions",
-    "target": "champion_course",
+    "target": "transcendent_course",
     "amount": 5,
-    "description": "Complete 5 Champion Course agility sessions for the Agility Guild.",
+    "description": "Complete 5 Transcendent Course agility sessions for the Agility Guild.",
     "rewards": {
       "coins": 200000,
       "xp": 600000,
@@ -7336,7 +7336,7 @@
     "name": "Grand Trade",
     "type": "trade",
     "target": "merchants_quarter",
-    "amount": 1,
+    "amount": 3,
     "description": "Complete 3 Merchant's Quarter trade routes for the Merchants Guild.",
     "rewards": {
       "coins": 50000,
@@ -7354,7 +7354,7 @@
     "name": "Elite Routes",
     "type": "trade",
     "target": "grand_exchange",
-    "amount": 1,
+    "amount": 4,
     "description": "Complete 4 Grand Exchange trade routes for the Merchants Guild.",
     "rewards": {
       "coins": 70000,
@@ -7369,10 +7369,10 @@
     "guild": "mercantile",
     "guild_level_min": 7,
     "guild_level_max": 10,
-    "name": "Exchange Master",
+    "name": "Quarter Master",
     "type": "trade",
     "target": "merchants_quarter",
-    "amount": 1,
+    "amount": 5,
     "description": "Complete 5 Merchant's Quarter trade routes for the Merchants Guild.",
     "rewards": {
       "coins": 90000,
@@ -7390,7 +7390,7 @@
     "name": "Fortune Run",
     "type": "earn_coins",
     "target": "",
-    "amount": 75000,
+    "amount": 100000,
     "description": "Earn 100,000 coins from trade routes for the Merchants Guild.",
     "rewards": {
       "coins": 75000,
@@ -7408,7 +7408,7 @@
     "name": "Grand Profit",
     "type": "earn_coins",
     "target": "",
-    "amount": 150000,
+    "amount": 200000,
     "description": "Earn 200,000 coins from trade routes for the Merchants Guild.",
     "rewards": {
       "coins": 110000,
@@ -8187,6 +8187,646 @@
         "diamond": 12
       },
       "reputation": 86000
+    }
+  },
+  {
+    "id": "construction_daily_1a",
+    "guild": "construction",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Rack Order",
+    "type": "craft",
+    "target": "wooden_rack",
+    "amount": 20,
+    "description": "Build 20 wooden racks for the Builders Guild.",
+    "rewards": {
+      "coins": 1500,
+      "xp": 8000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_1b",
+    "guild": "construction",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Rack Overtime",
+    "type": "craft",
+    "target": "wooden_rack",
+    "amount": 35,
+    "description": "Build 35 wooden racks for the Builders Guild.",
+    "rewards": {
+      "coins": 2250,
+      "xp": 12000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_1c",
+    "guild": "construction",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Stocking Shelves",
+    "type": "craft",
+    "target": "wooden_shelf",
+    "amount": 25,
+    "description": "Build 25 wooden shelves for the Builders Guild.",
+    "rewards": {
+      "coins": 2500,
+      "xp": 12000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_1d",
+    "guild": "construction",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Stone Carving Duty",
+    "type": "craft",
+    "target": "carved_stone",
+    "amount": 40,
+    "description": "Build 40 carved stones for the Builders Guild.",
+    "rewards": {
+      "coins": 2000,
+      "xp": 10000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_1e",
+    "guild": "construction",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Quarry Backlog",
+    "type": "craft",
+    "target": "carved_stone",
+    "amount": 60,
+    "description": "Build 60 carved stones for the Builders Guild.",
+    "rewards": {
+      "coins": 3000,
+      "xp": 15000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_1f",
+    "guild": "construction",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Table for Twenty",
+    "type": "craft",
+    "target": "oak_table",
+    "amount": 20,
+    "description": "Build 20 oak tables for the Builders Guild.",
+    "rewards": {
+      "coins": 3000,
+      "xp": 15000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_2a",
+    "guild": "construction",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Dining Hall Order",
+    "type": "craft",
+    "target": "oak_table",
+    "amount": 30,
+    "description": "Build 30 oak tables for the Builders Guild.",
+    "rewards": {
+      "coins": 8000,
+      "xp": 40000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_2b",
+    "guild": "construction",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Library Commission",
+    "type": "craft",
+    "target": "oak_bookshelf",
+    "amount": 30,
+    "description": "Build 30 oak bookshelves for the Builders Guild.",
+    "rewards": {
+      "coins": 10000,
+      "xp": 50000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_2c",
+    "guild": "construction",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Grand Library",
+    "type": "craft",
+    "target": "oak_bookshelf",
+    "amount": 45,
+    "description": "Build 45 oak bookshelves for the Builders Guild.",
+    "rewards": {
+      "coins": 13000,
+      "xp": 60000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_2d",
+    "guild": "construction",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Foundation Work",
+    "type": "craft",
+    "target": "stone_block",
+    "amount": 40,
+    "description": "Build 40 stone blocks for the Builders Guild.",
+    "rewards": {
+      "coins": 9000,
+      "xp": 45000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_2e",
+    "guild": "construction",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Cabinet Commission",
+    "type": "craft",
+    "target": "willow_cabinet",
+    "amount": 30,
+    "description": "Build 30 willow cabinets for the Builders Guild.",
+    "rewards": {
+      "coins": 12000,
+      "xp": 55000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_2f",
+    "guild": "construction",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Showroom Restock",
+    "type": "craft",
+    "target": "willow_cabinet",
+    "amount": 45,
+    "description": "Build 45 willow cabinets for the Builders Guild.",
+    "rewards": {
+      "coins": 16500,
+      "xp": 80000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_3a",
+    "guild": "construction",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Dresser Order",
+    "type": "craft",
+    "target": "maple_dresser",
+    "amount": 30,
+    "description": "Build 30 maple dressers for the Builders Guild.",
+    "rewards": {
+      "coins": 12000,
+      "xp": 60000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_3b",
+    "guild": "construction",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Furniture Fair",
+    "type": "craft",
+    "target": "maple_dresser",
+    "amount": 45,
+    "description": "Build 45 maple dressers for the Builders Guild.",
+    "rewards": {
+      "coins": 16000,
+      "xp": 80000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_3c",
+    "guild": "construction",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Wardrobe Work",
+    "type": "craft",
+    "target": "yew_wardrobe",
+    "amount": 30,
+    "description": "Build 30 yew wardrobes for the Builders Guild.",
+    "rewards": {
+      "coins": 15000,
+      "xp": 75000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_3d",
+    "guild": "construction",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "City Walls",
+    "type": "craft",
+    "target": "stone_block",
+    "amount": 60,
+    "description": "Build 60 stone blocks for the Builders Guild.",
+    "rewards": {
+      "coins": 13000,
+      "xp": 65000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_3e",
+    "guild": "construction",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Manor Fittings",
+    "type": "craft",
+    "target": "willow_cabinet",
+    "amount": 60,
+    "description": "Build 60 willow cabinets for the Builders Guild.",
+    "rewards": {
+      "coins": 18000,
+      "xp": 90000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_4a",
+    "guild": "construction",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Master Wardrobes",
+    "type": "craft",
+    "target": "yew_wardrobe",
+    "amount": 45,
+    "description": "Build 45 yew wardrobes for the Builders Guild.",
+    "rewards": {
+      "coins": 20000,
+      "xp": 100000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_4b",
+    "guild": "construction",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Palace Fittings",
+    "type": "craft",
+    "target": "yew_wardrobe",
+    "amount": 60,
+    "description": "Build 60 yew wardrobes for the Builders Guild.",
+    "rewards": {
+      "coins": 28000,
+      "xp": 140000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_4c",
+    "guild": "construction",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Throne Commission",
+    "type": "craft",
+    "target": "magic_throne",
+    "amount": 25,
+    "description": "Build 25 magic thrones for the Builders Guild.",
+    "rewards": {
+      "coins": 30000,
+      "xp": 150000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_4d",
+    "guild": "construction",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Royal Order",
+    "type": "craft",
+    "target": "magic_throne",
+    "amount": 40,
+    "description": "Build 40 magic thrones for the Builders Guild.",
+    "rewards": {
+      "coins": 51500,
+      "xp": 240000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_4e",
+    "guild": "construction",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Estate Clearout",
+    "type": "craft",
+    "target": "maple_dresser",
+    "amount": 60,
+    "description": "Build 60 maple dressers for the Builders Guild.",
+    "rewards": {
+      "coins": 24000,
+      "xp": 120000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_5a",
+    "guild": "construction",
+    "guild_level_min": 10,
+    "guild_level_max": 10,
+    "name": "Redwood Contract",
+    "type": "craft",
+    "target": "redwood_bench",
+    "amount": 20,
+    "description": "Build 20 redwood benches for the Builders Guild.",
+    "rewards": {
+      "coins": 35000,
+      "xp": 180000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "construction_daily_5b",
+    "guild": "construction",
+    "guild_level_min": 10,
+    "guild_level_max": 10,
+    "name": "Library Commission",
+    "type": "craft",
+    "target": "redwood_bookcase",
+    "amount": 15,
+    "description": "Build 15 redwood bookcases for the Builders Guild.",
+    "rewards": {
+      "coins": 40000,
+      "xp": 200000,
+      "xp_skill": "construction"
+    }
+  },
+  {
+    "id": "slayer_daily_1a",
+    "guild": "slayer",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Daily Cull",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 15,
+    "description": "Defeat 15 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 1500,
+      "xp": 8000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_1b",
+    "guild": "slayer",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Task at Hand",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 1,
+    "description": "Complete 1 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 2500,
+      "xp": 12000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_1c",
+    "guild": "slayer",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Steady Hunt",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 25,
+    "description": "Defeat 25 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 2250,
+      "xp": 11000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_1d",
+    "guild": "slayer",
+    "guild_level_min": 1,
+    "guild_level_max": 3,
+    "name": "Fresh Trails",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 20,
+    "description": "Defeat 20 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 1800,
+      "xp": 9000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_2a",
+    "guild": "slayer",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Contract Work",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 1,
+    "description": "Complete 1 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 8000,
+      "xp": 40000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_2b",
+    "guild": "slayer",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Double Duty",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 2,
+    "description": "Complete 2 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 13000,
+      "xp": 60000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_2c",
+    "guild": "slayer",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Relentless Hunt",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 40,
+    "description": "Defeat 40 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 10000,
+      "xp": 50000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_2d",
+    "guild": "slayer",
+    "guild_level_min": 4,
+    "guild_level_max": 6,
+    "name": "Bounty Run",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 30,
+    "description": "Defeat 30 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 9000,
+      "xp": 45000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_3a",
+    "guild": "slayer",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Elite Contract",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 2,
+    "description": "Complete 2 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 15000,
+      "xp": 75000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_3b",
+    "guild": "slayer",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Apex Predator",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 60,
+    "description": "Defeat 60 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 16000,
+      "xp": 80000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_3c",
+    "guild": "slayer",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "The Long Hunt",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 45,
+    "description": "Defeat 45 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 13000,
+      "xp": 65000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_3d",
+    "guild": "slayer",
+    "guild_level_min": 7,
+    "guild_level_max": 8,
+    "name": "Guild Champion",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 1,
+    "description": "Complete 1 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 12000,
+      "xp": 60000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_4a",
+    "guild": "slayer",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Masters Orders",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 2,
+    "description": "Complete 2 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 24000,
+      "xp": 120000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_4b",
+    "guild": "slayer",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Extinction Event",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 80,
+    "description": "Defeat 80 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 28000,
+      "xp": 140000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_4c",
+    "guild": "slayer",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "No Rest for Slayers",
+    "type": "slayer_kill",
+    "target": "any",
+    "amount": 60,
+    "description": "Defeat 60 enemies while on a slayer task.",
+    "rewards": {
+      "coins": 22000,
+      "xp": 110000,
+      "xp_skill": "slayer"
+    }
+  },
+  {
+    "id": "slayer_daily_4d",
+    "guild": "slayer",
+    "guild_level_min": 9,
+    "guild_level_max": 10,
+    "name": "Legend of the Hunt",
+    "type": "slayer_task",
+    "target": "any",
+    "amount": 3,
+    "description": "Complete 3 slayer tasks for the Slayers Guild.",
+    "rewards": {
+      "coins": 30000,
+      "xp": 150000,
+      "xp_skill": "slayer"
     }
   }
 ]

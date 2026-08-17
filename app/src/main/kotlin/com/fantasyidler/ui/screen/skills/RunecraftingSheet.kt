@@ -46,7 +46,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -72,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
+import com.fantasyidler.ui.screen.QuestIndicatorIcons
 import com.fantasyidler.ui.viewmodel.ExpeditionsViewModel
 import com.fantasyidler.data.json.AgilityCourseData
 import com.fantasyidler.data.json.BoneData
@@ -81,7 +85,6 @@ import com.fantasyidler.data.json.OreData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.TreeData
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -114,6 +117,9 @@ import androidx.compose.ui.draw.alpha
 
 @Composable
 internal fun RunecraftingSheet(
+    guildDailyButton: (@Composable () -> Unit)? = null,
+    /** Host-owned back interceptor: set while the quantity page is open so the system back button steps back to the item list (issue #1330). */
+    backStep: MutableState<(() -> Unit)?>? = null,
     sheet: SheetState.Runecrafting,
     inventory: Map<String, Int> = emptyMap(),
     isStarting: Boolean,
@@ -128,104 +134,122 @@ internal fun RunecraftingSheet(
 ) {
     val context = LocalContext.current
     var selectedKey by remember { mutableStateOf<String?>(null) }
+    val runeScrollState = rememberScrollState()
+    if (backStep != null) {
+        DisposableEffect(selectedKey) {
+            backStep.value = if (selectedKey != null) ({ selectedKey = null }) else null
+            onDispose { backStep.value = null }
+        }
+    }
+    // Dialog-based sheets (material3 1.3+) deliver back presses to in-content handlers;
+    // the host's onDismissRequest interception covers the older popup-based sheet.
+    BackHandler(enabled = selectedKey != null) { selectedKey = null }
     val selectedRune = selectedKey?.let { sheet.availableRunes[it] }
     var selectedAshKey by remember { mutableStateOf<String?>(null) }
+    val dim = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
             .padding(bottom = 32.dp),
     ) {
         if (selectedRune == null) {
-            // ── Rune type selection ──────────────────────────────────────
-            Text(
-                text     = stringResource(R.string.skill_runecrafting_name),
-                style    = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            )
-            Text(
-                text     = stringResource(R.string.skill_runecrafting_desc),
-                style    = MaterialTheme.typography.bodySmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
-            )
-            Text(
-                text     = stringResource(R.string.skills_essence_qty, sheet.essenceQty),
-                style    = MaterialTheme.typography.bodySmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-            )
-            HorizontalDivider()
-            if (sheet.availableRunes.isEmpty()) {
-                Box(
-                    modifier         = Modifier.fillMaxWidth().padding(32.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text  = stringResource(R.string.skills_no_runes),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else if (sheet.essenceQty == 0) {
-                Box(
-                    modifier         = Modifier.fillMaxWidth().padding(32.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text  = stringResource(R.string.skills_no_essence),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else {
-                sheet.availableRunes.forEach { (key, rune) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selectedKey = key }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(runeScrollState),
+            ) {
+                // ── Rune type selection ──────────────────────────────────────
+                Text(
+                    text     = stringResource(R.string.skill_runecrafting_name),
+                    style    = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                )
+                Text(
+                    text     = stringResource(R.string.skill_runecrafting_desc),
+                    style    = MaterialTheme.typography.bodySmall,
+                    color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
+                )
+                guildDailyButton?.invoke()
+                Text(
+                    text     = stringResource(R.string.skills_essence_qty, sheet.essenceQty),
+                    style    = MaterialTheme.typography.bodySmall,
+                    color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+                HorizontalDivider()
+                if (sheet.availableRunes.isEmpty()) {
+                    Box(
+                        modifier         = Modifier.fillMaxWidth().padding(32.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Column(Modifier.weight(1f)) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge)
-                                val questIndicators = activeQuests["${Skills.RUNECRAFTING}:$key"] ?: emptyList()
-                                if (questIndicators.isNotEmpty()) {
-                                    val categories = questIndicators.groupBy { it.category }
-                                    val sortedCategories = categories.entries.sortedBy { it.key }
-                                    sortedCategories.forEach { (category, indicators) ->
-                                        val emoji = if (category == QuestCategory.DAILY) "⏰" else "📜"
-                                        val isCompletable = indicators.any { it.isCompletable }
-                                        val alpha = if (isCompletable) 1.0f else 0.38f
-                                        Text(
-                                            text     = " $emoji",
-                                            style    = MaterialTheme.typography.bodyMedium,
-                                            modifier = Modifier.alpha(alpha),
-                                        )
-                                    }
-                                }
-                            }
-                            val runeOwned = inventory[key] ?: 0
-                            Text(
-                                text  = stringResource(R.string.skills_rune_desc, rune.xpPerRune.toInt(), rune.levelRequired) + "  •  " + stringResource(R.string.crafting_owned, runeOwned),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
                         Text(
-                            text  = stringResource(R.string.btn_select),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = GoldPrimary,
+                            text  = stringResource(R.string.skills_no_runes),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                } else if (sheet.essenceQty == 0) {
+                    Box(
+                        modifier         = Modifier.fillMaxWidth().padding(32.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text  = stringResource(R.string.skills_no_essence),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                } else {
+                    sheet.availableRunes.forEach { (key, rune) ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { selectedKey = key }
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge)
+                                    val questIndicators = activeQuests["${Skills.RUNECRAFTING}:$key"] ?: emptyList()
+                                    if (questIndicators.isNotEmpty()) {
+                                        QuestIndicatorIcons(questIndicators)
+                                    }
+                                }
+                                val runeOwned = inventory[key] ?: 0
+                                Text(
+                                    text  = stringResource(R.string.skills_rune_desc, rune.xpPerRune.toInt(), rune.levelRequired),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                                Text(
+                                    text  = stringResource(R.string.crafting_owned, runeOwned),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (runeOwned > 0) MaterialTheme.colorScheme.primary else dim,
+                                )
+                            }
+                            Text(
+                                text  = stringResource(R.string.btn_select),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    }
                 }
             }
         } else {
-            // ── Quantity picker ──────────────────────────────────────────
+            val detailScrollState = rememberScrollState()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(detailScrollState)
+                    .imePadding(),
+            ) {
+                // ── Quantity picker ──────────────────────────────────────────
             val inventoryMax = sheet.essenceQty
             val maxQty = minOf(inventoryMax, tierMaxQty)
             var qty by remember(selectedKey) { androidx.compose.runtime.mutableIntStateOf(maxQty.coerceAtLeast(1)) }
@@ -243,9 +267,15 @@ internal fun RunecraftingSheet(
             )
             val ownedRune = selectedKey?.let { inventory[it] } ?: 0
             Text(
-                text     = stringResource(R.string.skills_rune_selected, selectedRune.xpPerRune.toInt(), inventoryMax) + "  •  " + stringResource(R.string.crafting_owned, ownedRune),
+                text     = stringResource(R.string.skills_rune_selected, selectedRune.xpPerRune.toInt(), inventoryMax),
                 style    = MaterialTheme.typography.bodySmall,
                 color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            )
+            Text(
+                text     = stringResource(R.string.crafting_owned, ownedRune),
+                style    = MaterialTheme.typography.labelSmall,
+                color    = if (ownedRune > 0) MaterialTheme.colorScheme.primary else dim,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
             )
             Spacer(Modifier.height(12.dp))
@@ -302,13 +332,13 @@ internal fun RunecraftingSheet(
             Text(
                 text       = projectedXpLabel(currentXp, (qty * selectedRune.xpPerRune).toLong()),
                 style      = MaterialTheme.typography.bodyMedium,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
                 modifier   = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
             if (sessionDurationMs > 0) {
                 Text(
-                    text     = "~${(qty.toLong() * (sessionDurationMs / 60)).formatDurationMs()}",
+                    text     = "~${(qty.toLong() * (sessionDurationMs / 60)).formatDurationMs(context)}",
                     style    = MaterialTheme.typography.bodySmall,
                     color    = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
@@ -346,7 +376,7 @@ internal fun RunecraftingSheet(
                         Text(
                             text  = if (ashKey == null) stringResource(R.string.catalyst_none) else GameStrings.itemName(context, ashKey),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = if (selectedAshKey == ashKey) GoldPrimary else MaterialTheme.colorScheme.onSurface,
+                            color = if (selectedAshKey == ashKey) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                             fontWeight = if (selectedAshKey == ashKey) FontWeight.SemiBold else FontWeight.Normal,
                         )
                         if (ashKey != null) Text(stringResource(R.string.catalyst_rune_bonus, totalRunes), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -366,6 +396,7 @@ internal fun RunecraftingSheet(
             }
         }
     }
+}
 }
 
 // ---------------------------------------------------------------------------

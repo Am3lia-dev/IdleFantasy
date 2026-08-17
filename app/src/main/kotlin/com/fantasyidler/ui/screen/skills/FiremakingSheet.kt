@@ -46,7 +46,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -72,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
+import com.fantasyidler.ui.screen.QuestIndicatorIcons
 import com.fantasyidler.ui.viewmodel.ExpeditionsViewModel
 import com.fantasyidler.data.json.AgilityCourseData
 import com.fantasyidler.data.json.BoneData
@@ -81,7 +85,6 @@ import com.fantasyidler.data.json.OreData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.TreeData
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -114,6 +117,9 @@ import androidx.compose.ui.draw.alpha
 
 @Composable
 internal fun FiremakingSheet(
+    guildDailyButton: (@Composable () -> Unit)? = null,
+    /** Host-owned back interceptor: set while the quantity page is open so the system back button steps back to the item list (issue #1330). */
+    backStep: MutableState<(() -> Unit)?>? = null,
     availableLogs: Map<String, LogData>,
     inventory: Map<String, Int>,
     currentXp: Long,
@@ -129,7 +135,18 @@ internal fun FiremakingSheet(
     activeQuests: Map<String, List<QuestIndicator>> = emptyMap(),
 ) {
     var selectedKey by remember { mutableStateOf<String?>(null) }
+    val logScrollState = rememberScrollState()
+    if (backStep != null) {
+        DisposableEffect(selectedKey) {
+            backStep.value = if (selectedKey != null) ({ selectedKey = null }) else null
+            onDispose { backStep.value = null }
+        }
+    }
+    // Dialog-based sheets (material3 1.3+) deliver back presses to in-content handlers;
+    // the host's onDismissRequest interception covers the older popup-based sheet.
+    BackHandler(enabled = selectedKey != null) { selectedKey = null }
     val selectedLog = selectedKey?.let { availableLogs[it] }
+    val dim = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
 
     Column(
         modifier = Modifier
@@ -148,13 +165,14 @@ internal fun FiremakingSheet(
                 color    = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
             )
+            guildDailyButton?.invoke()
             HorizontalDivider()
             if (availableLogs.isEmpty()) {
                 Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
                     Text(stringResource(R.string.skills_no_logs), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             } else {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
+                Column(Modifier.verticalScroll(logScrollState).imePadding()) {
                     availableLogs.entries.sortedBy { it.value.levelRequired }.forEach { (key, log) ->
                         val ashKey = when (key) {
                             "oak_log" -> "oak_ashes"; "willow_log" -> "willow_ashes"
@@ -163,41 +181,37 @@ internal fun FiremakingSheet(
                             else -> "ashes"
                         }
                         val ashName = GameStrings.itemName(context, ashKey)
+                        val logsOwned = inventory[key] ?: 0
+                        val rowAlpha = if (logsOwned > 0) 1f else 0.38f
                         Row(
-                            modifier          = Modifier.fillMaxWidth().clickable { selectedKey = key }.padding(horizontal = 16.dp, vertical = 12.dp),
+                            modifier          = Modifier.fillMaxWidth().clickable(enabled = logsOwned > 0) { selectedKey = key }.padding(horizontal = 16.dp, vertical = 12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Column(Modifier.weight(1f)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge)
+                                    Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface.copy(alpha = rowAlpha))
                                     val questIndicators = activeQuests["${Skills.FIREMAKING}:$ashKey"] ?: emptyList()
                                     if (questIndicators.isNotEmpty()) {
-                                        val categories = questIndicators.groupBy { it.category }
-                                        val sortedCategories = categories.entries.sortedBy { it.key }
-                                        sortedCategories.forEach { (category, indicators) ->
-                                            val emoji = if (category == QuestCategory.DAILY) "⏰" else "📜"
-                                            val isCompletable = indicators.any { it.isCompletable }
-                                            val alpha = if (isCompletable) 1.0f else 0.38f
-                                            Text(
-                                                text     = " $emoji",
-                                                style    = MaterialTheme.typography.bodyMedium,
-                                                modifier = Modifier.alpha(alpha),
-                                            )
-                                        }
+                                        QuestIndicatorIcons(questIndicators)
                                     }
                                 }
                                 val ashOwned = inventory[ashKey] ?: 0
                                 Text(
-                                    text  = stringResource(R.string.firemaking_burns_to, ashName) + "  •  ${log.xpPerLog} XP  •  " + stringResource(R.string.firemaking_ashes_owned, ashOwned),
+                                    text  = stringResource(R.string.firemaking_burns_to, ashName) + "  •  ${log.xpPerLog} XP",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = rowAlpha),
+                                )
+                                Text(
+                                    text  = stringResource(R.string.firemaking_ashes_owned, ashOwned),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (ashOwned > 0) MaterialTheme.colorScheme.primary else dim,
                                 )
                             }
                             Text(
-                                text  = "${inventory[key] ?: 0} ${stringResource(R.string.firemaking_logs_in_inventory)}",
+                                text  = "$logsOwned ${stringResource(R.string.firemaking_logs_in_inventory)}",
                                 style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = rowAlpha),
                             )
                         }
                         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -217,67 +231,81 @@ internal fun FiremakingSheet(
             var qty      by remember(key) { androidx.compose.runtime.mutableIntStateOf(maxQty.coerceAtLeast(1)) }
             var textValue by remember(key) { mutableStateOf(maxQty.coerceAtLeast(1).toString()) }
             val totalXp = selectedLog.xpPerLog * qty
+            val detailScrollState = rememberScrollState()
 
-            TextButton(onClick = { selectedKey = null }, modifier = Modifier.padding(start = 4.dp)) {
-                Text(stringResource(R.string.btn_back_arrow))
-            }
-            Text(
-                text     = GameStrings.itemName(context, key),
-                style    = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-            Text(
-                text     = "${maxQty} ${stringResource(R.string.firemaking_logs_in_inventory)}  •  " + stringResource(R.string.firemaking_ashes_owned, ashOwned),
-                style    = MaterialTheme.typography.bodySmall,
-                color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-            )
-            Spacer(Modifier.height(12.dp))
-
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-                androidx.compose.material3.IconButton(onClick = { if (qty > 1) { qty--; textValue = qty.toString() } }, enabled = qty > 1) {
-                    androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Filled.Remove, contentDescription = null)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(detailScrollState)
+                    .imePadding(),
+            ) {
+                TextButton(onClick = { selectedKey = null }, modifier = Modifier.padding(start = 4.dp)) {
+                    Text(stringResource(R.string.btn_back_arrow))
                 }
-                androidx.compose.material3.OutlinedTextField(
-                    value         = textValue,
-                    onValueChange = { new ->
-                        val f = new.filter { it.isDigit() }
-                        textValue = f
-                        f.toIntOrNull()?.coerceIn(1, maxQty.coerceAtLeast(1))?.let { qty = it }
-                    },
-                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
-                    singleLine    = true,
-                    modifier      = Modifier.width(130.dp),
-                    textStyle     = MaterialTheme.typography.bodyLarge.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Center),
-                )
-                androidx.compose.material3.IconButton(onClick = { if (qty < maxQty) { qty++; textValue = qty.toString() } }, enabled = qty < maxQty) {
-                    androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Filled.Add, contentDescription = null)
-                }
-            }
-            QtyQuickButtons(qty, maxQty) { qty = it; textValue = it.toString() }
-            QuestFillRow(questFills[key] ?: emptyList(), qty, maxQty, modifier = Modifier.padding(horizontal = 16.dp)) { qty = it; textValue = it.toString() }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text       = projectedXpLabel(currentXp, totalXp.toLong()),
-                style      = MaterialTheme.typography.bodyMedium,
-                color      = GoldPrimary,
-                fontWeight = FontWeight.SemiBold,
-                modifier   = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            )
-            val logPerMs = perLogMs[key]?.takeIf { it > 0 } ?: (sessionDurationMs / 60)
-            if (logPerMs > 0) {
                 Text(
-                    text     = "~${(qty.toLong() * logPerMs).formatDurationMs()}",
+                    text     = GameStrings.itemName(context, key),
+                    style    = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                Text(
+                    text     = "${maxQty} ${stringResource(R.string.firemaking_logs_in_inventory)}",
                     style    = MaterialTheme.typography.bodySmall,
                     color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
+                Text(
+                    text     = stringResource(R.string.firemaking_ashes_owned, ashOwned),
+                    style    = MaterialTheme.typography.labelSmall,
+                    color    = if (ashOwned > 0) MaterialTheme.colorScheme.primary else dim,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+                Spacer(Modifier.height(12.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                    androidx.compose.material3.IconButton(onClick = { if (qty > 1) { qty--; textValue = qty.toString() } }, enabled = qty > 1) {
+                        androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Filled.Remove, contentDescription = null)
+                    }
+                    androidx.compose.material3.OutlinedTextField(
+                        value         = textValue,
+                        onValueChange = { new ->
+                            val f = new.filter { it.isDigit() }
+                            textValue = f
+                            f.toIntOrNull()?.coerceIn(1, maxQty.coerceAtLeast(1))?.let { qty = it }
+                        },
+                        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number),
+                        singleLine    = true,
+                        modifier      = Modifier.width(130.dp),
+                        textStyle     = MaterialTheme.typography.bodyLarge.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Center),
+                    )
+                    androidx.compose.material3.IconButton(onClick = { if (qty < maxQty) { qty++; textValue = qty.toString() } }, enabled = qty < maxQty) {
+                        androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.Filled.Add, contentDescription = null)
+                    }
+                }
+                QtyQuickButtons(qty, maxQty) { qty = it; textValue = it.toString() }
+                QuestFillRow(questFills[key] ?: emptyList(), qty, maxQty, modifier = Modifier.padding(horizontal = 16.dp)) { qty = it; textValue = it.toString() }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text       = projectedXpLabel(currentXp, totalXp.toLong()),
+                    style      = MaterialTheme.typography.bodyMedium,
+                    color      = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier   = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                )
+                val logPerMs = perLogMs[key]?.takeIf { it > 0 } ?: (sessionDurationMs / 60)
+                if (logPerMs > 0) {
+                    Text(
+                        text     = "~${(qty.toLong() * logPerMs).formatDurationMs(context)}",
+                        style    = MaterialTheme.typography.bodySmall,
+                        color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    )
+                }
+                Button(
+                    onClick  = { onStart(key, qty); selectedKey = null },
+                    enabled  = !isStarting && maxQty > 0,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                ) { Text(stringResource(R.string.firemaking_burn)) }
             }
-            Button(
-                onClick  = { onStart(key, qty); selectedKey = null },
-                enabled  = !isStarting && maxQty > 0,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            ) { Text(stringResource(R.string.firemaking_burn)) }
         }
     }
 }

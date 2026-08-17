@@ -53,7 +53,11 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -79,8 +83,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
+import com.fantasyidler.data.json.PetData
 import com.fantasyidler.data.json.SkillingDungeonData
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.viewmodel.Achievement
 import com.fantasyidler.ui.viewmodel.AchievementsViewModel
@@ -171,10 +175,35 @@ fun ProfileScreen(
                             style      = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
+                        if (state.ironman) {
+                            Text(
+                                text       = stringResource(R.string.ironman_badge),
+                                style      = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color      = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
+                        // Race/gender are stored as canonical English values (or free text for
+                        // custom genders); map the known ones back to their localised labels.
+                        val raceLabel = when (state.characterRace.lowercase()) {
+                            "human"    -> stringResource(R.string.character_race_human)
+                            "elf"      -> stringResource(R.string.character_race_elf)
+                            "dwarf"    -> stringResource(R.string.character_race_dwarf)
+                            "orc"      -> stringResource(R.string.character_race_orc)
+                            "halfling" -> stringResource(R.string.character_race_halfling)
+                            "gnome"    -> stringResource(R.string.character_race_gnome)
+                            else       -> state.characterRace
+                        }
+                        val genderLabel = when (state.characterGender.lowercase()) {
+                            "male"   -> stringResource(R.string.character_gender_male)
+                            "female" -> stringResource(R.string.character_gender_female)
+                            "other"  -> stringResource(R.string.character_gender_other)
+                            else     -> state.characterGender
+                        }
                         val subtitle = buildString {
-                            if (state.characterRace.isNotBlank()) append(state.characterRace)
-                            if (state.characterRace.isNotBlank() && state.characterGender.isNotBlank()) append(" • ")
-                            if (state.characterGender.isNotBlank()) append(state.characterGender)
+                            if (raceLabel.isNotBlank()) append(raceLabel)
+                            if (raceLabel.isNotBlank() && genderLabel.isNotBlank()) append(" • ")
+                            if (genderLabel.isNotBlank()) append(genderLabel)
                         }
                         if (subtitle.isNotBlank()) {
                             Text(
@@ -335,7 +364,7 @@ fun ProfileScreen(
             titles           = staticTitleOptions + seasonalTitleOptions,
             equippedTitleId  = state.equippedTitle,
             onEquipTitle     = viewModel::equipTitle,
-            onSave        = { name, gender, race ->
+            onSave        = { name, gender, race, _ ->
                 viewModel.saveCharacterProfile(name, gender, race)
                 showEditSheet = false
             },
@@ -415,18 +444,23 @@ private fun TabsLayout(
     modifier: Modifier = Modifier,
     content: @Composable (Int) -> Unit,
 ) {
+    val pagerState = rememberPagerState(initialPage = selectedTab) { tabs.size }
+    val scope = rememberCoroutineScope()
+    // Keeps the hoisted selectedTab in sync with swipes, so switching to the
+    // rail layout lands on the same tab.
+    LaunchedEffect(pagerState.currentPage) { onTabSelect(pagerState.currentPage) }
     Column(modifier) {
-        ScrollableTabRow(selectedTabIndex = selectedTab, edgePadding = 0.dp) {
+        ScrollableTabRow(selectedTabIndex = pagerState.currentPage, edgePadding = 0.dp) {
             tabs.forEachIndexed { index, title ->
                 Tab(
-                    selected = selectedTab == index,
-                    onClick  = { onTabSelect(index) },
+                    selected = pagerState.currentPage == index,
+                    onClick  = { scope.launch { pagerState.animateScrollToPage(index) } },
                     text     = { Text(title) },
                 )
             }
         }
-        Box(Modifier.weight(1f).fillMaxSize()) {
-            content(selectedTab)
+        HorizontalPager(state = pagerState, modifier = Modifier.weight(1f).fillMaxSize()) { page ->
+            content(page)
         }
     }
 }
@@ -438,7 +472,7 @@ private fun TabsLayout(
 @Composable
 fun CoinsBanner(coins: Long) {
     Surface(
-        color    = GoldPrimary.copy(alpha = 0.15f),
+        color    = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
@@ -455,7 +489,7 @@ fun CoinsBanner(coins: Long) {
                 text       = coins.formatCoins(),
                 style      = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
             )
         }
     }
@@ -531,7 +565,7 @@ private fun SkillsTab(
 
 @Composable
 private fun CircularSkillProgress(level: Int, progressFraction: Float, modifier: Modifier = Modifier) {
-    val gold      = GoldPrimary
+    val gold      = MaterialTheme.colorScheme.primary
     val track     = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
     val onSurface = MaterialTheme.colorScheme.onSurface
     val textStyle = MaterialTheme.typography.labelMedium.copy(
@@ -657,7 +691,7 @@ private fun SkillUnlockSheet(
                 Text(
                     text  = stringResource(R.string.guild_level_label, level),
                     style = MaterialTheme.typography.bodySmall,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }
@@ -673,7 +707,7 @@ private fun SkillUnlockSheet(
                 Text(
                     text     = stringResource(R.string.label_lv, milestone.level),
                     style    = MaterialTheme.typography.labelMedium,
-                    color    = if (unlocked) GoldPrimary
+                    color    = if (unlocked) MaterialTheme.colorScheme.primary
                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                     modifier = Modifier.width(44.dp),
                 )
@@ -687,7 +721,7 @@ private fun SkillUnlockSheet(
                 if (unlocked) {
                     Text(
                         text  = "✓",
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.labelSmall,
                     )
                 }
@@ -711,7 +745,7 @@ private fun buildUnlockMilestones(skillKey: String, vm: InventoryViewModel, cont
         "woodcutting" ->
             vm.trees.entries
                 .sortedBy { it.value.levelRequired }
-                .map { (key, tree) -> UnlockMilestone(tree.levelRequired, GameStrings.itemName(context, key)) }
+                .map { (key, tree) -> UnlockMilestone(tree.levelRequired, GameStrings.treeName(context, key, tree.displayName)) }
 
         "farming" ->
             vm.crops.entries
@@ -1057,7 +1091,7 @@ private fun AchievementsTab(
                         text       = "$unlockedCount / $totalCount",
                         style      = MaterialTheme.typography.labelLarge,
                         fontWeight = FontWeight.Bold,
-                        color      = GoldPrimary,
+                        color      = MaterialTheme.colorScheme.primary,
                     )
                 }
             }
@@ -1118,7 +1152,7 @@ private fun AchievementRow(ach: Achievement) {
             Text(
                 text  = "✓",
                 style = MaterialTheme.typography.titleMedium,
-                color = GoldPrimary,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
             )
         }
@@ -1169,7 +1203,7 @@ private fun PetsTab(
 }
 
 @Composable
-private fun PetRow(pet: com.fantasyidler.data.json.PetData, owned: Boolean) {
+private fun PetRow(pet: PetData, owned: Boolean) {
     val alpha = if (owned) 1f else 0.38f
     val context = LocalContext.current
     Row(
@@ -1177,7 +1211,7 @@ private fun PetRow(pet: com.fantasyidler.data.json.PetData, owned: Boolean) {
             .fillMaxWidth()
             .then(if (owned) Modifier.clickable {
                 val messages = context.resources.getStringArray(R.array.profile_pet_happy_messages)
-                AppBannerCenter.enqueue(String.format(messages.random(), pet.displayName))
+                AppBannerCenter.enqueue(String.format(messages.random(), GameStrings.petName(context, pet.id)))
             } else Modifier)
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -1196,21 +1230,25 @@ private fun PetRow(pet: com.fantasyidler.data.json.PetData, owned: Boolean) {
             modifier = Modifier.weight(1f),
         ) {
             Text(
-                text       = pet.displayName,
+                text       = GameStrings.petName(context, pet.id),
                 style      = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
                 color      = MaterialTheme.colorScheme.onSurface.copy(alpha = alpha),
             )
             Text(
-                text  = pet.description,
+                text  = GameStrings.petDesc(context, pet.id),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha),
             )
         }
         Text(
-            text  = stringResource(R.string.format_xp_boost_percent, pet.boostPercent),
+            text  = stringResource(
+                if (pet.effectType == "coin_boost") R.string.format_coin_boost_percent
+                else R.string.format_xp_boost_percent,
+                pet.boostPercent,
+            ),
             style = MaterialTheme.typography.labelMedium,
-            color = (if (owned) GoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant)
+            color = (if (owned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                 .copy(alpha = alpha),
         )
     }
@@ -1252,6 +1290,7 @@ private fun NotesTab(
                     if (notesFound > 0) {
                         item(key = key) {
                             DungeonNotesCard(
+                                dungeonKey = key,
                                 dungeon = dungeon,
                                 notesFound = notesFound,
                                 combatDungeonUnlocked = unlockedDungeons.contains(dungeon.unlockDungeon),
@@ -1260,7 +1299,7 @@ private fun NotesTab(
                     } else {
                         item(key = "$key-locked") {
                             Text(
-                                text = "${dungeon.displayName}: ???",
+                                text = "${GameStrings.skillingDungeonName(LocalContext.current, key, dungeon.displayName)}: ???",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
                                 modifier = Modifier.padding(vertical = 4.dp),
@@ -1276,14 +1315,16 @@ private fun NotesTab(
 
 @Composable
 private fun DungeonNotesCard(
+    dungeonKey: String,
     dungeon: SkillingDungeonData,
     notesFound: Int,
     combatDungeonUnlocked: Boolean,
 ) {
+    val context = LocalContext.current
     androidx.compose.material3.ElevatedCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = dungeon.displayName,
+                text = GameStrings.skillingDungeonName(context, dungeonKey, dungeon.displayName),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
             )
@@ -1294,11 +1335,11 @@ private fun DungeonNotesCard(
                     Text(
                         text = "${index + 1}.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.width(20.dp),
                     )
                     Text(
-                        text = text,
+                        text = GameStrings.skillingDungeonNote(context, dungeonKey, index, text),
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
                         ),

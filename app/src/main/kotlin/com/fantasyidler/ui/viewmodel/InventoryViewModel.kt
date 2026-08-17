@@ -29,6 +29,7 @@ import com.fantasyidler.data.model.PlayerFlags
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.ChurchRepository
 import com.fantasyidler.repository.GameDataRepository
+import com.fantasyidler.simulator.CombatSimulator
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.TitleRepository
 import com.fantasyidler.util.GameStrings
@@ -95,6 +96,7 @@ class InventoryViewModel @Inject constructor(
         val skillingDungeonNotes: Map<String, Int> = emptyMap(),
         val unlockedDungeons: List<String> = emptyList(),
         val xpBoostExpiresAt: Long = 0L,
+        val ironman: Boolean = false,
         val activeBlessingKey: String = "",
         val activeBlessingExpiresAt: Long = 0L,
         val activeBlessingXpPct: Int = 0,
@@ -181,6 +183,7 @@ class InventoryViewModel @Inject constructor(
                 skillingDungeonNotes  = flags.skillingDungeonNotes,
                 unlockedDungeons      = flags.unlockedDungeons,
                 xpBoostExpiresAt        = flags.xpBoostExpiresAt,
+                ironman                 = flags.ironman,
                 activeBlessingKey       = flags.activeBlessingKey,
                 activeBlessingExpiresAt = flags.activeBlessingExpiresAt,
                 activeBlessingXpPct     = run {
@@ -219,10 +222,11 @@ class InventoryViewModel @Inject constructor(
         return allIds.distinct().mapNotNull { id ->
             val earned = earnedById[id]
             val event = gameData.seasonalEvents[id]
+            val eventName = event?.let { GameStrings.seasonalEventName(context, id, it.displayName) }
             val label = when {
-                event  != null -> "${event.displayName} ${yearFormat.format(java.util.Date(event.startMs))}"
-                earned != null -> earned.displayText
-                else            -> return@mapNotNull null
+                eventName != null -> "$eventName ${yearFormat.format(java.util.Date(event.startMs))}"
+                earned    != null -> earned.displayText
+                else              -> return@mapNotNull null
             }
             SeasonalBannerDisplay(
                 eventId    = id,
@@ -230,7 +234,7 @@ class InventoryViewModel @Inject constructor(
                 bannerIcon = earned?.bannerIcon ?: event?.bannerIcon,
                 earned     = earned != null,
                 earnedAtMs = earned?.completedAtMs,
-                titleName  = event?.displayName ?: earned?.eventDisplayName?.ifBlank { null } ?: label,
+                titleName  = eventName ?: earned?.eventDisplayName?.ifBlank { null } ?: label,
             )
         }.sortedByDescending { gameData.seasonalEvents[it.eventId]?.startMs ?: it.earnedAtMs ?: 0L }
     }
@@ -301,7 +305,10 @@ class InventoryViewModel @Inject constructor(
         if (changedArmorSlots.isEmpty()) return
         val flags = playerRepo.getFlags()
         val style = resolveActiveStyle(flags, after)
-        val updatedStyle = flags.armorLoadouts[style].orEmpty() + changedArmorSlots.associateWith { after[it] }
+        // Full snapshot, not just the changed slots: sparse loadouts left unrecorded slots
+        // inheriting whatever the previous style displayed, so the shown composition
+        // depended on the tab path taken (issue #1224).
+        val updatedStyle = EquipSlot.ARMOR_SLOTS.associateWith { after[it] }
         playerRepo.updateFlags(flags.copy(armorLoadouts = flags.armorLoadouts + (style to updatedStyle)))
     }
 
@@ -332,18 +339,32 @@ class InventoryViewModel @Inject constructor(
                     EquipSlot.GRAPPLING_HOOK -> item.agilityEfficiency ?: 0f
                     EquipSlot.FRYING_PAN     -> item.cookingEfficiency ?: 0f
                     EquipSlot.LOCKPICK       -> item.thievingEfficiency ?: 0f
-                    else -> if (slot in EquipSlot.WEAPON_SLOTS)
-                        item.attackBonus * 1.5f + item.strengthBonus * 1.0f + item.defenseBonus * 0.5f
+                    else -> if (slot in EquipSlot.WEAPON_SLOTS) {
+                        // Score by the slot's style with the same stat fallbacks the
+                        // simulator uses, then scale by attacks-per-second: a faster
+                        // weapon lands proportionally more hits (issue #1222).
+                        val base = when (style) {
+                            "ranged"   -> (item.rangedStrengthBonus ?: 0) * 1.5f + (item.rangedAttackBonus ?: item.attackBonus) * 1.0f + item.defenseBonus * 0.5f
+                            "magic"    -> (item.magicDamageBonus ?: 0) * 1.5f + (item.magicAttackBonus ?: 0) * 1.0f + item.defenseBonus * 0.5f
+                            "strength" -> item.strengthBonus * 1.5f + item.attackBonus * 1.0f + item.defenseBonus * 0.5f
+                            else       -> item.attackBonus * 1.5f + item.strengthBonus * 1.0f + item.defenseBonus * 0.5f
+                        }
+                        val speed = (item.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC)
+                            .coerceIn(1.2, CombatSimulator.BASE_ATTACK_SPEED_SEC)
+                        base * (CombatSimulator.BASE_ATTACK_SPEED_SEC / speed).toFloat()
+                    }
                     else when (activeStyle) {
                         // Accuracy has diminishing returns once effective attack exceeds enemy
                         // defense (see CombatSimulator's hit-chance curve), while damage bonus
                         // adds to max hit linearly with no diminishing returns -- so the damage
-                        // stat outweighs the accuracy stat here, unlike melee's attack/strength
-                        // split below (which reflects a real weapon-style choice, not this
-                        // accuracy-vs-damage tradeoff) (issue #1198).
+                        // stat outweighs the accuracy stat here (issue #1198). For the strength
+                        // style the accuracy stat is weighted below the damage gap too, so e.g.
+                        // +8 atk cannot outscore +3 str and +2 def (issues #1180, #1230). The
+                        // attack style keeps accuracy primary: that split reflects the player's
+                        // weapon-style choice, not this accuracy-vs-damage tradeoff.
                         "ranged"   -> (item.rangedStrengthBonus ?: 0) * 1.5f + (item.rangedAttackBonus ?: 0) * 1.0f + item.defenseBonus * 0.5f
                         "magic"    -> (item.magicDamageBonus ?: 0) * 1.5f + (item.magicAttackBonus ?: 0) * 1.0f + item.defenseBonus * 0.5f
-                        "strength" -> item.strengthBonus * 1.5f + item.attackBonus * 1.0f + item.defenseBonus * 0.5f
+                        "strength" -> item.strengthBonus * 1.5f + item.attackBonus * 0.5f + item.defenseBonus * 0.5f
                         else       -> item.attackBonus * 1.5f + item.strengthBonus * 1.0f + item.defenseBonus * 0.5f
                     }
                 }

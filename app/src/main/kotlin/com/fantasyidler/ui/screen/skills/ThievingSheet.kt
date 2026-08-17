@@ -81,7 +81,6 @@ import com.fantasyidler.data.json.OreData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.TreeData
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -112,6 +111,7 @@ import com.fantasyidler.ui.viewmodel.QuestIndicator
 
 @Composable
 internal fun ThievingSheet(
+    guildDailyButton: (@Composable () -> Unit)? = null,
     npcs: Map<String, ThievingNpcData>,
     thievingLevel: Int,
     currentXp: Long,
@@ -124,6 +124,7 @@ internal fun ThievingSheet(
     onSelect: (String) -> Unit,
 ) {
     var selectedKey by remember { mutableStateOf<String?>(null) }
+    val scrollState = rememberScrollState()
     Column(Modifier.padding(bottom = 24.dp)) {
         Text(
             text     = stringResource(R.string.label_choose_activity),
@@ -136,6 +137,7 @@ internal fun ThievingSheet(
             color    = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
         )
+        guildDailyButton?.invoke()
         if (sessionDurationMs > 0) {
             Text(
                 text     = stringResource(R.string.skills_session_duration, sessionDurationMs / 60_000),
@@ -145,7 +147,7 @@ internal fun ThievingSheet(
             )
         }
         HorizontalDivider()
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column(Modifier.verticalScroll(scrollState)) {
             npcs.values
                 .sortedBy { it.levelRequired }
                 .forEach { npc ->

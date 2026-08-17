@@ -1,7 +1,9 @@
 package com.fantasyidler.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,10 +27,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -68,15 +74,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.BulkSellPreview
 import com.fantasyidler.ui.viewmodel.ShopEntry
 import com.fantasyidler.ui.viewmodel.ShopTransaction
 import com.fantasyidler.ui.viewmodel.ShopViewModel
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatCoins
+import com.fantasyidler.util.formatQuantity
 
 private fun localizedCategory(context: android.content.Context, raw: String): String {
     val resId = when (raw) {
@@ -121,7 +126,7 @@ fun ShopScreen(
             )
         },
     ) { padding ->
-        val pagerState = rememberPagerState(pageCount = { 2 })
+        val pagerState = rememberPagerState(pageCount = { if (state.ironman) 1 else 2 })
         val scope      = rememberCoroutineScope()
 
         Column(
@@ -129,17 +134,27 @@ fun ShopScreen(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            TabRow(selectedTabIndex = pagerState.currentPage) {
-                Tab(
-                    selected = pagerState.currentPage == 0,
-                    onClick  = { scope.launch { pagerState.animateScrollToPage(0) } },
-                    text     = { Text(stringResource(R.string.btn_buy)) },
+            if (state.ironman) {
+                // Ironman characters can only sell — no Buy tab at all.
+                Text(
+                    text     = stringResource(R.string.ironman_shop_buy_blocked),
+                    style    = MaterialTheme.typography.bodySmall,
+                    color    = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )
-                Tab(
-                    selected = pagerState.currentPage == 1,
-                    onClick  = { scope.launch { pagerState.animateScrollToPage(1) } },
-                    text     = { Text(stringResource(R.string.btn_sell)) },
-                )
+            } else {
+                TabRow(selectedTabIndex = pagerState.currentPage) {
+                    Tab(
+                        selected = pagerState.currentPage == 0,
+                        onClick  = { scope.launch { pagerState.animateScrollToPage(0) } },
+                        text     = { Text(stringResource(R.string.btn_buy)) },
+                    )
+                    Tab(
+                        selected = pagerState.currentPage == 1,
+                        onClick  = { scope.launch { pagerState.animateScrollToPage(1) } },
+                        text     = { Text(stringResource(R.string.btn_sell)) },
+                    )
+                }
             }
 
             Row(
@@ -158,30 +173,36 @@ fun ShopScreen(
                 Text(
                     text  = state.coins.formatCoins(),
                     style = MaterialTheme.typography.labelMedium,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Bold,
                 )
             }
 
             HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
-                when (page) {
-                    0 -> BuyList(
+                when {
+                    state.ironman || page == 1 -> SellList(
+                        inventory          = state.inventory,
+                        equipped           = state.equipped,
+                        lockedItems        = state.lockedItems,
+                        context            = context,
+                        compactNumbers     = state.compactNumbers,
+                        keepOneOfEach      = state.keepOneOfEach,
+                        onKeepOneChange    = viewModel::setKeepOneOfEach,
+                        priceFor           = viewModel::sellPriceFor,
+                        categoryFor        = viewModel::sellCategoryFor,
+                        onSell             = { key -> viewModel.openSell(key, GameStrings.itemName(context, key)) },
+                        onToggleLock       = viewModel::toggleItemLock,
+                        onSellJunk         = viewModel::previewSellJunk,
+                        onSellOldEquipment = viewModel::previewSellOldEquipment,
+                    )
+                    else -> BuyList(
                         entries            = viewModel.buyEntries.filter { it.mercantileLevelRequired <= state.mercantileLevel },
                         coins              = state.coins,
                         xpBoostActive      = state.xpBoostActive,
                         inventory          = state.inventory,
+                        compactNumbers     = state.compactNumbers,
                         discountedPriceFor = viewModel::discountedPrice,
                         onBuy              = viewModel::openBuy,
-                    )
-                    else -> SellList(
-                        inventory          = state.inventory,
-                        equipped           = state.equipped,
-                        context            = context,
-                        priceFor           = viewModel::sellPriceFor,
-                        categoryFor        = viewModel::sellCategoryFor,
-                        onSell             = { key -> viewModel.openSell(key, GameStrings.itemName(context, key)) },
-                        onSellJunk         = viewModel::previewSellJunk,
-                        onSellOldEquipment = viewModel::previewSellOldEquipment,
                     )
                 }
             }
@@ -218,9 +239,10 @@ fun ShopScreen(
         ) {
             ScaledSheetContent {
             BulkSellSheet(
-                preview   = preview,
-                onConfirm = viewModel::confirmBulkSell,
-                onDismiss = viewModel::dismissBulkSell,
+                preview        = preview,
+                compactNumbers = state.compactNumbers,
+                onConfirm      = viewModel::confirmBulkSell,
+                onDismiss      = viewModel::dismissBulkSell,
             )
             }
         }
@@ -237,6 +259,7 @@ private fun BuyList(
     coins: Long,
     xpBoostActive: Boolean,
     inventory: Map<String, Int>,
+    compactNumbers: Boolean = false,
     discountedPriceFor: (ShopEntry) -> Int,
     onBuy: (ShopEntry) -> Unit,
 ) {
@@ -292,7 +315,7 @@ private fun BuyList(
                         }
                         if (!isXpBoost) {
                             Text(
-                                text  = stringResource(R.string.shop_qty_in_inv, owned),
+                                text  = stringResource(R.string.shop_qty_in_inv, owned.formatQuantity(compactNumbers)),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                             )
@@ -300,14 +323,14 @@ private fun BuyList(
                     }
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
-                            text       = stringResource(R.string.shop_total_amount, discounted.toString()),
+                            text       = stringResource(R.string.shop_total_amount, discounted.toLong().formatCoins()),
                             style      = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color      = if (canAfford) GoldPrimary else GoldPrimary.copy(alpha = 0.38f),
+                            color      = if (canAfford) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.38f),
                         )
                         if (hasDiscount) {
                             Text(
-                                text           = stringResource(R.string.shop_total_amount, entry.price.toString()),
+                                text           = stringResource(R.string.shop_total_amount, entry.price.toLong().formatCoins()),
                                 style          = MaterialTheme.typography.bodySmall,
                                 textDecoration = TextDecoration.LineThrough,
                                 color          = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
@@ -328,24 +351,40 @@ private fun BuyList(
 
 private val SELL_CATEGORY_ORDER = listOf("Weapons", "Armor", "Tools", "Food", "Materials", "Misc")
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun SellList(
     inventory: Map<String, Int>,
     equipped: Map<String, String?>,
+    lockedItems: Set<String>,
     context: android.content.Context,
+    compactNumbers: Boolean = false,
+    keepOneOfEach: Boolean = false,
     priceFor: (String) -> Int,
     categoryFor: (String) -> String,
     onSell: (String) -> Unit,
+    onToggleLock: (String) -> Unit,
     onSellJunk: () -> Unit,
     onSellOldEquipment: () -> Unit,
+    onKeepOneChange: (Boolean) -> Unit,
 ) {
-    val grouped = remember(inventory) {
+    var query by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf<String?>(null) }
+
+    val grouped = remember(inventory, query, selectedCategory) {
         inventory.entries
             .filter { it.key != "coins" }
-            .groupBy { categoryFor(it.key) }
+            .map { Triple(it.key, it.value, GameStrings.itemName(context, it.key)) }
+            .filter { (_, _, name) -> query.isBlank() || name.contains(query.trim(), ignoreCase = true) }
+            .groupBy { (key, _, _) -> categoryFor(key) }
+            .filterKeys { selectedCategory == null || it == selectedCategory }
             .entries
             .sortedBy { SELL_CATEGORY_ORDER.indexOf(it.key).let { i -> if (i < 0) Int.MAX_VALUE else i } }
+            .map { (category, entries) -> category to entries.sortedBy { (_, _, name) -> name } }
+    }
+    val presentCategories = remember(inventory) {
+        inventory.keys.filter { it != "coins" }.map(categoryFor).distinct()
+            .sortedBy { SELL_CATEGORY_ORDER.indexOf(it).let { i -> if (i < 0) Int.MAX_VALUE else i } }
     }
 
     LazyColumn(Modifier.fillMaxSize()) {
@@ -364,6 +403,52 @@ private fun SellList(
                     onClick  = onSellOldEquipment,
                     modifier = Modifier.weight(1f),
                 ) { Text(stringResource(R.string.shop_sell_old_gear)) }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment     = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text     = stringResource(R.string.shop_keep_one_toggle),
+                    style    = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.weight(1f),
+                )
+                Switch(
+                    checked         = keepOneOfEach,
+                    onCheckedChange = onKeepOneChange,
+                )
+            }
+            OutlinedTextField(
+                value         = query,
+                onValueChange = { query = it },
+                placeholder   = { Text(stringResource(R.string.shop_search_hint)) },
+                singleLine    = true,
+                modifier      = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                FilterChip(
+                    selected = selectedCategory == null,
+                    onClick  = { selectedCategory = null },
+                    label    = { Text(stringResource(R.string.shop_filter_all)) },
+                )
+                presentCategories.forEach { category ->
+                    FilterChip(
+                        selected = selectedCategory == category,
+                        onClick  = { selectedCategory = if (selectedCategory == category) null else category },
+                        label    = { Text(localizedCategory(context, category)) },
+                    )
+                }
             }
             HorizontalDivider()
         }
@@ -385,22 +470,31 @@ private fun SellList(
         } else {
             grouped.forEach { (category, entries) ->
                 item(key = "sell_hdr_$category") { ShopSectionHeader(localizedCategory(context, category)) }
-                items(entries, key = { it.key }) { (key, qty) ->
+                items(entries, key = { it.first }) { (key, qty, _) ->
                     val sellPrice  = priceFor(key)
                     val isEquipped = equipped.values.any { it == key }
+                    val isLocked   = key in lockedItems
+                    val lockedAlpha = if (isLocked) 0.5f else 1f
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onSell(key) }
+                            .combinedClickable(
+                                onClick     = { onSell(key) },
+                                onLongClick = { onToggleLock(key) },
+                            )
                             .padding(horizontal = 16.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column(Modifier.weight(1f)) {
                             FlowRow(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
-                                    text       = GameStrings.itemName(context, key),
+                                    text       = buildString {
+                                        if (isLocked) append("🔒 ")
+                                        append(GameStrings.itemName(context, key))
+                                    },
                                     style      = MaterialTheme.typography.bodyLarge,
                                     fontWeight = FontWeight.Medium,
+                                    color      = MaterialTheme.colorScheme.onSurface.copy(alpha = lockedAlpha),
                                 )
                                 if (isEquipped) {
                                     Spacer(Modifier.width(6.dp))
@@ -412,16 +506,16 @@ private fun SellList(
                                 }
                             }
                             Text(
-                                text  = stringResource(R.string.shop_qty_in_inv, qty),
+                                text  = stringResource(R.string.shop_qty_in_inv, qty.formatQuantity(compactNumbers)),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                         Text(
-                            text       = stringResource(R.string.shop_price_each, sellPrice.toString()),
+                            text       = stringResource(R.string.shop_price_each, sellPrice.toLong().formatCoins()),
                             style      = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color      = GoldPrimary,
+                            color      = MaterialTheme.colorScheme.primary.copy(alpha = lockedAlpha),
                         )
                     }
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -468,7 +562,7 @@ private fun TransactionSheet(
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text  = stringResource(R.string.shop_price_each_long, transaction.priceEach.toString()),
+            text  = stringResource(R.string.shop_price_each_long, transaction.priceEach.toLong().formatCoins()),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -525,10 +619,10 @@ private fun TransactionSheet(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Text(
-                text       = stringResource(R.string.shop_total_amount, total.toString()),
+                text       = stringResource(R.string.shop_total_amount, total.formatCoins()),
                 style      = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
             )
         }
 
@@ -569,6 +663,7 @@ private fun TransactionSheet(
 @Composable
 private fun BulkSellSheet(
     preview: BulkSellPreview,
+    compactNumbers: Boolean = false,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -595,12 +690,12 @@ private fun BulkSellSheet(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text     = item.displayName,
+                        text     = GameStrings.itemName(LocalContext.current, item.key),
                         style    = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.weight(1f),
                     )
                     Text(
-                        text  = "×${item.qty}",
+                        text  = "×${item.qty.formatQuantity(compactNumbers)}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(horizontal = 12.dp),
@@ -609,7 +704,7 @@ private fun BulkSellSheet(
                         text       = item.total.formatCoins(),
                         style      = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color      = GoldPrimary,
+                        color      = MaterialTheme.colorScheme.primary,
                     )
                 }
                 HorizontalDivider()
@@ -631,7 +726,7 @@ private fun BulkSellSheet(
                 text       = preview.totalCoins.formatCoins(),
                 style      = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
             )
         }
         Row(

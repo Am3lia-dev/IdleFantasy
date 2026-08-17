@@ -27,11 +27,13 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Assignment
 import androidx.compose.material.icons.filled.Celebration
 import androidx.compose.material3.ModalBottomSheet
@@ -77,6 +79,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
 import com.fantasyidler.data.model.EquipSlot
@@ -86,7 +89,6 @@ import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.WorkerTier
 import com.fantasyidler.data.json.BlessingType
 import com.fantasyidler.repository.ChurchRepository
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.viewmodel.HomeViewModel
 import com.fantasyidler.ui.viewmodel.SessionSummary
@@ -116,6 +118,7 @@ fun HomeScreen(
     onNavigateToWorkerSkills: (Int) -> Unit = {},
     onNavigateToGuildHall: () -> Unit = {},
     onNavigateToChurch: () -> Unit = {},
+    onNavigateToMonument: () -> Unit = {},
     onNavigateToSlayer: () -> Unit = {},
     onNavigateToBuilder: () -> Unit = {},
     onNavigateToCarnival: () -> Unit = {},
@@ -191,7 +194,7 @@ fun HomeScreen(
                                         Text(
                                             text  = breakdown,
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = GoldPrimary,
+                                            color = MaterialTheme.colorScheme.primary,
                                         )
                                     }
                                 }
@@ -215,7 +218,7 @@ fun HomeScreen(
                                     Text(
                                         text  = breakdown,
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = GoldPrimary,
+                                        color = MaterialTheme.colorScheme.primary,
                                     )
                                 }
                             }
@@ -224,7 +227,7 @@ fun HomeScreen(
                     if (summary.killLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
                         SummarySection(stringResource(R.string.label_kills))
-                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(enemy, kills) }
+                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(GameStrings.enemyName(context, enemy), kills) }
                     }
                     if (summary.itemLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
@@ -234,8 +237,8 @@ fun HomeScreen(
                             SummaryRow(
                                 label = if (isRare) "🌟 $item" else item,
                                 value = qty,
-                                labelColor = if (isRare) GoldPrimary else MaterialTheme.colorScheme.onSurface,
-                                valueColor = if (isRare) GoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                labelColor = if (isRare) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                valueColor = if (isRare) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = if (isRare) FontWeight.Bold else FontWeight.Normal,
                             )
                         }
@@ -247,7 +250,7 @@ fun HomeScreen(
                         Text(
                             text  = stringResource(R.string.church_blessing_bonus, summary.coinBlessingBonus.formatCoins()),
                             style = MaterialTheme.typography.labelSmall,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                     if (summary.foodConsumedLines.isNotEmpty()) {
@@ -282,7 +285,7 @@ fun HomeScreen(
                             Text(
                                 text = note,
                                 style = MaterialTheme.typography.bodySmall.copy(fontStyle = androidx.compose.ui.text.font.FontStyle.Italic),
-                                color = GoldPrimary,
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(vertical = 2.dp),
                             )
                         }
@@ -347,7 +350,7 @@ fun HomeScreen(
                                         Text(
                                             text  = breakdown,
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = GoldPrimary,
+                                            color = MaterialTheme.colorScheme.primary,
                                         )
                                     }
                                 }
@@ -371,7 +374,7 @@ fun HomeScreen(
                                     Text(
                                         text  = breakdown,
                                         style = MaterialTheme.typography.labelSmall,
-                                        color = GoldPrimary,
+                                        color = MaterialTheme.colorScheme.primary,
                                     )
                                 }
                             }
@@ -380,7 +383,7 @@ fun HomeScreen(
                     if (summary.killLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
                         SummarySection(stringResource(R.string.label_kills))
-                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(enemy, kills) }
+                        summary.killLines.forEach { (enemy, kills) -> SummaryRow(GameStrings.enemyName(context, enemy), kills) }
                     }
                     if (summary.itemLines.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
@@ -390,8 +393,8 @@ fun HomeScreen(
                             SummaryRow(
                                 label = if (isRare) "🌟 $item" else item,
                                 value = qty,
-                                labelColor = if (isRare) GoldPrimary else MaterialTheme.colorScheme.onSurface,
-                                valueColor = if (isRare) GoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                labelColor = if (isRare) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                valueColor = if (isRare) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = if (isRare) FontWeight.Bold else FontWeight.Normal,
                             )
                         }
@@ -403,7 +406,7 @@ fun HomeScreen(
                         Text(
                             text  = stringResource(R.string.church_blessing_bonus, summary.coinBlessingBonus.formatCoins()),
                             style = MaterialTheme.typography.labelSmall,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -466,9 +469,10 @@ fun HomeScreen(
 
     if (!state.isLoading && !state.characterSetupDone) {
         CharacterSetupSheet(
-            isFirstTime = true,
-            onSave      = { name, gender, race -> viewModel.saveCharacterProfile(name, gender, race) },
-            onDismiss   = viewModel::dismissCharacterSetup,
+            isFirstTime       = true,
+            showIronmanOption = true,
+            onSave            = { name, gender, race, ironman -> viewModel.saveCharacterProfile(name, gender, race, ironman) },
+            onDismiss         = viewModel::dismissCharacterSetup,
         )
     }
 
@@ -513,17 +517,18 @@ fun HomeScreen(
             TopAppBar(
                 title   = { Text(stringResource(R.string.app_name)) },
                 actions = {
+                    // dropUnlessResumed: ignore ghost taps during nav transitions (issue #1345)
                     if (!state.isLoading && state.showRecentActivityLog) {
-                        IconButton(onClick = { showRecentLog = true }) {
+                        IconButton(onClick = dropUnlessResumed { showRecentLog = true }) {
                             Icon(Icons.Filled.History, contentDescription = stringResource(R.string.label_recent_activity))
                         }
                     }
                     if (!state.isLoading && state.showJournalButton) {
-                        IconButton(onClick = viewModel::openJournal) {
+                        IconButton(onClick = dropUnlessResumed { viewModel.openJournal() }) {
                             Icon(Icons.Filled.EditNote, contentDescription = stringResource(R.string.label_journal))
                         }
                     }
-                    IconButton(onClick = onNavigateToSettings) {
+                    IconButton(onClick = dropUnlessResumed { onNavigateToSettings() }) {
                         Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings_title))
                     }
                 },
@@ -572,6 +577,23 @@ fun HomeScreen(
                             fontWeight = FontWeight.Bold,
                         )
                     }
+                    if (state.ironman) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector        = Icons.Filled.Shield,
+                                contentDescription = null,
+                                modifier           = Modifier.size(14.dp),
+                                tint               = MaterialTheme.colorScheme.tertiary,
+                            )
+                            Spacer(Modifier.width(4.dp))
+                            Text(
+                                text       = stringResource(R.string.ironman_badge),
+                                style      = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color      = MaterialTheme.colorScheme.tertiary,
+                            )
+                        }
+                    }
                 }
                 if (state.showCharacterViewer) {
                     CharacterSprite(
@@ -613,7 +635,7 @@ fun HomeScreen(
                             StatInline(
                                 label      = stringResource(R.string.label_coins),
                                 value      = state.coins.formatCoins(),
-                                valueColor = GoldPrimary,
+                                valueColor = MaterialTheme.colorScheme.primary,
                             )
                         }
                         if (blessingActive) {
@@ -630,7 +652,7 @@ fun HomeScreen(
                                     BlessingType.COINS   -> "+${(b.magnitude * 100).toInt()}% coins"
                                 }
                             }
-                            val timeLeft = state.activeBlessingRemainingMs.formatDurationMs()
+                            val timeLeft = state.activeBlessingRemainingMs.formatDurationMs(context)
                             val blessingText = if (boostDesc != null) "$blessingName ($boostDesc) - $timeLeft"
                                               else "$blessingName - $timeLeft"
                             Spacer(Modifier.height(4.dp))
@@ -638,14 +660,14 @@ fun HomeScreen(
                                 Icon(
                                     imageVector        = Icons.Filled.Star,
                                     contentDescription = null,
-                                    tint               = GoldPrimary,
+                                    tint               = MaterialTheme.colorScheme.primary,
                                     modifier           = Modifier.size(12.dp),
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Text(
                                     text  = blessingText,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = GoldPrimary,
+                                    color = MaterialTheme.colorScheme.primary,
                                 )
                             }
                         }
@@ -660,7 +682,7 @@ fun HomeScreen(
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Text(
-                                    text  = stringResource(R.string.home_xp_boost_active, state.xpBoostRemainingMs.formatDurationMs()),
+                                    text  = stringResource(R.string.home_xp_boost_active, state.xpBoostRemainingMs.formatDurationMs(context)),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.tertiary,
                                 )
@@ -672,7 +694,7 @@ fun HomeScreen(
 
             // ── Town grid ───────────────────────────────────────────────
             val churchTint = if (state.activeBlessingKey.isNotEmpty() && state.activeBlessingRemainingMs > 0)
-                GoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant
+                MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
             val townGridRows: @Composable () -> Unit = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(
@@ -688,11 +710,10 @@ fun HomeScreen(
                         modifier              = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Spacer(Modifier.weight(0.5f))
-                        TownGridCard(Icons.Filled.Assignment,  stringResource(R.string.builder_title),  onClick = onNavigateToBuilder,  modifier = Modifier.weight(1f))
-                        TownGridCard(Icons.Filled.Shield,      stringResource(R.string.slayer_title),   onClick = onNavigateToSlayer,   modifier = Modifier.weight(1f))
-                        TownGridCard(Icons.Filled.Celebration, stringResource(R.string.carnival_title), onClick = onNavigateToCarnival, modifier = Modifier.weight(1f))
-                        Spacer(Modifier.weight(0.5f))
+                        TownGridCard(Icons.Filled.Assignment,     stringResource(R.string.builder_title),  onClick = onNavigateToBuilder,  modifier = Modifier.weight(1f))
+                        TownGridCard(Icons.Filled.Shield,         stringResource(R.string.slayer_title),   onClick = onNavigateToSlayer,   modifier = Modifier.weight(1f))
+                        TownGridCard(Icons.Filled.Celebration,    stringResource(R.string.carnival_title), onClick = onNavigateToCarnival, modifier = Modifier.weight(1f))
+                        TownGridCard(Icons.Filled.AccountBalance, stringResource(R.string.monument_title), onClick = onNavigateToMonument, modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -760,7 +781,7 @@ fun HomeScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 Text(
-                                    text       = event.displayName,
+                                    text       = GameStrings.seasonalEventName(LocalContext.current, event.id, event.displayName),
                                     style      = MaterialTheme.typography.titleSmall,
                                     fontWeight = FontWeight.Bold,
                                 )
@@ -768,12 +789,14 @@ fun HomeScreen(
                                     text  = if (eventComplete) stringResource(R.string.seasonal_event_complete)
                                             else stringResource(R.string.seasonal_event_token_progress, event.tokens, event.goal),
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = if (eventComplete) GoldPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                    color = if (eventComplete) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontWeight = if (eventComplete) FontWeight.Bold else FontWeight.Normal,
                                 )
                             }
                             Spacer(Modifier.height(6.dp))
                             LinearProgressIndicator(
+                                gapSize = 0.dp,
+                                drawStopIndicator = {},
                                 progress = { (event.tokens.toFloat() / event.goal).coerceIn(0f, 1f) },
                                 modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
                             )
@@ -801,6 +824,7 @@ fun HomeScreen(
                     bossEmoji      = if (session.skillName == "boss") viewModel.bossEmoji(session.activityKey) else null,
                     repeatIndex    = if (session.skillName == "boss") state.activeBossRepeatIndex else state.activeDungeonRepeatIndex,
                     repeatTotal    = if (session.skillName == "boss") state.activeBossRepeatTotal else state.activeDungeonRepeatTotal,
+                    assignedItems  = state.activeSessionAssignedItems,
                     onRepeat       = viewModel::repeatActiveSession,
                     onAbandon      = viewModel::abandonSession,
                     onDebugFinish  = viewModel::debugFinishSession,

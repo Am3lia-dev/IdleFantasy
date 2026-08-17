@@ -44,16 +44,27 @@
     <string name="skill_hitpoints_name">Здоровье</string>
     <string name="skill_hitpoints_desc">Ваше общее здоровье. Более высокие уровни позволяют дольше выживать в бою.</string>
     <string name="skill_prayer_name">Молитва</string>
-    <string name="skill_prayer_desc">Хороните кости, выпадающие из боя, чтобы получать опыт Молитвы. Более высокие уровни увеличивают ваш боевой уровень.</string>
+    <string name="skill_prayer_desc">Хороните кости, выпадающие из боя, чтобы получать опыт Молитвы. Более высокие уровни открывают более сильные благословения Церкви.</string>
 
     <!-- ===== Skill unlock sheet labels ===== -->
     <string name="label_lv">Ур. %1$d</string>
+    <string name="armory_req_level">Lv. %1$d</string> <!-- untranslated -->
+    <string name="skills_projected_xp_level">+%1$s XP → Level %2$d</string> <!-- untranslated -->
     <string name="skills_agility_course_detail">Ур. %1$d  •  %2$d опыта/круг</string>
     <string name="label_hp_passive">Пассивный — увеличивает макс. HP</string>
     <string name="label_hp_scales">Макс. HP растёт с каждым уровнем</string>
     <string name="label_hp_max">Макс. HP: %1$d</string>
     <string name="label_xp_per_bone">%1$s (%2$d опыта/кость)</string>
     <string name="label_xp_per_kill">%1$s (%2$d опыта/убийство)</string>
+
+    <!-- ===== Tree names ===== -->
+    <string name="tree_tree_name">Tree</string> <!-- untranslated -->
+    <string name="tree_oak_tree_name">Oak Tree</string> <!-- untranslated -->
+    <string name="tree_willow_tree_name">Willow Tree</string> <!-- untranslated -->
+    <string name="tree_maple_tree_name">Maple Tree</string> <!-- untranslated -->
+    <string name="tree_yew_tree_name">Yew Tree</string> <!-- untranslated -->
+    <string name="tree_magic_tree_name">Magic Tree</string> <!-- untranslated -->
+    <string name="tree_redwood_tree_name">Redwood Tree</string> <!-- untranslated -->
 
     <!-- ===== Agility course names and descriptions ===== -->
     <string name="agility_beginner_course_name">Начальный маршрут</string>
@@ -86,6 +97,7 @@
     <string name="agility_divine_course_desc">Божественный маршрут, благословлённый богами ловкости.</string>
     <string name="agility_transcendent_course_name">Трансцендентный маршрут</string>
     <string name="agility_transcendent_course_desc">Высшее испытание ловкости, превосходящее смертные пределы.</string>
+
     <!-- ===== Session skill type labels ===== -->
     <string name="skill_expedition_name">Экспедиция</string>
     <string name="skill_boss_name">Босс</string>

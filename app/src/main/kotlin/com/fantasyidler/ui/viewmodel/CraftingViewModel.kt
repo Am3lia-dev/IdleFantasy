@@ -17,6 +17,7 @@ import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.QuestRepository
 import com.fantasyidler.repository.SeasonalEventRepository
 import com.fantasyidler.repository.SessionRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.repository.WeeklyQuestRepository
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.simulator.XpTable
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import com.fantasyidler.util.GameStrings
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,14 +44,20 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 data class QuestFillSuggestion(val label: String, val qty: Int)
 
-enum class QuestCategory {
-    DAILY,
-    MAIN
+/** Ordinal order is the display order of the indicator icons. */
+enum class QuestCategory(val emoji: String) {
+    DAILY("⏰"),
+    WEEKLY("📅"),
+    GUILD_DAILY("⚒️"),
+    GUILD("🏰"),
+    MAIN("📜"),
 }
 
 data class QuestIndicator(
     val category: QuestCategory,
-    val isCompletable: Boolean
+    val isCompletable: Boolean,
+    /** Source quest id, used to dedupe skill-row counts when one quest spans many activities. */
+    val questId: String = "",
 )
 
 // ---------------------------------------------------------------------------
@@ -109,7 +117,6 @@ data class CraftingUiState(
     val effectiveInventory: Map<String, Int> = emptyMap(),
     /** Non-null while the craft-quantity sheet is open. */
     val selectedRecipe: CraftableRecipe? = null,
-    val craftQuantity:  Int = 1,
     /** Ash catalyst key selected for a herblore brew, or null for no catalyst. */
     val herbloreAshKey: String? = null,
     val snackbarMessage: String? = null,
@@ -154,6 +161,7 @@ class CraftingViewModel @Inject constructor(
     private val weeklyQuestRepo: WeeklyQuestRepository,
     private val guildRepo: GuildRepository,
     private val seasonalEventRepo: SeasonalEventRepository,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -182,7 +190,7 @@ class CraftingViewModel @Inject constructor(
             val perItemMs = if (selectedRecipe != null) {
                 val agility = levels[Skills.AGILITY] ?: 1
                 val eff = craftToolEfficiency(selectedRecipe, equipped)
-                (SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0) / 60 / eff).toLong()
+                (SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)) / 60 / eff).toLong()
             } else 0L
             extra.copy(
                 smithingLevel      = levels[Skills.SMITHING]      ?: 1,
@@ -261,12 +269,16 @@ class CraftingViewModel @Inject constructor(
     val fletchingRecipes: List<CraftableRecipe> by lazy {
         gameData.fletchingRecipes.map { (_, r) ->
             val isPlank = r.itemName == "plank" || r.itemName.endsWith("_plank")
+            val isStaff = r.itemName.startsWith("staff_of_")
+            // Base items with no material prefix would leak product words into the tier chips
+            val untiered = isPlank || isStaff || r.itemName == "arrow_shaft" || r.itemName == "shortbow"
             val category = when {
-                isPlank              -> "Plank"
-                r.type == "component"  -> "Component"
-                r.type == "ammunition" -> "Ammunition"
-                r.type == "weapon"     -> "Weapon"
-                else                   -> ""
+                isPlank                                               -> "Plank"
+                isStaff                                               -> "Staff"
+                r.type == "ammunition" || r.itemName == "arrow_shaft" -> "Arrow"
+                r.type == "weapon"                                    -> "Bow"
+                r.type == "component"                                 -> "Component"
+                else                                                  -> ""
             }
             CraftableRecipe(
                 key                 = r.itemName,
@@ -282,7 +294,7 @@ class CraftingViewModel @Inject constructor(
                 outputStrengthBonus = r.strengthBonus ?: 0,
                 outputCombatStyle   = gameData.equipment[r.itemName]?.combatStyle,
                 category            = category,
-                tier                = if (isPlank) "" else tierFromKey(r.itemName),
+                tier                = if (untiered) "" else tierFromKey(r.itemName),
             )
         }.sortedBy { it.levelRequired }
     }
@@ -347,23 +359,18 @@ class CraftingViewModel @Inject constructor(
     // Craft sheet
     // ------------------------------------------------------------------
 
-    fun openRecipe(recipe: CraftableRecipe) {
-        val max = uiState.value.maxCraftable(recipe).coerceAtLeast(1)
-        _extra.update { it.copy(selectedRecipe = recipe, craftQuantity = max) }
-    }
+    fun openRecipe(recipe: CraftableRecipe) =
+        _extra.update { it.copy(selectedRecipe = recipe) }
 
     fun dismissRecipe() = _extra.update { it.copy(selectedRecipe = null, herbloreAshKey = null) }
 
     fun setHerbloreAsh(key: String?) = _extra.update { it.copy(herbloreAshKey = key) }
 
-    /** [max] should come from the combined uiState (which has inventory), not _extra. */
-    fun setQuantity(qty: Int, max: Int) =
-        _extra.update { it.copy(craftQuantity = qty.coerceIn(1, max.coerceAtLeast(1))) }
-
     private fun craftToolEfficiency(recipe: CraftableRecipe, equipped: Map<String, String?>): Float =
         gameData.craftDurationEfficiency(recipe.skillName, recipe.key, equipped)
 
-    private fun petBoostFor(petsJson: String, skillKey: String): Int {
+    private fun petBoostFor(petsJson: String, skillKey: String, ironman: Boolean = false): Int {
+        if (ironman) return 0
         val pets = try {
             json.decodeFromString<List<com.fantasyidler.data.model.OwnedPet>>(petsJson)
         } catch (_: Exception) {
@@ -375,23 +382,42 @@ class CraftingViewModel @Inject constructor(
         }
     }
 
-    fun craft() {
-        val state  = uiState.value          // combined state — has inventory
-        val recipe = state.selectedRecipe ?: return
-        val max    = state.maxCraftable(recipe).coerceAtLeast(1)
-        val qty    = state.craftQuantity.coerceIn(1, max)
-        val ashKey = if (recipe.skillName == Skills.HERBLORE) state.herbloreAshKey else null
+    /**
+     * Quick-queues the recipe producing [targetKey] toward a guild daily.
+     * Returns false when no known recipe outputs the target; shows the usual
+     * snackbar when the level or materials fall short.
+     */
+    fun queueCraftForDaily(targetKey: String, remaining: Int): Boolean {
+        val recipe = allRecipes.firstOrNull { it.outputKey == targetKey } ?: return false
+        val state  = uiState.value
+        val max    = state.maxCraftable(recipe)
+        if ((state.skillLevels[recipe.skillName] ?: 1) < recipe.levelRequired || max <= 0) {
+            _extra.update { it.copy(snackbarMessage = context.getString(R.string.skill_not_enough_materials)) }
+            return true
+        }
+        craft(recipe, ceilDiv(remaining, recipe.outputQty).coerceIn(1, max))
+        return true
+    }
+
+    /** Starts or enqueues [qty] crafts of [recipe]. */
+    fun craft(recipe: CraftableRecipe, qty: Int, ashKey: String? = null) {
+        val state = uiState.value
 
         viewModelScope.launch {
+            val player = playerRepo.getOrCreatePlayer()
+            val flags: PlayerFlags = json.decodeFromString(player.flags)
+            val saveChance = townRepo.secondaryMaterialSaveChance(flags)
+            val matsToConsume = applyMaterialPreservation(recipe.materials, qty, saveChance)
+            val ashQtyToConsume = if (ashKey != null) applyQtyPreservation(qty, saveChance) else 0
+
             // Enqueue if a session is already running
             if (sessionRepo.getActiveSession() != null) {
-                val craftFlags = playerRepo.getFlags()
                 val agility   = state.skillLevels[Skills.AGILITY] ?: 1
-                val toolEff   = craftToolEfficiency(recipe, json.decodeFromString(playerRepo.getOrCreatePlayer().equipped))
-                val perItemMs = (SkillSimulator.sessionDurationMs(agility, craftFlags.skillPrestige[Skills.AGILITY] ?: 0) / 60 / toolEff).toLong()
+                val toolEff   = craftToolEfficiency(recipe, json.decodeFromString(player.equipped))
+                val perItemMs = (SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)) / 60 / toolEff).toLong()
                 val totalOutput = qty * recipe.outputQty
-                val xpQueueMult = (if (craftFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(craftFlags)
-                val queuePetPct = petBoostFor(playerRepo.getOrCreatePlayer().pets, recipe.skillName)
+                val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags)
+                val queuePetPct = petBoostFor(player.pets, recipe.skillName, flags.ironman)
                 val action = QueuedAction(
                     skillName           = recipe.skillName,
                     activityKey         = recipe.key,
@@ -401,9 +427,13 @@ class CraftingViewModel @Inject constructor(
                     estimatedXpGain     = (qty * recipe.xpPerItem * xpQueueMult * toolEff * (1.0 + queuePetPct / 100.0)).toLong(),
                     estimatedDurationMs = qty.toLong() * perItemMs,
                     catalystKey         = ashKey,
+                    catalystQty         = ashQtyToConsume,
                 )
                 val enqueued = playerRepo.enqueueAction(action)
-                if (enqueued) playerRepo.consumeItems(recipe.materials.mapValues { it.value * qty })
+                if (enqueued) {
+                    playerRepo.consumeItems(matsToConsume)
+                    if (ashKey != null && ashQtyToConsume > 0) playerRepo.consumeItems(mapOf(ashKey to ashQtyToConsume))
+                }
                 _extra.update {
                     it.copy(
                         snackbarMessage = if (enqueued) context.getString(R.string.snackbar_added_to_queue, recipe.displayName) else context.getString(R.string.snackbar_queue_full),
@@ -415,7 +445,6 @@ class CraftingViewModel @Inject constructor(
 
             // Build a single aggregate frame regardless of qty to stay within
             // Android's 2 MB CursorWindow per-row limit.
-            val player = playerRepo.getOrCreatePlayer()
             val freshInv: Map<String, Int> = json.decodeFromString(player.inventory)
             if (!recipe.materials.all { (item, needed) -> (freshInv[item] ?: 0) >= needed * qty }) {
                 _extra.update { it.copy(snackbarMessage = context.getString(R.string.skill_not_enough_materials)) }
@@ -426,7 +455,7 @@ class CraftingViewModel @Inject constructor(
             val startXp     = xpMap[recipe.skillName] ?: 0L
             val levelBefore = XpTable.levelForXp(startXp)
             val efficiency = craftToolEfficiency(recipe, equipped)
-            val petPct = petBoostFor(player.pets, recipe.skillName)
+            val petPct = petBoostFor(player.pets, recipe.skillName, flags.ironman)
             val totalXpGain = (qty * recipe.xpPerItem * efficiency * (1.0 + petPct / 100.0)).toInt()
             val xpAfter     = startXp + totalXpGain
             val levelAfter  = XpTable.levelForXp(xpAfter)
@@ -447,17 +476,16 @@ class CraftingViewModel @Inject constructor(
             )
 
             val levels: Map<String, Int> = json.decodeFromString(player.skillLevels)
-            val flags = try { json.decodeFromString<PlayerFlags>(player.flags) } catch (_: Exception) { PlayerFlags() }
             val agilityLevel = levels[Skills.AGILITY] ?: 1
             // 1 item per minute, reduced by agility (same formula as gathering skills) and by tool efficiency
-            val perItemMs = (SkillSimulator.sessionDurationMs(agilityLevel, flags.skillPrestige[Skills.AGILITY] ?: 0) / 60 / efficiency).toLong()
+            val perItemMs = (SkillSimulator.sessionDurationMs(agilityLevel, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)) / 60 / efficiency).toLong()
 
             val framesJson = json.encodeToString(
                 json.serializersModule.serializer<List<SessionFrame>>(),
                 frames,
             )
-            playerRepo.consumeItems(recipe.materials.mapValues { it.value * qty })
-            if (ashKey != null) playerRepo.consumeItems(mapOf(ashKey to qty))
+            playerRepo.consumeItems(matsToConsume)
+            if (ashKey != null && ashQtyToConsume > 0) playerRepo.consumeItems(mapOf(ashKey to ashQtyToConsume))
             sessionRepo.startSession(
                 skillName        = recipe.skillName,
                 activityKey      = recipe.key,
@@ -465,7 +493,7 @@ class CraftingViewModel @Inject constructor(
                 durationMs       = qty * perItemMs,
                 skillDisplayName = recipe.skillName,
                 catalystKey      = ashKey,
-                catalystQty      = if (ashKey != null) qty else 0,
+                catalystQty      = ashQtyToConsume,
             )
             _extra.update { it.copy(selectedRecipe = null, herbloreAshKey = null) }
         }
@@ -506,7 +534,7 @@ class CraftingViewModel @Inject constructor(
                 val prereqDone = quest.requiresPrevious == null ||
                         progressById[quest.requiresPrevious]?.completed == true
                 if (remaining > 0 && prereqDone)
-                    fills += QuestFillSuggestion(quest.name, ceilDiv(remaining, recipe.outputQty))
+                    fills += QuestFillSuggestion(GameStrings.questName(context, id, quest.name), ceilDiv(remaining, recipe.outputQty))
             }
         }
 
@@ -528,7 +556,7 @@ class CraftingViewModel @Inject constructor(
                 val effectiveAmount = guildRepo.effectiveQuestAmountFromFlags(quest, flags)
                 val remaining = effectiveAmount - progress
                 if (remaining > 0)
-                    fills += QuestFillSuggestion(quest.name, ceilDiv(remaining, recipe.outputQty))
+                    fills += QuestFillSuggestion(GameStrings.questName(context, id, quest.name), ceilDiv(remaining, recipe.outputQty))
             }
         }
 
@@ -585,7 +613,7 @@ class CraftingViewModel @Inject constructor(
                 if (task.type != "craft" || task.target != recipe.outputKey) continue
                 val remaining = task.amount - taskProgress.progress
                 if (remaining > 0)
-                    fills += QuestFillSuggestion(event.displayName, ceilDiv(remaining, recipe.outputQty))
+                    fills += QuestFillSuggestion(GameStrings.seasonalEventName(context, event.id, event.displayName), ceilDiv(remaining, recipe.outputQty))
             }
         }
 
@@ -664,7 +692,7 @@ class CraftingViewModel @Inject constructor(
                 }
                 if (matches) {
                     val neededCrafts = ceilDiv(remaining, recipe.outputQty)
-                    indicators.add(QuestIndicator(QuestCategory.MAIN, max >= neededCrafts))
+                    indicators.add(QuestIndicator(QuestCategory.GUILD, max >= neededCrafts))
                 }
             }
 
@@ -694,7 +722,7 @@ class CraftingViewModel @Inject constructor(
                 }
                 if (matches) {
                     val neededCrafts = ceilDiv(remaining, recipe.outputQty)
-                    indicators.add(QuestIndicator(QuestCategory.DAILY, max >= neededCrafts))
+                    indicators.add(QuestIndicator(QuestCategory.WEEKLY, max >= neededCrafts))
                 }
             }
 
@@ -711,7 +739,7 @@ class CraftingViewModel @Inject constructor(
                 }
                 if (matches) {
                     val neededCrafts = ceilDiv(remaining, recipe.outputQty)
-                    indicators.add(QuestIndicator(QuestCategory.DAILY, max >= neededCrafts))
+                    indicators.add(QuestIndicator(QuestCategory.GUILD_DAILY, max >= neededCrafts))
                 }
             }
 
@@ -728,4 +756,30 @@ class CraftingViewModel @Inject constructor(
     }
 
     private fun ceilDiv(a: Int, b: Int) = if (b <= 0) a else (a + b - 1) / b
+
+    private fun applyMaterialPreservation(materials: Map<String, Int>, qty: Int, saveChance: Float): Map<String, Int> {
+        val totalMats = materials.mapValues { it.value * qty }
+        if (saveChance <= 0f || totalMats.size <= 1) return totalMats
+        val entries = totalMats.entries.toList()
+        val result = mutableMapOf<String, Int>()
+        result[entries[0].key] = entries[0].value
+        for (i in 1 until entries.size) {
+            val (item, totalQty) = entries[i]
+            var toConsume = 0
+            for (u in 0 until totalQty) {
+                if (kotlin.random.Random.nextFloat() >= saveChance) toConsume++
+            }
+            if (toConsume > 0) result[item] = toConsume
+        }
+        return result
+    }
+
+    private fun applyQtyPreservation(totalQty: Int, saveChance: Float): Int {
+        if (saveChance <= 0f) return totalQty
+        var toConsume = 0
+        for (u in 0 until totalQty) {
+            if (kotlin.random.Random.nextFloat() >= saveChance) toConsume++
+        }
+        return toConsume
+    }
 }

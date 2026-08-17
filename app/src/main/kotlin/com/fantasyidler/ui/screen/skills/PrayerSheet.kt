@@ -46,7 +46,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -72,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
+import com.fantasyidler.ui.screen.QuestIndicatorIcons
 import com.fantasyidler.ui.viewmodel.ExpeditionsViewModel
 import com.fantasyidler.data.json.AgilityCourseData
 import com.fantasyidler.data.json.BoneData
@@ -81,7 +85,6 @@ import com.fantasyidler.data.json.OreData
 import com.fantasyidler.data.json.ThievingNpcData
 import com.fantasyidler.data.json.TreeData
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -114,6 +117,9 @@ import androidx.compose.ui.draw.alpha
 
 @Composable
 internal fun PrayerSheet(
+    guildDailyButton: (@Composable () -> Unit)? = null,
+    /** Host-owned back interceptor: set while the quantity page is open so the system back button steps back to the item list (issue #1330). */
+    backStep: MutableState<(() -> Unit)?>? = null,
     availableBones: Map<String, BoneData>,
     inventory: Map<String, Int>,
     prayerLevel: Int,
@@ -130,96 +136,105 @@ internal fun PrayerSheet(
 ) {
     val context = LocalContext.current
     var selectedKey by remember { mutableStateOf<String?>(null) }
+    val boneScrollState = rememberScrollState()
+    if (backStep != null) {
+        DisposableEffect(selectedKey) {
+            backStep.value = if (selectedKey != null) ({ selectedKey = null }) else null
+            onDispose { backStep.value = null }
+        }
+    }
+    // Dialog-based sheets (material3 1.3+) deliver back presses to in-content handlers;
+    // the host's onDismissRequest interception covers the older popup-based sheet.
+    BackHandler(enabled = selectedKey != null) { selectedKey = null }
     val selectedBone = selectedKey?.let { availableBones[it] }
+    val dim = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .imePadding()
             .padding(bottom = 32.dp),
     ) {
-        Text(
-            text     = stringResource(R.string.label_prayer),
-            style    = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-        )
-        Text(
-            text     = stringResource(R.string.skill_prayer_desc),
-            style    = MaterialTheme.typography.bodySmall,
-            color    = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
-        )
-        HorizontalDivider()
-
         if (selectedBone == null) {
-            // ── Bone selection ───────────────────────────────────────────
-            Row(
-                modifier          = Modifier
+            Column(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                    .verticalScroll(boneScrollState),
             ) {
                 Text(
-                    text     = stringResource(R.string.skills_prayer_desc, prayerLevel),
+                    text     = stringResource(R.string.label_prayer),
+                    style    = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                )
+                Text(
+                    text     = stringResource(R.string.skill_prayer_desc),
                     style    = MaterialTheme.typography.bodySmall,
                     color    = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.weight(1f).padding(vertical = 8.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp),
                 )
-                TextButton(onClick = onNavigateToBoneAltar) {
-                    Text(stringResource(R.string.bone_altar_open))
-                }
-            }
-            if (availableBones.isEmpty()) {
-                Box(
-                    modifier         = Modifier.fillMaxWidth().padding(32.dp),
-                    contentAlignment = Alignment.Center,
+                guildDailyButton?.invoke()
+                HorizontalDivider()
+
+                // ── Bone selection ───────────────────────────────────────────
+                Row(
+                    modifier          = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text  = stringResource(R.string.skills_no_bones),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        text     = stringResource(R.string.skills_prayer_desc, prayerLevel),
+                        style    = MaterialTheme.typography.bodySmall,
+                        color    = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f).padding(vertical = 8.dp),
                     )
+                    TextButton(onClick = onNavigateToBoneAltar) {
+                        Text(stringResource(R.string.bone_altar_open))
+                    }
                 }
-            } else {
-                availableBones.forEach { (key, bone) ->
-                    val qty = inventory[key] ?: 0
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { selectedKey = key }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+                if (availableBones.isEmpty()) {
+                    Box(
+                        modifier         = Modifier.fillMaxWidth().padding(32.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
-                        Column(Modifier.weight(1f)) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge)
-                                val questIndicators = activeQuests["${Skills.PRAYER}:$key"] ?: emptyList()
-                                if (questIndicators.isNotEmpty()) {
-                                    val categories = questIndicators.groupBy { it.category }
-                                    val sortedCategories = categories.entries.sortedBy { it.key }
-                                    sortedCategories.forEach { (category, indicators) ->
-                                        val emoji = if (category == QuestCategory.DAILY) "⏰" else "📜"
-                                        val isCompletable = indicators.any { it.isCompletable }
-                                        val alpha = if (isCompletable) 1.0f else 0.38f
-                                        Text(
-                                            text     = " $emoji",
-                                            style    = MaterialTheme.typography.bodyMedium,
-                                            modifier = Modifier.alpha(alpha),
-                                        )
+                        Text(
+                            text  = stringResource(R.string.skills_no_bones),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                } else {
+                    availableBones.forEach { (key, bone) ->
+                        val qty = inventory[key] ?: 0
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { selectedKey = key }
+                                .padding(horizontal = 16.dp, vertical = 12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(GameStrings.itemName(context, key), style = MaterialTheme.typography.bodyLarge)
+                                    val questIndicators = activeQuests["${Skills.PRAYER}:$key"] ?: emptyList()
+                                    if (questIndicators.isNotEmpty()) {
+                                        QuestIndicatorIcons(questIndicators)
                                     }
                                 }
+                                Text(
+                                    text  = stringResource(R.string.skills_xp_each, bone.xpPerBone.toInt()),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
                             }
                             Text(
-                                text  = stringResource(R.string.skills_bone_qty, bone.xpPerBone.toInt(), qty),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                text  = stringResource(R.string.crafting_owned, qty),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = if (qty > 0) MaterialTheme.colorScheme.primary else dim,
                             )
                         }
-                        Text(stringResource(R.string.btn_select), style = MaterialTheme.typography.labelMedium, color = GoldPrimary)
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                     }
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
             }
         } else {
@@ -292,19 +307,22 @@ internal fun PrayerSheet(
             }
             Spacer(Modifier.height(8.dp))
             QtyQuickButtons(qty, maxQty) { v -> qty = v; textValue = v.toString() }
-            QuestFillRow(questFills, qty, maxQty, modifier = Modifier.padding(horizontal = 16.dp)) { v -> qty = v; textValue = v.toString() }
+            // Ashes give Prayer XP but never count toward prayer quests (issue #1207).
+            if (!selectedBone.isAsh) {
+                QuestFillRow(questFills, qty, maxQty, modifier = Modifier.padding(horizontal = 16.dp)) { v -> qty = v; textValue = v.toString() }
+            }
             Spacer(Modifier.height(8.dp))
 
             Text(
                 text     = projectedXpLabel(currentXp, (qty * selectedBone.xpPerBone).toLong()),
                 style    = MaterialTheme.typography.bodyMedium,
-                color    = GoldPrimary,
+                color    = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
             if (sessionDurationMs > 0) {
                 Text(
-                    text     = "~${(qty.toLong() * (sessionDurationMs / 60)).formatDurationMs()}",
+                    text     = "~${(qty.toLong() * (sessionDurationMs / 60)).formatDurationMs(context)}",
                     style    = MaterialTheme.typography.bodySmall,
                     color    = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),

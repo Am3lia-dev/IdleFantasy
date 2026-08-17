@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -39,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
 import com.fantasyidler.data.json.EquipmentData
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.ArmoryEntry
 import com.fantasyidler.ui.viewmodel.ArmoryFilter
 import com.fantasyidler.ui.viewmodel.ArmorySort
@@ -97,18 +97,19 @@ fun ArmoryTab(viewModel: ArmoryViewModel = hiltViewModel()) {
         }
 
         val grouped = buildSlotGroups(state.entries)
-        LazyColumn(Modifier.fillMaxSize()) {
+        val listState = rememberLazyListState()
+        LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
             grouped.forEach { (groupName, entries) ->
                 item(key = "header_$groupName") {
                     Text(
                         text     = groupName,
                         style    = MaterialTheme.typography.labelMedium,
-                        color    = GoldPrimary,
+                        color    = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                     )
                     HorizontalDivider()
                 }
-                items(entries, key = { it.key }) { entry ->
+                items(entries, key = { "${groupName}_${it.key}" }) { entry ->
                     ArmoryRow(entry = entry, onClick = { selectedEntry = entry })
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
@@ -184,7 +185,7 @@ private fun ArmoryDetailContent(entry: ArmoryEntry) {
     val dimmed   = !entry.owned
     val statRows = armoryStatRows(item)
     val reqRows  = item.requirements.map { (skill, lvl) ->
-        skill.replaceFirstChar { it.uppercase() } to "Lv. $lvl"
+        GameStrings.skillName(context, skill) to context.getString(R.string.armory_req_level, lvl)
     }
 
     LazyColumn(
@@ -202,7 +203,7 @@ private fun ArmoryDetailContent(entry: ArmoryEntry) {
             Text(
                 text  = slotLabel(item.slot),
                 style = MaterialTheme.typography.labelMedium,
-                color = GoldPrimary,
+                color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(16.dp))
         }
@@ -304,7 +305,7 @@ private fun ArmorySectionHeader(text: String) {
         text       = text,
         style      = MaterialTheme.typography.labelMedium,
         fontWeight = FontWeight.SemiBold,
-        color      = GoldPrimary,
+        color      = MaterialTheme.colorScheme.primary,
     )
 }
 
@@ -317,7 +318,7 @@ private fun armoryStatSummary(item: EquipmentData): String {
     item.miningEfficiency?.let      { parts.add("×${"%.2f".format(it)}") }
     item.woodcuttingEfficiency?.let { parts.add("×${"%.2f".format(it)}") }
     item.fishingEfficiency?.let     { parts.add("×${"%.2f".format(it)}") }
-    item.farmingEfficiency?.let     { parts.add("+${"%.0f".format(it * 100)}% yield") }
+    item.farmingEfficiency?.let     { parts.add("×${"%.2f".format(it)}") }
     if (parts.isEmpty()) {
         if (item.attackBonus   != 0) parts.add("Atk +${item.attackBonus}")
         if (item.strengthBonus != 0) parts.add("Str +${item.strengthBonus}")
@@ -338,7 +339,7 @@ private fun armoryStatRows(item: EquipmentData): List<Pair<String, String>> {
     item.miningEfficiency?.let      { rows.add(stringResource(R.string.armory_stat_mining) to "×${"%.2f".format(it)}") }
     item.woodcuttingEfficiency?.let { rows.add(stringResource(R.string.armory_stat_woodcutting) to "×${"%.2f".format(it)}") }
     item.fishingEfficiency?.let     { rows.add(stringResource(R.string.armory_stat_fishing) to "×${"%.2f".format(it)}") }
-    item.farmingEfficiency?.let     { rows.add(stringResource(R.string.armory_stat_farming) to "×${"%.2f".format(1f + it)}") }
+    item.farmingEfficiency?.let     { rows.add(stringResource(R.string.armory_stat_farming) to "×${"%.2f".format(it)}") }
     item.smithingEfficiency?.let    { rows.add(stringResource(R.string.armory_stat_smithing) to "×${"%.2f".format(it)}") }
     item.firemakingEfficiency?.let  { rows.add(stringResource(R.string.armory_stat_firemaking) to "×${"%.2f".format(it)}") }
     item.agilityEfficiency?.let     { rows.add(stringResource(R.string.armory_stat_agility) to "×${"%.2f".format(it)}") }
@@ -420,14 +421,16 @@ private fun CollectionProgressBar(obtained: Int, total: Int, label: String) {
                 text  = "$pct%",
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                color = GoldPrimary,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
         Spacer(Modifier.height(4.dp))
         LinearProgressIndicator(
+            gapSize = 0.dp,
+            drawStopIndicator = {},
             progress = { fraction },
             modifier = Modifier.fillMaxWidth(),
-            color    = GoldPrimary,
+            color    = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant,
         )
     }

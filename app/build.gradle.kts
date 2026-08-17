@@ -15,8 +15,8 @@ android {
         applicationId = "com.tristinbaker.idlefantasy"
         minSdk = 26
         targetSdk = 35
-        versionCode = 122
-        versionName = "1.12.10"
+        versionCode = 135
+        versionName = "1.13.8"
     }
 
     dependenciesInfo {
@@ -76,7 +76,7 @@ android {
         // running `./gradlew lintDebug`.
         baseline = file("lint-baseline.xml")
         warningsAsErrors = false
-        warning += "MissingTranslation"
+        warning += listOf("MissingTranslation", "MissingQuantity")
     }
 
     testOptions {
@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
 
     // Compose

@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fantasyidler.data.json.TradeRouteData
 import com.fantasyidler.data.json.XpRange
+import com.fantasyidler.data.model.EquipSlot
+import com.fantasyidler.data.model.OwnedPet
 import com.fantasyidler.data.model.PlayerFlags
 import com.fantasyidler.data.model.QueuedAction
 import com.fantasyidler.data.model.SessionFrame
@@ -17,6 +19,8 @@ import com.fantasyidler.repository.QuestRepository
 import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.DailyQuestRepository
 import com.fantasyidler.repository.WeeklyQuestRepository
+import com.fantasyidler.repository.TownRepository
+import com.fantasyidler.repository.resolveCapeMultiplier
 import com.fantasyidler.simulator.MercantileSimulator
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.simulator.XpTable
@@ -35,12 +39,14 @@ import kotlinx.serialization.serializer
 import javax.inject.Inject
 import android.content.Context
 import com.fantasyidler.R
+import com.fantasyidler.util.GameStrings
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 data class MercantileUiState(
     val mercantileLevel: Int = 1,
     val mercantileXp: Long = 0L,
     val coins: Long = 0L,
+    val coinReturnMult: Float = 1f,
     val tradeRoutes: List<TradeRouteData> = emptyList(),
     val isLoading: Boolean = true,
     val startingSession: Boolean = false,
@@ -62,6 +68,7 @@ class MercantileViewModel @Inject constructor(
     private val guildRepo: GuildRepository,
     private val dailyQuestRepo: DailyQuestRepository,
     private val weeklyQuestRepo: WeeklyQuestRepository,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -80,11 +87,21 @@ class MercantileViewModel @Inject constructor(
             val flags   = try { json.decodeFromString<PlayerFlags>(player.flags) } catch (_: Exception) { PlayerFlags() }
             val level   = levels[Skills.MERCANTILE] ?: 1
             val routes  = gameData.tradeRoutes.filter { it.levelRequired <= level }
+            // Mirror the collection-time coin math in HomeViewModel so the displayed
+            // return range matches what a session can actually pay out.
+            val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
+            val inventory: Map<String, Int>    = json.decodeFromString(player.inventory)
+            val equippedCape = equipped[EquipSlot.CAPE]?.let { gameData.equipment[it] }
+            val capeMult     = resolveCapeMultiplier(Skills.MERCANTILE, equippedCape, inventory.keys, flags.townBuildingTiers, flags.skillPrestige, gameData.equipment, flags.ironman)
+            val prestigeMult = if (flags.ironman) 1f else 1f + (flags.skillPrestige[Skills.MERCANTILE] ?: 0) * 0.10f
+            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags) *
+                PlayerRepository.gooseCoinMultiplier(json.decodeFromString<List<OwnedPet>>(player.pets)).toFloat()
             extra.copy(
                 isLoading        = false,
                 mercantileLevel  = level,
                 mercantileXp     = xp[Skills.MERCANTILE] ?: 0L,
                 coins            = player.coins,
+                coinReturnMult   = capeMult * prestigeMult * blessingCoinMult,
                 tradeRoutes      = routes,
                 anySessionActive = session != null,
                 queueSize        = flags.sessionQueue.size,
@@ -123,7 +140,7 @@ class MercantileViewModel @Inject constructor(
                 val xpRange = matchedKey?.let { route.xpRanges[it.toString()] } ?: XpRange(1, 1)
 
                 val expectedRawXp = (xpRange.min + xpRange.max) * 30L
-                val xpQueueMult = (if (mercFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(mercFlags)
+                val xpQueueMult = if (mercFlags.ironman) 1.0 else (if (mercFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(mercFlags)
                 val prestigeLevel = mercFlags.skillPrestige[Skills.MERCANTILE] ?: 0
                 val prestigeMult = 1.0 + prestigeLevel * 0.10
                 val estimatedXpGain = (expectedRawXp * xpQueueMult * prestigeMult).toLong()
@@ -134,7 +151,7 @@ class MercantileViewModel @Inject constructor(
                         activityKey         = routeId,
                         skillDisplayName    = "Mercantile",
                         estimatedXpGain     = estimatedXpGain,
-                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agilityLevel, mercFlags.skillPrestige[Skills.AGILITY] ?: 0),
+                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agilityLevel, mercFlags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(mercFlags)),
                         coinRefund          = route.coinCost.toLong(),
                     )
                 )
@@ -143,7 +160,7 @@ class MercantileViewModel @Inject constructor(
                 }
                 _extra.update {
                     it.copy(snackbarMessage = if (enqueued)
-                        context.getString(R.string.mercantile_added_to_queue, route.displayName)
+                        context.getString(R.string.mercantile_added_to_queue, GameStrings.tradeRouteName(context, routeId))
                     else
                         context.getString(R.string.snackbar_queue_full))
                 }
@@ -162,6 +179,7 @@ class MercantileViewModel @Inject constructor(
                 val result  = MercantileSimulator.simulate(
                     route, startXp, agilityLevel,
                     agilityPrestige = mercFlags.skillPrestige[Skills.AGILITY] ?: 0,
+                    chronosMultiplier = townRepo.playerSessionDurationMultiplier(mercFlags),
                 )
                 val framesJson = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),
@@ -234,7 +252,7 @@ class MercantileViewModel @Inject constructor(
             if (guildRepo.guildLevel(quest.guild, flags.guildDailyTierCounts, completedIds) < quest.guildLevelRequired) continue
 
             val effectiveAmount = guildRepo.effectiveQuestAmountFromFlags(quest, flags)
-            checkAndAdd(quest.type, quest.guild, quest.target, effectiveAmount, prog?.progress ?: 0, QuestCategory.MAIN)
+            checkAndAdd(quest.type, quest.guild, quest.target, effectiveAmount, prog?.progress ?: 0, QuestCategory.GUILD)
         }
 
         for (daily in activeDailies) {
@@ -242,13 +260,13 @@ class MercantileViewModel @Inject constructor(
         }
 
         for (weekly in activeWeeklies) {
-            checkAndAdd(weekly.template.type, weekly.template.skill, weekly.template.target, weekly.template.amount, weekly.progress, QuestCategory.DAILY)
+            checkAndAdd(weekly.template.type, weekly.template.skill, weekly.template.target, weekly.template.amount, weekly.progress, QuestCategory.WEEKLY)
         }
 
         for (id in activeGuildDailyIds) {
             val template = guildPool[id] ?: continue
             val progress = flags.guildDailyProgress[id] ?: 0
-            checkAndAdd(template.type, template.guild, template.target, template.amount, progress, QuestCategory.DAILY)
+            checkAndAdd(template.type, template.guild, template.target, template.amount, progress, QuestCategory.GUILD_DAILY)
         }
 
         return result

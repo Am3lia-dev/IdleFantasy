@@ -1,5 +1,7 @@
 package com.fantasyidler.repository
 
+import com.fantasyidler.data.model.EquipSlot
+import com.fantasyidler.data.model.Skills
 import com.fantasyidler.data.model.SlayerTask
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,6 +19,7 @@ class SlayerRepository @Inject constructor(
     private val playerRepo: PlayerRepository,
     private val questRepo: QuestRepository,
     private val gameData: GameDataRepository,
+    private val guildRepo: GuildRepository,
 ) {
 
     /** Pick and assign a random eligible task for the given Slayer level. Returns false if no eligible tasks exist. */
@@ -58,16 +61,13 @@ class SlayerRepository @Inject constructor(
         if (eligible.isEmpty()) return@withLock false
 
         val (enemyKey, cfg) = eligible.entries.random()
-        val displayName = gameData.enemies[enemyKey]?.displayName
-            ?: enemyKey.split('_').joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
-        val targetKills = kotlin.random.Random.nextInt(cfg.minKills, cfg.maxKills + 1)
+        val targetKills = Random.nextInt(cfg.minKills, cfg.maxKills + 1)
         val taskPoints  = maxOf(3, cfg.slayerLevel / 5)
 
         playerRepo.updateFlagsUnlocked(
             flags.copy(
                 activeSlayerTask = SlayerTask(
                     enemyKey       = enemyKey,
-                    displayName    = displayName,
                     targetKills    = targetKills,
                     killsCompleted = 0,
                     xpPerKill      = cfg.xpPerKill,
@@ -134,13 +134,10 @@ class SlayerRepository @Inject constructor(
         playerRepo.consumeItemsUnlocked(toConsume)
 
         val (enemyKey, cfg) = eligible.entries.random()
-        val displayName = gameData.enemies[enemyKey]?.displayName
-            ?: enemyKey.split('_').joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
-        val targetKills = kotlin.random.Random.nextInt(cfg.minKills, cfg.maxKills + 1)
+        val targetKills = Random.nextInt(cfg.minKills, cfg.maxKills + 1)
         val taskPoints  = maxOf(3, cfg.slayerLevel / 5)
         val task = SlayerTask(
             enemyKey       = enemyKey,
-            displayName    = displayName,
             targetKills    = targetKills,
             killsCompleted = 0,
             xpPerKill      = cfg.xpPerKill,
@@ -169,10 +166,16 @@ class SlayerRepository @Inject constructor(
 
         val added          = minOf(count, task.targetKills - task.killsCompleted)
         if (added <= 0) return 0L
-        val xpEarned       = added.toLong() * task.xpPerKill
+        val equippedCape   = playerRepo.getEquipped()[EquipSlot.CAPE]?.let { gameData.equipment[it] }
+        val capeMult       = resolveCapeMultiplier(
+            Skills.SLAYER, equippedCape, playerRepo.getInventory().keys,
+            flags.townBuildingTiers, flags.skillPrestige, gameData.equipment, flags.ironman,
+        )
+        val xpEarned       = (added.toLong() * task.xpPerKill * capeMult).toLong()
         val newCompleted   = task.killsCompleted + added
+        val taskCompleted  = newCompleted >= task.targetKills
 
-        if (newCompleted >= task.targetKills) {
+        if (taskCompleted) {
             val freshFlags = playerRepo.getFlags()  // re-read to get latest foretelledTasks
             val nextTask = freshFlags.foretelledTasks.firstOrNull()
             playerRepo.updateFlags(
@@ -191,6 +194,7 @@ class SlayerRepository @Inject constructor(
                 )
             )
         }
+        guildRepo.recordGuildSlayer(added, if (taskCompleted) 1 else 0)
         return xpEarned
     }
 

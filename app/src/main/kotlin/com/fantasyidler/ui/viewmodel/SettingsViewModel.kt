@@ -3,27 +3,31 @@ package com.fantasyidler.ui.viewmodel
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fantasyidler.data.json.ThemeData
+import com.fantasyidler.data.model.CustomTheme
 import com.fantasyidler.data.model.PlayerFlags
-import com.fantasyidler.data.model.toExport
-import com.fantasyidler.data.model.toSkillSession
 import com.fantasyidler.repository.BackupScheduler
 import com.fantasyidler.repository.FarmingRepository
-import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.PlayerRepository
-import com.fantasyidler.repository.QueuedSessionStarter
 import com.fantasyidler.repository.QuestRepository
+import com.fantasyidler.repository.SaveSlotRepository
 import com.fantasyidler.repository.SessionRepository
-import com.fantasyidler.repository.WorkerQueuedSessionStarter
+import com.fantasyidler.repository.ThemeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,13 +36,18 @@ class SettingsViewModel @Inject constructor(
     private val playerRepo: PlayerRepository,
     private val sessionRepo: SessionRepository,
     private val questRepo: QuestRepository,
-    private val queuedSessionStarter: QueuedSessionStarter,
-    private val workerStarter: WorkerQueuedSessionStarter,
     private val backupScheduler: BackupScheduler,
-    private val guildRepo: GuildRepository,
     private val farmingRepo: FarmingRepository,
+    private val saveSlotRepo: SaveSlotRepository,
+    private val themeRepo: ThemeRepository,
     private val json: Json,
 ) : ViewModel() {
+
+    val officialThemes: List<String> = themeRepo.getOfficialThemes()
+
+    val customThemes: StateFlow<List<CustomTheme>> = themeRepo.observeCustomThemes()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000),
+            emptyList())
 
     val themePreference: StateFlow<String> = playerRepo.playerFlow
         .map { player ->
@@ -47,6 +56,25 @@ class SettingsViewModel @Inject constructor(
             catch (_: Exception) { "dark" }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "dark")
+
+    private val systemDark = MutableStateFlow(themeRepo.isSystemDarkNow())
+
+    /** Keeps the "system" theme in sync with the device night-mode setting; fed from composition. */
+    fun setSystemDark(dark: Boolean) { systemDark.value = dark }
+
+    val colourScheme: StateFlow<ColorScheme> = combine(
+        playerRepo.playerFlow,
+        themeRepo.observeCustomThemes(),
+        systemDark,
+    ) { player, _, isSystemDark ->
+        val preference = if (player == null) {
+            "dark"
+        } else {
+            try { json.decodeFromString<PlayerFlags>(player.flags).themePreference }
+            catch (_: Exception) { "dark" }
+        }
+        themeRepo.getColourScheme(preference, isSystemDark)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), darkColorScheme())
 
     val fontScale: StateFlow<Float> = playerRepo.playerFlow
         .map { player ->
@@ -76,6 +104,30 @@ class SettingsViewModel @Inject constructor(
         .map { player ->
             if (player == null) return@map true
             try { json.decodeFromString<PlayerFlags>(player.flags).showRecentActivityLog }
+            catch (_: Exception) { true }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
+    val showQuestDots: StateFlow<Boolean> = playerRepo.playerFlow
+        .map { player ->
+            if (player == null) return@map true
+            try { json.decodeFromString<PlayerFlags>(player.flags).showQuestDots }
+            catch (_: Exception) { true }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
+
+    val compactNumbers: StateFlow<Boolean> = playerRepo.playerFlow
+        .map { player ->
+            if (player == null) return@map false
+            try { json.decodeFromString<PlayerFlags>(player.flags).compactNumbers }
+            catch (_: Exception) { false }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    val showPrestigeNotifications: StateFlow<Boolean> = playerRepo.playerFlow
+        .map { player ->
+            if (player == null) return@map true
+            try { json.decodeFromString<PlayerFlags>(player.flags).showPrestigeNotifications }
             catch (_: Exception) { true }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), true)
@@ -150,6 +202,27 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setShowQuestDots(enabled: Boolean) {
+        viewModelScope.launch {
+            val flags = playerRepo.getFlags()
+            playerRepo.updateFlags(flags.copy(showQuestDots = enabled))
+        }
+    }
+
+    fun setCompactNumbers(enabled: Boolean) {
+        viewModelScope.launch {
+            val flags = playerRepo.getFlags()
+            playerRepo.updateFlags(flags.copy(compactNumbers = enabled))
+        }
+    }
+
+    fun setShowPrestigeNotifications(enabled: Boolean) {
+        viewModelScope.launch {
+            val flags = playerRepo.getFlags()
+            playerRepo.updateFlags(flags.copy(showPrestigeNotifications = enabled))
+        }
+    }
+
     fun setShowJournalButton(enabled: Boolean) {
         viewModelScope.launch {
             val flags = playerRepo.getFlags()
@@ -196,6 +269,16 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val flags = playerRepo.getFlags()
             playerRepo.updateFlags(flags.copy(themePreference = preference))
+        }
+    }
+
+    fun deleteTheme(theme: String) {
+        viewModelScope.launch {
+            if (!themeRepo.deleteTheme(theme)) return@launch
+            val flags = playerRepo.getFlags()
+            if (flags.themePreference == theme) {
+                playerRepo.updateFlags(flags.copy(themePreference = "dark"))
+            }
         }
     }
 
@@ -251,50 +334,42 @@ class SettingsViewModel @Inject constructor(
 
     fun exportSave(onReady: (String) -> Unit) {
         viewModelScope.launch {
-            val sessions = buildList {
-                sessionRepo.getActiveSession()?.let { add(it.toExport()) }
-                addAll(sessionRepo.getAllCompletedSessions().map { it.toExport() })
-                for (slot in 1..2) {
-                    sessionRepo.getActiveWorkerSession(slot)?.let { add(it.toExport()) }
-                    addAll(sessionRepo.getAllCompletedWorkerSessions(slot).map { it.toExport() })
-                }
-            }.distinctBy { it.sessionId }
-            onReady(playerRepo.exportSave(sessions))
+            onReady(saveSlotRepo.exportFullSave())
         }
     }
 
-    fun importSave(jsonString: String, onDone: (success: Boolean) -> Unit) {
+    fun importSave(jsonString: String, onDone: (success: Boolean, ironmanDemoted: Boolean) -> Unit) {
         viewModelScope.launch {
             try {
-                val export = playerRepo.importSave(jsonString)
-                // Imported flags may predate the guild-leveling rework (reputation -> daily-count),
-                // and importing overwrites the current save's migration state wholesale, so this
-                // must re-run here rather than relying on the one-time app-startup call.
-                guildRepo.migrateLegacyGuildReputation()
-                sessionRepo.deleteAllSessions()
-                sessionRepo.deleteAllWorkerSessions()
-                val now = System.currentTimeMillis()
-                val exportedAt = export.exportedAt.takeIf { it > 0L } ?: now
-                export.sessions.forEach { s ->
-                    val session = if (s.completed) {
-                        s.toSkillSession()
-                    } else {
-                        val remainingMs = (s.endsAt - exportedAt).coerceAtLeast(0L)
-                        s.toSkillSession().copy(endsAt = now + remainingMs)
-                    }
-                    try {
-                        sessionRepo.insertSession(session)
-                    } catch (_: Exception) {
-                        // A duplicate/bad session in an old export file shouldn't abort the whole restore.
-                    }
-                }
-                sessionRepo.recoverActiveSession(queuedSessionStarter)
-                sessionRepo.recoverActiveWorkerSession(1, workerStarter)
-                sessionRepo.recoverActiveWorkerSession(2, workerStarter)
+                val ironmanDemoted = saveSlotRepo.importFullSave(jsonString)
+                onDone(true, ironmanDemoted)
+            } catch (_: Exception) {
+                onDone(false, false)
+            }
+        }
+    }
+
+    fun importTheme(jsonString: String, onDone: (success: Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                themeRepo.importTheme(jsonString)
                 onDone(true)
             } catch (_: Exception) {
                 onDone(false)
             }
+        }
+    }
+
+    /** Serializes [theme] in the shape importTheme reads and hands it to [onReady]. */
+    fun exportTheme(theme: String, onReady: (jsonString: String) -> Unit) {
+        viewModelScope.launch {
+            val data = themeRepo.getThemeData(theme) ?: return@launch
+            onReady(
+                json.encodeToString(
+                    json.serializersModule.serializer<Map<String, ThemeData>>(),
+                    mapOf(theme to data),
+                )
+            )
         }
     }
 }

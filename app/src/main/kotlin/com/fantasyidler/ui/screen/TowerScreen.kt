@@ -1,5 +1,7 @@
 package com.fantasyidler.ui.screen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -39,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,7 +56,6 @@ import com.fantasyidler.data.json.EquipmentData
 import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.ui.viewmodel.TowerMilestone
 import com.fantasyidler.ui.viewmodel.TowerViewModel
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.util.GameStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +88,16 @@ fun TowerScreen(
             return@Scaffold
         }
 
+        val listState  = rememberLazyListState()
+        val hasSession = state.towerSession != null
+        // Starting a session collapses the pickers in the header card, which would
+        // otherwise strand the scroll position partway down the milestone list (issue #1259).
+        LaunchedEffect(hasSession) {
+            if (hasSession) listState.animateScrollToItem(0)
+        }
+
         LazyColumn(
+            state          = listState,
             modifier       = Modifier
                 .padding(padding)
                 .fillMaxSize(),
@@ -100,6 +112,7 @@ fun TowerScreen(
                     hasSession           = state.towerSession != null,
                     sessionDone          = state.towerSession?.completed == true,
                     startingSession      = state.startingSession,
+                    isQueueFull          = state.isQueueFull,
                     equippedWeapons      = state.equippedWeapons,
                     selectedWeaponSlot   = state.selectedWeaponSlot,
                     onWeaponSlotSelected = viewModel::selectWeaponSlot,
@@ -150,6 +163,7 @@ private fun TowerHeaderCard(
     hasSession:           Boolean,
     sessionDone:          Boolean,
     startingSession:      Boolean,
+    isQueueFull:          Boolean,
     equippedWeapons:      Map<String, EquipmentData>,
     selectedWeaponSlot:   String?,
     onWeaponSlotSelected: (String) -> Unit,
@@ -192,11 +206,13 @@ private fun TowerHeaderCard(
                         Text(
                             text  = stringResource(R.string.tower_best_floor, bestFloor),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
-                if (currentFloor > 0) {
+                // Stat scaling only starts past floor 100 (lower floors get harder via
+                // tougher enemy types); a permanent +0% chip reads as a bug (issue #1049).
+                if (currentFloor > 0 && enemyStrengthPct > 0) {
                     SuggestionChip(
                         onClick = {},
                         label   = { Text(stringResource(R.string.tower_enemy_strength, "+$enemyStrengthPct")) },
@@ -204,8 +220,8 @@ private fun TowerHeaderCard(
                 }
             }
 
-            // Weapon picker — only when no active session
-            if (!hasSession && equippedWeapons.isNotEmpty()) {
+            // Weapon picker — selection applies to the next floor attempt
+            if (equippedWeapons.isNotEmpty()) {
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text  = stringResource(R.string.label_weapon),
@@ -241,8 +257,8 @@ private fun TowerHeaderCard(
                 }
             }
 
-            // Arrow picker — ranged combat style only, no active session
-            if (!hasSession && combatStyle == "ranged" && availableArrows.isNotEmpty()) {
+            // Arrow picker — ranged combat style only
+            if (combatStyle == "ranged" && availableArrows.isNotEmpty()) {
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text  = stringResource(R.string.combat_label_arrow),
@@ -265,8 +281,8 @@ private fun TowerHeaderCard(
                 }
             }
 
-            // Spell picker — magic combat style only, no active session
-            if (!hasSession && combatStyle == "magic") {
+            // Spell picker — magic combat style only
+            if (combatStyle == "magic") {
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text  = stringResource(R.string.label_active_spell),
@@ -297,8 +313,8 @@ private fun TowerHeaderCard(
                 }
             }
 
-            // Potion picker — always available, no active session
-            if (!hasSession && availablePotions.isNotEmpty()) {
+            // Potion picker
+            if (availablePotions.isNotEmpty()) {
                 Spacer(Modifier.height(12.dp))
                 Text(
                     text  = "Potion",
@@ -317,7 +333,8 @@ private fun TowerHeaderCard(
                             onClick  = { onPotionSelected(key) },
                             label    = {
                                 Text(
-                                    text  = if (key == null) stringResource(R.string.combat_no_potion) else GameStrings.itemName(context, key),
+                                    text  = if (key == null) stringResource(R.string.combat_no_potion)
+                                            else "${GameStrings.itemName(context, key)} (${availablePotions[key]})",
                                     style = MaterialTheme.typography.bodySmall,
                                 )
                             },
@@ -336,12 +353,28 @@ private fun TowerHeaderCard(
                     Text(stringResource(R.string.tower_collect_prompt))
                 }
 
-                else        -> Button(
-                    onClick  = onStart,
-                    enabled  = !startingSession,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(stringResource(R.string.tower_start_btn, nextFloorToQueue))
+                else        -> {
+                    val queueFullMessage = stringResource(R.string.snackbar_queue_full)
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Button(
+                            onClick  = onStart,
+                            enabled  = !startingSession && !isQueueFull,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(stringResource(R.string.tower_start_btn, nextFloorToQueue))
+                        }
+                        if (isQueueFull) {
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication        = null,
+                                        onClick           = { AppBannerCenter.enqueue(queueFullMessage) },
+                                    ),
+                            )
+                        }
+                    }
                 }
             }
 
@@ -377,7 +410,7 @@ private fun MilestoneRow(
                 text       = stringResource(R.string.tower_floor_label, milestone.floor),
                 style      = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
-                color      = if (unlocked) GoldPrimary else dimColor,
+                color      = if (unlocked) MaterialTheme.colorScheme.primary else dimColor,
             )
             Text(
                 text  = milestone.description,

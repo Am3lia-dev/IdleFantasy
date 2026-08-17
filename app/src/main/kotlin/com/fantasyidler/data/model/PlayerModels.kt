@@ -33,6 +33,8 @@ data class PlayerFlags(
     @SerialName("battery_prompt_shown") val batteryPromptShown: Boolean = false,
     /** Epoch ms when the 2× XP boost expires; 0 = not active. */
     @SerialName("xp_boost_expires_at") val xpBoostExpiresAt: Long = 0L,
+    /** Epoch ms of the most recent 2× XP boost purchase; gates one purchase per weekly reset. */
+    @SerialName("xp_boost_last_purchase_at") val xpBoostLastPurchaseAt: Long = 0L,
     @SerialName("character_name") val characterName: String = "",
     @SerialName("character_gender") val characterGender: String = "",
     @SerialName("character_race") val characterRace: String = "",
@@ -92,6 +94,8 @@ data class PlayerFlags(
     @SerialName("weekly_bonus_claimed") val weeklyBonusClaimed: Boolean = false,
     /** Consecutive weekly bonus claims without a Divine gear drop; resets to 0 on a drop. */
     @SerialName("divine_pity_misses") val divinePityMisses: Int = 0,
+    /** Claimed dailies since the last Dwarven gear drop; each narrows the drop odds by 2 (1/100, 1/98, ...). */
+    @SerialName("dwarven_pity_claims") val dwarvenPityClaims: Int = 0,
 
     /** Currently hired worker, or null if none. */
     @SerialName("hired_worker") val hiredWorker: HiredWorker? = null,
@@ -157,6 +161,18 @@ data class PlayerFlags(
     @SerialName("profile_layout") val profileLayout: String = "rail",
     /** Whether session/queue countdowns append the predicted wall-clock completion time. */
     @SerialName("show_session_end_time") val showSessionEndTime: Boolean = true,
+    /** Gold quest dots on the Skills tab icons; some players prefer them off (discussion #1386). */
+    @SerialName("show_quest_dots") val showQuestDots: Boolean = true,
+    /** Whether to abbreviate large item quantities/numbers (e.g. 2.46M vs 2,461,940). */
+    @SerialName("compact_numbers") val compactNumbers: Boolean = false,
+    /** Nav bar badge dots for combat/skill prestige availability. */
+    @SerialName("show_prestige_notifications") val showPrestigeNotifications: Boolean = true,
+    /** Shop: bulk and manual sells always leave one of each item for collectors. */
+    @SerialName("shop_keep_one_of_each") val shopKeepOneOfEach: Boolean = false,
+    /** Epoch ms when this character was created; 0 for pre-existing characters until backfilled
+     *  from their oldest quest completion (sessions are deleted on collect, so quest timestamps
+     *  are the oldest surviving record). */
+    @SerialName("character_created_at") val characterCreatedAt: Long = 0L,
     /** Prestige level per skill: skill key → 0–3. */
     @SerialName("skill_prestige") val skillPrestige: Map<String, Int> = emptyMap(),
     /** Ash fertilizer per farming patch: patchNumber.toString() → ash item key. */
@@ -209,18 +225,41 @@ data class PlayerFlags(
     @SerialName("seasonal_bounty_slots") val seasonalBountySlots: List<String> = emptyList(),
     /** Seasonal Events: slot index (as String) -> epoch ms when a claimed slot rotates in a new task. */
     @SerialName("seasonal_bounty_slot_cooldown") val seasonalBountySlotCooldownUntil: Map<String, Long> = emptyMap(),
+    /** When the bounty board last did its 6am daily rotation of untouched slots. */
+    @SerialName("seasonal_bounty_daily_stamp") val seasonalBountyDailyStamp: Long = 0L,
     /** Seasonal Events: epoch ms when the minigame cooldown expires; 0 = not on cooldown. */
     @SerialName("seasonal_minigame_cooldown_at") val seasonalMinigameCooldownAt: Long = 0L,
     /** Seasonal Events: persistent player choice — longer reaction window, longer cooldown. */
     @SerialName("seasonal_minigame_easy_mode") val seasonalMinigameEasyMode: Boolean = false,
     /** Seasonal Events: permanent record of every event completed, kept even after the event's data is removed. */
     @SerialName("seasonal_banners_earned") val seasonalBannersEarned: List<SeasonalBannerEarned> = emptyList(),
+    /** Grand Monument: completed stage (0-5). Stages 1-4 are lump purchases; 5 completes via [monumentFund]. */
+    @SerialName("monument_tier") val monumentTier: Int = 0,
+    /** Grand Monument: coins contributed toward the stage-5 Eternal Flame. */
+    @SerialName("monument_fund") val monumentFund: Long = 0L,
+    /** Grand Monument: yyyymmdd of the last daily touch boon. */
+    @SerialName("monument_touch_day") val monumentTouchDay: Int = 0,
+    /** Boss coin soft cap: yyyymmdd day stamp [bossCoinKillsByBoss] applies to. */
+    @SerialName("boss_coin_day") val bossCoinDay: Int = 0,
+    /** Boss coin soft cap: boss key -> victorious kills recorded for [bossCoinDay]. */
+    @SerialName("boss_coin_kills_by_boss") val bossCoinKillsByBoss: Map<String, Int> = emptyMap(),
+    /** Item keys the player locked against selling (long-press in the shop's sell list). */
+    @SerialName("locked_items") val lockedItems: List<String> = emptyList(),
+    /** Seasonal Events: event id -> token thresholds of reward tiers already claimed. */
+    @SerialName("seasonal_reward_tiers_claimed") val seasonalRewardTiersClaimed: Map<String, List<Int>> = emptyMap(),
+    /** Seasonal Events: "eventId:offerId" -> number of Night Market purchases made. */
+    @SerialName("seasonal_market_purchases") val seasonalMarketPurchases: Map<String, Int> = emptyMap(),
     /** Free-text notes the player jots down for themselves (e.g. what to queue next). */
     @SerialName("player_notes") val playerNotes: String = "",
     /** Titles: ids of every title ever earned. A title, once unlocked, is never revoked. */
     @SerialName("unlocked_titles") val unlockedTitles: Set<String> = emptySet(),
     /** Titles: id of the currently equipped title, or null for none. */
     @SerialName("equipped_title") val equippedTitle: String? = null,
+    /**
+     * Ironman mode: chosen at character creation, permanent. All XP/yield/coin multipliers are
+     * inert, shop buying is blocked, and workers cannot be hired. Never written after creation.
+     */
+    @SerialName("ironman") val ironman: Boolean = false,
 )
 
 /** A permanent snapshot of a completed Seasonal Event, shown in the Profile Banners tab. */
@@ -255,7 +294,6 @@ data class RecentSession(
 @Serializable
 data class SlayerTask(
     @SerialName("enemy_key")       val enemyKey: String,
-    @SerialName("display_name")    val displayName: String,
     @SerialName("target_kills")    val targetKills: Int,
     @SerialName("kills_completed") val killsCompleted: Int = 0,
     @SerialName("xp_per_kill")     val xpPerKill: Int,
@@ -415,6 +453,12 @@ data class PlayerExport(
     val farmingPatches: List<FarmingPatch> = emptyList(),
     val sessions: List<SkillSessionExport> = emptyList(),
     @SerialName("exported_at") val exportedAt: Long = 0L,
+    /**
+     * HMAC over the seven core player fields, written on every export. Only enforced when the
+     * save claims ironman: an edited or unsigned ironman save imports fine but loses its
+     * ironman status. Deterrence only — the key ships in this open-source app.
+     */
+    @SerialName("sig") val sig: String = "",
 )
 
 // ---------------------------------------------------------------------------

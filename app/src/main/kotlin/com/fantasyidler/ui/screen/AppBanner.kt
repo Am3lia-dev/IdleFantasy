@@ -94,9 +94,14 @@ private const val BANNER_DISPLAY_MS = 2_500L
 @Composable
 fun AppBannerHost() {
     val current by AppBannerCenter.current.collectAsState()
+    val hostView = LocalView.current
 
     LaunchedEffect(current) {
-        if (current != null) {
+        current?.let { shown ->
+            // Banners replaced Toasts, which TalkBack announced on its own. The banner's
+            // window is non-focusable, so screen readers say nothing without an explicit
+            // announcement (#1241).
+            hostView.announceForAccessibility(shown.message)
             delay(BANNER_DISPLAY_MS)
             AppBannerCenter.dismissCurrent()
         }
@@ -118,7 +123,12 @@ fun AppBannerHost() {
                 window.setGravity(Gravity.TOP)
                 window.setDimAmount(0f)
                 window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+                // NOT_FOCUSABLE keeps key input (the system back press) routed to the
+                // window below; a focusable banner window swallowed back presses for
+                // its whole display time (issue #1212). Tap-to-dismiss is positional
+                // touch, so it is unaffected.
                 window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+                window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
                 window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             }
         }

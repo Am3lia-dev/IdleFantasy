@@ -17,13 +17,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,7 +42,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -67,7 +68,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fantasyidler.R
 import com.fantasyidler.data.json.CarnivalPrize
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
+import com.fantasyidler.ui.components.LampSkillDialog
 import com.fantasyidler.ui.viewmodel.ActiveGameState
 import com.fantasyidler.ui.viewmodel.AppraisalQuad
 import com.fantasyidler.ui.viewmodel.CarnivalViewModel
@@ -82,6 +83,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
 import com.fantasyidler.simulator.CarnivalSimulator
@@ -102,7 +104,17 @@ private val POTION_COLORS = listOf(
     Color(0xFF00BCD4), // cyan   (hard mode)
 )
 
-private val POTION_NAMES = listOf("Green", "Blue", "Red", "Purple", "Orange", "Cyan")
+// One single-letter string per potion color, translator-controlled so every
+// language can pick six DISTINCT letters (in French "Violet" and "Vert" would
+// otherwise both abbreviate to V - issue #1146).
+private val POTION_LETTER_RES = listOf(
+    R.string.carnival_potion_letter_green,
+    R.string.carnival_potion_letter_blue,
+    R.string.carnival_potion_letter_red,
+    R.string.carnival_potion_letter_purple,
+    R.string.carnival_potion_letter_orange,
+    R.string.carnival_potion_letter_cyan,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,9 +129,10 @@ fun CarnivalScreen(
     state.pendingLampPrizeKey?.let { prizeKey ->
         val prize = viewModel.prizesMap[prizeKey]
         if (prize != null) {
-            LampSkillPickerDialog(
-                xpAmount        = prize.xpAmount,
+            LampSkillDialog(
                 skillLevels     = state.skillLevels,
+                skillXp         = state.skillXp,
+                sessionXpGain   = prize.xpAmount,
                 onSkillSelected = viewModel::redeemLamp,
                 onDismiss       = viewModel::dismissLampPicker,
             )
@@ -136,7 +149,7 @@ fun CarnivalScreen(
                         Text(
                             text  = stringResource(R.string.carnival_ticket_balance, state.ticketBalance),
                             style = MaterialTheme.typography.bodySmall,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 },
@@ -262,7 +275,7 @@ private fun IdleGamesTab(
                             Text(
                                 text  = stringResource(R.string.carnival_skill_level, GameStrings.skillName(context, game.skillKey), skillLevel),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = GoldPrimary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                             Text(
                                 text  = stringResource(R.string.carnival_ticket_yield, myTickets),
@@ -420,7 +433,7 @@ private fun RingTossCard(gameState: ActiveGameState, difficulty: Difficulty, vie
                     stringResource(R.string.carnival_ring_hard_hint)
                 else
                     stringResource(R.string.carnival_ring_target_hint)
-                Text(hint, style = MaterialTheme.typography.bodySmall, color = GoldPrimary)
+                Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                 Button(onClick = viewModel::startRingToss, modifier = Modifier.fillMaxWidth()) {
                     Text(stringResource(R.string.carnival_play))
                 }
@@ -443,19 +456,23 @@ private fun RingTossCard(gameState: ActiveGameState, difficulty: Difficulty, vie
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     BoxWithConstraints(modifier = Modifier.fillMaxWidth().height(24.dp)) {
                         LinearProgressIndicator(
+                            gapSize = 0.dp,
+                            drawStopIndicator = {},
                             progress         = { position },
                             modifier         = Modifier.fillMaxWidth().height(24.dp).clip(RoundedCornerShape(4.dp)),
                             color            = if (inZone) Color(0xFFF44336) else MaterialTheme.colorScheme.primary,
                             trackColor       = MaterialTheme.colorScheme.surfaceVariant,
                         )
                         // Drawn after the indicator so its opaque track doesn't hide this marker.
+                        // Padding must precede width: the offset has to displace the box, not
+                        // shrink its content to nothing (issue #1372).
                         Box(
                             modifier = Modifier
-                                .width(maxWidth * (targetEnd - targetStart))
                                 .align(Alignment.CenterStart)
                                 .padding(start = maxWidth * targetStart)
+                                .width(maxWidth * (targetEnd - targetStart))
                                 .height(24.dp)
-                                .background(GoldPrimary.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
                         )
                     }
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -463,10 +480,26 @@ private fun RingTossCard(gameState: ActiveGameState, difficulty: Difficulty, vie
                             stringResource(R.string.carnival_ring_hard_hint)
                         else
                             stringResource(R.string.carnival_ring_target_hint)
-                        Text(hint, style = MaterialTheme.typography.bodySmall, color = GoldPrimary)
+                        Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                    // Grade the throw where the bar was when the finger LANDED: onClick only
+                    // fires on release, and at 0.5 bar-widths per second that delay alone can
+                    // carry the position out of the target zone (issue #1372).
+                    val throwInteractions = remember { MutableInteractionSource() }
+                    var pressedPosition by remember { mutableFloatStateOf(-1f) }
+                    LaunchedEffect(throwInteractions) {
+                        throwInteractions.interactions.collect { interaction ->
+                            if (interaction is PressInteraction.Press) pressedPosition = position
+                        }
                     }
                     Button(
-                        onClick  = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitRingToss(position) },
+                        onClick  = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            val thrown = if (pressedPosition >= 0f) pressedPosition else position
+                            pressedPosition = -1f
+                            viewModel.submitRingToss(thrown)
+                        },
+                        interactionSource = throwInteractions,
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(stringResource(R.string.carnival_throw))
@@ -514,18 +547,20 @@ private fun HammerStrikeCard(gameState: ActiveGameState, difficulty: Difficulty,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     LinearProgressIndicator(
+                        gapSize = 0.dp,
+                        drawStopIndicator = {},
                         progress   = { power },
                         modifier   = Modifier.fillMaxWidth().height(28.dp).clip(RoundedCornerShape(4.dp)),
                         color      = when {
                             power >= perfectThreshold -> Color(0xFFF44336)
-                            power >= goodThreshold    -> GoldPrimary
+                            power >= goodThreshold    -> MaterialTheme.colorScheme.primary
                             else                      -> MaterialTheme.colorScheme.primary
                         },
                         trackColor = MaterialTheme.colorScheme.surfaceVariant,
                     )
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
                         Text(stringResource(R.string.carnival_hammer_miss_zone), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Text(stringResource(R.string.carnival_hammer_good_zone), style = MaterialTheme.typography.bodySmall, color = GoldPrimary)
+                        Text(stringResource(R.string.carnival_hammer_good_zone), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                         Text(stringResource(R.string.carnival_hammer_perfect_zone), style = MaterialTheme.typography.bodySmall, color = Color(0xFFF44336))
                     }
                     Button(
@@ -581,7 +616,7 @@ private fun PotionSequenceCard(gameState: ActiveGameState, difficulty: Difficult
                                 ) {
                                     if (i == current) {
                                         Text(
-                                            text  = POTION_NAMES[colorIdx].first().toString(),
+                                            text  = stringResource(POTION_LETTER_RES[colorIdx]),
                                             style = MaterialTheme.typography.bodyLarge,
                                             fontWeight = FontWeight.Bold,
                                             color = Color.White,
@@ -646,7 +681,7 @@ private fun PotionButton(colorIdx: Int, onClick: () -> Unit) {
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    text  = POTION_NAMES[colorIdx].first().toString(),
+                    text  = stringResource(POTION_LETTER_RES[colorIdx]),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -686,18 +721,18 @@ private fun ItemAppraisalCard(
                         )
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(0) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[0], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[0]), textAlign = TextAlign.Center)
                             }
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(1) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[1], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[1]), textAlign = TextAlign.Center)
                             }
                         }
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(2) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[2], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[2]), textAlign = TextAlign.Center)
                             }
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(3) }, modifier = Modifier.weight(1f)) {
-                                Text(quad.items[3], textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, quad.items[3]), textAlign = TextAlign.Center)
                             }
                         }
                     }
@@ -712,10 +747,10 @@ private fun ItemAppraisalCard(
                         )
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(0) }, modifier = Modifier.weight(1f)) {
-                                Text(pair.itemA, textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, pair.itemA), textAlign = TextAlign.Center)
                             }
                             OutlinedButton(onClick = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); viewModel.submitAppraisalAnswer(1) }, modifier = Modifier.weight(1f)) {
-                                Text(pair.itemB, textAlign = TextAlign.Center)
+                                Text(GameStrings.itemName(LocalContext.current, pair.itemB), textAlign = TextAlign.Center)
                             }
                         }
                     }
@@ -759,7 +794,7 @@ private fun ShellGameCard(gameState: ActiveGameState, difficulty: Difficulty, vi
                         (0 until cupCount).forEach { i ->
                             Surface(
                                 shape  = RoundedCornerShape(8.dp),
-                                color  = if (i == gemPos) GoldPrimary else MaterialTheme.colorScheme.surface,
+                                color  = if (i == gemPos) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
                                 modifier = Modifier.size(56.dp),
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
@@ -783,19 +818,25 @@ private fun ShellGameCard(gameState: ActiveGameState, difficulty: Difficulty, vi
                 val stepPx    = with(density) { 64.dp.toPx() }
                 val offsets   = remember(gameState) { Array(cupCount) { Animatable(0f) } }
                 LaunchedEffect(swaps) {
-                    var gemSlot = gameState.gemPos
-                    for ((a, b) in swaps) {
-                        val dist = (b - a) * stepPx
-                        coroutineScope {
-                            launch { offsets[a].animateTo( dist, animationSpec = tween(animMs)) }
-                            launch { offsets[b].animateTo(-dist, animationSpec = tween(animMs)) }
+                    // The shuffle is the gameplay itself, so it must ignore the system animator
+                    // duration scale: at 0 the cups never move, at 10x the game is trivial
+                    withContext(object : MotionDurationScale {
+                        override val scaleFactor: Float get() = 1f
+                    }) {
+                        var gemSlot = gameState.gemPos
+                        for ((a, b) in swaps) {
+                            val dist = (b - a) * stepPx
+                            coroutineScope {
+                                launch { offsets[a].animateTo( dist, animationSpec = tween(animMs)) }
+                                launch { offsets[b].animateTo(-dist, animationSpec = tween(animMs)) }
+                            }
+                            offsets[a].snapTo(0f)
+                            offsets[b].snapTo(0f)
+                            if (gemSlot == a) gemSlot = b else if (gemSlot == b) gemSlot = a
+                            delay(pauseMs)
                         }
-                        offsets[a].snapTo(0f)
-                        offsets[b].snapTo(0f)
-                        if (gemSlot == a) gemSlot = b else if (gemSlot == b) gemSlot = a
-                        delay(pauseMs)
+                        viewModel.finishShellGame(gemSlot)
                     }
-                    viewModel.finishShellGame(gemSlot)
                 }
                 Column(
                     modifier            = Modifier.fillMaxWidth(),
@@ -888,7 +929,7 @@ private fun HigherOrLowerCard(gameState: ActiveGameState, difficulty: Difficulty
                         text       = stringResource(R.string.carnival_higher_lower_current, current),
                         style      = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
-                        color      = GoldPrimary,
+                        color      = MaterialTheme.colorScheme.primary,
                     )
                     Text(
                         text  = stringResource(R.string.carnival_higher_lower_round, gameState.currentIdx + 1, totalRounds),
@@ -921,7 +962,7 @@ private fun HigherOrLowerCard(gameState: ActiveGameState, difficulty: Difficulty
                         text  = stringResource(R.string.carnival_higher_lower_last_card, gameState.lastNumber),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                     Text(
                         text  = stringResource(R.string.carnival_higher_lower_result, gameState.totalCorrect, gameState.totalRounds, gameState.tickets),
@@ -974,6 +1015,8 @@ private fun PrizeRow(
     equipData: com.fantasyidler.data.json.EquipmentData?,
     onRedeem: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier              = Modifier
             .fillMaxWidth()
@@ -983,17 +1026,18 @@ private fun PrizeRow(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text       = prize.displayName,
+                text       = GameStrings.carnivalPrizeName(context, prize.type, prize.key, prize.displayName),
                 style      = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
             )
             if (equipData != null) {
                 val statParts = buildList {
-                    if (equipData.attackBonus   > 0) add("ATK +${equipData.attackBonus}")
-                    if (equipData.strengthBonus > 0) add("STR +${equipData.strengthBonus}")
-                    if (equipData.defenseBonus  > 0) add("DEF +${equipData.defenseBonus}")
+                    if (equipData.attackBonus   > 0) add(stringResource(R.string.carnival_stat_atk, equipData.attackBonus))
+                    if (equipData.strengthBonus > 0) add(stringResource(R.string.carnival_stat_str, equipData.strengthBonus))
+                    if (equipData.defenseBonus  > 0) add(stringResource(R.string.carnival_stat_def, equipData.defenseBonus))
                     if ((equipData.capeBonus) > 0f) {
-                        val capeLabel = if (equipData.capeSkill in COMBAT_CAPE_SKILLS) "XP" else "Yield"
+                        val capeLabel = if (equipData.capeSkill in COMBAT_CAPE_SKILLS) stringResource(R.string.bestiary_stat_xp)
+                                        else stringResource(R.string.carnival_stat_yield)
                         add("$capeLabel +${(equipData.capeBonus * 100).toInt()}%")
                     }
                 }
@@ -1001,20 +1045,20 @@ private fun PrizeRow(
                     Text(
                         text  = statParts.joinToString("  "),
                         style = MaterialTheme.typography.bodySmall,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
                 val reqs = equipData.requirements
                 if (reqs.isNotEmpty()) {
                     Text(
-                        text  = stringResource(R.string.slayer_requires, reqs.entries.joinToString { (s, l) -> "${s.replaceFirstChar { it.uppercase() }} $l" }),
+                        text  = stringResource(R.string.slayer_requires, reqs.entries.joinToString { (s, l) -> "${GameStrings.skillName(context, s)} $l" }),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             } else {
                 Text(
-                    text  = prize.description,
+                    text  = GameStrings.carnivalPrizeDesc(context, prize.type, prize.key, prize.description),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -1027,7 +1071,7 @@ private fun PrizeRow(
             Text(
                 text       = stringResource(R.string.carnival_ticket_cost, prize.ticketCost),
                 style      = MaterialTheme.typography.bodyMedium,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
             )
             Spacer(Modifier.height(4.dp))
@@ -1044,52 +1088,3 @@ private fun PrizeRow(
     }
 }
 
-// ── Lamp skill picker ──────────────────────────────────────────────────────────
-
-@Composable
-private fun LampSkillPickerDialog(
-    xpAmount: Long,
-    skillLevels: Map<String, Int>,
-    onSkillSelected: (String) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    val context = LocalContext.current
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.slayer_lamp_pick_skill)) },
-        text = {
-            Column(
-                modifier            = Modifier.verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                Skills.ALL.forEach { skillKey ->
-                    val level = skillLevels[skillKey] ?: 1
-                    val name  = GameStrings.skillName(context, skillKey)
-                    Surface(
-                        onClick  = { onSkillSelected(skillKey) },
-                        shape    = RoundedCornerShape(8.dp),
-                        color    = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Row(
-                            modifier              = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment     = Alignment.CenterVertically,
-                        ) {
-                            Text(name, style = MaterialTheme.typography.bodyMedium)
-                            Text(
-                                text  = stringResource(R.string.slayer_level_label, level),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = GoldPrimary,
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_cancel)) } },
-    )
-}

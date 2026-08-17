@@ -43,20 +43,73 @@ class ExtensionsTest {
     @Test
     fun `formatCoins uses the same boundaries as formatXp`() {
         assertEquals("500", 500L.formatCoins())
+        assertEquals("500", 500.formatCoins())
         assertEquals("1,000", 1_000L.formatCoins())
+        assertEquals("1,000", 1_000.formatCoins())
         assertEquals("2.5M", 2_500_000L.formatCoins())
     }
 
     @Test
-    fun `formatDurationMs renders hours minutes and seconds`() {
-        assertEquals("45s", 45_000L.formatDurationMs())
-        assertEquals("1m", 60_000L.formatDurationMs())
-        assertEquals("1m", 90_000L.formatDurationMs())     // sub-minute remainder dropped
-        assertEquals("1h", 3_600_000L.formatDurationMs())
-        assertEquals("1h 1m", 3_660_000L.formatDurationMs())
-        assertEquals("1h 30m", 5_400_000L.formatDurationMs())
-        assertEquals("0s", 0L.formatDurationMs())
+    fun `formatQuantity formats full and compact numbers correctly`() {
+        // Full formatting (compact = false)
+        assertEquals("0", 0.formatQuantity(compact = false))
+        assertEquals("455", 455.formatQuantity(compact = false))
+        assertEquals("1,021", 1_021.formatQuantity(compact = false))
+        assertEquals("35,715", 35_715.formatQuantity(compact = false))
+        assertEquals("2,461,940", 2_461_940.formatQuantity(compact = false))
+
+        // Compact formatting (compact = true)
+        assertEquals("0", 0.formatQuantity(compact = true))
+        assertEquals("455", 455.formatQuantity(compact = true))
+        assertEquals("1k", 1_000.formatQuantity(compact = true))
+        assertEquals("1k", 1_021.formatQuantity(compact = true))
+        assertEquals("1.5k", 1_500.formatQuantity(compact = true))
+        assertEquals("35.7k", 35_715.formatQuantity(compact = true))
+        assertEquals("1M", 1_000_000.formatQuantity(compact = true))
+        assertEquals("2.4M", 2_400_000.formatQuantity(compact = true))
+        assertEquals("2.46M", 2_461_940.formatQuantity(compact = true))
     }
+
+    // The context overload just resolves string resources; the ladder logic under test lives in
+    // the lambda-based core, exercised here with the English unit templates.
+    private val englishUnits = mapOf(
+        com.fantasyidler.R.string.duration_months  to "mo",
+        com.fantasyidler.R.string.duration_weeks   to "w",
+        com.fantasyidler.R.string.duration_days    to "d",
+        com.fantasyidler.R.string.duration_hours   to "h",
+        com.fantasyidler.R.string.duration_minutes to "m",
+        com.fantasyidler.R.string.duration_seconds to "s",
+    )
+
+    private fun Long.formatDurationEn(): String =
+        formatDurationMs { resId, value -> "$value${englishUnits.getValue(resId)}" }
+
+    @Test
+    fun `formatDurationMs renders hours minutes and seconds`() {
+        assertEquals("45s", 45_000L.formatDurationEn())
+        assertEquals("1m", 60_000L.formatDurationEn())
+        assertEquals("1m", 90_000L.formatDurationEn())     // sub-minute remainder dropped
+        assertEquals("1h", 3_600_000L.formatDurationEn())
+        assertEquals("1h 1m", 3_660_000L.formatDurationEn())
+        assertEquals("1h 30m", 5_400_000L.formatDurationEn())
+        assertEquals("0s", 0L.formatDurationEn())
+    }
+
+    @Test
+    fun `formatDurationMs renders months weeks and days, omitting zero units`() {
+        val hour = 3_600_000L
+        assertEquals("1d", 24 * hour)                        // exactly one day
+        assertEquals("1d 1h 10m", 25 * hour + 600_000L)
+        assertEquals("1w", 7 * 24 * hour)                    // exactly one week
+        assertEquals("1w 1d 2h", 8 * 24 * hour + 2 * hour)
+        assertEquals("1mo", 30 * 24 * hour)                  // months are 30 days
+        assertEquals("2mo", 60 * 24 * hour)
+        assertEquals("1mo 1w 1d 8h 54m", 920 * hour + 54 * 60_000L)
+        assertEquals("1mo 1m", 30 * 24 * hour + 60_000L)     // interior zero units skipped
+    }
+
+    private fun assertEquals(expected: String, ms: Long) =
+        assertEquals(expected, ms.formatDurationEn())
 
     @Test
     fun `clampLevel constrains to the 1-99 skill range`() {

@@ -28,6 +28,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import com.fantasyidler.util.GameStrings
+import com.fantasyidler.util.withAppLocale
 import javax.inject.Inject
 
 // ---------------------------------------------------------------------------
@@ -56,6 +58,8 @@ data class FarmingUiState(
     val harvestResult: HarvestResult?          = null,
     /** True once the magic bean has been planted; used to hide it from the seed picker permanently. */
     val magicBeanPlanted: Boolean              = false,
+    /** Shows the persistent beanstalk-climbed dialog until the player dismisses it. */
+    val showBeanClimbDialog: Boolean           = false,
 )
 
 data class HarvestResult(
@@ -172,7 +176,7 @@ class FarmingViewModel @Inject constructor(
             if (flags.lastFertilizerKey != ashKey) {
                 playerRepo.updateFlags(flags.copy(lastFertilizerKey = ashKey))
             }
-            val seedName = crop.seedName.replace('_', ' ')
+            val seedName = GameStrings.itemName(context.withAppLocale(), crop.seedName)
 
             if (patchNumber == -1) {
                 delay(300)
@@ -205,15 +209,20 @@ class FarmingViewModel @Inject constructor(
     fun climbBeanstalk(patchNumber: Int) {
         viewModelScope.launch {
             farmingRepo.climbBeanstalk(patchNumber)
-            _extra.update { it.copy(snackbarMessage = context.getString(R.string.farming_bean_climbed)) }
+            // A dialog rather than a banner: the unlock is easy to miss after a 30-day
+            // grow if the message auto-dismisses (Discord report, Aug 2026).
+            _extra.update { it.copy(showBeanClimbDialog = true) }
         }
     }
+
+    fun beanClimbDialogConsumed() = _extra.update { it.copy(showBeanClimbDialog = false) }
 
     fun harvestPatch(patchNumber: Int) {
         viewModelScope.launch {
             val patch = uiState.value.patches.firstOrNull { it.patchNumber == patchNumber } ?: return@launch
-            if (patch.cropType == "magic_bean") return@launch
-            val crop  = gameData.crops[patch.cropType] ?: return@launch
+            val cropKey = patch.cropType ?: return@launch
+            if (cropKey == "magic_bean") return@launch
+            if (gameData.crops[cropKey] == null) return@launch
 
             // Snapshot inventory before harvest to compute diff
             val invBefore: Map<String, Int> = json.decodeFromString(playerRepo.getOrCreatePlayer().inventory)
@@ -228,13 +237,17 @@ class FarmingViewModel @Inject constructor(
             val gained = invAfter.mapValues { (k, v) -> v - (invBefore[k] ?: 0) }.filter { it.value > 0 }
             guildRepo.recordGuildGathering(Skills.FARMING, gained)
             _extra.update {
-                it.copy(harvestResult = HarvestResult(crop.displayName, gained, xpAfter - xpBefore))
+                it.copy(harvestResult = HarvestResult(GameStrings.cropName(context, cropKey), gained, xpAfter - xpBefore))
             }
         }
     }
 
     fun clearPatch(patchNumber: Int) {
-        viewModelScope.launch { farmingRepo.clearPatch(patchNumber) }
+        viewModelScope.launch {
+            val wasBean = uiState.value.patches.firstOrNull { it.patchNumber == patchNumber }?.cropType == "magic_bean"
+            farmingRepo.clearPatch(patchNumber)
+            if (wasBean) _extra.update { it.copy(snackbarMessage = context.getString(R.string.farming_bean_cleared)) }
+        }
     }
 
     fun harvestResultConsumed() = _extra.update { it.copy(harvestResult = null) }

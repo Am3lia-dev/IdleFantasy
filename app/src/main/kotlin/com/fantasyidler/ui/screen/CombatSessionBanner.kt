@@ -81,8 +81,6 @@ import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
-import com.fantasyidler.ui.theme.SuccessGreen
 import com.fantasyidler.ui.viewmodel.CombatViewModel
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
@@ -128,6 +126,7 @@ internal fun CombatSessionBanner(
     skillLevels: Map<String, Int>,
     modifier: Modifier = Modifier,
     skillPrestige: Map<String, Int> = emptyMap(),
+    towerHpBonus: Int = 0,
     attackBonus: Int,
     strengthBonus: Int,
     defenseBonus: Int,
@@ -140,9 +139,10 @@ internal fun CombatSessionBanner(
     onDebugFinish: () -> Unit,
 ) {
     val context = LocalContext.current
+    val sessionBoss = bosses.firstOrNull { it.id == session.activityKey }
     val dungeonName = dungeons.firstOrNull { it.name == session.activityKey }
         ?.let { GameStrings.dungeonName(context, it.name) }
-        ?: bosses.firstOrNull { it.id == session.activityKey }?.let { "${it.emoji} ${GameStrings.bossName(context, it.id)}" }
+        ?: sessionBoss?.let { GameStrings.bossName(context, it.id) }
         ?: run {
             if (session.skillName == "tower") {
                 val floor = session.activityKey.removePrefix("tower_floor_").toIntOrNull()
@@ -186,11 +186,17 @@ internal fun CombatSessionBanner(
     val currentEnemy = currentEnemyKey?.let { enemies[it] }
 
     val isBoss = session.skillName == "boss"
-    val frameTickCount = currentFrame?.playerHits?.size ?: 0
-    val attackSpeedMs = if (frameTickCount > 0) perFrameMs / frameTickCount else 2_400L
+    // Pace by the session's true tick cadence, not the current frame's own hit count: a
+    // partial final frame would otherwise stretch its few hits across the whole minute
+    // (issue #935).
+    val fullTicks     = remember(session.sessionId) { CombatSimulator.fullFrameTicks(frames) }
+    val attackSpeedMs = (perFrameMs / fullTicks).coerceAtLeast(2L)
     val frameStartMs  = session.startedAt + currentFrameIdx.toLong() * perFrameMs
     val maxTick = (currentFrame?.playerHits?.size?.minus(1) ?: 0).coerceAtLeast(0)
-    val tickInFrame = if (!isDone) ((now - frameStartMs) / attackSpeedMs).toInt().coerceIn(0, maxTick) else maxTick
+    // Half-tick pacing: the player's hit shows on the tick, the enemy's reply half a tick
+    // later, so log lines appear one at a time instead of clumping per tick (issue #935).
+    val halfTickInFrame = if (!isDone) ((now - frameStartMs) * 2 / attackSpeedMs).toInt().coerceIn(0, maxTick * 2 + 1) else maxTick * 2 + 1
+    val tickInFrame = halfTickInFrame / 2
 
     val killsSoFar: Map<String, Int> = remember(currentFrameIdx, tickInFrame) {
         val acc = frames.take(currentFrameIdx).fold(mutableMapOf<String, Int>()) { a, f ->
@@ -201,7 +207,7 @@ internal fun CombatSessionBanner(
         if (f != null && !isBoss) {
             val enemy = enemies[f.enemyKey]
             if (enemy != null && f.playerHits.isNotEmpty()) {
-                var hp = enemy.hp
+                var hp = enemyHpAtFrameStart(frames, currentFrameIdx, enemies) ?: enemy.hp
                 var kills = 0
                 for (dmg in f.playerHits.take(tickInFrame + 1)) {
                     hp -= dmg
@@ -233,14 +239,24 @@ internal fun CombatSessionBanner(
                     else stringResource(R.string.label_session_in_progress),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
-            color = if (isDone) GoldPrimary else MaterialTheme.colorScheme.onSurface,
+            color = if (isDone) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
         )
         Spacer(Modifier.height(8.dp))
-        Text(
-            text  = dungeonName,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (sessionBoss != null) {
+                BossIcon(
+                    bossId        = sessionBoss.id,
+                    modifier      = Modifier.size(28.dp),
+                    fallbackEmoji = sessionBoss.emoji,
+                )
+                Spacer(Modifier.width(8.dp))
+            }
+            Text(
+                text  = dungeonName,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         if ((isBoss || session.skillName == "combat") && repeatTotal > 1) {
             Spacer(Modifier.height(4.dp))
             Text(
@@ -248,7 +264,7 @@ internal fun CombatSessionBanner(
                              else stringResource(R.string.combat_run_progress, repeatIndex.coerceAtLeast(1), repeatTotal),
                 style      = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.SemiBold,
-                color      = GoldPrimary,
+                color      = MaterialTheme.colorScheme.primary,
             )
         }
         Spacer(Modifier.height(16.dp))
@@ -266,11 +282,14 @@ internal fun CombatSessionBanner(
                 val currentBoss = if (isBoss) bosses.firstOrNull { it.id == session.activityKey } else null
                 val divColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.2f)
 
-                // Live player HP (per-tick if hit data exists, else per-frame fallback)
-                val maxHp = ((skillLevels[Skills.HITPOINTS] ?: 1) + (skillPrestige[Skills.HITPOINTS] ?: 0) * 5) * 10
+                // Live player HP (per-tick if hit data exists, else per-frame fallback).
+                // Enemy hits display half a tick after player hits, so only count the
+                // newest tick's enemy damage once its log line is visible.
+                val maxHp = ((skillLevels[Skills.HITPOINTS] ?: 1) + (skillPrestige[Skills.HITPOINTS] ?: 0) * 5 + towerHpBonus) * 10
+                val enemyTicksShown = tickInFrame + if (halfTickInFrame >= 2 * tickInFrame + 1) 1 else 0
                 val currentPlayerHp = if (currentFrame?.enemyHits?.isNotEmpty() == true) {
                     val base = frames.getOrNull(currentFrameIdx - 1)?.hpAfter ?: maxHp
-                    (base - currentFrame.enemyHits.take(tickInFrame + 1).sum()).coerceAtLeast(0)
+                    (base - currentFrame.enemyHits.take(enemyTicksShown).sum()).coerceAtLeast(0)
                 } else {
                     frames.getOrNull(currentFrameIdx - 1)?.hpAfter ?: maxHp
                 }
@@ -283,7 +302,7 @@ internal fun CombatSessionBanner(
                         (currentBoss.hp - prevDmg - curDmg).coerceAtLeast(0)
                     }
                     currentEnemy != null && currentFrame?.playerHits?.isNotEmpty() == true -> {
-                        var hp = currentEnemy.hp
+                        var hp = enemyHpAtFrameStart(frames, currentFrameIdx, enemies) ?: currentEnemy.hp
                         for (dmg in currentFrame.playerHits.take(tickInFrame + 1)) {
                             hp -= dmg
                             if (hp <= 0) hp = currentEnemy.hp
@@ -293,36 +312,31 @@ internal fun CombatSessionBanner(
                     else -> currentEnemy?.hp ?: 0
                 }
 
-                // Combat log: last 8 entries (interleaved per tick)
-                val combatLog = remember(currentFrameIdx, tickInFrame) {
+                // Combat log: last 8 entries, interleaved per half-tick. Enemy HP threads
+                // across frames like the simulator's carryover so kill lines land on the
+                // tick they actually happened (issue #935).
+                val combatLog = remember(currentFrameIdx, halfTickInFrame) {
                     buildList<CombatLogEntry> {
-                        for (i in 0 until currentFrameIdx) {
+                        var hp = 0
+                        var prevKey: String? = null
+                        for (i in 0..currentFrameIdx) {
                             val f = frames.getOrNull(i) ?: break
                             val eName = bosses.firstOrNull { it.id == f.enemyKey }?.let { GameStrings.bossName(context, it.id) }
                                 ?: enemies[f.enemyKey]?.let { GameStrings.enemyName(context, f.enemyKey) } ?: f.enemyKey
                             val enemyHp = if (!isBoss) enemies[f.enemyKey]?.hp ?: Int.MAX_VALUE else Int.MAX_VALUE
-                            var hp = enemyHp
-                            for (t in 0 until maxOf(f.playerHits.size, f.enemyHits.size)) {
+                            if (f.enemyKey != prevKey) hp = enemyHp
+                            prevKey = f.enemyKey
+                            val lastTick = if (i < currentFrameIdx) maxOf(f.playerHits.size, f.enemyHits.size) - 1 else tickInFrame
+                            for (t in 0..lastTick) {
                                 f.playerHits.getOrNull(t)?.let { dmg ->
                                     add(CombatLogEntry(true, dmg, eName))
                                     hp -= dmg
                                     if (hp <= 0) { add(CombatLogEntry(false, 0, eName, isKill = true)); hp = enemyHp }
                                 }
-                                f.enemyHits.getOrNull(t)?.let { add(CombatLogEntry(false, it, eName)) }
+                                if (i < currentFrameIdx || 2 * t + 1 <= halfTickInFrame) {
+                                    f.enemyHits.getOrNull(t)?.let { add(CombatLogEntry(false, it, eName)) }
+                                }
                             }
-                        }
-                        val f = frames.getOrNull(currentFrameIdx) ?: return@buildList
-                        val eName = bosses.firstOrNull { it.id == f.enemyKey }?.let { GameStrings.bossName(context, it.id) }
-                            ?: enemies[f.enemyKey]?.let { GameStrings.enemyName(context, f.enemyKey) } ?: f.enemyKey
-                        val enemyHp = if (!isBoss) enemies[f.enemyKey]?.hp ?: Int.MAX_VALUE else Int.MAX_VALUE
-                        var hp = enemyHp
-                        for (t in 0..tickInFrame) {
-                            f.playerHits.getOrNull(t)?.let { dmg ->
-                                add(CombatLogEntry(true, dmg, eName))
-                                hp -= dmg
-                                if (hp <= 0) { add(CombatLogEntry(false, 0, eName, isKill = true)); hp = enemyHp }
-                            }
-                            f.enemyHits.getOrNull(t)?.let { add(CombatLogEntry(false, it, eName)) }
                         }
                     }.takeLast(8)
                 }
@@ -340,11 +354,6 @@ internal fun CombatSessionBanner(
                         acc
                     }
                 }
-
-                // Food remaining (equipped qty minus consumed so far in session)
-                val foodRemaining = equippedFood.mapValues { (key, qty) ->
-                    (qty - (foodConsumedSoFar[key] ?: 0)).coerceAtLeast(0)
-                }.filter { (_, qty) -> qty > 0 }
 
                 Spacer(Modifier.height(16.dp))
                 Surface(
@@ -364,6 +373,8 @@ internal fun CombatSessionBanner(
                             )
                             Spacer(Modifier.height(4.dp))
                             LinearProgressIndicator(
+                                gapSize = 0.dp,
+                                drawStopIndicator = {},
                                 progress  = { if (currentBoss.hp > 0) currentEnemyHp / currentBoss.hp.toFloat() else 0f },
                                 modifier  = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
                                 color     = MaterialTheme.colorScheme.error,
@@ -384,6 +395,8 @@ internal fun CombatSessionBanner(
                             )
                             Spacer(Modifier.height(4.dp))
                             LinearProgressIndicator(
+                                gapSize = 0.dp,
+                                drawStopIndicator = {},
                                 progress  = { if (currentEnemy.hp > 0) currentEnemyHp / currentEnemy.hp.toFloat() else 0f },
                                 modifier  = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
                                 color     = MaterialTheme.colorScheme.error,
@@ -425,6 +438,8 @@ internal fun CombatSessionBanner(
                         }
                         Spacer(Modifier.height(4.dp))
                         LinearProgressIndicator(
+                            gapSize = 0.dp,
+                            drawStopIndicator = {},
                             progress  = { if (maxHp > 0) currentPlayerHp / maxHp.toFloat() else 0f },
                             modifier  = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)),
                             color     = hpColor,
@@ -459,7 +474,7 @@ internal fun CombatSessionBanner(
                             for ((key, startQty) in equippedFood) {
                                 val remaining = (startQty - (foodConsumedSoFar[key] ?: 0)).coerceAtLeast(0)
                                 val heal      = foodHealValues[key] ?: 0
-                                val name      = key.replace('_', ' ').replaceFirstChar { it.uppercase() }
+                                val name      = GameStrings.itemName(context, key)
                                 Text(
                                     text  = "$name ×$remaining (${stringResource(R.string.combat_heals_hp, heal)})",
                                     style = MaterialTheme.typography.bodySmall,
@@ -467,6 +482,20 @@ internal fun CombatSessionBanner(
                                         MaterialTheme.colorScheme.onSecondaryContainer
                                     else
                                         MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.4f),
+                                )
+                            }
+                            if (foodConsumedSoFar.isNotEmpty()) {
+                                val eatenSoFar = stringResource(R.string.combat_eaten_so_far)
+                                Spacer(Modifier.height(2.dp))
+                                Text(
+                                    text  = foodConsumedSoFar.entries
+                                        .sortedByDescending { it.value }
+                                        .joinToString(", ") { (k, v) ->
+                                            "$v ${GameStrings.itemName(context, k)}"
+                                        }
+                                        + " $eatenSoFar",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                                 )
                             }
                         }
@@ -546,7 +575,7 @@ internal fun CombatSessionBanner(
                                         Text(
                                             text  = stringResource(R.string.combat_log_kill, entry.enemyName),
                                             style = MaterialTheme.typography.bodySmall,
-                                            color = GoldPrimary,
+                                            color = MaterialTheme.colorScheme.primary,
                                         )
                                     } else if (entry.isPlayer) {
                                         val color = if (entry.damage > 0) Color(0xFF4CAF50)
@@ -618,4 +647,32 @@ internal fun CombatSessionBanner(
             }
         }
     }
+}
+
+/**
+ * Enemy HP carried into [frameIdx], mirroring the simulator's cross-frame carryover: a
+ * partially damaged enemy persists across minute boundaries, resetting only on a kill or
+ * when the enemy type changes. Replaying every frame from full HP would show kills later
+ * than they happened (issue #935). Null when the frame's enemy starts fresh or is unknown.
+ */
+private fun enemyHpAtFrameStart(
+    frames: List<SessionFrame>,
+    frameIdx: Int,
+    enemies: Map<String, EnemyData>,
+): Int? {
+    val frame = frames.getOrNull(frameIdx) ?: return null
+    val full  = enemies[frame.enemyKey]?.hp ?: return null
+    var hp = full
+    var prevKey: String? = null
+    for (i in 0 until frameIdx) {
+        val f     = frames.getOrNull(i) ?: break
+        val fFull = enemies[f.enemyKey]?.hp ?: continue
+        if (f.enemyKey != prevKey) hp = fFull
+        for (dmg in f.playerHits) {
+            hp -= dmg
+            if (hp <= 0) hp = fFull
+        }
+        prevKey = f.enemyKey
+    }
+    return if (frame.enemyKey == prevKey) hp else full
 }

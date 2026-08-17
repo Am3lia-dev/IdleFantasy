@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.fantasyidler.R
 import com.fantasyidler.data.json.TownBuildingData
 import com.fantasyidler.repository.TownRepository
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatCoins
 import kotlin.math.roundToInt
@@ -43,10 +42,14 @@ fun BuildingUpgradeCard(
     val isMaxed = currentTier >= def.tiers.size
     val nextTier = if (!isMaxed) def.tiers[currentTier] else null
 
+    val nextCoinCost  = nextTier?.let { TownRepository.discountedCoins(it.coinCost, constructionLevel) } ?: 0L
+    val nextMaterials = nextTier?.let { TownRepository.discountedMaterials(it.materials, constructionLevel) } ?: emptyMap()
+    val discountPct   = (TownRepository.builderDiscount(constructionLevel) * 100).toInt()
+
     val canUpgrade = nextTier != null &&
         constructionLevel >= nextTier.constructionLevelRequired &&
-        coins >= nextTier.coinCost &&
-        nextTier.materials.all { (k, qty) -> (inventory[k] ?: 0) >= qty }
+        coins >= nextCoinCost &&
+        nextMaterials.all { (k, qty) -> (inventory[k] ?: 0) >= qty }
 
     Surface(
         shape    = RoundedCornerShape(16.dp),
@@ -62,6 +65,8 @@ fun BuildingUpgradeCard(
                 "garden"       -> R.string.town_building_garden_name
                 "queue_master" -> R.string.town_building_queue_master_name
                 "cape_rack"    -> R.string.town_building_cape_rack_name
+                "artisans_workshop" -> R.string.town_building_artisans_workshop_name
+                "chronos_spire" -> R.string.town_building_chronos_spire_name
                 else           -> R.string.town_upgrade_section_title
             }
             Text(
@@ -79,7 +84,7 @@ fun BuildingUpgradeCard(
             Text(
                 text       = tierText,
                 style      = MaterialTheme.typography.bodyMedium,
-                color      = if (isMaxed) GoldPrimary else MaterialTheme.colorScheme.onSurface,
+                color      = if (isMaxed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                 fontWeight = if (isMaxed) FontWeight.SemiBold else FontWeight.Normal,
             )
 
@@ -108,20 +113,27 @@ fun BuildingUpgradeCard(
                         MaterialTheme.colorScheme.error,
                 )
                 Text(
-                    text  = stringResource(R.string.town_upgrade_cost, nextTier.coinCost.formatCoins()),
+                    text  = stringResource(R.string.town_upgrade_cost, nextCoinCost.formatCoins()),
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (coins >= nextTier.coinCost)
+                    color = if (coins >= nextCoinCost)
                         MaterialTheme.colorScheme.onSurface
                     else
                         MaterialTheme.colorScheme.error,
                 )
+                if (discountPct > 0) {
+                    Text(
+                        text  = stringResource(R.string.town_builder_discount, discountPct),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 Text(
                     text     = stringResource(R.string.town_upgrade_materials_header),
                     style    = MaterialTheme.typography.labelSmall,
                     color    = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp),
                 )
-                nextTier.materials.forEach { (key, qty) ->
+                nextMaterials.forEach { (key, qty) ->
                     val have = inventory[key] ?: 0
                     Text(
                         text  = "  ${GameStrings.itemName(context, key)}: $have / $qty",
@@ -183,6 +195,14 @@ fun buildingBonusText(buildingKey: String, tier: Int, townRepo: TownRepository):
         1    -> stringResource(R.string.town_cape_rack_t1_bonus)
         2    -> stringResource(R.string.town_cape_rack_t2_bonus)
         else -> stringResource(R.string.town_cape_rack_t3_bonus)
+    }
+    "artisans_workshop" -> when (tier) {
+        0    -> stringResource(R.string.town_artisans_workshop_no_bonus)
+        else -> stringResource(R.string.town_artisans_workshop_active_bonus, (townRepo.secondaryMaterialSaveChance("artisans_workshop", tier) * 100).roundToInt())
+    }
+    "chronos_spire" -> when (tier) {
+        0    -> stringResource(R.string.town_chronos_spire_no_bonus)
+        else -> stringResource(R.string.town_chronos_spire_active_bonus, (townRepo.playerSessionSpeedReduction("chronos_spire", tier) * 100).roundToInt())
     }
     else -> ""
 }

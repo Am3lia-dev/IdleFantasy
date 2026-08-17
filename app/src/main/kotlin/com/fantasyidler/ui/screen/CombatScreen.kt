@@ -61,6 +61,7 @@ import androidx.compose.runtime.setValue
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -92,9 +93,7 @@ import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.theme.ScaledSheetContent
-import com.fantasyidler.ui.theme.SuccessGreen
 import com.fantasyidler.ui.viewmodel.CombatViewModel
 import com.fantasyidler.ui.viewmodel.InventoryViewModel
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
@@ -126,7 +125,7 @@ fun CombatScreen(
     }
     LaunchedEffect(initialDungeonKey, initialBossKey) {
         initialDungeonKey?.let { key -> viewModel.dungeonList.firstOrNull { it.name == key }?.let(viewModel::selectDungeon) }
-        initialBossKey?.let { key -> viewModel.bossList.firstOrNull { it.id == key }?.let(viewModel::selectBoss) }
+        initialBossKey?.let { key -> viewModel.bossList(state.monumentComplete).firstOrNull { it.id == key }?.let(viewModel::selectBoss) }
     }
 
     AppBannerEffect(state.snackbarMessage, viewModel::snackbarConsumed)
@@ -155,7 +154,7 @@ fun CombatScreen(
                             text       = "${stringResource(R.string.combat_level_label)} ${combatLevelFrom(state.skillLevels)}",
                             style      = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.Bold,
-                            color      = GoldPrimary,
+                            color      = MaterialTheme.colorScheme.primary,
                             modifier   = Modifier.padding(end = 16.dp),
                         )
                     }
@@ -171,6 +170,13 @@ fun CombatScreen(
         }
 
         val combatSession = state.combatSession
+        val skillsPrestigeReadyCount = if (state.ironman || !state.showPrestigeNotifications) 0 else COMBAT_SKILLS.count { key ->
+            (state.skillLevels[key] ?: 1) >= 99 && (state.skillPrestige[key] ?: 0) < 3
+        }
+        val skillsTabLabel = if (skillsPrestigeReadyCount > 0)
+            stringResource(R.string.tab_label_with_count, stringResource(R.string.label_skills), skillsPrestigeReadyCount)
+        else
+            stringResource(R.string.label_skills)
         if (combatSession != null) {
             var savedPage by rememberSaveable { mutableIntStateOf(if (startOnGear) 2 else 0) }
             val pagerState = rememberPagerState(initialPage = savedPage, pageCount = { 4 })
@@ -199,7 +205,7 @@ fun CombatScreen(
                     Tab(
                         selected = pagerState.currentPage == 3,
                         onClick  = { scope.launch { pagerState.animateScrollToPage(3) } },
-                        text     = { Text(stringResource(R.string.label_skills)) },
+                        text     = { Text(skillsTabLabel) },
                     )
                 }
                 HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
@@ -207,10 +213,11 @@ fun CombatScreen(
                         0 -> CombatSessionBanner(
                             session        = combatSession,
                             dungeons       = visibleDungeons,
-                            bosses         = viewModel.bossList,
+                            bosses         = viewModel.bossList(state.monumentComplete),
                             enemies        = viewModel.enemyMap,
                             skillLevels    = state.skillLevels,
                             skillPrestige  = state.skillPrestige,
+                            towerHpBonus   = state.towerHpBonus,
                             attackBonus    = state.totalAttackBonus,
                             strengthBonus  = state.totalStrengthBonus,
                             defenseBonus   = state.totalDefenseBonus,
@@ -224,7 +231,7 @@ fun CombatScreen(
                         )
                         1 -> CombatSelectionList(
                             dungeons            = visibleDungeons,
-                            bosses              = viewModel.bossList,
+                            bosses              = viewModel.bossList(state.monumentComplete),
                             skillLevels         = state.skillLevels,
                             survivalRatings     = state.dungeonSurvivalRatings,
                             dungeonRuns         = state.dungeonRuns,
@@ -232,6 +239,7 @@ fun CombatScreen(
                             unlockedDungeons    = state.unlockedDungeons,
                             towerBestFloor      = state.towerBestFloor,
                             bossKillCounts      = state.bossKillCounts,
+                            isQueueFull         = state.isQueueFull,
                             onDungeon           = viewModel::selectDungeon,
                             onBoss              = viewModel::selectBoss,
                             onTower             = onNavigateToTower,
@@ -266,7 +274,7 @@ fun CombatScreen(
                             totalStrengthBonus = state.totalStrengthBonus,
                             totalDefenseBonus  = state.totalDefenseBonus,
                             skillPrestige      = state.skillPrestige,
-                            onPrestige         = viewModel::prestigeSkill,
+                            onPrestige         = if (state.ironman) null else viewModel::prestigeSkill,
                         )
                     }
                 }
@@ -294,14 +302,14 @@ fun CombatScreen(
                     Tab(
                         selected = pagerState.currentPage == 2,
                         onClick  = { scope.launch { pagerState.animateScrollToPage(2) } },
-                        text     = { Text(stringResource(R.string.label_skills)) },
+                        text     = { Text(skillsTabLabel) },
                     )
                 }
                 HorizontalPager(state = pagerState, modifier = Modifier.weight(1f)) { page ->
                     when (page) {
                         0 -> CombatSelectionList(
                             dungeons            = visibleDungeons,
-                            bosses              = viewModel.bossList,
+                            bosses              = viewModel.bossList(state.monumentComplete),
                             skillLevels         = state.skillLevels,
                             survivalRatings     = state.dungeonSurvivalRatings,
                             dungeonRuns         = state.dungeonRuns,
@@ -309,6 +317,7 @@ fun CombatScreen(
                             unlockedDungeons    = state.unlockedDungeons,
                             towerBestFloor      = state.towerBestFloor,
                             bossKillCounts      = state.bossKillCounts,
+                            isQueueFull         = state.isQueueFull,
                             onDungeon           = viewModel::selectDungeon,
                             onBoss              = viewModel::selectBoss,
                             onTower             = onNavigateToTower,
@@ -343,7 +352,7 @@ fun CombatScreen(
                             totalStrengthBonus = state.totalStrengthBonus,
                             totalDefenseBonus  = state.totalDefenseBonus,
                             skillPrestige      = state.skillPrestige,
-                            onPrestige         = viewModel::prestigeSkill,
+                            onPrestige         = if (state.ironman) null else viewModel::prestigeSkill,
                         )
                     }
                 }
@@ -392,7 +401,9 @@ fun CombatScreen(
                 potionEffects        = viewModel.potionEffects,
                 selectedPotionKey    = state.selectedPotionKey,
                 isStarting           = state.startingSession,
+                isQueueFull          = state.isQueueFull,
                 repeatCount          = state.selectedBossRepeatCount,
+                fullCoinKillsLeft    = state.bossFullCoinKillsLeft,
                 onWeaponSlotSelected = viewModel::selectWeaponSlot,
                 onPotionSelected     = viewModel::selectPotion,
                 onRepeatCountChanged = viewModel::selectBossRepeatCount,
@@ -423,6 +434,7 @@ fun CombatScreen(
                 potionEffects        = viewModel.potionEffects,
                 selectedPotionKey    = state.selectedPotionKey,
                 isStarting           = state.startingSession,
+                isQueueFull          = state.isQueueFull,
                 repeatCount          = state.selectedDungeonRepeatCount,
                 enemies              = viewModel.enemyMap,
                 onWeaponSlotSelected = viewModel::selectWeaponSlot,
@@ -471,6 +483,7 @@ private fun CombatSelectionList(
     unlockedDungeons: List<String> = emptyList(),
     towerBestFloor: Int = 0,
     bossKillCounts: Map<String, Int> = emptyMap(),
+    isQueueFull: Boolean = false,
     modifier: Modifier = Modifier,
     onDungeon: (DungeonData) -> Unit,
     onBoss: (BossData) -> Unit,
@@ -480,7 +493,7 @@ private fun CombatSelectionList(
 
     LazyColumn(modifier.fillMaxSize()) {
         item { CombatSectionHeader(stringResource(R.string.label_dungeons_tab)) }
-        item { TowerEntryRow(bestFloor = towerBestFloor, onTap = onTower) }
+        item { TowerEntryRow(bestFloor = towerBestFloor, isQueueFull = isQueueFull, onTap = onTower) }
         items(dungeons) { dungeon ->
             val unlocked = if (dungeon.loreUnlockOnly) {
                 unlockedDungeons.contains(dungeon.name)
@@ -490,6 +503,7 @@ private fun CombatSelectionList(
             DungeonRow(
                 dungeon        = dungeon,
                 unlocked       = unlocked,
+                isQueueFull     = isQueueFull,
                 survivalRating = survivalRatings[dungeon.name],
                 runCount       = dungeonRuns[dungeon.name] ?: 0,
                 lastRunStats   = dungeonLastRunStats[dungeon.name],
@@ -505,6 +519,7 @@ private fun CombatSelectionList(
                 unlocked = combatLvl >= boss.combatLevelRequired,
                 runCount = bossKillCounts[boss.id] ?: 0,
                 onTap    = { onBoss(boss) },
+                isQueueFull = isQueueFull,
             )
         }
         item { Spacer(Modifier.height(16.dp)) }
@@ -672,7 +687,7 @@ private fun CombatGearTab(
 
 private val COMBAT_SKILLS = listOf(
     Skills.ATTACK, Skills.STRENGTH, Skills.DEFENSE,
-    Skills.RANGED, Skills.MAGIC, Skills.HITPOINTS, Skills.PRAYER,
+    Skills.RANGED, Skills.MAGIC, Skills.HITPOINTS,
 )
 
 @Composable
@@ -683,7 +698,7 @@ private fun CombatSkillsTab(
     totalStrengthBonus: Int,
     totalDefenseBonus: Int,
     skillPrestige: Map<String, Int> = emptyMap(),
-    onPrestige: (String) -> Unit = {},
+    onPrestige: ((String) -> Unit)? = null,
 ) {
     val context = LocalContext.current
     var tappedSkill by remember { mutableStateOf<String?>(null) }
@@ -715,7 +730,7 @@ private fun CombatSkillsTab(
                 xp            = skillXp[key]     ?: 0L,
                 gearBonus     = gearBonus,
                 prestigeLevel = skillPrestige[key] ?: 0,
-                onPrestige    = if (key != Skills.PRAYER) ({ onPrestige(key) }) else null,
+                onPrestige    = onPrestige?.let { cb -> { cb(key) } },
                 onClick       = { tappedSkill = key },
             )
         }
@@ -819,12 +834,12 @@ private fun CombatSkillRow(
                             color = MaterialTheme.colorScheme.primary,
                         )
                     }
-                    if (skillKey != Skills.PRAYER && prestigeLevel > 0) {
+                    if (prestigeLevel > 0) {
                         Spacer(Modifier.width(6.dp))
                         Text(
                             text  = stringResource(R.string.combat_prestige_bonus, prestigeLevel * 5),
                             style = MaterialTheme.typography.labelSmall,
-                            color = GoldPrimary,
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -836,12 +851,14 @@ private fun CombatSkillRow(
             }
             Spacer(Modifier.height(4.dp))
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress = { progress },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(4.dp)
                     .clip(RoundedCornerShape(2.dp)),
-                color            = GoldPrimary,
+                color            = MaterialTheme.colorScheme.primary,
                 trackColor       = MaterialTheme.colorScheme.surfaceVariant,
             )
         }
@@ -859,7 +876,7 @@ private fun CombatSkillRow(
                 Text(
                     text  = "★".repeat(prestigeLevel) + "☆".repeat((3 - prestigeLevel).coerceAtLeast(0)),
                     style = MaterialTheme.typography.labelMedium,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 when {
                     onPrestige != null && level >= 99 && prestigeLevel < 3 -> {
@@ -867,7 +884,7 @@ private fun CombatSkillRow(
                             Text(
                                 text  = stringResource(R.string.prestige),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = GoldPrimary,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                     }
@@ -899,6 +916,7 @@ private fun CombatSectionHeader(title: String) {
 private fun BossRow(
     boss: BossData,
     unlocked: Boolean,
+    isQueueFull: Boolean,
     runCount: Int = 0,
     onTap: () -> Unit,
 ) {
@@ -915,10 +933,12 @@ private fun BossRow(
             modifier         = Modifier.size(36.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text  = boss.emoji,
-                style = MaterialTheme.typography.titleLarge,
-                color = if (unlocked) MaterialTheme.colorScheme.onSurface else dimColor,
+            BossIcon(
+                bossId        = boss.id,
+                modifier      = Modifier
+                    .size(36.dp)
+                    .then(if (unlocked) Modifier else Modifier.alpha(0.38f)),
+                fallbackEmoji = boss.emoji,
             )
         }
         Spacer(Modifier.width(8.dp))
@@ -945,12 +965,21 @@ private fun BossRow(
             }
         }
         Spacer(Modifier.width(12.dp))
-        Text(
-            text       = "Lv. ${boss.combatLevelRequired}",
-            style      = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.SemiBold,
-            color      = if (unlocked) GoldPrimary else dimColor,
-        )
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text       = "Lv. ${boss.combatLevelRequired}",
+                style      = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color      = if (unlocked) MaterialTheme.colorScheme.primary else dimColor,
+            )
+            if (isQueueFull) {
+                Text(
+                    text = stringResource(R.string.snackbar_queue_full),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                )
+            }
+        }
     }
     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 }
@@ -958,6 +987,7 @@ private fun BossRow(
 @Composable
 private fun TowerEntryRow(
     bestFloor: Int,
+    isQueueFull: Boolean,
     onTap: () -> Unit,
 ) {
     Row(
@@ -988,14 +1018,23 @@ private fun TowerEntryRow(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (bestFloor > 0) {
-            Spacer(Modifier.width(12.dp))
-            Text(
-                text       = stringResource(R.string.tower_best_floor, bestFloor),
-                style      = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
-                color      = GoldPrimary,
-            )
+        Spacer(Modifier.width(12.dp))
+        Column(horizontalAlignment = Alignment.End) {
+            if (bestFloor > 0) {
+                    Text(
+                        text       = stringResource(R.string.tower_best_floor, bestFloor),
+                        style      = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color      = MaterialTheme.colorScheme.primary,
+                    )
+            }
+            if (isQueueFull) {
+                Text(
+                    text  = stringResource(R.string.snackbar_queue_full),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                )
+            }
         }
     }
     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -1005,6 +1044,7 @@ private fun TowerEntryRow(
 private fun DungeonRow(
     dungeon: DungeonData,
     unlocked: Boolean,
+    isQueueFull: Boolean,
     survivalRating: CombatSimulator.SurvivalRating? = null,
     runCount: Int = 0,
     lastRunStats: com.fantasyidler.data.model.DungeonRunStats? = null,
@@ -1038,8 +1078,8 @@ private fun DungeonRow(
             )
             if (unlocked && survivalRating != null) {
                 val (ratingText, ratingColor) = when (survivalRating) {
-                    CombatSimulator.SurvivalRating.LIKELY   -> stringResource(R.string.combat_difficulty_likely)   to SuccessGreen
-                    CombatSimulator.SurvivalRating.RISKY    -> stringResource(R.string.combat_difficulty_risky)    to MaterialTheme.colorScheme.tertiary
+                    CombatSimulator.SurvivalRating.LIKELY   -> stringResource(R.string.combat_difficulty_likely)   to MaterialTheme.colorScheme.tertiary
+                    CombatSimulator.SurvivalRating.RISKY    -> stringResource(R.string.combat_difficulty_risky)    to MaterialTheme.colorScheme.secondary
                     CombatSimulator.SurvivalRating.UNLIKELY -> stringResource(R.string.combat_difficulty_unlikely) to MaterialTheme.colorScheme.error
                 }
                 Text(
@@ -1077,12 +1117,21 @@ private fun DungeonRow(
             }
         }
         Spacer(Modifier.width(12.dp))
-        Text(
-            text  = "Lv. ${dungeon.recommendedLevel}",
-            style = MaterialTheme.typography.labelMedium,
-            color = if (unlocked) GoldPrimary else dimColor,
-            fontWeight = FontWeight.SemiBold,
-        )
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = "Lv. ${dungeon.recommendedLevel}",
+                style = MaterialTheme.typography.labelMedium,
+                color = if (unlocked) MaterialTheme.colorScheme.primary else dimColor,
+                fontWeight = FontWeight.SemiBold,
+            )
+            if (isQueueFull) {
+                Text(
+                    text = stringResource(R.string.snackbar_queue_full),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                )
+            }
+        }
     }
     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
 }

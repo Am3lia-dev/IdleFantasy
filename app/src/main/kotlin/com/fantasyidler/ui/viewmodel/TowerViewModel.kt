@@ -24,6 +24,7 @@ import com.fantasyidler.repository.QueuedSessionStarter
 import com.fantasyidler.repository.QuestRepository
 import com.fantasyidler.repository.SessionRepository
 import com.fantasyidler.repository.SlayerRepository
+import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.simulator.CombatSimulator
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.util.GameStrings
@@ -59,6 +60,7 @@ data class TowerUiState(
     val availableSpells: List<SpellData> = emptyList(),
     val selectedPotionKey: String? = null,
     val availablePotions: Map<String, Int> = emptyMap(),
+    val isQueueFull: Boolean = false,
 )
 
 data class TowerMilestone(
@@ -76,8 +78,26 @@ class TowerViewModel @Inject constructor(
     private val questRepo: QuestRepository,
     private val guildRepo: GuildRepository,
     private val slayerRepo: SlayerRepository,
+    private val townRepo: TownRepository,
     private val json: Json,
 ) : ViewModel() {
+
+    init {
+        // Tower Boots and Tower Plateskirt joined the floor 150 milestone after many players had already
+        // claimed it; grant them once retroactively since milestones can't be re-claimed
+        viewModelScope.launch {
+            val flags = playerRepo.getFlags()
+            if (150 in flags.towerMilestonesClaimed) {
+                val inventory: Map<String, Int> = json.decodeFromString(playerRepo.getOrCreatePlayer().inventory)
+                if ("tower_boots" !in inventory) {
+                    playerRepo.addItems(mapOf("tower_boots" to 1))
+                }
+                if ("tower_plateskirt" !in inventory) {
+                    playerRepo.addItems(mapOf("tower_plateskirt" to 1))
+                }
+            }
+        }
+    }
 
     companion object {
         /** Floors between death-recovery checkpoints — see the playerDied branch in collectSession(). */
@@ -110,7 +130,7 @@ class TowerViewModel @Inject constructor(
             TowerMilestone(30,  "5,000 coins"),
             TowerMilestone(40,  "Tower Shield (defense +80)"),
             TowerMilestone(50,  "Tower Amulet (attack +15, strength +15, defense +10, all styles)"),
-            TowerMilestone(60,  "+5 max HP"),
+            TowerMilestone(60,  "+50 max HP"),
             TowerMilestone(70,  "+2% tower XP all skills"),
             TowerMilestone(80,  "25,000 coins"),
             TowerMilestone(90,  "Tower Helm (defense +82, strength +8)"),
@@ -119,13 +139,13 @@ class TowerViewModel @Inject constructor(
             TowerMilestone(120, "Tower Plate (defense +132)"),
             TowerMilestone(130, "+2% tower XP all skills"),
             TowerMilestone(140, "100,000 coins"),
-            TowerMilestone(150, "Tower Legs (defense +125)"),
-            TowerMilestone(160, "+5 max HP"),
+            TowerMilestone(150, "Tower Legs (defense +125) + Tower Boots (defense +58) + Tower Plateskirt (defense +125)"),
+            TowerMilestone(160, "+50 max HP"),
             TowerMilestone(170, "+1% tower coin drops"),
             TowerMilestone(180, "Tower Sword (attack +72, strength +75)"),
             TowerMilestone(190, "+2% tower XP all skills"),
             TowerMilestone(200, "Tower Cape (attack/str/def +14, ranged/magic +12) + 500,000 coins"),
-            TowerMilestone(210, "+5 max HP"),
+            TowerMilestone(210, "+50 max HP"),
             TowerMilestone(220, "Tower Crossbow (ranged attack +78, ranged strength +52)"),
             TowerMilestone(230, "+1% tower coin drops"),
             TowerMilestone(240, "+2% tower XP all skills"),
@@ -181,6 +201,7 @@ class TowerViewModel @Inject constructor(
                 availableSpells     = gameData.spells.values.filter { it.magicLevelRequired <= magicLevel }.sortedBy { it.magicLevelRequired },
                 selectedPotionKey   = extra.selectedPotionKey ?: flags.activePotionKey?.takeIf { (inventory[it] ?: 0) > 0 },
                 availablePotions    = inventory.filterKeys { it in gameData.potionEffects },
+                isQueueFull         = flags.sessionQueue.size >= playerRepo.maxQueueSize(flags),
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TowerUiState())
@@ -191,8 +212,8 @@ class TowerViewModel @Inject constructor(
 
     private fun buildFloorDungeon(floor: Int): DungeonData = DungeonData(
         name             = "tower_floor_$floor",
-        displayName      = "Floor $floor",
-        description      = "Infinite Tower floor $floor",
+        displayName      = context.getString(R.string.tower_floor_label, floor),
+        description      = context.getString(R.string.tower_floor_desc, floor),
         recommendedLevel = (floor * 2).coerceAtMost(200),
         encounterRate    = 0.65,
         enemySpawns      = tierFor(floor),
@@ -236,7 +257,8 @@ class TowerViewModel @Inject constructor(
         }
     }
 
-    private fun petBoostFor(petsJson: String): Int {
+    private fun petBoostFor(petsJson: String, ironman: Boolean = false): Int {
+        if (ironman) return 0
         val pets = try { json.decodeFromString<List<OwnedPet>>(petsJson) } catch (_: Exception) { return 0 }
         return pets.sumOf { pet ->
             val pd = gameData.pets[pet.id]
@@ -263,7 +285,7 @@ class TowerViewModel @Inject constructor(
                         skillName           = "tower",
                         activityKey         = "tower_floor_$nextFloor",
                         skillDisplayName    = "Infinite Tower: Floor $nextFloor",
-                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0),
+                        estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, flags.skillPrestige[Skills.AGILITY] ?: 0, townRepo.playerSessionDurationMultiplier(flags)),
                     )
                 )
                 if (enqueued) queuedSessionStarter.startNextQueued()
@@ -374,7 +396,7 @@ class TowerViewModel @Inject constructor(
                     spellMaxHit         = (selectedSpell?.maxHit ?: 0) + totalMagicDmgBonus,
                     agilityLevel        = levels[Skills.AGILITY] ?: 1,
                     agilityPrestige     = prestigeMap[Skills.AGILITY] ?: 0,
-                    petBoostPct         = petBoostFor(player.pets),
+                    petBoostPct         = petBoostFor(player.pets, flags.ironman),
                     equippedFood        = availableFood,
                     foodHealValues      = foodHeal,
                     potionBonuses       = potionBonuses,
@@ -384,6 +406,7 @@ class TowerViewModel @Inject constructor(
                     runeCostPerAttack   = runeCost,
                     attackSpeedSec      = weaponAttackSpeed,
                     eatThresholdPct     = flags.foodEatThresholdPct,
+                    chronosMultiplier   = townRepo.playerSessionDurationMultiplier(flags),
                 )
 
                 // Runes are consumed after the session, not upfront.
@@ -391,11 +414,7 @@ class TowerViewModel @Inject constructor(
                     json.serializersModule.serializer<List<SessionFrame>>(),
                     result.frames,
                 )
-                val deathFrameIdx = result.frames.indexOfFirst { it.died }
-                val alarmOffsetMs = if (deathFrameIdx >= 0) {
-                    val perFrameMs = result.durationMs / 60L
-                    perFrameMs * (deathFrameIdx + 1)
-                } else null
+                val alarmOffsetMs = CombatSimulator.deathAlarmOffsetMs(result.frames, result.durationMs / 60L)
 
                 sessionRepo.startSession(
                     skillName        = "tower",
@@ -474,12 +493,9 @@ class TowerViewModel @Inject constructor(
             val frames: List<SessionFrame> = json.decodeFromString(session.frames)
 
             val currentLevels = playerRepo.getSkillLevels()
-            if (!isSkillSessionStillEligible(session, currentLevels, gameData)) {
-                sessionRepo.deleteSession(session.sessionId)
-                _extra.update { it.copy(snackbarMessage = context.getString(R.string.combat_session_voided_prestige)) }
-                session = sessionRepo.getAllCompletedSessions().firstOrNull { it.skillName == "tower" }
-                continue
-            }
+            // Prestige mid-floor forfeits only the XP; loot, coins, kills, and floor progress
+            // still pay out below.
+            val grantXp = isSkillSessionStillEligible(session, currentLevels, gameData)
 
             val playerDied = frames.any { it.died }
 
@@ -523,11 +539,11 @@ class TowerViewModel @Inject constructor(
             var coinsGained = allItems.remove("coins")?.toLong() ?: 0L
 
             val flags         = playerRepo.getFlags()
-            val towerXpMult   = 1.0 + flags.towerXpBonusPct / 100.0
-            val towerCoinMult = 1.0 + flags.towerCoinBonusPct / 100.0
+            val towerXpMult   = if (flags.ironman) 1.0 else 1.0 + flags.towerXpBonusPct / 100.0
+            val towerCoinMult = if (flags.ironman) 1.0 else 1.0 + flags.towerCoinBonusPct / 100.0
 
             // Apply only the tower bonus here; applyMultiSkillResults handles boost/blessing internally
-            val xpForRepo = totalXpPerSkill.mapValues { (_, xp) -> (xp * towerXpMult).toLong() }
+            val xpForRepo = if (grantXp) totalXpPerSkill.mapValues { (_, xp) -> (xp * towerXpMult).toLong() } else emptyMap()
             coinsGained   = (coinsGained * towerCoinMult).toLong()
 
             playerRepo.applyMultiSkillResults(xpForRepo, allItems, coinsGained)
@@ -568,6 +584,9 @@ class TowerViewModel @Inject constructor(
                 ))
                 sessionRepo.deleteSession(session.sessionId)
                 _extra.update { it.copy(snackbarMessage = msg) }
+            }
+            if (!grantXp) {
+                _extra.update { it.copy(snackbarMessage = context.getString(R.string.combat_session_voided_prestige)) }
             }
             session = sessionRepo.getAllCompletedSessions().firstOrNull { it.skillName == "tower" }
             }
@@ -617,7 +636,7 @@ class TowerViewModel @Inject constructor(
                 120 -> playerRepo.addItems(mapOf("tower_body" to 1))
                 130 -> newFlags = newFlags.copy(towerXpBonusPct = newFlags.towerXpBonusPct + 2)
                 140 -> playerRepo.addCoins(100_000L)
-                150 -> playerRepo.addItems(mapOf("tower_legs" to 1))
+                150 -> playerRepo.addItems(mapOf("tower_legs" to 1, "tower_boots" to 1, "tower_plateskirt" to 1))
                 160 -> newFlags = newFlags.copy(towerHpBonus = newFlags.towerHpBonus + 5)
                 170 -> newFlags = newFlags.copy(towerCoinBonusPct = newFlags.towerCoinBonusPct + 1)
                 180 -> playerRepo.addItems(mapOf("tower_sword" to 1))

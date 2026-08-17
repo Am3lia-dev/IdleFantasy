@@ -1,6 +1,5 @@
 package com.fantasyidler.ui.screen
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.DocumentsContract
@@ -10,6 +9,8 @@ import androidx.core.os.LocaleListCompat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,17 +67,19 @@ import androidx.core.app.NotificationManagerCompat
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
     onReopenTutorial: () -> Unit = {},
     onNavigateToHomeScreenSettings: () -> Unit = {},
+    onNavigateToThemeSettings: () -> Unit = {},
+    onNavigateToSaveSlots: () -> Unit = {},
+    onNavigateToArtCredits: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
-    val themePreference        by viewModel.themePreference.collectAsState()
     val fontScale              by viewModel.fontScale.collectAsState()
     val profileLayout          by viewModel.profileLayout.collectAsState()
     val backupFolderUri  by viewModel.backupFolderUri.collectAsState()
@@ -112,9 +115,13 @@ fun SettingsScreen(
         uri ?: return@rememberLauncherForActivityResult
         val jsonString = context.contentResolver.openInputStream(uri)?.bufferedReader()?.readText()
             ?: return@rememberLauncherForActivityResult
-        viewModel.importSave(jsonString) { success ->
+        viewModel.importSave(jsonString) { success, ironmanDemoted ->
             AppBannerCenter.enqueue(
-                if (success) context.getString(R.string.settings_imported_ok) else context.getString(R.string.settings_imported_fail)
+                when {
+                    !success       -> context.getString(R.string.settings_imported_fail)
+                    ironmanDemoted -> context.getString(R.string.settings_imported_demoted)
+                    else           -> context.getString(R.string.settings_imported_ok)
+                }
             )
         }
     }
@@ -248,21 +255,7 @@ fun SettingsScreen(
             SettingsRow(
                 title    = stringResource(R.string.settings_theme),
                 subtitle = stringResource(R.string.settings_theme_desc),
-                trailing = {
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        listOf(
-                            "dark"   to stringResource(R.string.settings_theme_dark),
-                            "light"  to stringResource(R.string.settings_theme_light),
-                            "system" to stringResource(R.string.settings_theme_system),
-                        ).forEach { (key, label) ->
-                            FilterChip(
-                                selected = themePreference == key,
-                                onClick  = { viewModel.setTheme(key) },
-                                label    = { Text(label, style = MaterialTheme.typography.labelSmall) },
-                            )
-                        }
-                    }
-                }
+                onClick  = onNavigateToThemeSettings,
             )
 
             SettingsRow(
@@ -316,6 +309,39 @@ fun SettingsScreen(
                 title    = stringResource(R.string.settings_home_screen),
                 subtitle = stringResource(R.string.settings_home_screen_desc),
                 onClick  = onNavigateToHomeScreenSettings,
+            )
+            val showQuestDots by viewModel.showQuestDots.collectAsState()
+            SettingsRow(
+                title    = stringResource(R.string.settings_quest_dots),
+                subtitle = stringResource(R.string.settings_quest_dots_desc),
+                trailing = {
+                    Switch(
+                        checked         = showQuestDots,
+                        onCheckedChange = { viewModel.setShowQuestDots(it) },
+                    )
+                }
+            )
+            val showPrestigeNotifications by viewModel.showPrestigeNotifications.collectAsState()
+            SettingsRow(
+                title    = stringResource(R.string.settings_prestige_notifications),
+                subtitle = stringResource(R.string.settings_prestige_notifications_desc),
+                trailing = {
+                    Switch(
+                        checked         = showPrestigeNotifications,
+                        onCheckedChange = { viewModel.setShowPrestigeNotifications(it) },
+                    )
+                }
+            )
+            val compactNumbers by viewModel.compactNumbers.collectAsState()
+            SettingsRow(
+                title    = stringResource(R.string.settings_compact_numbers),
+                subtitle = stringResource(R.string.settings_compact_numbers_desc),
+                trailing = {
+                    Switch(
+                        checked         = compactNumbers,
+                        onCheckedChange = { viewModel.setCompactNumbers(it) },
+                    )
+                }
             )
             SettingsRow(
                 title    = stringResource(R.string.settings_profile_layout),
@@ -408,6 +434,12 @@ fun SettingsScreen(
             HorizontalDivider()
 
             SectionHeader(title = stringResource(R.string.settings_save_data))
+
+            SettingsRow(
+                title    = stringResource(R.string.settings_characters),
+                subtitle = stringResource(R.string.settings_characters_desc),
+                onClick  = onNavigateToSaveSlots,
+            )
 
             SettingsRow(
                 title    = stringResource(R.string.settings_export),
@@ -569,7 +601,7 @@ fun SettingsScreen(
                     OutlinedButton(
                         onClick = {
                             context.startActivity(
-                                Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/nZVZ67gyH"))
+                                Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/vRxtXsBwQU"))
                             )
                         }
                     ) {
@@ -588,35 +620,11 @@ fun SettingsScreen(
             // Art credits section
             HorizontalDivider()
 
-            SectionHeader(title = stringResource(R.string.settings_art_credits))
-
-            val artCredits = listOf(
-                Triple(
-                    stringResource(R.string.settings_credit_banners_title),
-                    stringResource(R.string.settings_credit_banners_subtitle),
-                    "https://wenrexa.itch.io/banners-kingdoms",
-                ),
-                Triple(
-                    stringResource(R.string.settings_credit_skill_icons_title),
-                    stringResource(R.string.settings_credit_skill_icons_subtitle),
-                    "https://shikashipx.itch.io/shikashis-fantasy-icons-pack",
-                ),
+            SettingsRow(
+                title    = stringResource(R.string.settings_art_credits),
+                subtitle = stringResource(R.string.settings_art_credits_desc),
+                onClick  = onNavigateToArtCredits,
             )
-            artCredits.forEach { (title, subtitle, url) ->
-                SettingsRow(
-                    title    = title,
-                    subtitle = subtitle,
-                    trailing = {
-                        OutlinedButton(
-                            onClick = {
-                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                            }
-                        ) {
-                            Text(stringResource(R.string.settings_source_open))
-                        }
-                    }
-                )
-            }
         }
     }
 }
@@ -649,7 +657,9 @@ private fun LanguageSection() {
         "ja"     to stringResource(R.string.settings_lang_japanese),
         "ga"     to stringResource(R.string.settings_lang_irish),
         "cs"     to stringResource(R.string.settings_lang_czech),
-        "zh-CN"  to stringResource(R.string.settings_lang_chinese),
+        "pl"     to stringResource(R.string.settings_lang_polish),
+        "lt"     to stringResource(R.string.settings_lang_lithuanian),
+        "zh-CN"  to stringResource(R.string.settings_lang_chinese_simplified),
         "system" to stringResource(R.string.settings_lang_system),
     )
     val selectedLabel =

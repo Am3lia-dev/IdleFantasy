@@ -59,7 +59,6 @@ import com.fantasyidler.R
 import com.fantasyidler.data.json.DailyQuestTemplate
 import com.fantasyidler.data.json.QuestData
 import com.fantasyidler.repository.DailyQuestWithProgress
-import com.fantasyidler.ui.theme.GoldPrimary
 import com.fantasyidler.ui.viewmodel.QuestWithProgress
 import com.fantasyidler.ui.viewmodel.QuestsViewModel
 import com.fantasyidler.repository.WeeklyQuestWithProgress
@@ -176,6 +175,7 @@ fun QuestsScreen(
                         hideCompleted       = state.hideCompleted,
                         weeklyBonusClaimed  = state.weeklyBonusClaimed,
                         divineDropChance    = state.divineDropChance,
+                        dwarvenDropDenominator = state.dwarvenDropDenominator,
                         onClaimDailyQuest   = { viewModel.claimDailyQuest(it) },
                         onClaimWeeklyQuest  = { viewModel.claimWeeklyQuest(it) },
                         onClaimWeeklyBonus  = { viewModel.claimWeeklyBonus() },
@@ -227,6 +227,7 @@ private fun TimedQuestsContent(
     hideCompleted: Boolean,
     weeklyBonusClaimed: Boolean = false,
     divineDropChance: Double? = null,
+    dwarvenDropDenominator: Int? = null,
     onClaimDailyQuest: (String) -> Unit,
     onClaimWeeklyQuest: (String) -> Unit,
     onClaimWeeklyBonus: () -> Unit,
@@ -255,10 +256,11 @@ private fun TimedQuestsContent(
         }
         when (selectedSubTab) {
             0 -> DailyQuestsContent(
-                quests        = dailyQuests,
-                nextReset     = nextDailyReset,
-                hideCompleted = hideCompleted,
-                onClaimQuest  = onClaimDailyQuest,
+                quests          = dailyQuests,
+                nextReset       = nextDailyReset,
+                hideCompleted   = hideCompleted,
+                dropDenominator = dwarvenDropDenominator,
+                onClaimQuest    = onClaimDailyQuest,
             )
             1 -> WeeklyQuestsContent(
                 quests             = weeklyQuests,
@@ -282,6 +284,7 @@ private fun DailyQuestsContent(
     quests: List<DailyQuestWithProgress>,
     nextReset: Long,
     hideCompleted: Boolean = false,
+    dropDenominator: Int? = null,
     onClaimQuest: (String) -> Unit,
 ) {
     val visibleQuests = if (hideCompleted) quests.filter { !it.claimed } else quests
@@ -289,7 +292,10 @@ private fun DailyQuestsContent(
     LazyColumn(Modifier.fillMaxSize()) {
         item {
             Text(
-                text     = stringResource(R.string.label_daily_info),
+                text     = if (dropDenominator != null)
+                    stringResource(R.string.label_daily_info_pity, dropDenominator)
+                else
+                    stringResource(R.string.label_daily_info_complete),
                 style    = MaterialTheme.typography.bodySmall,
                 color    = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
@@ -313,7 +319,11 @@ private fun DailyQuestsContent(
             }
         } else {
             items(visibleQuests, key = { it.template.id }) { q ->
-                DailyQuestCard(quest = q, onClaim = { onClaimQuest(q.template.id) })
+                DailyQuestCard(
+                    quest           = q,
+                    dropDenominator = dropDenominator,
+                    onClaim         = { onClaimQuest(q.template.id) },
+                )
                 HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
         }
@@ -390,7 +400,7 @@ private fun WeeklyQuestsContent(
                     Text(
                         text = stringResource(R.string.weekly_bonus_title),
                         style = MaterialTheme.typography.bodyLarge,
-                        color = GoldPrimary,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(Modifier.height(8.dp))
                     Button(onClick = onClaimBonus, modifier = Modifier.fillMaxWidth()) {
@@ -412,19 +422,25 @@ private fun WeeklyQuestsContent(
     }
 }
 
-private fun buildDailyObjective(context: Context, template: DailyQuestTemplate): String {
-    val verbResId = when (template.skill) {
+internal fun buildDailyObjective(context: Context, template: DailyQuestTemplate): String =
+    buildDailyObjective(context, template.skill, template.target, template.amount, template.description)
+
+internal fun buildDailyObjective(context: Context, skill: String, target: String, amount: Int, fallback: String): String {
+    val verbResId = when (skill) {
         "mining"      -> R.string.daily_verb_mining
         "fishing"     -> R.string.daily_verb_fishing
         "woodcutting" -> R.string.daily_verb_woodcutting
         "smithing"    -> R.string.daily_verb_smithing
         "cooking"     -> R.string.daily_verb_cooking
         "combat"      -> R.string.daily_verb_combat
-        else          -> return template.description
+        else          -> return fallback
     }
     val verb = context.getString(verbResId)
-    val item = GameStrings.itemName(context, template.target)
-    return "$verb ${template.amount} $item."
+    // Combat dailies target an enemy key, not an item key — weekly quests
+    // already localize these; dailies showed raw English names (issue #1146).
+    val item = if (skill == "combat") GameStrings.enemyName(context, target)
+               else GameStrings.itemName(context, target)
+    return "$verb $amount $item."
 }
 
 private fun buildQuestObjective(context: Context, quest: QuestData): String {
@@ -465,6 +481,7 @@ private fun buildQuestObjective(context: Context, quest: QuestData): String {
 @Composable
 private fun DailyQuestCard(
     quest: DailyQuestWithProgress,
+    dropDenominator: Int? = null,
     onClaim: () -> Unit,
 ) {
     val context    = LocalContext.current
@@ -496,9 +513,11 @@ private fun DailyQuestCard(
             Spacer(Modifier.height(8.dp))
             val fraction = (quest.progress.toFloat() / quest.template.amount.toFloat()).coerceIn(0f, 1f)
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress = { fraction },
                 modifier = Modifier.fillMaxWidth(),
-                color    = GoldPrimary,
+                color    = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(4.dp))
             val displayProgress = quest.progress.coerceAtMost(quest.template.amount)
@@ -531,9 +550,12 @@ private fun DailyQuestCard(
         } else if (isComplete) {
             Spacer(Modifier.height(6.dp))
             Text(
-                text  = stringResource(R.string.label_daily_reward),
+                text  = if (dropDenominator != null)
+                    stringResource(R.string.label_daily_reward_pity, dropDenominator)
+                else
+                    stringResource(R.string.label_daily_reward_complete),
                 style = MaterialTheme.typography.labelSmall,
-                color = GoldPrimary,
+                color = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(6.dp))
             Button(
@@ -593,9 +615,11 @@ private fun QuestRow(
         if (!questWithProgress.completed && questWithProgress.progress > 0) {
             Spacer(Modifier.height(8.dp))
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress  = { questWithProgress.progressFraction },
                 modifier  = Modifier.fillMaxWidth(),
-                color     = GoldPrimary,
+                color     = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(4.dp))
             val displayProgress = questWithProgress.progress.coerceAtMost(quest.amount)
@@ -640,7 +664,7 @@ private fun QuestRow(
             val rewards = quest.rewards
             val rewardParts = buildList {
                 if (rewards.xp > 0) add("+${rewards.xp.toLong().formatXp()} XP")
-                if (rewards.coins > 0) add("${rewards.coins.toLong().formatCoins()} coins")
+                if (rewards.coins > 0) add(stringResource(R.string.reward_part_coins_plain, rewards.coins.toLong().formatCoins()))
                 rewards.items.forEach { (itemKey, qty) ->
                     add("${GameStrings.itemName(context, itemKey)} ×$qty")
                 }
@@ -649,7 +673,7 @@ private fun QuestRow(
                 Text(
                     text  = rewardParts.joinToString(" · "),
                     style = MaterialTheme.typography.labelSmall,
-                    color = GoldPrimary,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Spacer(Modifier.height(6.dp))
             }
@@ -697,9 +721,11 @@ private fun WeeklyQuestCard(
             Spacer(Modifier.height(8.dp))
             val fraction = (quest.progress.toFloat() / quest.template.amount.toFloat()).coerceIn(0f, 1f)
             LinearProgressIndicator(
+                gapSize = 0.dp,
+                drawStopIndicator = {},
                 progress = { fraction },
                 modifier = Modifier.fillMaxWidth(),
-                color    = GoldPrimary,
+                color    = MaterialTheme.colorScheme.primary,
             )
             Spacer(Modifier.height(4.dp))
             val displayProgress = quest.progress.coerceAtMost(quest.template.amount)
