@@ -739,53 +739,37 @@
 
     <!-- ===== Seed names ===== -->
     <string name="item_potato_seed_name">土豆种子</string>
-    <string name="item_potato_seed_desc">种植马铃薯。2小时成熟。
-需要农业等级1。</string> <!-- untranslated -->
+    <string name="item_potato_seed_desc">种植马铃薯。2小时成熟。\n需要农业等级1。</string>
     <string name="item_onion_seed_name">洋葱种子</string>
-    <string name="item_onion_seed_desc">种植洋葱。3小时成熟。
-需要农业等级5。</string> <!-- untranslated -->
+    <string name="item_onion_seed_desc">种植洋葱。3小时成熟。\n需要农业等级5。</string>
     <string name="item_cabbage_seed_name">卷心菜种子</string>
-    <string name="item_cabbage_seed_desc">种植卷心菜。4小时成熟。
-需要农业等级10。</string> <!-- untranslated -->
+    <string name="item_cabbage_seed_desc">种植卷心菜。4小时成熟。\n需要农业等级10。</string>
     <string name="item_carrot_seed_name">胡萝卜种子</string>
-    <string name="item_carrot_seed_desc">种植胡萝卜。5小时成熟。
-需要农业等级15。</string> <!-- untranslated -->
+    <string name="item_carrot_seed_desc">种植胡萝卜。5小时成熟。\n需要农业等级15。</string>
     <string name="item_tomato_seed_name">番茄种子</string>
-    <string name="item_tomato_seed_desc">种植番茄。6小时成熟。
-需要农业等级20。</string> <!-- untranslated -->
+    <string name="item_tomato_seed_desc">种植番茄。6小时成熟。\n需要农业等级20。</string>
     <string name="item_corn_seed_name">玉米种子</string>
-    <string name="item_corn_seed_desc">种植玉米。7小时成熟。
-需要农业等级25。</string> <!-- untranslated -->
+    <string name="item_corn_seed_desc">种植玉米。7小时成熟。\n需要农业等级25。</string>
     <string name="item_pumpkin_seed_name">南瓜种子</string>
-    <string name="item_pumpkin_seed_desc">种植南瓜。9小时成熟。
-需要农业等级30。</string> <!-- untranslated -->
+    <string name="item_pumpkin_seed_desc">种植南瓜。9小时成熟。\n需要农业等级30。</string>
     <string name="item_watermelon_seed_name">西瓜种子</string>
-    <string name="item_watermelon_seed_desc">种植西瓜。10小时成熟。
-需要农业等级35。</string> <!-- untranslated -->
+    <string name="item_watermelon_seed_desc">种植西瓜。10小时成熟。\n需要农业等级35。</string>
     <string name="item_strawberry_seed_name">草莓种子</string>
-    <string name="item_strawberry_seed_desc">种植草莓。11小时成熟。
-需要农业等级40。</string> <!-- untranslated -->
+    <string name="item_strawberry_seed_desc">种植草莓。11小时成熟。\n需要农业等级40。</string>
     <string name="item_magic_herb_seed_name">魔法草药种子</string>
-    <string name="item_magic_herb_seed_desc">种植魔法草药。13小时成熟。
-需要农业等级50。</string> <!-- untranslated -->
+    <string name="item_magic_herb_seed_desc">种植魔法草药。13小时成熟。\n需要农业等级50。</string>
     <string name="item_dragon_fruit_seed_name">火龙果种子</string>
-    <string name="item_dragon_fruit_seed_desc">种植火龙果。14小时成熟。
-需要农业等级55。</string> <!-- untranslated -->
+    <string name="item_dragon_fruit_seed_desc">种植火龙果。14小时成熟。\n需要农业等级55。</string>
     <string name="item_golden_wheat_seed_name">黄金麦种子</string>
-    <string name="item_golden_wheat_seed_desc">种植金麦。16小时成熟。
-需要农业等级65。</string> <!-- untranslated -->
+    <string name="item_golden_wheat_seed_desc">种植金麦。16小时成熟。\n需要农业等级65。</string>
     <string name="item_spirit_seed_name">灵草种子</string>
-    <string name="item_spirit_seed_desc">种植灵草。19小时成熟。
-需要农业等级75。</string> <!-- untranslated -->
+    <string name="item_spirit_seed_desc">种植灵草。19小时成熟。\n需要农业等级75。</string>
     <string name="item_celestial_bloom_seed_name">天界之花种子</string>
-    <string name="item_celestial_bloom_seed_desc">种植天灵花。21小时成熟。
-需要农业等级85。</string> <!-- untranslated -->
+    <string name="item_celestial_bloom_seed_desc">种植天灵花。21小时成熟。\n需要农业等级85。</string>
     <string name="item_starfruit_seed_name">杨桃种子</string>
-    <string name="item_starfruit_seed_desc">种植星星果。23小时成熟。
-需要农业等级95。</string> <!-- untranslated -->
+    <string name="item_starfruit_seed_desc">种植星星果。23小时成熟。\n需要农业等级95。</string>
     <string name="item_void_lotus_seed_name">虚空莲种子</string>
-    <string name="item_void_lotus_seed_desc">种植虚空莲。24小时成熟。
-需要农业等级99。</string> <!-- untranslated -->
+    <string name="item_void_lotus_seed_desc">种植虚空莲。24小时成熟。\n需要农业等级99。</string>
 
 
     <!-- Additional item/boss/food names (English placeholders) -->
