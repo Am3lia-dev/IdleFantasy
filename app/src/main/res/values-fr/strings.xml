@@ -100,12 +100,12 @@
     <string name="label_coming_soon">À venir</string>
     <string name="label_time_remaining">Temps restant</string>
     <!-- Translator note: compact duration units; English puts the letter(s) right after the number -->
-    <string name="duration_months">%1$dmo</string> <!-- untranslated -->
+    <string name="duration_months">%1$dmo</string>
     <string name="duration_weeks">%1$dS</string>
     <string name="duration_days">%1$dj</string>
-    <string name="duration_hours">%1$dh</string> <!-- untranslated -->
-    <string name="duration_minutes">%1$dm</string> <!-- untranslated -->
-    <string name="duration_seconds">%1$ds</string> <!-- untranslated -->
+    <string name="duration_hours">%1$dh</string>
+    <string name="duration_minutes">%1$dm</string>
+    <string name="duration_seconds">%1$ds</string>
     <string name="duration_complete">Finie</string>
     <string name="label_session_results">Résultats de la Session</string>
     <string name="label_xp_gained">XP gagnés</string>
@@ -149,7 +149,7 @@
     <string name="label_available_quests">Disponible</string>
     <string name="label_stats">Stats</string>
     <string name="label_skills">Aptitudes</string>
-    <string name="tab_label_with_count">%1$s (%2$d)</string> <!-- untranslated -->
+    <string name="tab_label_with_count">%1$s (%2$d)</string>
     <string name="label_shop">Magasin</string>
     <string name="label_sell_items">Vendre des Objets</string>
     <string name="label_total_level">Total des Niveaux</string>
@@ -303,8 +303,8 @@
     <string name="settings_profile_layout_tabs">Onglets</string>
     <string name="settings_quest_dots">Point de quête sur aptitudes</string>
     <string name="settings_quest_dots_desc">Montre un point doré sur les aptitudes qui ont une quête possible</string>
-    <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
-    <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
+    <string name="settings_prestige_notifications">Notification de Prestige</string>
+    <string name="settings_prestige_notifications_desc">Montrer une notification quand une aptitude est prête à prestige.</string>
     <string name="settings_compact_numbers">Nombres Compacts</string>
     <string name="settings_compact_numbers_desc">Abréger les grands nombres d\'éléments (par ex. 2,46 M au lieu de 2 461 940).</string>
     <string name="settings_home_screen">Écran d\'Accueil</string>
@@ -1820,20 +1820,20 @@
     <string name="home_welcome_title">Le %1$s !</string>
 
     <!-- Pet names and descriptions -->
-    <string name="pet_dragon_whelp_name">Jeune dragon</string>
+    <string name="pet_dragon_whelp_name">Dragonnet</string>
     <string name="pet_dragon_whelp_desc">Un jeune dragon qui augmente votre prouesse de combat.</string>
-    <string name="pet_imp_pet_name">Diabolin</string>
+    <string name="pet_imp_pet_name">Diabolin de Compagnie</string>
     <string name="pet_imp_pet_desc">Un diablotin malicieux qui améliore votre entraînement de Prière.</string>
-    <string name="pet_baby_kraken_name">Petit kraken</string>
+    <string name="pet_baby_kraken_name">Petit Kraken</string>
     <string name="pet_baby_kraken_desc">Un tout petit kraken qui augmente votre habilité en Cuisine.</string>
     <string name="pet_rock_golem_name">Golem de Pierre</string>
-    <string name="pet_rock_golem_desc">Une formation rocheuse vivante qui augmente votre XP d\'Extraction.</string>
+    <string name="pet_rock_golem_desc">Une formation rocheuse vivante qui augmente votre prouesse d\'Extraction.</string>
     <string name="pet_ent_name">Ent</string>
-    <string name="pet_ent_desc">Un ancien esprit d\'arbre qui booste votre XP de coupe de Bois.</string>
-    <string name="pet_tiny_templar_name">Petite templier</string>
-    <string name="pet_tiny_templar_desc">Un petit compagnon poisson qui augmente votre XP de Pêche.</string>
-    <string name="pet_tangleroot_name">Créature végétale</string>
-    <string name="pet_tangleroot_desc">Une créature végétale magique qui améliore votre XP d\'Agriculture.</string>
+    <string name="pet_ent_desc">Un ancien esprit d\'arbre qui aide votre bûcheronnage.</string>
+    <string name="pet_tiny_templar_name">Petit Templier</string>
+    <string name="pet_tiny_templar_desc">Un petit compagnon poisson qui augmente votre expertise en Pêche.</string>
+    <string name="pet_tangleroot_name">Racine Enchevêtrée</string>
+    <string name="pet_tangleroot_desc">Une créature végétale magique qui améliore votre Agriculture.</string>
     <string name="pet_baby_balrog_name">Braisette Gothique</string>
     <string name="pet_baby_balrog_desc">Un minuscule démon de feu et d\'ombre qui renforce votre magie.</string>
     <string name="pet_void_wisp_name">Feu Follet du Vide</string>
@@ -1863,7 +1863,7 @@
     <string name="pet_tower_pet_name">Gardien de Pierre</string>
     <string name="pet_tower_pet_desc">Un ancien golem de pierre qui garde les secrets de la tour. Augmente l\'XP de combat.</string>
     <string name="pet_solstice_sprite_name">Farfadet du Solstice</string>
-    <string name="pet_solstice_sprite_desc">Un minuscule esprit de braise issu de l\'événement du Solstice de la Tour Solaire, qui renforce vos prouesses au combat.</string>
+    <string name="pet_solstice_sprite_desc">Un minuscule esprit de braise issu de l\'événement du Solstice de la Flèche Solaire, qui renforce vos prouesses au combat.</string>
     <string name="pet_lantern_wisp_name">Feu Follet-Lanterne</string>
     <string name="pet_lantern_wisp_desc">Une lanterne-citrouille grimaçante, échappée de la couronne du Roi Creux, qui éclaire désormais votre chemin vers la bataille.</string>
     <string name="pet_grave_sprout_name">Germe de Tombe</string>
@@ -1880,8 +1880,8 @@
     <string name="save_slot_new">Nouveau personnage</string>
     <string name="save_slot_playing">En jeu</string>
     <string name="save_slot_ironman">Ironman</string>
-    <string name="save_slot_combat_level">Niveau de combat %1$d</string>
-    <string name="save_slot_total_level">Niveau total %1$d</string>
+    <string name="save_slot_combat_level">Combat Niv %1$d</string>
+    <string name="save_slot_total_level">Total Niv %1$d</string>
     <string name="save_slot_last_played">il y a %1$s</string>
     <string name="save_slot_created">Créé il y a %1$s ans</string>
     <string name="save_slot_switch_title">Changer de personnage ?</string>
