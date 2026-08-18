@@ -487,13 +487,14 @@
     <!-- ===== HomeScreen ===== -->
     <string name="home_town_title">Kota</string>
     <string name="home_town_desc">Kunjungi toko, Penginapan, Serikat, Toko Bangunan, Penumpasan, dan Karnaval</string>
-    <string name="guild_dailies_available">Tersedia harian</string>
     <string name="guild_not_unlocked">Belum terbuka</string>
     <string name="guild_dailies_done_today">Harian selesai hari ini</string>
     <string name="guild_dailies_remaining_today">%1$d tersisa hari ini</string>
     <string name="guild_do_dailies_hint">Lakukan tugas harian untuk naik ke tingkat berikutnya</string>
     <string name="guild_quest_gate_blocked">Selesaikan Tugas untuk meningkatkan peringkatmu.</string>
     <string name="guild_quest_required">Quest diperlukan untuk melanjutkan</string>
+    <string name="guild_progress_dailies_and_quest">Complete %1$d/%2$d dailies &amp; quests required to advance</string> <!-- untranslated -->
+    <string name="guild_progress_dailies_only">Complete %1$d/%2$d dailies to advance</string> <!-- untranslated -->
     <string name="home_died_message">Anda meninggal dan kehilangan sebagian besar keuntungan Anda.</string>
     <string name="home_xp_boost_was_active">Bonus XP 2x aktif.</string>
     <string name="home_xp_boost_active">2x XP Boost aktif — %1$s tersisa</string>

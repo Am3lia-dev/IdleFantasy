@@ -494,13 +494,14 @@
     <!-- ===== HomeScreen ===== -->
     <string name="home_town_title">Stadt</string>
     <string name="home_town_desc">Besucht den Krämer, die Schänke, das Gildenhaus, die Kirche, die Bauwerkstatt, den Trophäensammler und den Jahrmarkt</string>
-    <string name="guild_dailies_available">Tagesaufgaben verfügbar</string>
     <string name="guild_not_unlocked">Noch nicht freigeschaltet</string>
     <string name="guild_dailies_done_today">Tagesaufgaben heute erledigt</string>
     <string name="guild_dailies_remaining_today">%1$d heute übrig</string>
     <string name="guild_do_dailies_hint">Erledigt Tagesaufgaben, um in den nächsten Rang aufzusteigen</string>
     <string name="guild_quest_gate_blocked">Schließt Missionen ab, um im Rang aufzusteigen</string>
     <string name="guild_quest_required">Mission benötigt, um voranzukommen</string>
+    <string name="guild_progress_dailies_and_quest">Complete %1$d/%2$d dailies &amp; quests required to advance</string> <!-- untranslated -->
+    <string name="guild_progress_dailies_only">Complete %1$d/%2$d dailies to advance</string> <!-- untranslated -->
     <string name="home_died_message">Ihr seid verstorben und habt daher den Großteil Eurer Gewinne verloren.</string>
     <string name="home_xp_boost_was_active">2×EP-Hilfe war aktiv</string>
     <string name="home_xp_boost_active">2×EP-Hilfe aktiv — noch %1$s</string>

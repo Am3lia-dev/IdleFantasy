@@ -491,13 +491,14 @@
     <!-- ===== HomeScreen ===== -->
     <string name="home_town_title">Town</string> <!-- untranslated -->
     <string name="home_town_desc">Visita la tienda, la posada, el gremio, la iglesia, el taller del constructor, el maestro cazador y el salón de juegos</string>
-    <string name="guild_dailies_available">Dailies available</string> <!-- untranslated -->
     <string name="guild_not_unlocked">Not yet unlocked</string> <!-- untranslated -->
     <string name="guild_dailies_done_today">Dailies done today</string> <!-- untranslated -->
     <string name="guild_dailies_remaining_today">%1$d left today</string> <!-- untranslated -->
     <string name="guild_do_dailies_hint">Do dailies to increase your reputation</string>
     <string name="guild_quest_gate_blocked">Complete quests to advance your rank</string> <!-- untranslated -->
     <string name="guild_quest_required">Quest required to advance</string> <!-- untranslated -->
+    <string name="guild_progress_dailies_and_quest">Complete %1$d/%2$d dailies &amp; quests required to advance</string> <!-- untranslated -->
+    <string name="guild_progress_dailies_only">Complete %1$d/%2$d dailies to advance</string> <!-- untranslated -->
     <string name="home_died_message">Moriste y perdiste la mayor parte de tus ganancias.</string>
     <string name="home_xp_boost_was_active">2× XP Boost was active</string> <!-- untranslated -->
     <string name="home_xp_boost_active">2× XP Boost active — %1$s remaining</string> <!-- untranslated -->
