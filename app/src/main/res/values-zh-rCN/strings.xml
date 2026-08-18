@@ -149,7 +149,7 @@
     <string name="label_available_quests">可用</string>
     <string name="label_stats">属性</string>
     <string name="label_skills">技能</string>
-    <string name="tab_label_with_count">%1 (%2)</string>
+    <string name="tab_label_with_count">%1$s (%2$d)</string>
     <string name="label_shop">商店</string>
     <string name="label_sell_items">出售物品</string>
     <string name="label_total_level">总等级</string>
@@ -551,7 +551,7 @@
     <string name="combat_log_player_miss">→ 你未命中 %1$s</string>
     <string name="combat_log_enemy_hit">← %1$s 命中你：%2$d 伤害</string>
     <string name="combat_log_enemy_miss">← %1$s 未命中</string>
-    <string name="combat_log_heal">治疗</string>
+    <string name="combat_log_heal">✚ 你食用了：+%1$d 生命</string>
     <string name="combat_eat_threshold_warning">⚠ 食物即将耗尽</string>
     <string name="combat_rec_level">推荐战斗等级</string>
     <string name="combat_your_level">你的战斗等级</string>
@@ -1432,7 +1432,7 @@
     <string name="farming_bean_climb">攀爬</string>
     <string name="farming_bean_climbed">你已爬上豆茎。一条巨蛇的嘶嘶声引起了你的注意……</string>
     <string name="farming_bean_climbed_title">攀爬成功</string>
-    <string name="farming_bean_unlock_hint">需要攀爬魔豆</string>
+    <string name="farming_bean_unlock_hint">新地牢已解锁：%1$s。在战斗的地牢列表中查找。</string>
     <string name="farming_bean_cleared">已清除</string>
 
     <string name="farming_magic_bean_one_plot">魔法豆只能种在一块田地里</string>
@@ -1544,7 +1544,7 @@
     <string name="bonus_combined_xp">综合经验</string>
     <string name="bonus_yield">+%1$d%% 产量</string>
     <string name="bonus_boost">提升+%1$d%%</string>
-    <string name="bonus_agility_prestige_detail">敏捷威望详情</string>
+    <string name="bonus_agility_prestige_detail">威望加成：%1$dm 等级 %2$d 的训练变为 %3$dm</string>
     <string name="bonus_coin_return">+%1$d%% 金币回报</string>
     <string name="bonus_tower">塔楼</string>
 
@@ -1602,9 +1602,9 @@
     <string name="item_gilded_full_helmet_name">镀金全罩头盔</string>
     <string name="item_gilded_platebody_name">镀金板甲</string>
     <string name="item_gilded_kiteshield_name">镀金鸢盾</string>
-    <string name="boss_coin_cap_remaining">剩余金币上限</string>
+    <string name="boss_coin_cap_remaining">今日该Boss金币掉落剩余：%1$d</string>
     <string name="boss_coin_cap_spent">已花费金币上限</string>
-    <string name="bestiary_coin_cap_label">金币上限</string>
+    <string name="bestiary_coin_cap_label">%1$d 次击杀/天后</string>
     <string name="session_note_boss_coin_cap">金币掉落减少（该Boss每日上限）</string>
     <string name="guild_daily_button">公会每日</string>
     <string name="guild_daily_banner_claimable">可领取</string>
@@ -1621,20 +1621,20 @@
     <string name="tower_milestone_claim">领取</string>
     <string name="tower_milestone_claimed">已领取</string>
     <!-- Tower milestone reward descriptions; %s placeholders are item display names -->
-    <string name="tower_milestone_ring">高塔戒指</string>
+    <string name="tower_milestone_ring">%1$s（攻击+6，力量+6）</string>
     <string name="tower_milestone_coins_5k">5,000 金币</string>
-    <string name="tower_milestone_shield">高塔盾</string>
-    <string name="tower_milestone_amulet">高塔护符</string>
+    <string name="tower_milestone_shield">%1$s（防御+80）</string>
+    <string name="tower_milestone_amulet">%1$s（攻击+15，力量+15，防御+10，全类型）</string>
     <string name="tower_milestone_hp_50">+50 生命值</string>
     <string name="tower_milestone_coins_25k">25,000 金币</string>
-    <string name="tower_milestone_helm">高塔头盔</string>
-    <string name="tower_milestone_plate">高塔胸甲</string>
+    <string name="tower_milestone_helm">%1$s（防御+82，力量+8）</string>
+    <string name="tower_milestone_plate">%1$s（防御+132）</string>
     <string name="tower_milestone_coins_100k">100,000 金币</string>
-    <string name="tower_milestone_legs_set">高塔腿甲套装</string>
-    <string name="tower_milestone_sword">高塔之剑</string>
-    <string name="tower_milestone_cape">高塔披风</string>
-    <string name="tower_milestone_crossbow">高塔弩</string>
-    <string name="tower_milestone_staff">法杖</string>
+    <string name="tower_milestone_legs_set">%1$s（防御+125）+ %2$s（防御+58）+ %3$s（防御+125）</string>
+    <string name="tower_milestone_sword">%1$s（攻击+72，力量+75）</string>
+    <string name="tower_milestone_cape">%1$s（攻击/力量/防御+14，远程/魔法+12）+ 500,000 金币</string>
+    <string name="tower_milestone_crossbow">%1$s（远程攻击+78，远程力量+52）</string>
+    <string name="tower_milestone_staff">%1$s（魔法攻击+68，魔法伤害+18，无限符文）+ 1,000,000 金币</string>
     <string name="tower_enemies_this_floor">敌人</string>
     <string name="tower_enemy_strength">敌人强度：%1$s%%</string>
     <string name="tower_entry_card_desc">无尽的楼层。你能攀爬多高？</string>
@@ -1816,7 +1816,7 @@
     <string name="title_seasonal_champion_of">%1$s 冠军</string>
     <string name="title_seasonal_requirement">完成 %1$s 季节活动</string>
     <string name="home_welcome_greeting">欢迎回来，</string>
-    <string name="home_welcome_name">欢迎回来，%1</string>
+    <string name="home_welcome_name">欢迎回来，%1$s</string>
     <string name="home_welcome_title">%1$s！</string>
 
     <!-- Pet names and descriptions -->
@@ -1916,12 +1916,12 @@
     <string name="bestiary_stat_required_level">需求等级</string>
     <string name="bestiary_stat_xp_reward">经验奖励</string>
     <string name="bestiary_stat_duration">持续时间</string>
-    <string name="bestiary_stat_duration_min">最短时间</string>
-    <string name="bestiary_kill_count">击杀次数</string>
+    <string name="bestiary_stat_duration_min">%1$d 分钟</string>
+    <string name="bestiary_kill_count">%1$d 次击杀</string>
     <string name="bestiary_location_other">其他地点</string>
-    <string name="carnival_stat_atk">攻击</string>
-    <string name="carnival_stat_str">力量</string>
-    <string name="carnival_stat_def">防御</string>
+    <string name="carnival_stat_atk">攻击 +%1$d</string>
+    <string name="carnival_stat_str">力量 +%1$d</string>
+    <string name="carnival_stat_def">防御 +%1$d</string>
     <string name="carnival_stat_yield">收益</string>
     <string name="carnival_potion_letter_green">绿</string>
     <string name="carnival_potion_letter_blue">蓝</string>
@@ -1929,6 +1929,6 @@
     <string name="carnival_potion_letter_purple">紫</string>
     <string name="carnival_potion_letter_orange">橙</string>
     <string name="carnival_potion_letter_cyan">青</string>
-    <string name="farming_crop_picker_stats">作物统计</string>
-    <string name="farming_seeds_owned">持有种子</string>
+    <string name="farming_crop_picker_stats">等级 %1$d  •  %2$s  •  %3$d 经验/作物</string>
+    <string name="farming_seeds_owned">种子：%1$d  •  持有：%2$d</string>
 </resources>
