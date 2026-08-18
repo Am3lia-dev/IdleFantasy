@@ -441,7 +441,7 @@ private fun CraftQuantityContent(
     val max     = state.maxCraftable(recipe)
     var quantity by remember(recipe) { mutableIntStateOf(max.coerceAtLeast(1)) }
     val qty     = quantity.coerceIn(1, max.coerceAtLeast(1))
-    val totalXp = recipe.xpPerItem * qty
+    val totalXp = recipe.xpPerItem * qty * state.craftXpMult
     var textValue by remember(recipe) { mutableStateOf(qty.toString()) }
     val isHerblore = recipe.skillName == Skills.HERBLORE
     fun setQuantity(value: Int) {

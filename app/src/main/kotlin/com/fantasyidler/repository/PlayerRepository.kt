@@ -808,7 +808,7 @@ class PlayerRepository @Inject constructor(
         val now = System.currentTimeMillis()
 
         if (flags.xpBoostExpiresAt > now) return XpBoostPurchaseResult.ALREADY_ACTIVE
-        if (flags.xpBoostLastPurchaseAt > 0 && now < weeklyQuestRepo.nextResetMs(flags.xpBoostLastPurchaseAt)) {
+        if (flags.xpBoostLastPurchaseAt > 0 && now < weeklyQuestRepo.nextResetMs(flags.xpBoostLastPurchaseAt, flags.dailyResetHour)) {
             return XpBoostPurchaseResult.WEEKLY_LIMIT_REACHED
         }
         if (player.coins < cost) return XpBoostPurchaseResult.NOT_ENOUGH_COINS
@@ -1240,12 +1240,12 @@ class PlayerRepository @Inject constructor(
         var changed = false
         val skillLevels: Map<String, Int> by lazy { json.decodeFromString(player.skillLevels) }
 
-        if (dailyQuestRepo.shouldRefresh(flags.dailyQuestGeneratedAt)) {
+        if (dailyQuestRepo.shouldRefresh(flags.dailyQuestGeneratedAt, flags.dailyResetHour)) {
             flags = dailyQuestRepo.refreshFlags(flags, skillLevels)
             changed = true
         }
         
-        if (weeklyQuestRepo.shouldRefresh(flags.weeklyQuestGeneratedAt)) {
+        if (weeklyQuestRepo.shouldRefresh(flags.weeklyQuestGeneratedAt, flags.dailyResetHour)) {
             flags = weeklyQuestRepo.refreshFlags(flags, skillLevels)
             changed = true
         }

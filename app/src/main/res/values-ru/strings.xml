@@ -319,6 +319,9 @@
     <string name="settings_quest_dots_desc">Показывает золотую точку на навыках, для которых открыт квест</string>
     <string name="settings_prestige_notifications">Значки с уведомлением о престиже</string>
     <string name="settings_prestige_notifications_desc">Показывать значок уведомления при навигации, когда навык готов к получению престижа.</string>
+    <string name="label_switch_character">Switch character</string> <!-- untranslated -->
+    <string name="settings_daily_reset_time">Daily reset time</string> <!-- untranslated -->
+    <string name="settings_daily_reset_time_desc">Local time when dailies, guild dailies, and weeklies roll over. Changing it never grants an extra reset.</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Компактные числа</string>
     <string name="settings_compact_numbers_desc">Сокращать большие значения (например, 2,46М вместо 2 461 940)</string>
     <string name="settings_home_screen">Главный экран</string>

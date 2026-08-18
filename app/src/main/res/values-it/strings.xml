@@ -104,8 +104,8 @@
     <string name="duration_weeks">%1$dsett</string>
     <string name="duration_days">%1$dg</string>
     <string name="duration_hours">%1$do</string>
-    <string name="duration_minutes">%1$dm</string> <!-- untranslated -->
-    <string name="duration_seconds">%1$ds</string> <!-- untranslated -->
+    <string name="duration_minutes">%1$dm</string>
+    <string name="duration_seconds">%1$ds</string>
     <string name="duration_complete">Termine</string>
     <string name="label_session_results">Risultati Sessione</string>
     <string name="label_xp_gained">XP guadagnati</string>
@@ -305,6 +305,9 @@
     <string name="settings_quest_dots_desc">Mostra un indicatore quando una missione è disponibile</string>
     <string name="settings_prestige_notifications">Indicatori Onore</string>
     <string name="settings_prestige_notifications_desc">Mostra un indicatore quando una abilità può essere onorata</string>
+    <string name="label_switch_character">Switch character</string> <!-- untranslated -->
+    <string name="settings_daily_reset_time">Daily reset time</string> <!-- untranslated -->
+    <string name="settings_daily_reset_time_desc">Local time when dailies, guild dailies, and weeklies roll over. Changing it never grants an extra reset.</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Numeri Compatti</string>
     <string name="settings_compact_numbers_desc">Abbrevia grandi quantità (ad es. 2,46M invece che 2.461.940)</string>
     <string name="settings_home_screen">Schermata Principale</string>
@@ -1572,7 +1575,7 @@
     <string name="reward_part_combat_xp">+%1$s XP combattimento (distribuito su tutte le abilità)</string>
     <string name="quest_claimed_suffix">Ricevuto: %1$s</string>
     <plurals name="plural_reward_items">
-        <item quantity="one">×%1$d ogetto</item>
+        <item quantity="one">×%1$d oggetto</item>
         <item quantity="other">×%1$d oggetti</item>
     </plurals>
     <string name="monument_title">Grande Monumento</string>
