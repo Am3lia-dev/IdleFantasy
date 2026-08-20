@@ -36,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -269,6 +270,7 @@ fun WorkerSkillsScreen(
             },
             sheetState       = sheetState,
             dragHandle       = { BottomSheetDefaults.DragHandle() },
+            properties       = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
         ) {
             // Dialog-based sheets (material3 1.3+) deliver back presses to in-content handlers;
             // the onDismissRequest interception above covers the older popup-based sheet.
@@ -505,7 +507,8 @@ private fun WorkerCraftSkillSheet(
     val categoryFiltered = if (selectedCategory == null) allRecipes
                            else allRecipes.filter { it.category == selectedCategory }
     val tiers = remember(categoryFiltered) {
-        categoryFiltered.map { it.tier }.filter { it.isNotEmpty() }.distinct().sorted()
+        categoryFiltered.map { it.tier }.filter { it.isNotEmpty() }.distinct()
+            .sortedBy { tier -> categoryFiltered.filter { it.tier == tier }.minOf { it.levelRequired } }
     }
     val recipes = categoryFiltered
         .filter { selectedTier == null || it.tier == selectedTier }

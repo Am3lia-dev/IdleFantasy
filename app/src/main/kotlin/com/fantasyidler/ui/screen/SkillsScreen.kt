@@ -43,6 +43,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -299,6 +300,7 @@ fun SkillActivitySheet(
             },
             sheetState = sheetState,
             dragHandle = { BottomSheetDefaults.DragHandle() },
+            properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
         ) {
             // Rendered by each sheet under its skill description; only the sheets without
             // a description header (Mercantile, Farming) show it above their content.
