@@ -949,6 +949,7 @@
     <string name="guild_daily_resets_in">Wird um %1$s zurückgesetzt</string>
     <string name="guild_locked_hint">Erfordert Gildenlevel %1$d</string>
     <string name="guild_no_dailies">Schließt Gildenmissionen ab, um Tagesaufgaben freizuschalten. (Oder Ihr habt Eure Tagesaufgaben schon erfüllt.)</string>
+    <string name="guild_dailies_all_done">All of today\'s daily requests are complete. Come back after the daily reset.</string> <!-- untranslated -->
     <string name="guild_contribute_inventory">Aus Inventar beisteuern (%1$d verfügbar)</string>
     <string name="guild_quest_desc_gather">%1$s %2$d %3$s für die %4$s.</string>
     <string name="guild_quest_desc_kill">Besiegt %1$d Feinde im %2$s-Kampf.</string>

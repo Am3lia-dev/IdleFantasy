@@ -949,6 +949,7 @@
     <string name="guild_daily_resets_in">毎日%1$sにリセット</string>
     <string name="guild_locked_hint">ギルドレベル %1$d が必要</string>
     <string name="guild_no_dailies">デイリー依頼を解放するには、ギルドクエストを完了してください。</string>
+    <string name="guild_dailies_all_done">All of today\'s daily requests are complete. Come back after the daily reset.</string> <!-- untranslated -->
     <string name="guild_contribute_inventory">インベントリから納品（所持数: %1$d）</string>
     <string name="guild_quest_desc_gather">%4$sのために%3$sを%2$d個%1$sする。</string>
     <string name="guild_quest_desc_kill">%2$s戦闘を使用して敵を%1$d体倒す。</string>

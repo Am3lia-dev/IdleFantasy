@@ -424,7 +424,10 @@ private fun GuildDailiesTab(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text  = stringResource(R.string.guild_no_dailies),
+                        text  = stringResource(
+                            if (dailies.isEmpty()) R.string.guild_no_dailies
+                            else R.string.guild_dailies_all_done
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

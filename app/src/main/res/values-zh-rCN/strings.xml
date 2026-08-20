@@ -949,6 +949,7 @@
     <string name="guild_daily_resets_in">每日 %1$s 刷新</string>
     <string name="guild_locked_hint">需要公会等级 %1$d</string>
     <string name="guild_no_dailies">完成公会任务以解锁每日请求。</string>
+    <string name="guild_dailies_all_done">All of today\'s daily requests are complete. Come back after the daily reset.</string> <!-- untranslated -->
     <string name="guild_contribute_inventory">从背包捐献（可用 %1$d）</string>
     <string name="guild_quest_desc_gather">为%4$s收集%2$d个%1$s%3$s。</string>
     <string name="guild_quest_desc_kill">使用%2$s战斗击败%1$d个敌人。</string>
