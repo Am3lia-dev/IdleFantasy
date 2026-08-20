@@ -253,7 +253,7 @@ private fun guildProgressCaption(summary: GuildSummary): String {
             summary.dailiesCompletedThisTier,
             summary.dailiesRequiredThisTier,
         )
-        summary.questGateBlocked -> stringResource(R.string.guild_quest_required)
+        !summary.guildUnlocked || summary.questGateBlocked -> stringResource(R.string.guild_quest_required)
         else -> stringResource(
             R.string.guild_progress_dailies_only,
             summary.dailiesCompletedThisTier,
