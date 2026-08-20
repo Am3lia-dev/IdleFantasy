@@ -494,13 +494,14 @@
     <!-- ===== HomeScreen ===== -->
     <string name="home_town_title">Ville</string>
     <string name="home_town_desc">Visitez la boutique, l\'auberge, les guildes, l\'église, l\'atelier, le mentor et la kermesse</string>
-    <string name="guild_dailies_available">Requêtes quotidiennes disponibles</string>
     <string name="guild_not_unlocked">Pas encore débloqué</string>
     <string name="guild_dailies_done_today">Requêtes quotidiennes terminées</string>
     <string name="guild_dailies_remaining_today">%1$d restantes aujourd\'hui</string>
     <string name="guild_do_dailies_hint">Faites des requêtes quotidiennes pour progresser au rang suivant</string>
     <string name="guild_quest_gate_blocked">Accomplir des quêtes pour monter en grade</string>
     <string name="guild_quest_required">Quête nécessaire pour progresser</string>
+    <string name="guild_progress_dailies_and_quest">Complete %1$d/%2$d dailies &amp; quests required to advance</string> <!-- untranslated -->
+    <string name="guild_progress_dailies_only">Complete %1$d/%2$d dailies to advance</string> <!-- untranslated -->
     <string name="home_died_message">Vous êtes mort et avez perdu la majorité de vos gains.</string>
     <string name="home_xp_boost_was_active">Le bonus d\'XP x2 était actif</string>
     <string name="home_xp_boost_active">Bonus XP x2 actif — %1$s restant</string>

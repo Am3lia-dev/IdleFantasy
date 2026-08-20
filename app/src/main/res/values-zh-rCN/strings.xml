@@ -494,13 +494,14 @@
     <!-- ===== HomeScreen ===== -->
     <string name="home_town_title">城镇</string>
     <string name="home_town_desc">拜访商店、旅馆、公会、教堂、建筑工坊、猎魔大师和嘉年华</string>
-    <string name="guild_dailies_available">可接每日任务</string>
     <string name="guild_not_unlocked">尚未解锁</string>
     <string name="guild_dailies_done_today">今日已完成每日</string>
     <string name="guild_dailies_remaining_today">今日剩余 %1$d 次</string>
     <string name="guild_do_dailies_hint">完成每日任务以晋升下一等级</string>
     <string name="guild_quest_gate_blocked">完成任务以提升你的等级</string>
     <string name="guild_quest_required">需要完成任务才能晋升</string>
+    <string name="guild_progress_dailies_and_quest">Complete %1$d/%2$d dailies &amp; quests required to advance</string> <!-- untranslated -->
+    <string name="guild_progress_dailies_only">Complete %1$d/%2$d dailies to advance</string> <!-- untranslated -->
     <string name="home_died_message">你阵亡了，失去了大部分收获。</string>
     <string name="home_xp_boost_was_active">2 倍经验加成已生效</string>
     <string name="home_xp_boost_active">2 倍经验加成生效中 — 剩余 %1$s</string>
