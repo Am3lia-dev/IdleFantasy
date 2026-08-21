@@ -16,6 +16,7 @@ import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.resolveCapeMultiplier
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.repository.QuestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -110,7 +111,8 @@ class BoneAltarViewModel @Inject constructor(
             allEquipment = gameData.equipment,
             ironman = flags.ironman,
         )
-        val churchMult     = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags)
+        val churchMult     = if (flags.ironman) 1.0f
+                     else ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData))
         val prestigeMult   = (1.0 + boostRepo.prestigeXpPct(Skills.PRAYER, flags) / 100.0).toFloat()
         val petBoostPct    = if (flags.ironman) 0 else petBoostFor(player.pets, Skills.PRAYER)
 

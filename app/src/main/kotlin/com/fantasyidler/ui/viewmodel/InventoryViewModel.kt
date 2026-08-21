@@ -33,6 +33,7 @@ import com.fantasyidler.repository.PrestigeActionResult
 import com.fantasyidler.simulator.PrestigeBoosts
 import com.fantasyidler.repository.ChurchRepository
 import com.fantasyidler.repository.GameDataRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.simulator.CombatSimulator
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.TitleRepository
@@ -106,6 +107,7 @@ class InventoryViewModel @Inject constructor(
         val activeBlessingKey: String = "",
         val activeBlessingExpiresAt: Long = 0L,
         val activeBlessingXpPct: Int = 0,
+        val prayerCapeMult: Float = 1f,
         val towerXpBonusPct: Int = 0,
         val towerCoinBonusPct: Int = 0,
         val towerHpBonus: Int = 0,
@@ -201,8 +203,11 @@ class InventoryViewModel @Inject constructor(
                 activeBlessingExpiresAt = flags.activeBlessingExpiresAt,
                 activeBlessingXpPct     = run {
                     val b = ChurchRepository.activeBlessing(flags) ?: return@run 0
-                    if (b.type == BlessingType.XP) ((b.magnitude - 1f) * 100 + 0.5f).toInt() else 0
+                    if (b.type != BlessingType.XP) return@run 0
+                    val mult = blessingPrayerCapeMult(player, flags, gameData)
+                    ((ChurchRepository.effectiveMagnitude(b, mult) - 1f) * 100 + 0.5f).toInt()
                 },
+                prayerCapeMult          = blessingPrayerCapeMult(player, flags, gameData),
                 towerXpBonusPct         = flags.towerXpBonusPct,
                 towerCoinBonusPct       = flags.towerCoinBonusPct,
                 towerHpBonus            = flags.towerHpBonus,

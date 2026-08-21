@@ -32,6 +32,7 @@ import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.repository.WorkerQueuedSessionStarter
 import com.fantasyidler.repository.resolveCapeMultiplier
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.simulator.SkillSimulator
 import kotlin.math.roundToInt
 import com.fantasyidler.util.GameStrings
@@ -179,6 +180,7 @@ data class HomeUiState(
     val workerQueue2: List<QueuedAction> = emptyList(),
     val workerSummary: SessionSummary? = null,
     val activeBlessingKey: String = "",
+    val prayerCapeMult: Float = 1f,
     val activeBlessingRemainingMs: Long = 0L,
     val xpBoostRemainingMs: Long = 0L,
     val ironman: Boolean = false,
@@ -316,7 +318,7 @@ class HomeViewModel @Inject constructor(
                                }
             val innXpMult = townRepo.workerXpMultiplier(flags)
             val playerXpBoostMult = if (flags.ironman) 1.0
-                else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags)
+                else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(player, flags, gameData))
             val sessionXpGain: (SkillSession?) -> Long = { s ->
                 if (s == null || s.skillName in listOf("combat", "boss", "expedition", "farming", "tower", "carnival")) 0L
                 else try {
@@ -407,6 +409,7 @@ class HomeViewModel @Inject constructor(
                 workerQueue         = flags.hiredWorker?.sessionQueue ?: emptyList(),
                 workerQueue2        = flags.hiredWorker2?.sessionQueue ?: emptyList(),
                 activeBlessingKey          = flags.activeBlessingKey,
+                prayerCapeMult             = blessingPrayerCapeMult(player, flags, gameData),
                 activeBlessingRemainingMs  = (flags.activeBlessingExpiresAt - System.currentTimeMillis()).coerceAtLeast(0L),
                 xpBoostRemainingMs         = if (flags.ironman) 0L else (flags.xpBoostExpiresAt - System.currentTimeMillis()).coerceAtLeast(0L),
                 ironman                    = flags.ironman,
@@ -502,8 +505,9 @@ class HomeViewModel @Inject constructor(
             val equippedCape = equipped[EquipSlot.CAPE]?.let { gameData.equipment[it] }
             val boostActive      = !flags.ironman && flags.xpBoostExpiresAt > System.currentTimeMillis()
             val xpMult           = if (boostActive) 2L else 1L
-            val blessingXpMult   = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags)
-            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags) *
+            val blessingCapeMult = blessingPrayerCapeMult(player, flags, gameData)
+            val blessingXpMult   = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags, blessingCapeMult)
+            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags, blessingCapeMult) *
                 PlayerRepository.gooseCoinMultiplier(json.decodeFromString<List<OwnedPet>>(player.pets)).toFloat()
 
             val ctx = CollectContext(flags, inventory, equippedCape, capeScalingBySkill, blessingCoinMult, petIds, player)
@@ -1095,14 +1099,14 @@ class HomeViewModel @Inject constructor(
                 }
             }
             val isCombat = session.skillName == "combat" || session.skillName == "boss"
-            val player = if (isCombat) playerRepo.getOrCreatePlayer() else null
+            val player = playerRepo.getOrCreatePlayer()
             val weaponSlot = if (isCombat) {
-                val equipped: Map<String, String?> = player?.equipped?.let { json.decodeFromString(it) } ?: emptyMap()
+                val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
                 flags.activeWeaponSlot
                     ?: EquipSlot.WEAPON_SLOTS.firstOrNull { equipped[it] != null }
                     ?: EquipSlot.WEAPON_ATK
             } else null
-            val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags)
+            val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(player, flags, gameData))
             val rawXpGain = frames.sumOf { it.xpGain }
             // The original fight/run count isn't stored on the session itself, only in the
             // repeat-chain flags set when it was first started -- carry it forward so
@@ -1122,7 +1126,7 @@ class HomeViewModel @Inject constructor(
                 estimatedXpGain     = if (session.skillName in listOf("carnival", "expedition")) 0L
                                       else (rawXpGain * xpQueueMult).toLong(),
                 weaponSlot          = weaponSlot,
-                equippedSnapshot    = player?.equipped,
+                equippedSnapshot    = if (isCombat) player.equipped else null,
                 spellName           = flags.activeSpell,
                 arrowsKey           = flags.equippedArrows,
                 potionKey           = flags.activePotionKey,
@@ -1218,8 +1222,9 @@ class HomeViewModel @Inject constructor(
             val flags: PlayerFlags = json.decodeFromString(workerPlayer.flags)
             val boostActive      = !flags.ironman && flags.xpBoostExpiresAt > System.currentTimeMillis()
             val xpMult           = if (boostActive) 2L else 1L
-            val blessingXpMult   = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags)
-            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags) *
+            val workerCapeMult   = blessingPrayerCapeMult(workerPlayer, flags, gameData)
+            val blessingXpMult   = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags, workerCapeMult)
+            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags, workerCapeMult) *
                 PlayerRepository.gooseCoinMultiplier(json.decodeFromString<List<OwnedPet>>(workerPlayer.pets)).toFloat()
             val innXpMult        = townRepo.workerXpMultiplier(flags)
             val workerOwnedPets: List<OwnedPet> = if (flags.ironman) emptyList()

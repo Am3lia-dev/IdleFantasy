@@ -117,6 +117,14 @@ class PlayerRepository @Inject constructor(
      * recalculate level, and merge loot into inventory.
      * Returns the keys of any skill capes awarded (level 99 reached for the first time).
      */
+    private fun prayerCapeMult(player: Player, flags: PlayerFlags): Float =
+        blessingPrayerCapeMult(
+            flags,
+            json.decodeFromString(player.equipped),
+            json.decodeFromString<Map<String, Int>>(player.inventory).keys,
+            gameData,
+        )
+
     suspend fun applySessionResults(
         skillName: String,
         xpGained: Long,
@@ -127,7 +135,7 @@ class PlayerRepository @Inject constructor(
         val flags: PlayerFlags = json.decodeFromString(player.flags)
         val scaledXp = if (efficiencyMultiplier == 1.0f) xpGained else (xpGained * efficiencyMultiplier).toLong()
         // 2x boost, blessing, and prestige xp nodes combined in one place (ironman-inert).
-        val boostedXp = (scaledXp * boostRepo.xpMultiplier(skillName, flags)).toLong()
+        val boostedXp = (scaledXp * boostRepo.xpMultiplier(skillName, flags, prayerCapeMult(player, flags))).toLong()
         val scaledItems = if (efficiencyMultiplier == 1.0f) itemsGained
             else itemsGained.mapValues { (_, v) -> (v * efficiencyMultiplier).roundToInt().coerceAtLeast(1) }
 
@@ -807,7 +815,8 @@ class PlayerRepository @Inject constructor(
     ): List<String> {
         val player    = getOrCreatePlayer()
         val flags: PlayerFlags = json.decodeFromString(player.flags)
-        val coinBlessingMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags) *
+        val capeMult = prayerCapeMult(player, flags)
+        val coinBlessingMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags, capeMult) *
             gooseCoinMultiplier(json.decodeFromString(player.pets)).toFloat()
         val scaledItems = if (efficiencyMultiplier == 1.0f) itemsGained
             else itemsGained.mapValues { (_, v) -> (v * efficiencyMultiplier).roundToInt().coerceAtLeast(1) }
@@ -822,7 +831,7 @@ class PlayerRepository @Inject constructor(
             val scaledXp = if (efficiencyMultiplier == 1.0f) xp else (xp * efficiencyMultiplier).toLong()
             val petPct = if (flags.ironman) 0 else perSkillPetBoostPct[skill] ?: 0
             val withPet = if (petPct > 0) (scaledXp * (1.0 + petPct / 100.0)).toLong() else scaledXp
-            val finalXp = (withPet * boostRepo.xpMultiplier(skill, flags)).toLong()
+            val finalXp = (withPet * boostRepo.xpMultiplier(skill, flags, capeMult)).toLong()
             val newXp = (xpMap[skill] ?: 0L) + finalXp
             xpMap[skill]  = newXp
             levels[skill] = XpTable.levelForXp(newXp)
@@ -865,11 +874,13 @@ class PlayerRepository @Inject constructor(
      * the real credited XP instead of the pre-multiplier flat amount.
      */
     suspend fun previewFlatXpGrant(skillName: String, baseXp: Long): FlatXpBreakdown {
-        val flags = getFlags()
+        val player = getOrCreatePlayer()
+        val flags: PlayerFlags = json.decodeFromString(player.flags)
+        val capeMult = prayerCapeMult(player, flags)
         val boostActive = boostRepo.xpBoostActive(skillName, flags)
-        val blessingMult = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags)
+        val blessingMult = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags, capeMult)
         val prestigeXpPct = boostRepo.prestigeXpPct(skillName, flags)
-        val finalXp = (baseXp * boostRepo.xpMultiplier(skillName, flags)).toLong()
+        val finalXp = (baseXp * boostRepo.xpMultiplier(skillName, flags, capeMult)).toLong()
         return FlatXpBreakdown(baseXp, finalXp, boostActive, blessingMult, prestigeXpPct)
     }
 
@@ -1637,6 +1648,33 @@ internal fun resolveOwnedCapeKeysForSkill(skillName: String): List<String> {
         "hitpoints", "hp" -> listOf("hp_cape")
         else -> listOf("${skillName}_cape", "${skillName}_guild_cape")
     }
+}
+
+/** Prayer cape multiplier that scales church blessing strength (issue #1491). */
+fun blessingPrayerCapeMult(
+    flags: PlayerFlags,
+    equipped: Map<String, String?>,
+    inventoryKeys: Set<String>,
+    gameData: GameDataRepository,
+): Float {
+    if (flags.ironman) return 1f
+    val equippedCape = equipped[EquipSlot.CAPE]?.let { gameData.equipment[it] }
+    return resolveCapeMultiplier(
+        Skills.PRAYER, equippedCape, inventoryKeys, flags.townBuildingTiers,
+        com.fantasyidler.simulator.PrestigeBoosts.capeScalingBySkill(gameData.prestigeTrees, flags),
+        gameData.equipment, flags.ironman,
+    )
+}
+
+/** [blessingPrayerCapeMult] convenience for call sites holding a raw [Player] row. */
+fun blessingPrayerCapeMult(player: Player, flags: PlayerFlags, gameData: GameDataRepository): Float {
+    if (flags.ironman) return 1f
+    return blessingPrayerCapeMult(
+        flags,
+        kotlinx.serialization.json.Json.decodeFromString(player.equipped),
+        kotlinx.serialization.json.Json.decodeFromString<Map<String, Int>>(player.inventory).keys,
+        gameData,
+    )
 }
 
 fun resolveCapeMultiplier(

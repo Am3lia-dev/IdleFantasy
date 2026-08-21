@@ -15,13 +15,13 @@ class PrestigePointsTest {
 
     @Test
     fun `level 99 earns exactly base points`() {
-        assertEquals(2, PrestigePoints.pointsForXp(l99))
+        assertEquals(3, PrestigePoints.pointsForXp(l99))
     }
 
     @Test
     fun `banked XP past 99 earns no extra points`() {
-        assertEquals(2, PrestigePoints.pointsForXp(l99 + 10_000_000))
-        assertEquals(2, PrestigePoints.pointsForXp(l99 + 100_000_000))
-        assertEquals(2, PrestigePoints.pointsForXp(Long.MAX_VALUE / 2))
+        assertEquals(3, PrestigePoints.pointsForXp(l99 + 10_000_000))
+        assertEquals(3, PrestigePoints.pointsForXp(l99 + 100_000_000))
+        assertEquals(3, PrestigePoints.pointsForXp(Long.MAX_VALUE / 2))
     }
 }

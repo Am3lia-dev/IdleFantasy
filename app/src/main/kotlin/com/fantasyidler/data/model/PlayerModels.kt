@@ -282,6 +282,43 @@ data class PlayerFlags(
      * inert, shop buying is blocked, and workers cannot be hired. Never written after creation.
      */
     @SerialName("ironman") val ironman: Boolean = false,
+    /** Player housing: rooms, placed furnishings, and stored (built but unplaced) furnishings. */
+    @SerialName("house") val house: HouseData? = null,
+)
+
+/** The player's house: a set of room rectangles on one shared cell grid. */
+@Serializable
+data class HouseData(
+    @SerialName("rooms") val rooms: List<HouseRoom> = emptyList(),
+    @SerialName("placements") val placements: List<HousePlacement> = emptyList(),
+    /** Furnishings built (paid for) but not currently placed: tile key -> count. */
+    @SerialName("storage") val storage: Map<String, Int> = emptyMap(),
+    /** Outdoor ground texture key (see house_tiles.json "grounds"). */
+    @SerialName("ground") val ground: String = "ground_1",
+    /**
+     * Units per room cell used by placement coordinates. 1 = legacy full-cell saves,
+     * 2 = half-cell placement. Migrated up on load; never written back down.
+     */
+    @SerialName("coord_scale") val coordScale: Int = 1,
+)
+
+/** One rectangular room, in house-grid cells. Rooms never overlap and attach edge-to-edge. */
+@Serializable
+data class HouseRoom(
+    @SerialName("x") val x: Int,
+    @SerialName("y") val y: Int,
+    @SerialName("w") val w: Int,
+    @SerialName("h") val h: Int,
+    /** Floor style key: "dark" (default) or "brick". */
+    @SerialName("floor") val floor: String = "dark",
+)
+
+/** A placed furnishing; (x, y) is the top-left cell of its footprint. */
+@Serializable
+data class HousePlacement(
+    @SerialName("item") val item: String,
+    @SerialName("x") val x: Int,
+    @SerialName("y") val y: Int,
 )
 
 /** A permanent snapshot of a completed Seasonal Event, shown in the Profile Banners tab. */

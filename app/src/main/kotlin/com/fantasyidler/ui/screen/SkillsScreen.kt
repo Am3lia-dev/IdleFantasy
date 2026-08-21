@@ -43,6 +43,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -304,6 +305,17 @@ fun SkillActivitySheet(
             dragHandle = { BottomSheetDefaults.DragHandle() },
             properties = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
         ) {
+            // With shouldDismissOnBackPress = false the sheet's own callback never consumes back
+            // (the predictive-back gesture used to settle the sheet hidden and close it whole,
+            // issue #1469), so this handler owns every back press: step back one level when a
+            // sheet registered an inner page, close the whole sheet otherwise.
+            BackHandler {
+                val stepBack = sheetBackStep.value
+                if (stepBack != null) stepBack() else {
+                    viewModel.dismissSheet()
+                    craftingViewModel.dismissRecipe()
+                }
+            }
             // Rendered by each sheet under its skill description; only the sheets without
             // a description header (Mercantile, Farming) show it above their content.
             val dailyBanner: @Composable () -> Unit = {

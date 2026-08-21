@@ -245,6 +245,10 @@ class GameDataRepository @Inject constructor(
         asset("data/buildings.json")
     }
 
+    val houseTiles: com.fantasyidler.data.json.HouseTilesData by lazy {
+        asset("data/house_tiles.json")
+    }
+
     // ------------------------------------------------------------------ gathering activities
 
     /** All mineable ores, keyed by ore key (e.g. "iron_ore"). */

@@ -272,9 +272,14 @@ fun WorkerSkillsScreen(
             dragHandle       = { BottomSheetDefaults.DragHandle() },
             properties       = ModalBottomSheetProperties(shouldDismissOnBackPress = false),
         ) {
-            // Dialog-based sheets (material3 1.3+) deliver back presses to in-content handlers;
-            // the onDismissRequest interception above covers the older popup-based sheet.
-            BackHandler(enabled = state.selectedRecipe != null) { viewModel.dismissRecipe() }
+            // With shouldDismissOnBackPress = false the sheet's own callback never consumes back
+            // (the predictive-back gesture used to settle the sheet hidden and close it whole,
+            // issue #1469), so this handler owns every back press: step to the recipe list from
+            // an inner page, close the sheet otherwise.
+            BackHandler {
+                if (state.selectedRecipe != null) viewModel.dismissRecipe()
+                else viewModel.dismissSheet()
+            }
             ScaledSheetContent {
             // For workers: always pass hasActiveSession=true so button says "Add to Queue",
             // and isQueueFull=state.workerQueueFull.

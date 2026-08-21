@@ -59,6 +59,9 @@ object GameStrings {
     fun bossName(context: Context, key: String): String =
         context.stringByName("boss_${key}_name") ?: key.toTitleCase()
 
+    fun houseItemName(context: Context, key: String): String =
+        context.stringByName("house_item_$key") ?: key.toTitleCase()
+
     fun bossDesc(context: Context, key: String): String =
         context.stringByName("boss_${key}_desc") ?: ""
 

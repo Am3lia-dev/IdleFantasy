@@ -25,6 +25,7 @@ import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.BoostRepository
 import com.fantasyidler.repository.ChurchRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.PlayerRepository
@@ -442,6 +443,7 @@ class CombatViewModel @Inject constructor(
                     dungeonKey    = dungeonKey,
                     weaponSlot    = queuedWeaponSlot,
                     equipped      = equipped,
+                    inventory     = inventory,
                     levels        = queuedLevels,
                     flags         = dungeonFlags,
                     selectedSpell = queuedSpell,
@@ -588,7 +590,7 @@ class CombatViewModel @Inject constructor(
                     playerAttack        = (levels[Skills.ATTACK]    ?: 1) + boostRepo.combatStatBonus(Skills.ATTACK, flags),
                     playerStrength      = (levels[Skills.STRENGTH]  ?: 1) + boostRepo.combatStatBonus(Skills.STRENGTH, flags),
                     playerDefence       = (levels[Skills.DEFENSE]   ?: 1) + totalDefenseBonus + boostRepo.combatStatBonus(Skills.DEFENSE, flags),
-                    blessingDefBonus    = ChurchRepository.defBonus(flags),
+                    blessingDefBonus    = ChurchRepository.defBonus(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData)),
                     playerHp            = (levels[Skills.HITPOINTS] ?: 1) + boostRepo.combatStatBonus(Skills.HITPOINTS, flags) + flags.towerHpBonus,
                     weaponAttackBonus   = totalAttackBonus,
                     weaponStrengthBonus = totalStrengthBonus,
@@ -681,6 +683,7 @@ class CombatViewModel @Inject constructor(
                     bossKey       = bossKey,
                     weaponSlot    = bossWeaponSlot,
                     equipped      = queuedEquipped,
+                    inventory     = queuedInventory,
                     levels        = bossQueuedLevels,
                     flags         = queuedFlags,
                     selectedSpell = bossQueuedSpell,
@@ -806,7 +809,7 @@ class CombatViewModel @Inject constructor(
                     arrowStrengthBonuses = ARROW_STRENGTH_BONUS,
                     equippedFood       = availableFood,
                     foodHealValues     = boostRepo.boostedFoodHeal(flags, gameData.foodHealValues),
-                    blessingDefBonus   = ChurchRepository.defBonus(flags),
+                    blessingDefBonus   = ChurchRepository.defBonus(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData)),
                     runeKey            = bossRuneKey,
                     runeCostPerAttack  = bossRuneCost,
                     availableRunes     = if (bossRuneKey != null) inventory[bossRuneKey] ?: 0 else Int.MAX_VALUE,
@@ -1023,7 +1026,7 @@ class CombatViewModel @Inject constructor(
                     playerAttack        = atk,
                     playerStrength      = str,
                     playerDefence       = def,
-                    blessingDefBonus    = ChurchRepository.defBonus(flags),
+                    blessingDefBonus    = ChurchRepository.defBonus(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData)),
                     playerHp            = hp,
                     weaponAttackBonus   = totalAtk,
                     weaponStrengthBonus = totalStr,
@@ -1099,6 +1102,7 @@ class CombatViewModel @Inject constructor(
         dungeonKey: String,
         weaponSlot: String,
         equipped: Map<String, String?>,
+        inventory: Map<String, Int>,
         levels: Map<String, Int>,
         flags: PlayerFlags,
         selectedSpell: SpellData?,
@@ -1146,7 +1150,7 @@ class CombatViewModel @Inject constructor(
             playerAttack        = (levels[Skills.ATTACK]    ?: 1) + boostRepo.combatStatBonus(Skills.ATTACK, flags),
             playerStrength      = (levels[Skills.STRENGTH]  ?: 1) + boostRepo.combatStatBonus(Skills.STRENGTH, flags),
             playerDefence       = (levels[Skills.DEFENSE]   ?: 1) + totalDefenseBonus + boostRepo.combatStatBonus(Skills.DEFENSE, flags),
-            blessingDefBonus    = ChurchRepository.defBonus(flags),
+            blessingDefBonus    = ChurchRepository.defBonus(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData)),
             playerHp            = (levels[Skills.HITPOINTS] ?: 1) + boostRepo.combatStatBonus(Skills.HITPOINTS, flags) + flags.towerHpBonus,
             weaponAttackBonus   = totalAttackBonus,
             weaponStrengthBonus = totalStrengthBonus,
@@ -1179,6 +1183,7 @@ class CombatViewModel @Inject constructor(
         bossKey: String,
         weaponSlot: String,
         equipped: Map<String, String?>,
+        inventory: Map<String, Int>,
         levels: Map<String, Int>,
         flags: PlayerFlags,
         selectedSpell: SpellData?,
@@ -1239,7 +1244,7 @@ class CombatViewModel @Inject constructor(
             arrowStrengthBonuses = ARROW_STRENGTH_BONUS,
             equippedFood       = flags.equippedFood.keys.associateWith { Int.MAX_VALUE },
             foodHealValues     = gameData.foodHealValues,
-            blessingDefBonus   = ChurchRepository.defBonus(flags),
+            blessingDefBonus   = ChurchRepository.defBonus(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData)),
             runeKey            = bossRuneKey,
             runeCostPerAttack  = selectedSpell?.runeCost ?: 1,
             availableRunes     = Int.MAX_VALUE,

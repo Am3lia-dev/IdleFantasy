@@ -553,7 +553,8 @@ class GuildRepository @Inject constructor(
      *
      *  If the strict guild-level bracket doesn't yield 4 (e.g. a thin bracket, or a skill level
      *  that outpaces guild rank), the search widens in stages so players still get a full 4
-     *  whenever the guild has that many templates at all (issue #1076).
+     *  whenever the guild has that many templates at all (issue #1076). The widened stage
+     *  hands out the highest tiers the player's skill can manage first, random within a tier.
      */
     fun buildRefreshedGuildDailyFlags(flags: PlayerFlags, completedQuestIds: Set<String>, skillLevels: Map<String, Int> = emptyMap(), randomSeed: Boolean = false): PlayerFlags {
         val today = Calendar.getInstance().let {
@@ -571,20 +572,36 @@ class GuildRepository @Inject constructor(
 
             val inBracket = guildPool.filter { effectiveLevel >= it.guildLevelMin && effectiveLevel <= it.guildLevelMax }
             val reachableInBracket = inBracket.filter { isTemplateReachable(it, skillLevels) }
-            val reachableAnyBracket = guildPool.filter { isTemplateReachable(it, skillLevels) }
+            // Fallback prefers the HIGHEST tiers the player's skill can actually do (random
+            // within a tier): a high-rank guild whose bracket is out of skill reach after a
+            // prestige should hand out the best manageable dailies, not roll uniformly across
+            // every low tier (playtester feedback ahead of 1.14).
+            val reachableBestFirst = guildPool
+                .filter { isTemplateReachable(it, skillLevels) }
+                .shuffled(rng)
+                .sortedByDescending { it.guildLevelMin }
 
             val chosen = mutableListOf<GuildDailyTemplate>()
             val chosenIds = mutableSetOf<String>()
-            for (candidates in listOf(reachableInBracket, reachableAnyBracket, guildPool)) {
-                if (chosen.size >= 4) break
-                candidates.shuffled(rng)
-                    .filter { it.id !in chosenIds }
-                    .forEach {
-                        if (chosen.size < 4) {
-                            chosen.add(it)
-                            chosenIds.add(it.id)
+            val chosenTargets = mutableSetOf<String>()
+            val stages = listOf(reachableInBracket.shuffled(rng), reachableBestFirst, guildPool.shuffled(rng))
+            // Distinct target items first: a thin bracket must not fill the whole day with
+            // one item (issue #1500 -- four "craft platinum diamond ring" dailies). Only when
+            // the guild runs out of distinct items do duplicates fill the remaining slots.
+            for (allowDuplicateTargets in listOf(false, true)) {
+                for (candidates in stages) {
+                    if (chosen.size >= 4) break
+                    candidates
+                        .filter { it.id !in chosenIds }
+                        .filter { allowDuplicateTargets || it.target.isBlank() || it.target !in chosenTargets }
+                        .forEach {
+                            if (chosen.size < 4) {
+                                chosen.add(it)
+                                chosenIds.add(it.id)
+                                chosenTargets.add(it.target)
+                            }
                         }
-                    }
+                }
             }
             selectedIds.addAll(chosen.map { it.id })
         }

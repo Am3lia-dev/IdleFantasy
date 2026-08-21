@@ -69,6 +69,7 @@ import kotlin.math.roundToInt
 import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
 import com.fantasyidler.simulator.CombatSimulator
+import com.fantasyidler.simulator.TowerScaling
 import com.fantasyidler.data.json.BossData
 import com.fantasyidler.data.json.CookingRecipe
 import com.fantasyidler.data.json.DungeonData
@@ -144,6 +145,15 @@ internal fun CombatSessionBanner(
     onDebugFinish: () -> Unit,
 ) {
     val context = LocalContext.current
+    // Tower floors above 100 scale enemy stats at simulation time; the banner must fight the
+    // same scaled enemies or every HP-derived display (mid-minute kill estimate, enemy HP bar,
+    // header stats) runs against base values and the kill count sawtooths (issue #1494).
+    @Suppress("NAME_SHADOWING")
+    val enemies = remember(session.sessionId, enemies) {
+        val floor = if (session.skillName == "tower")
+            session.activityKey.removePrefix("tower_floor_").toIntOrNull() else null
+        if (floor != null) TowerScaling.scaledEnemies(floor, enemies) else enemies
+    }
     val sessionBoss = bosses.firstOrNull { it.id == session.activityKey }
     val dungeonName = dungeons.firstOrNull { it.name == session.activityKey }
         ?.let { GameStrings.dungeonName(context, it.name) }

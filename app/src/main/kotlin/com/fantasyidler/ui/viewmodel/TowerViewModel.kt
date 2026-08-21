@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.fantasyidler.R
 import com.fantasyidler.data.json.DungeonData
 import com.fantasyidler.data.json.EnemyData
-import com.fantasyidler.data.json.EnemySpawn
 import com.fantasyidler.data.json.EquipmentData
 import com.fantasyidler.data.json.SpellData
 import com.fantasyidler.data.model.EquipSlot
@@ -21,6 +20,7 @@ import com.fantasyidler.data.model.Skills
 import com.fantasyidler.data.model.QueuedAction
 import com.fantasyidler.repository.BoostRepository
 import com.fantasyidler.repository.ChurchRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.PlayerRepository
@@ -31,6 +31,7 @@ import com.fantasyidler.repository.SlayerRepository
 import com.fantasyidler.repository.TownRepository
 import com.fantasyidler.simulator.CombatSimulator
 import com.fantasyidler.simulator.SkillSimulator
+import com.fantasyidler.simulator.TowerScaling
 import com.fantasyidler.util.GameStrings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -123,14 +124,6 @@ class TowerViewModel @Inject constructor(
             "runite_arrow"     to 49,
         )
 
-        private val FLOOR_TIERS: List<Pair<IntRange, List<EnemySpawn>>> = listOf(
-            (1..20)   to listOf(EnemySpawn("goblin", 40), EnemySpawn("skeleton", 30), EnemySpawn("zombie", 30)),
-            (21..40)  to listOf(EnemySpawn("orc_warrior", 40), EnemySpawn("dark_wizard", 30), EnemySpawn("bandit", 30)),
-            (41..60)  to listOf(EnemySpawn("cave_troll", 35), EnemySpawn("shadow_beast", 35), EnemySpawn("demon", 30)),
-            (61..80)  to listOf(EnemySpawn("forge_demon", 35), EnemySpawn("shadow_assassin", 35), EnemySpawn("abyssal_leech", 30)),
-            (81..100) to listOf(EnemySpawn("void_stalker", 35), EnemySpawn("void_guardian", 35), EnemySpawn("abyssal_lord", 30)),
-            (101..Int.MAX_VALUE) to listOf(EnemySpawn("void_archon", 35), EnemySpawn("eternal_sentinel", 35), EnemySpawn("abyssal_lord", 30)),
-        )
 
         val MILESTONES: List<TowerMilestone> = listOf(
             TowerMilestone(10,  R.string.tower_milestone_ring, listOf("tower_ring")),
@@ -190,7 +183,7 @@ class TowerViewModel @Inject constructor(
             val runningFloor = lastQueuedFloor
                 ?: towerSession?.activityKey?.removePrefix("tower_floor_")?.toIntOrNull()
                 ?: flags.towerCurrentFloor
-            val enemyStrengthPct = ((hpScalingMult(flags.towerCurrentFloor) - 1f) * 100).roundToInt()
+            val enemyStrengthPct = ((TowerScaling.hpScalingMult(flags.towerCurrentFloor) - 1f) * 100).roundToInt()
             val magicLevel = levels[Skills.MAGIC] ?: 1
             extra.copy(
                 isLoading           = false,
@@ -214,56 +207,17 @@ class TowerViewModel @Inject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TowerUiState())
 
-    private fun tierFor(floor: Int): List<EnemySpawn> =
-        FLOOR_TIERS.firstOrNull { (range, _) -> floor in range }?.second
-            ?: FLOOR_TIERS.last().second
-
     private fun buildFloorDungeon(floor: Int): DungeonData = DungeonData(
         name             = "tower_floor_$floor",
         displayName      = context.withAppLocale().getString(R.string.tower_floor_label, floor),
         description      = context.withAppLocale().getString(R.string.tower_floor_desc, floor),
         recommendedLevel = (floor * 2).coerceAtMost(200),
         encounterRate    = 0.65,
-        enemySpawns      = tierFor(floor),
+        enemySpawns      = TowerScaling.tierFor(floor),
     )
 
-    /** 0 at floor <= 100 (no scaling applied yet), ramping to 1 at floor 250. */
-    private fun scalingProgress(floor: Int): Float =
-        if (floor <= 100) 0f else (floor.coerceIn(101, 250) - 100) / 150f
-
-    private fun hpScalingMult(floor: Int): Float = 1f + scalingProgress(floor) * 9f
-
-    private fun statScalingMult(floor: Int): Float = 1f + scalingProgress(floor) * 0.3f
-
-    /**
-     * Floors 1-100 use the fixed tier stats from FLOOR_TIERS as-is. Beyond floor 100, the
-     * (fixed) 101+ tier's enemies keep scaling smoothly up to floor 250: hp grows toward
-     * ~10x (landing near void_sovereign, the game's current hardest raid boss) while
-     * attack/defense only grow up to +30%, so higher floors take longer to clear rather
-     * than becoming more lethal.
-     */
-    private fun scaledEnemies(floor: Int): Map<String, EnemyData> {
-        if (floor <= 100) return gameData.enemies
-        val hpMult = hpScalingMult(floor)
-        val statMult = statScalingMult(floor)
-        val relevantKeys = tierFor(floor).map { it.enemy }.toSet()
-        return gameData.enemies.mapValues { (key, enemy) ->
-            if (key !in relevantKeys) return@mapValues enemy
-            enemy.copy(
-                hp = (enemy.hp * hpMult).toInt().coerceAtLeast(1),
-                combatStats = enemy.combatStats.copy(
-                    attackBonus   = (enemy.combatStats.attackBonus   * statMult).toInt(),
-                    strengthBonus = (enemy.combatStats.strengthBonus * statMult).toInt(),
-                ),
-                defensiveStats = enemy.defensiveStats.copy(
-                    attackDefense   = (enemy.defensiveStats.attackDefense   * statMult).toInt(),
-                    strengthDefense = (enemy.defensiveStats.strengthDefense * statMult).toInt(),
-                    rangedDefense   = (enemy.defensiveStats.rangedDefense   * statMult).toInt(),
-                    magicDefense    = (enemy.defensiveStats.magicDefense    * statMult).toInt(),
-                ),
-            )
-        }
-    }
+    private fun scaledEnemies(floor: Int): Map<String, EnemyData> =
+        TowerScaling.scaledEnemies(floor, gameData.enemies)
 
     private fun petBoostFor(petsJson: String, ironman: Boolean = false): Int {
         if (ironman) return 0
@@ -392,7 +346,7 @@ class TowerViewModel @Inject constructor(
                     playerAttack        = (levels[Skills.ATTACK]    ?: 1) + boostRepo.combatStatBonus(Skills.ATTACK, flags),
                     playerStrength      = (levels[Skills.STRENGTH]  ?: 1) + boostRepo.combatStatBonus(Skills.STRENGTH, flags),
                     playerDefence       = (levels[Skills.DEFENSE]   ?: 1) + totalDefenseBonus + boostRepo.combatStatBonus(Skills.DEFENSE, flags),
-                    blessingDefBonus    = ChurchRepository.defBonus(flags),
+                    blessingDefBonus    = ChurchRepository.defBonus(flags, blessingPrayerCapeMult(flags, equipped, inventory.keys, gameData)),
                     playerHp            = (levels[Skills.HITPOINTS] ?: 1) + boostRepo.combatStatBonus(Skills.HITPOINTS, flags) + towerHpBonus,
                     weaponAttackBonus   = totalAttackBonus,
                     weaponStrengthBonus = totalStrengthBonus,

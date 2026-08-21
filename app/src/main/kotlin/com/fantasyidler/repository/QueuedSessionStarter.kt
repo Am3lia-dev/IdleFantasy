@@ -7,7 +7,6 @@ import com.fantasyidler.R
 import com.fantasyidler.data.json.CookingRecipe
 import com.fantasyidler.data.json.DungeonData
 import com.fantasyidler.data.json.EnemyData
-import com.fantasyidler.data.json.EnemySpawn
 import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.OwnedPet
 import com.fantasyidler.data.model.PlayerFlags
@@ -20,6 +19,7 @@ import com.fantasyidler.simulator.MercantileSimulator
 import com.fantasyidler.simulator.SkillingDungeonSimulator
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.simulator.ThievingSimulator
+import com.fantasyidler.simulator.TowerScaling
 import com.fantasyidler.simulator.XpTable
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
 import com.fantasyidler.util.toolEfficiency
@@ -656,7 +656,7 @@ class QueuedSessionStarter @Inject constructor(
                     arrowStrengthBonuses = ARROW_STRENGTH_BONUS,
                     equippedFood       = availableFood,
                     foodHealValues     = boostRepo.boostedFoodHeal(flags, gameData.foodHealValues),
-                    blessingDefBonus   = (ChurchRepository.defBonus(flags) * prayerCapeMult).toInt(),
+                    blessingDefBonus   = ChurchRepository.defBonus(flags, prayerCapeMult),
                     attackSpeedSec     = bossWeapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
                     eatThresholdPct    = flags.foodEatThresholdPct,
                     doubleHitChance     = boostRepo.doubleHitChance(flags),
@@ -754,7 +754,7 @@ class QueuedSessionStarter @Inject constructor(
                     playerStrength      = ((levels[Skills.STRENGTH] ?: 1) * strengthCapeMult).toInt() + boostRepo.combatStatBonus(Skills.STRENGTH, flags) + (combatPotBonuses["strength"] ?: 0),
                     playerDefence       = ((levels[Skills.DEFENSE]  ?: 1) * defenseCapeMult).toInt() + totalDefBonus + boostRepo.combatStatBonus(Skills.DEFENSE, flags) + (combatPotBonuses["defense"] ?: 0),
                     playerHp            = (levels[Skills.HITPOINTS] ?: 1) + boostRepo.combatStatBonus(Skills.HITPOINTS, flags) + flags.towerHpBonus,
-                    blessingDefBonus    = (ChurchRepository.defBonus(flags) * prayerCapeMult).toInt(),
+                    blessingDefBonus    = ChurchRepository.defBonus(flags, prayerCapeMult),
                     weaponAttackBonus   = totalAtkBonus,
                     weaponStrengthBonus = totalStrBonus,
                     combatStyle         = combatStyle,
@@ -840,7 +840,7 @@ class QueuedSessionStarter @Inject constructor(
                     playerStrength      = ((levels[Skills.STRENGTH] ?: 1) * strengthCapeMult).toInt() + boostRepo.combatStatBonus(Skills.STRENGTH, flags),
                     playerDefence       = ((levels[Skills.DEFENSE]  ?: 1) * defenseCapeMult).toInt() + totalDefBonus + boostRepo.combatStatBonus(Skills.DEFENSE, flags),
                     playerHp            = (levels[Skills.HITPOINTS] ?: 1) + boostRepo.combatStatBonus(Skills.HITPOINTS, flags) + flags.towerHpBonus,
-                    blessingDefBonus    = (ChurchRepository.defBonus(flags) * prayerCapeMult).toInt(),
+                    blessingDefBonus    = ChurchRepository.defBonus(flags, prayerCapeMult),
                     weaponAttackBonus   = totalAtkBonus,
                     weaponStrengthBonus = totalStrBonus,
                     combatStyle         = combatStyle,
@@ -1015,18 +1015,6 @@ class QueuedSessionStarter @Inject constructor(
         else            -> 0
     }
 
-    private val FLOOR_TIERS: List<Pair<IntRange, List<EnemySpawn>>> = listOf(
-        (1..20)              to listOf(EnemySpawn("goblin", 40), EnemySpawn("skeleton", 30), EnemySpawn("zombie", 30)),
-        (21..40)             to listOf(EnemySpawn("orc_warrior", 40), EnemySpawn("dark_wizard", 30), EnemySpawn("bandit", 30)),
-        (41..60)             to listOf(EnemySpawn("cave_troll", 35), EnemySpawn("shadow_beast", 35), EnemySpawn("demon", 30)),
-        (61..80)             to listOf(EnemySpawn("forge_demon", 35), EnemySpawn("shadow_assassin", 35), EnemySpawn("abyssal_leech", 30)),
-        (81..100)            to listOf(EnemySpawn("void_stalker", 35), EnemySpawn("void_guardian", 35), EnemySpawn("abyssal_lord", 30)),
-        (101..Int.MAX_VALUE) to listOf(EnemySpawn("void_archon", 35), EnemySpawn("eternal_sentinel", 35), EnemySpawn("abyssal_lord", 30)),
-    )
-
-    private fun towerTierFor(floor: Int): List<EnemySpawn> =
-        FLOOR_TIERS.firstOrNull { (range, _) -> floor in range }?.second
-            ?: FLOOR_TIERS.last().second
 
     private fun buildTowerFloorDungeon(floor: Int): DungeonData = DungeonData(
         name             = "tower_floor_$floor",
@@ -1034,33 +1022,11 @@ class QueuedSessionStarter @Inject constructor(
         description      = context.withAppLocale().getString(R.string.tower_floor_desc, floor),
         recommendedLevel = (floor * 2).coerceAtMost(200),
         encounterRate    = 0.65,
-        enemySpawns      = towerTierFor(floor),
+        enemySpawns      = TowerScaling.tierFor(floor),
     )
 
-    /** Mirrors TowerViewModel.scaledEnemies — keep in sync if the scaling curve changes. */
-    private fun scaledTowerEnemies(floor: Int): Map<String, EnemyData> {
-        if (floor <= 100) return gameData.enemies
-        val t = (floor.coerceIn(101, 250) - 100) / 150f
-        val hpMult = 1f + t * 9f
-        val statMult = 1f + t * 0.3f
-        val relevantKeys = towerTierFor(floor).map { it.enemy }.toSet()
-        return gameData.enemies.mapValues { (key, enemy) ->
-            if (key !in relevantKeys) return@mapValues enemy
-            enemy.copy(
-                hp = (enemy.hp * hpMult).toInt().coerceAtLeast(1),
-                combatStats = enemy.combatStats.copy(
-                    attackBonus   = (enemy.combatStats.attackBonus   * statMult).toInt(),
-                    strengthBonus = (enemy.combatStats.strengthBonus * statMult).toInt(),
-                ),
-                defensiveStats = enemy.defensiveStats.copy(
-                    attackDefense   = (enemy.defensiveStats.attackDefense   * statMult).toInt(),
-                    strengthDefense = (enemy.defensiveStats.strengthDefense * statMult).toInt(),
-                    rangedDefense   = (enemy.defensiveStats.rangedDefense   * statMult).toInt(),
-                    magicDefense    = (enemy.defensiveStats.magicDefense    * statMult).toInt(),
-                ),
-            )
-        }
-    }
+    private fun scaledTowerEnemies(floor: Int): Map<String, EnemyData> =
+        TowerScaling.scaledEnemies(floor, gameData.enemies)
 
     private val ARROW_TIERS = listOf(
         "runite_arrow", "adamantite_arrow", "mithril_arrow",

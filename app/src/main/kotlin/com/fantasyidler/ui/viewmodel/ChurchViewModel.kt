@@ -12,6 +12,7 @@ import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.BlessingActivateResult
 import com.fantasyidler.repository.BoostRepository
 import com.fantasyidler.repository.ChurchRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.TownRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +35,7 @@ data class ChurchUiState(
     val unlockedBlessingKeys: Set<String> = emptySet(),
     val activeBlessing: BlessingData? = null,
     val activeBlessingRemainingMs: Long = 0L,
+    val prayerCapeMult: Float = 1f,
     val totalBoneEquivalent: Int = 0,
     val totalBoneCount: Int = 0,
     val pendingBlessingKey: String? = null,
@@ -50,6 +52,7 @@ class ChurchViewModel @Inject constructor(
     private val boostRepo: BoostRepository,
     val townRepo: TownRepository,
     private val playerRepo: PlayerRepository,
+    private val gameData: com.fantasyidler.repository.GameDataRepository,
     private val churchRepo: ChurchRepository,
     private val json: Json,
     @ApplicationContext private val context: Context,
@@ -66,6 +69,7 @@ class ChurchViewModel @Inject constructor(
         val levels: Map<String, Int>    = json.decodeFromString(player.skillLevels)
         val inventory: Map<String, Int> = json.decodeFromString(player.inventory)
         val prayerLevel = levels[Skills.PRAYER] ?: 1
+        val prayerCapeMult = blessingPrayerCapeMult(player, flags, gameData)
         val active      = ChurchRepository.activeBlessing(flags)
         val remaining   = if (active != null) (flags.activeBlessingExpiresAt - System.currentTimeMillis()).coerceAtLeast(0L) else 0L
         extra.copy(
@@ -77,6 +81,7 @@ class ChurchViewModel @Inject constructor(
             unlockedBlessingKeys      = churchRepo.blessingsForLevel(prayerLevel).map { it.key }.toSet(),
             activeBlessing            = active,
             activeBlessingRemainingMs = remaining,
+            prayerCapeMult            = prayerCapeMult,
             totalBoneEquivalent       = ChurchRepository.totalBoneEquivalent(inventory),
             totalBoneCount            = ChurchRepository.totalBoneCount(inventory),
             ironman                   = flags.ironman,

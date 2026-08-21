@@ -70,19 +70,29 @@ class ChurchRepository @Inject constructor(
             return BY_KEY[flags.activeBlessingKey]
         }
 
-        fun xpMultiplier(flags: PlayerFlags): Float {
+        fun xpMultiplier(flags: PlayerFlags, prayerCapeMult: Float): Float {
             val b = activeBlessing(flags) ?: return 1f
-            return if (b.type == BlessingType.XP) b.magnitude else 1f
+            return if (b.type == BlessingType.XP) effectiveMagnitude(b, prayerCapeMult) else 1f
         }
 
-        fun defBonus(flags: PlayerFlags): Int {
+        fun defBonus(flags: PlayerFlags, prayerCapeMult: Float): Int {
             val b = activeBlessing(flags) ?: return 0
-            return if (b.type == BlessingType.DEFENSE) b.magnitude.toInt() else 0
+            return if (b.type == BlessingType.DEFENSE) effectiveMagnitude(b, prayerCapeMult).toInt() else 0
         }
 
-        fun coinMultiplier(flags: PlayerFlags): Float {
+        fun coinMultiplier(flags: PlayerFlags, prayerCapeMult: Float): Float {
             val b = activeBlessing(flags) ?: return 1f
-            return if (b.type == BlessingType.COINS) 1f + b.magnitude else 1f
+            return if (b.type == BlessingType.COINS) 1f + effectiveMagnitude(b, prayerCapeMult) else 1f
+        }
+
+        /**
+         * Blessing strength with the prayer cape's multiplier folded in (issue #1491). The
+         * cape scales the blessing's BONUS: for XP the magnitude is a full multiplier (1.5x),
+         * so only the part above 1 grows; DEFENSE/COINS magnitudes are already pure bonuses.
+         */
+        fun effectiveMagnitude(b: BlessingData, prayerCapeMult: Float): Float = when (b.type) {
+            BlessingType.XP -> 1f + (b.magnitude - 1f) * prayerCapeMult
+            BlessingType.DEFENSE, BlessingType.COINS -> b.magnitude * prayerCapeMult
         }
 
         /** Pure variant for UI display; [costMult] from BoostRepository.blessingCostMultiplier. */

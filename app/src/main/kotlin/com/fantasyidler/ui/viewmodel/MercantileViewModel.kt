@@ -14,6 +14,7 @@ import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.BoostRepository
 import com.fantasyidler.repository.ChurchRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.PlayerRepository
 import com.fantasyidler.repository.QueuedSessionStarter
@@ -98,7 +99,7 @@ class MercantileViewModel @Inject constructor(
             val equippedCape = equipped[EquipSlot.CAPE]?.let { gameData.equipment[it] }
             val capeMult     = resolveCapeMultiplier(Skills.MERCANTILE, equippedCape, inventory.keys, flags.townBuildingTiers, boostRepo.capeScalingBySkill(flags), gameData.equipment, flags.ironman)
             val prestigeMult = boostRepo.coinMultiplier(Skills.MERCANTILE, flags).toFloat()
-            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags) *
+            val blessingCoinMult = if (flags.ironman) 1.0f else ChurchRepository.coinMultiplier(flags, blessingPrayerCapeMult(player, flags, gameData)) *
                 PlayerRepository.gooseCoinMultiplier(json.decodeFromString<List<OwnedPet>>(player.pets)).toFloat()
             extra.copy(
                 isLoading        = false,
@@ -144,7 +145,7 @@ class MercantileViewModel @Inject constructor(
                 val xpRange = matchedKey?.let { route.xpRanges[it.toString()] } ?: XpRange(1, 1)
 
                 val expectedRawXp = (xpRange.min + xpRange.max) * 30L
-                val xpQueueMult = if (mercFlags.ironman) 1.0 else (if (mercFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(mercFlags)
+                val xpQueueMult = if (mercFlags.ironman) 1.0 else (if (mercFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(mercFlags, blessingPrayerCapeMult(player, mercFlags, gameData))
                 val prestigeMult = 1.0 + boostRepo.prestigeXpPct(Skills.MERCANTILE, mercFlags) / 100.0
                 val estimatedXpGain = (expectedRawXp * xpQueueMult * prestigeMult).toLong()
 
@@ -182,9 +183,9 @@ class MercantileViewModel @Inject constructor(
                 val result  = MercantileSimulator.simulate(
                     route, startXp, agilityLevel,
                     floorReductionMin = boostRepo.sessionFloorReductionMin(mercFlags),
+                    petDropKey        = gameData.pets.values.firstOrNull { it.boostedSkill == Skills.MERCANTILE }?.id,
+                    petDropChance     = 1.0 / 1000.0,
                     chronosMultiplier = townRepo.playerSessionDurationMultiplier(mercFlags),
-                    petDropKey = "coin_drake",
-                    petDropChance = 1.0 / 1000.0
                 )
                 val framesJson = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),

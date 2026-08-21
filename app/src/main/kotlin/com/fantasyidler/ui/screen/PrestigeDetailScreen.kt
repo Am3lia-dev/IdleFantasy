@@ -63,10 +63,14 @@ import com.fantasyidler.repository.PrestigeActionResult
 import com.fantasyidler.ui.viewmodel.PrestigeDetailViewModel
 import com.fantasyidler.ui.viewmodel.PrestigeNodeUi
 import com.fantasyidler.ui.viewmodel.PrestigePathUi
+import androidx.compose.ui.graphics.Color
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatDurationMs
 
 private val TIER_NUMERALS = listOf("I", "II", "III", "IV", "V")
+
+// Same success green as the quest/guild checkmarks; "your race" on race locks.
+private val RaceLockGreen = Color(0xFF4CAF50)
 
 private fun nodeDisplayName(context: Context, skill: String, pathKey: String, tier: Int): String =
     "${GameStrings.prestigePathDisplayName(context, skill, pathKey)} ${TIER_NUMERALS.getOrElse(tier - 1) { "$tier" }}"
@@ -144,14 +148,29 @@ fun PrestigeDetailScreen(
                     }
                 }
                 node.races?.let { races ->
-                    Text(
-                        text  = stringResource(R.string.prestige_node_race_only, GameStrings.raceNames(context, races)),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (node.raceLocked) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Filled.Lock,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp),
+                            tint = if (node.raceLocked) MaterialTheme.colorScheme.error else RaceLockGreen,
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            text  = stringResource(R.string.prestige_node_race_only, GameStrings.raceNames(context, races)),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = if (node.raceLocked) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
                 }
                 Spacer(Modifier.height(8.dp))
-                Text(GameStrings.prestigeEffectDesc(context, node.effect, node.value, node.unlock), style = MaterialTheme.typography.bodyLarge)
+                // Other races see "???" so race-locked effects stay a surprise (debug shows all).
+                val effectHidden = node.raceLocked && !node.owned && !BuildConfig.DEBUG
+                Text(
+                    text  = if (effectHidden) "???"
+                            else GameStrings.prestigeEffectDesc(context, node.effect, node.value, node.unlock),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     text  = stringResource(R.string.prestige_node_cost, node.cost),
@@ -167,7 +186,7 @@ fun PrestigeDetailScreen(
                     )
                     node.raceLocked -> Text(
                         text  = stringResource(
-                            R.string.prestige_node_race_only,
+                            R.string.prestige_node_race_locked_desc,
                             node.races?.let { GameStrings.raceNames(context, it) }.orEmpty(),
                         ),
                         style = MaterialTheme.typography.bodyMedium,
@@ -372,15 +391,14 @@ private fun PathBranch(
             )
             if (racesLock != null) {
                 Spacer(Modifier.width(6.dp))
-                if (playerRace !in racesLock) {
-                    Icon(
-                        Icons.Filled.Lock,
-                        contentDescription = null,
-                        modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.width(2.dp))
-                }
+                // Green lock: your race can use this path. Red lock: another race's exclusive.
+                Icon(
+                    Icons.Filled.Lock,
+                    contentDescription = null,
+                    modifier = Modifier.size(14.dp),
+                    tint = if (playerRace in racesLock) RaceLockGreen else MaterialTheme.colorScheme.error,
+                )
+                Spacer(Modifier.width(2.dp))
                 Text(
                     text  = GameStrings.raceNames(context, racesLock),
                     style = MaterialTheme.typography.labelSmall,
@@ -394,6 +412,13 @@ private fun PathBranch(
                 path.nodes.mapNotNull { it.races }
                     .flatMap { it.filter { race -> race != "human" } }.distinct().forEach { race ->
                         Spacer(Modifier.width(6.dp))
+                        Icon(
+                            Icons.Filled.Lock,
+                            contentDescription = null,
+                            modifier = Modifier.size(12.dp),
+                            tint = if (playerRace == race) RaceLockGreen else MaterialTheme.colorScheme.error,
+                        )
+                        Spacer(Modifier.width(2.dp))
                         Text(
                             text  = GameStrings.raceName(context, race),
                             style = MaterialTheme.typography.labelSmall,
@@ -456,7 +481,7 @@ private fun NodeCircle(node: PrestigeNodeUi, onTap: () -> Unit) {
         ) {
             when {
                 node.owned -> Icon(Icons.Filled.Check, contentDescription = null, tint = contentColor, modifier = Modifier.size(22.dp))
-                node.raceLocked -> Icon(Icons.Filled.Lock, contentDescription = null, tint = contentColor, modifier = Modifier.size(18.dp))
+                node.raceLocked -> Icon(Icons.Filled.Lock, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
                 // Nodes past the next unowned tier hide behind "?" until the path reaches them.
                 node.prereqLocked && !BuildConfig.DEBUG -> Text(
                     text  = "?",

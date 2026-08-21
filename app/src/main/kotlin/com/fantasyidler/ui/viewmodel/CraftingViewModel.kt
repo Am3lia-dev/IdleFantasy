@@ -8,6 +8,7 @@ import com.fantasyidler.data.model.EquipSlot
 import com.fantasyidler.data.model.PlayerFlags
 import com.fantasyidler.repository.BoostRepository
 import com.fantasyidler.repository.ChurchRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.data.model.QueuedAction
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.Skills
@@ -203,7 +204,7 @@ class CraftingViewModel @Inject constructor(
             } else 0L
             val xpMult = if (selectedRecipe != null) {
                 val boostMult = if (flags.ironman) 1.0
-                                else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags)
+                                else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(player, flags, gameData))
                 val petPct = petBoostFor(player.pets, selectedRecipe.skillName, flags.ironman)
                 selectedEff * boostMult * (1.0 + petPct / 100.0)
             } else 1.0
@@ -435,7 +436,7 @@ class CraftingViewModel @Inject constructor(
                 val toolEff   = craftToolEfficiency(recipe, json.decodeFromString(player.equipped))
                 val perItemMs = (SkillSimulator.sessionDurationMs(agility, boostRepo.sessionFloorReductionMin(flags), townRepo.playerSessionDurationMultiplier(flags)) / 60 / toolEff).toLong()
                 val totalOutput = qty * recipe.outputQty
-                val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags)
+                val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(player, flags, gameData))
                 val queuePetPct = petBoostFor(player.pets, recipe.skillName, flags.ironman)
                 val action = QueuedAction(
                     skillName           = recipe.skillName,
@@ -480,6 +481,14 @@ class CraftingViewModel @Inject constructor(
             val levelAfter  = XpTable.levelForXp(xpAfter)
             val outputKey = if (ashKey != null && recipe.skillName == Skills.HERBLORE)
                 "enhanced_${recipe.outputKey}" else recipe.outputKey
+            // Cooking's pet (baby_kraken) is raid-only; every other craft skill rolls its
+            // pet 60 times per session at 1/1000, matching queued crafts.
+            val petDropKey = if (recipe.skillName == Skills.COOKING) null
+                else gameData.pets.values.firstOrNull { it.boostedSkill == recipe.skillName }?.id
+            val petDropped = petDropKey != null &&
+                (0 until 60).any { kotlin.random.Random.nextDouble() < 1.0 / 1000.0 }
+            val craftedItems = mutableMapOf(outputKey to recipe.outputQty * qty)
+            if (petDropped) craftedItems[petDropKey!!] = 1
             val frames = listOf(
                 SessionFrame(
                     minute      = 1,
@@ -488,7 +497,7 @@ class CraftingViewModel @Inject constructor(
                     xpAfter     = xpAfter,
                     levelBefore = levelBefore,
                     levelAfter  = levelAfter,
-                    items       = mapOf(outputKey to recipe.outputQty * qty),
+                    items       = craftedItems,
                     leveledUp   = levelAfter > levelBefore,
                     kills       = qty,
                 )

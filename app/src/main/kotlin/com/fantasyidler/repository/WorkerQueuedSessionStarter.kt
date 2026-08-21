@@ -293,7 +293,7 @@ class WorkerQueuedSessionStarter @Inject constructor(
                     availableArrows    = availableArrows,
                     equippedFood       = availableFood,
                     foodHealValues     = boostRepo.boostedFoodHeal(flags, gameData.foodHealValues),
-                    blessingDefBonus   = (ChurchRepository.defBonus(flags) * prayerCapeMult).toInt(),
+                    blessingDefBonus   = ChurchRepository.defBonus(flags, prayerCapeMult),
                     attackSpeedSec     = bossWeapon?.attackSpeed ?: CombatSimulator.BASE_ATTACK_SPEED_SEC,
                     eatThresholdPct    = flags.foodEatThresholdPct,
                 )
@@ -335,7 +335,7 @@ class WorkerQueuedSessionStarter @Inject constructor(
                     playerStrength      = ((levels[Skills.STRENGTH]  ?: 1) * strengthCapeMult).toInt(),
                     playerDefence       = (((levels[Skills.DEFENSE]  ?: 1) * defenseCapeMult).toInt() + totalDefBonus),
                     playerHp            = levels[Skills.HITPOINTS] ?: 1,
-                    blessingDefBonus    = (ChurchRepository.defBonus(flags) * prayerCapeMult).toInt(),
+                    blessingDefBonus    = ChurchRepository.defBonus(flags, prayerCapeMult),
                     weaponAttackBonus   = totalAtkBonus,
                     weaponStrengthBonus = totalStrBonus,
                     combatStyle         = combatStyle,

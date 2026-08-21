@@ -8,10 +8,10 @@ package com.fantasyidler.simulator
  */
 object PrestigePoints {
 
-    const val BASE_POINTS = 2
+    const val BASE_POINTS = 3
 
     /** Points granted per legacy prestige level in the one-time v1.14.0 migration. */
-    const val LEGACY_POINTS_PER_LEVEL = 2
+    const val LEGACY_POINTS_PER_LEVEL = 3
 
     private val LEVEL_99_XP = XpTable.xpForLevel(99)
 

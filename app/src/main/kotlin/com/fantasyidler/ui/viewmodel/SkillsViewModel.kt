@@ -20,6 +20,7 @@ import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.data.model.Skills
 import com.fantasyidler.repository.BoostRepository
 import com.fantasyidler.repository.ChurchRepository
+import com.fantasyidler.repository.blessingPrayerCapeMult
 import com.fantasyidler.repository.FarmingRepository
 import com.fantasyidler.repository.GameDataRepository
 import com.fantasyidler.repository.GuildRepository
@@ -212,7 +213,7 @@ class SkillsViewModel @Inject constructor(
                 thievingEfficiency    = gameData.toolEfficiency(equipped[EquipSlot.LOCKPICK],       EquipSlot.LOCKPICK,       0),
                 cookingEfficiency     = gameData.toolEfficiency(equipped[EquipSlot.FRYING_PAN],     EquipSlot.FRYING_PAN,     0),
                 xpBonusMult           = if (flags.ironman) 1.0f
-                                        else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0f else 1.0f) * ChurchRepository.xpMultiplier(flags),
+                                        else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0f else 1.0f) * ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(flags, equipped, inv.keys, gameData)),
                 petBoosts             = listOf(Skills.MINING, Skills.WOODCUTTING, Skills.FISHING, Skills.AGILITY)
                     .associateWith { if (flags.ironman) 0 else petBoostFor(player.pets, it) },
                 sessionDurationMs     = SkillSimulator.sessionDurationMs(levels[Skills.AGILITY] ?: 1, boostRepo.sessionFloorReductionMin(flags), townRepo.playerSessionDurationMultiplier(flags)),
@@ -425,6 +426,7 @@ class SkillsViewModel @Inject constructor(
         val flags: PlayerFlags = json.decodeFromString(player.flags)
         val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
 
+        val (petKey, petChance) = petDropParams(Skills.AGILITY)
         SkillSimulator.simulateAgility(
             courseData      = courseData,
             startXp         = (json.decodeFromString<Map<String, Long>>(player.skillXp))[Skills.AGILITY] ?: 0L,
@@ -432,6 +434,8 @@ class SkillsViewModel @Inject constructor(
             floorReductionMin = boostRepo.sessionFloorReductionMin(flags),
             petBoostPct     = boostRepo.boostedPetPct(Skills.AGILITY, flags, petBoostFor(player.pets, Skills.AGILITY, flags.ironman)),
             toolEfficiency  = gameData.toolEfficiency(equipped[EquipSlot.GRAPPLING_HOOK], EquipSlot.GRAPPLING_HOOK, courseData.levelRequired),
+            petDropKey      = petKey,
+            petDropChance   = petChance,
             chronosMultiplier = townRepo.playerSessionDurationMultiplier(flags),
         )
     }
@@ -454,7 +458,7 @@ class SkillsViewModel @Inject constructor(
             val toolEff = gameData.toolEfficiency(equipped[EquipSlot.TINDERBOX], EquipSlot.TINDERBOX, logData?.levelRequired ?: 0)
             val perLogMs = (SkillSimulator.sessionDurationMs(agility, boostRepo.sessionFloorReductionMin(flags), townRepo.playerSessionDurationMultiplier(flags)) / 60L / toolEff).toLong()
             val logXp = logData?.xpPerLog?.toLong() ?: 0L
-            val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags)
+            val xpQueueMult = if (flags.ironman) 1.0 else (if (flags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(flags, blessingPrayerCapeMult(player, flags, gameData))
             val action = QueuedAction(
                 skillName           = Skills.FIREMAKING,
                 activityKey         = logKey,
@@ -513,7 +517,7 @@ class SkillsViewModel @Inject constructor(
                 val perItemMs  = SkillSimulator.sessionDurationMs(agility, boostRepo.sessionFloorReductionMin(rcFlags), townRepo.playerSessionDurationMultiplier(rcFlags)) / 60
                 val ashBon     = catalystKey?.let { ashRuneBonusForKey(it) } ?: 0
                 val mult       = when { rcLevel >= 75 -> 3; rcLevel >= 50 -> 2; else -> 1 } + ashBon
-                val xpQueueMult = if (rcFlags.ironman) 1.0 else (if (rcFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(rcFlags)
+                val xpQueueMult = if (rcFlags.ironman) 1.0 else (if (rcFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(rcFlags, blessingPrayerCapeMult(player, rcFlags, gameData))
                 val ashCost = if (catalystKey != null) (qty + 9) / 10 else 0
                 val saveChance = townRepo.secondaryMaterialSaveChance(rcFlags)
                 val consumedAshCost = if (catalystKey != null) applyQtyPreservation(ashCost, saveChance) else 0
@@ -628,7 +632,7 @@ class SkillsViewModel @Inject constructor(
                 val agility   = (json.decodeFromString<Map<String, Int>>(player.skillLevels))[Skills.AGILITY] ?: 1
                 val prayerFlags = try { json.decodeFromString<PlayerFlags>(player.flags) } catch (_: Exception) { PlayerFlags() }
                 val perBoneMs = SkillSimulator.sessionDurationMs(agility, boostRepo.sessionFloorReductionMin(prayerFlags), townRepo.playerSessionDurationMultiplier(prayerFlags)) / 60
-                val xpQueueMult = if (prayerFlags.ironman) 1.0 else (if (prayerFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(prayerFlags)
+                val xpQueueMult = if (prayerFlags.ironman) 1.0 else (if (prayerFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(prayerFlags, blessingPrayerCapeMult(player, prayerFlags, gameData))
                 val enqueued = playerRepo.enqueueAction(
                     QueuedAction(
                         skillName           = Skills.PRAYER,
@@ -737,7 +741,7 @@ class SkillsViewModel @Inject constructor(
                 val petBoostPct = petBoostFor(player.pets, Skills.THIEVING, thievingFlags.ironman)
                 val petBoostedXp = if (petBoostPct > 0) (npc.baseXp * (1.0 + petBoostPct / 100.0)).toInt() else npc.baseXp
                 val expectedXp = 60.0 * (successChance / (2.0 - successChance)) * petBoostedXp
-                val xpQueueMult = if (thievingFlags.ironman) 1.0 else (if (thievingFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(thievingFlags)
+                val xpQueueMult = if (thievingFlags.ironman) 1.0 else (if (thievingFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(thievingFlags, blessingPrayerCapeMult(player, thievingFlags, gameData))
                 val prestigeMult = 1.0 + boostRepo.prestigeXpPct(Skills.THIEVING, thievingFlags) / 100.0
                 val estimatedXpGain = (expectedXp * xpQueueMult * prestigeMult).toLong()
 
@@ -845,7 +849,7 @@ class SkillsViewModel @Inject constructor(
             val player       = playerRepo.getOrCreatePlayer()
             val agility      = (json.decodeFromString<Map<String, Int>>(player.skillLevels))[Skills.AGILITY] ?: 1
             val gatherFlags = try { json.decodeFromString<PlayerFlags>(player.flags) } catch (_: Exception) { PlayerFlags() }
-            val xpQueueMult = if (gatherFlags.ironman) 1.0 else (if (gatherFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(gatherFlags)
+            val xpQueueMult = if (gatherFlags.ironman) 1.0 else (if (gatherFlags.xpBoostExpiresAt > System.currentTimeMillis()) 2.0 else 1.0) * ChurchRepository.xpMultiplier(gatherFlags, blessingPrayerCapeMult(player, gatherFlags, gameData))
             val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
             val petBoostPct = petBoostFor(player.pets, skillName, gatherFlags.ironman)
             val rawXp = when (skillName) {

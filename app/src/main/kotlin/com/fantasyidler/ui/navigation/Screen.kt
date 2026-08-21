@@ -167,6 +167,12 @@ sealed class Screen(
         icon     = Icons.Filled.Star,
     )
 
+    object House : Screen(
+        route    = "house",
+        labelRes = R.string.house_title,
+        icon     = Icons.Filled.Home,
+    )
+
     object BoneAltar : Screen(
         route    = "bone_altar",
         labelRes = R.string.bone_altar_title,
