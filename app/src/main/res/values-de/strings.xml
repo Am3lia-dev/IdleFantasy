@@ -305,7 +305,7 @@
     <string name="settings_quest_dots_desc">Goldenen Punkt auf Fähigkeiten mit offenen Quests anzeigen.</string>
     <string name="settings_prestige_notifications">Prestige Notification Badges</string> <!-- untranslated -->
     <string name="settings_prestige_notifications_desc">Show a notification badge on navigation when a skill is ready to prestige</string> <!-- untranslated -->
-    <string name="label_switch_character">Switch character</string> <!-- untranslated -->
+    <string name="label_switch_character">Charakter wechseln</string>
     <string name="settings_daily_reset_time">Daily reset time</string> <!-- untranslated -->
     <string name="settings_daily_reset_time_desc">Local time when dailies, guild dailies, and weeklies roll over. Changing it never grants an extra reset.</string> <!-- untranslated -->
     <string name="settings_compact_numbers">Nummern abkürzen</string>
@@ -552,7 +552,7 @@
     <string name="combat_log_player_miss">→ Ihr habt %1$s verfehlt</string>
     <string name="combat_log_enemy_hit">← %1$s traf Euch: %2$d SCH</string>
     <string name="combat_log_enemy_miss">← %1$s verfehlte Euch</string>
-    <string name="combat_log_heal">✚ You eat: +%1$d HP</string> <!-- untranslated -->
+    <string name="combat_log_heal">✚ Essen: +%1$d LP</string>
     <string name="combat_eat_threshold_warning">Risky: at a low threshold a hard hit can drop you to 0 HP before your character eats.</string> <!-- untranslated -->
     <string name="combat_rec_level">Empfohlenes Kampflevel</string>
     <string name="combat_your_level">Euer Kampflevel</string>
@@ -1616,7 +1616,7 @@
     <string name="title_patron_of_the_realm_requirement">Vollendet das Große Monument</string>
     <string name="item_gilded_full_helmet_name">Vergoldeter Vollhelm</string>
     <string name="item_gilded_platebody_name">Vergoldeter Plattenpanzer</string>
-    <string name="item_gilded_kiteshield_name">Vergoldeter Turmschild</string>
+    <string name="item_gilded_kiteshield_name">Vergoldeter Langspitzschild</string>
     <string name="boss_coin_cap_remaining">Volle Münzbeute heute noch für diesen Boss: %1$d</string>
     <string name="boss_coin_cap_spent">Münzbeute dieses Bosses bis morgen reduziert</string>
     <string name="bestiary_coin_cap_label">Nach %1$d Kills/Tag</string>
@@ -1646,7 +1646,7 @@
     <string name="tower_milestone_coins_5k">5.000 Münzen</string>
     <string name="tower_milestone_shield">%1$s (defense +80)</string> <!-- untranslated -->
     <string name="tower_milestone_amulet">%1$s (attack +15, strength +15, defense +10, all styles)</string> <!-- untranslated -->
-    <string name="tower_milestone_hp_50">+50 max HP</string> <!-- untranslated -->
+    <string name="tower_milestone_hp_50">+50 max. LP</string>
     <string name="tower_milestone_xp_2pct" formatted="false">+2% tower XP all skills</string> <!-- untranslated -->
     <string name="tower_milestone_coins_25k">25.000 Münzen</string>
     <string name="tower_milestone_helm">%1$s (defense +82, strength +8)</string> <!-- untranslated -->
