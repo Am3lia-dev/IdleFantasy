@@ -1099,6 +1099,8 @@
     <string name="skill_slayer_desc">在城镇向讨伐大师领取任务。</string>
     <string name="builder_title">建筑工坊</string>
     <string name="builder_card_desc">升级旅店、公会大厅和教堂</string>
+
+    <!-- Player housing -->
     <string name="house_title">My House</string> <!-- untranslated -->
     <string name="house_edit">Edit</string> <!-- untranslated -->
     <string name="house_done">Done</string> <!-- untranslated -->
@@ -1792,6 +1794,9 @@
     <string name="guild_daily_banner_claimable">可领取</string>
     <string name="guild_daily_banner_claimed">已领取</string>
     <string name="guild_daily_rank_maxed">等级已满</string>
+
+    <!-- ===== Infinite Tower ===== -->
+    <!-- Raids and mercenaries -->
     <string name="raid_section_title">Raids</string> <!-- untranslated -->
     <string name="raid_section_desc">Bosses no lone hero can fell. Hire a mercenary party first.</string> <!-- untranslated -->
     <string name="raid_party_status">Mercenaries: %1$d/%2$d hired</string> <!-- untranslated -->
@@ -1829,7 +1834,6 @@
     <string name="merc_vex_the_undying_name">Vex the Undying</string> <!-- untranslated -->
     <string name="merc_thane_dawnbringer_name">Thane Dawnbringer</string> <!-- untranslated -->
 
-    <!-- ===== Infinite Tower ===== -->
     <string name="tower_title">无限塔</string>
     <string name="tower_floor_label" formatted="false">Floor %d</string> <!-- untranslated -->
     <string name="tower_floor_desc">无限高塔 第 %1$d 层</string>
@@ -2042,6 +2046,7 @@
     <string name="settings_credit_bosses_title">Boss精灵</string>
     <string name="settings_credit_bosses_subtitle">美术：Meg</string>
     <string name="settings_credit_house_title">House Interiors</string> <!-- untranslated -->
+
     <string name="title_seasonal_champion_of">%1$s 冠军</string>
     <string name="title_seasonal_requirement">完成 %1$s 季节活动</string>
     <string name="home_welcome_greeting">欢迎回来，</string>
@@ -2161,35 +2166,54 @@
     <string name="carnival_potion_letter_cyan">青</string>
     <string name="farming_crop_picker_stats">等级 %1$d  •  %2$s  •  %3$d 经验/作物</string>
     <string name="farming_seeds_owned">种子：%1$d  •  持有：%2$d</string>
+    <!-- ============ Prestige overhaul (v1.14.0) ============ -->
     <string name="prestige_title">Prestige</string> <!-- untranslated -->
     <string name="prestige_open_tree">View tree</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = unspent prestige points -->
     <string name="prestige_points_available">%1$d points available</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = lifetime points earned, %2$d = maximum points for this skill -->
     <string name="prestige_points_lifetime">%1$d of %2$d lifetime points earned</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = points the reset would award right now -->
     <string name="prestige_button_with_points">Prestige now for +%1$d points</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = current skill level -->
     <string name="prestige_requires_99">Reach level 99 to prestige (currently %1$d).</string> <!-- untranslated -->
     <string name="prestige_maxed_cap">Maximum prestige reached. Every point this skill can earn is yours.</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = skill name, %2$d = points awarded -->
     <string name="prestige_confirm_message_points">Your %1$s level will reset to 1 and you\'ll earn %2$d prestige points to spend in this skill\'s tree. Equipment that no longer meets its requirements will be swapped out, and unclaimed %1$s daily quest progress resets. You\'ll also gain 2x %1$s XP for 48 hours to speed the climb back up.</string> <!-- untranslated -->
     <string name="prestige_respec">Reset points</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = formatted remaining cooldown -->
     <string name="prestige_respec_available_in">Reset available in %1$s</string> <!-- untranslated -->
     <string name="prestige_respec_confirm_title">Reset prestige points?</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = skill name -->
     <string name="prestige_respec_confirm_message">All purchased %1$s upgrades will be refunded for their full point cost. You can reset this skill\'s points again in 24 hours.</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = skill name -->
     <string name="prestige_respec_done">%1$s prestige points refunded.</string> <!-- untranslated -->
     <string name="prestige_respec_on_cooldown">Points were reset recently. Try again later.</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = node cost in points -->
     <string name="prestige_node_cost">Cost: %1$d points</string> <!-- untranslated -->
     <string name="prestige_node_owned">Purchased</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = list of race names -->
     <string name="prestige_node_race_only">%1$s only</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = list of race names -->
     <string name="prestige_node_race_locked_desc">Only %1$s characters can learn this upgrade.</string> <!-- untranslated -->
     <string name="prestige_node_prereq_locked">Requires the previous tier in this path.</string> <!-- untranslated -->
     <string name="prestige_node_hidden">Unlock the previous upgrade first.</string> <!-- untranslated -->
     <string name="character_race_edit_hint">Race changes are made in the appearance editor.</string> <!-- untranslated -->
     <string name="prestige_node_not_enough">Not enough points</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = node name -->
     <string name="prestige_node_purchased">%1$s purchased!</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = node cost in points -->
     <string name="prestige_buy">Purchase for %1$d points</string> <!-- untranslated -->
+
+    <!-- Prestige effect descriptions -->
     <string name="prestige_effect_xp_pct">+%1$d%% XP in this skill.</string> <!-- untranslated -->
     <string name="prestige_effect_yield_pct">+%1$d%% items from this skill\'s sessions.</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = yield percent per interval (may be fractional) -->
     <string name="prestige_effect_flow_rate">Flow-state: +%1$s%% yield per interval of continuous activity, up to +100%%.</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = minutes removed from the flow interval -->
     <string name="prestige_effect_flow_interval">Flow-state interval shortened by %1$d minutes.</string> <!-- untranslated -->
     <string name="prestige_effect_combat_stat">+%1$d effective levels in combat.</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = minutes (may be fractional) -->
     <string name="prestige_effect_session_floor">Sessions up to %1$s minutes shorter at level 99.</string> <!-- untranslated -->
     <string name="prestige_effect_cape_scaling">Cape bonuses for this skill multiplied ×%1$d.</string> <!-- untranslated -->
     <string name="prestige_effect_bonus_roll">+%1$d%% gem find chance while mining.</string> <!-- untranslated -->
@@ -2215,6 +2239,8 @@
     <string name="prestige_effect_foretell_slots">+%1$d foretold slayer task slots.</string> <!-- untranslated -->
     <string name="prestige_effect_multi_task">Dungeon kills also count toward matching foretold tasks.</string> <!-- untranslated -->
     <string name="prestige_effect_unlock_recipe">Unlocks the %1$s fletching recipe.</string> <!-- untranslated -->
+
+    <!-- New distinctive base path names (variety pass) -->
     <string name="prestige_path_fishing_rod">Sturdy Rod</string> <!-- untranslated -->
     <string name="prestige_path_woodcutting_axe">Honed Edge</string> <!-- untranslated -->
     <string name="prestige_path_cooking_hearty">Hearty Meals</string> <!-- untranslated -->
@@ -2233,12 +2259,16 @@
     <string name="prestige_path_strength_double_hit">Double Hit</string> <!-- untranslated -->
     <string name="prestige_path_ranged_bows">Better Bows</string> <!-- untranslated -->
     <string name="prestige_path_slayer_foresight">Foresight</string> <!-- untranslated -->
+
+    <!-- Prestige path names (generic) -->
     <string name="prestige_path_xp">XP Boost</string> <!-- untranslated -->
     <string name="prestige_path_yield">Yield</string> <!-- untranslated -->
     <string name="prestige_path_flow">Flow-state</string> <!-- untranslated -->
     <string name="prestige_path_endurance">Endurance</string> <!-- untranslated -->
     <string name="prestige_path_gem">Gem Hunter</string> <!-- untranslated -->
     <string name="prestige_path_rotation">Crop Rotation</string> <!-- untranslated -->
+
+    <!-- Prestige path names (skill flavored) -->
     <string name="prestige_path_mining_yield">Purer Ore</string> <!-- untranslated -->
     <string name="prestige_path_fishing_yield">More Fish</string> <!-- untranslated -->
     <string name="prestige_path_woodcutting_yield">Sharper Axe</string> <!-- untranslated -->
@@ -2252,6 +2282,8 @@
     <string name="prestige_path_hitpoints_prowess">Vitality</string> <!-- untranslated -->
     <string name="prestige_path_thieving_coin">Silver Tongue</string> <!-- untranslated -->
     <string name="prestige_path_mercantile_coin">Haggler</string> <!-- untranslated -->
+
+    <!-- Prestige race branch names -->
     <string name="prestige_path_thieving_race_elf">Shadow Step</string> <!-- untranslated -->
     <string name="prestige_path_firemaking_race_dwarf">Ember Heart</string> <!-- untranslated -->
     <string name="prestige_path_fishing_race_halfling">Patient Angler</string> <!-- untranslated -->
@@ -2265,15 +2297,19 @@
     <string name="prestige_path_construction_race_gnome">Gadget Works</string> <!-- untranslated -->
     <string name="prestige_path_prayer_race_gnome">Trickster\'s Favor</string> <!-- untranslated -->
     <string name="prestige_path_hitpoints_race_orc">Thick Hide</string> <!-- untranslated -->
+
+    <!-- Race change -->
     <string name="race_change_confirm_title">Change race?</string> <!-- untranslated -->
     <string name="item_race_change_token_name">Race Change Token</string> <!-- untranslated -->
     <string name="item_race_change_token_desc">A rare boss drop that lets you change your character\'s race once.</string> <!-- untranslated -->
+    <!-- Translator note: %1$d = number of tokens owned -->
     <string name="race_change_pay_token">Use Race Change Token (%1$d)</string> <!-- untranslated -->
     <string name="race_change_pay_coins">Pay 10,000,000 coins</string> <!-- untranslated -->
     <string name="race_change_cannot_afford">You need a Race Change Token (rare boss drop) or 10,000,000 coins to change race.</string> <!-- untranslated -->
     <string name="race_change_ironman_locked">Ironman characters cannot change their race.</string> <!-- untranslated -->
     <string name="race_change_ironman_once">As an ironman, this is your one and only race change. Afterwards your race is locked forever.</string> <!-- untranslated -->
     <string name="ironman_race_permanent_note">Ironman characters cannot change their race later. Choose carefully!</string> <!-- untranslated -->
+    <!-- Translator note: %1$s = comma-separated list of skill names -->
     <string name="race_proficiency_label">Racial skill trees: %1$s</string> <!-- untranslated -->
     <string name="race_proficiency_human">Racial bonus: an exclusive XP mastery tier in every skill</string> <!-- untranslated -->
     <string name="race_change_confirm_message">Your race grants race-locked prestige upgrades. Changing race refunds any points spent in other races\' branches, and you can only change race once every 24 hours.</string> <!-- untranslated -->

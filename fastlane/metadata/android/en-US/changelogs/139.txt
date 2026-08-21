@@ -22,3 +22,7 @@ Bug Fixes:
 • Guild daily requests now prefer a variety of items instead of repeating the same one; previously a guild rank whose only skill-reachable recipe was a single item (like the crafting guild's platinum diamond ring at rank 7) served that item four times a day, every day
 • The live combat log on Tower floors above 100 now uses the enemy's scaled stats, fixing the kill counter that crept up and dropped back every minute and showing the enemy's true HP bar and attack values
 • On Android 13+ the predictive back gesture no longer closes an entire skill menu from an inner page; back now steps to the recipe list first, and closes the menu only from the top level (thanks xRahul!)
+
+Translations:
+• Updated French, German, and Italian translations
+• Completed Simplified Chinese translations (thanks LawrenZzz!)
