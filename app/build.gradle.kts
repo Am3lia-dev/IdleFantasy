@@ -26,10 +26,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile     = file("${System.getProperty("user.home")}/.android/idlefantasy-release.jks")
-            storePassword = System.getenv("IDLEFANTASY_STORE_PASSWORD") ?: ""
-            keyAlias      = "idlefantasy"
-            keyPassword   = System.getenv("IDLEFANTASY_KEY_PASSWORD") ?: ""
+            storeFile     = file("${System.getProperty("user.home")}/.android/defide-release.jks")
+            storePassword = System.getenv("DEFIDE_STORE_PASSWORD") ?: ""
+            keyAlias      = "defide"
+            keyPassword   = System.getenv("DEFIDE_KEY_PASSWORD") ?: ""
         }
     }
 
