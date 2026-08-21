@@ -182,6 +182,8 @@ class MercantileViewModel @Inject constructor(
                     route, startXp, agilityLevel,
                     agilityPrestige = mercFlags.skillPrestige[Skills.AGILITY] ?: 0,
                     chronosMultiplier = townRepo.playerSessionDurationMultiplier(mercFlags),
+                    petDropKey = "coin_drake",
+                    petDropChance = 1.0 / 1000.0
                 )
                 val framesJson = json.encodeToString(
                     json.serializersModule.serializer<List<SessionFrame>>(),
