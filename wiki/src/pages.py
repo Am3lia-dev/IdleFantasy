@@ -621,6 +621,7 @@ def _prestige_effect_text(node: dict) -> str:
         "slayer_multi_task":       "Dungeon kills also count toward matching foretold tasks",
         "queue_slot":              f"+{vs} session queue slot",
         "potion_bonus_flat":       f"Combat potions grant +{vs} more to their stats",
+        "per_level_bonus":         f"+{vs} tool or combat bonus per level of this skill",
     }.get(node["effect"], node["effect"])
 
 

@@ -1011,6 +1011,11 @@
     <string name="mercantile_level_label">Уровень %1$d Торговли</string>
     <string name="mercantile_xp_label">Опыт: %1$s</string>
     <string name="mercantile_coins_label">Монеты: %1$s</string>
+    <string name="mercantile_perks_title">Perks</string> <!-- untranslated -->
+    <string name="mercantile_perk_trading_locked">Shop trading: cheaper buying and better sell prices from level %1$d.</string> <!-- untranslated -->
+    <string name="mercantile_perk_trading">Shop trading: buy prices -%1$d%%, sell prices +%2$d%%.</string> <!-- untranslated -->
+    <string name="mercantile_perk_trading_next">Next boost at level %1$d.</string> <!-- untranslated -->
+    <string name="mercantile_perk_guild">Merchant\'s Guild: exclusive shop goods unlock from level %1$d.</string> <!-- untranslated -->
     <string name="mercantile_cost_label">Стоимость: %1$s</string>
     <string name="mercantile_return_range">Доход: %1$s – %2$s</string>
     <string name="mercantile_dispatch_label">Отправить</string>
@@ -1166,6 +1171,7 @@
     <string name="house_remove_banner">Снять знамя</string>
     <string name="house_move_hint">Перетащите по сетке, чтобы переместить в другое место.</string>
     <string name="house_rotate_item">Повернуть</string>
+    <string name="house_nudge_item">Move with arrows</string> <!-- untranslated -->
     <string name="house_outside_title">Снаружи</string>
     <string name="house_outside_hint">Выберите, как выглядит земля вокруг вашего дома.</string>
     <string name="house_move_room">Переместить комнату</string>
@@ -2212,6 +2218,11 @@
     <!-- Translator note: %1$d = node cost in points -->
     <string name="prestige_node_cost">Стоимость: %1$d очков</string>
     <string name="prestige_node_owned">Приобретено</string>
+    <string name="prestige_path_auto_label">Earned by prestiging</string> <!-- untranslated -->
+    <string name="prestige_node_auto_earned">Earned at prestige %1$d.</string> <!-- untranslated -->
+    <string name="prestige_node_auto_pending">Unlocks automatically at prestige %1$d.</string> <!-- untranslated -->
+    <string name="prestige_button_xp_only">Prestige now for the next XP tier</string> <!-- untranslated -->
+    <string name="prestige_confirm_message_xp_only">Your %1$s level will reset to 1 and you\'ll unlock the next automatic XP tier. Equipment that no longer meets its requirements will be swapped out, and unclaimed %1$s daily quest progress resets. You\'ll also gain 2x %1$s XP for 48 hours to speed the climb back up.</string> <!-- untranslated -->
     <!-- Translator note: %1$s = list of race names -->
     <string name="prestige_node_race_only">%1$s только</string>
     <!-- Translator note: %1$s = list of race names -->
@@ -2241,6 +2252,7 @@
     <string name="prestige_effect_crop_rotation">+%1$d%% урожайность при посадке культуры, отличной от предыдущего урожая.</string>
     <string name="prestige_effect_crop_rotation_always">The rotation bonus applies to every crop, no rotation needed.</string> <!-- untranslated -->
     <string name="prestige_effect_tool_eff">Эффективность инструмента +%1$d%%.</string>
+    <string name="prestige_effect_per_level">+%1$s tool or combat bonus per level of this skill.</string> <!-- untranslated -->
     <string name="prestige_effect_success_chance">Шанс успешной кражи +%1$d%%.</string>
     <string name="prestige_effect_reclaim">+%1$d%% шанс восстановить потраченные стрелы и руны после боя.</string>
     <string name="prestige_effect_heal">Еда лечит на +%1$d%% больше в бою.</string>
@@ -2304,6 +2316,7 @@
     <string name="prestige_path_mercantile_coin">Торгующийся</string>
 
     <!-- Prestige race branch names -->
+    <string name="prestige_path_race_human">Resourceful</string> <!-- untranslated -->
     <string name="prestige_path_thieving_race_elf">Теневой шаг</string>
     <string name="prestige_path_firemaking_race_dwarf">Тлеющее сердце</string>
     <string name="prestige_path_fishing_race_halfling">Терпеливый рыболов</string>
