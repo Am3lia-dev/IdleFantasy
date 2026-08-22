@@ -996,11 +996,11 @@
     <string name="mercantile_level_label">Niveau %1$d Commerce</string>
     <string name="mercantile_xp_label">XP : %1$s</string>
     <string name="mercantile_coins_label">Pièces : %1$s</string>
-    <string name="mercantile_perks_title">Perks</string> <!-- untranslated -->
-    <string name="mercantile_perk_trading_locked">Shop trading: cheaper buying and better sell prices from level %1$d.</string> <!-- untranslated -->
-    <string name="mercantile_perk_trading">Shop trading: buy prices -%1$d%%, sell prices +%2$d%%.</string> <!-- untranslated -->
-    <string name="mercantile_perk_trading_next">Next boost at level %1$d.</string> <!-- untranslated -->
-    <string name="mercantile_perk_guild">Merchant\'s Guild: exclusive shop goods unlock from level %1$d.</string> <!-- untranslated -->
+    <string name="mercantile_perks_title">Avantages</string>
+    <string name="mercantile_perk_trading_locked">Négociation en magasin : achats moins chers et meilleurs prix de vente à partir du niveau %1$d.</string>
+    <string name="mercantile_perk_trading">Négociation en magasin : prix d’achat -%1$d%%, prix de vente +%2$d%%.</string>
+    <string name="mercantile_perk_trading_next">Prochain boost au niveau %1$d.</string>
+    <string name="mercantile_perk_guild">Guilde des Marchands : des marchandises exclusives de la boutique sont débloquées au niveau %1$d.</string>
     <string name="mercantile_cost_label">Coût : %1$s</string>
     <string name="mercantile_return_range">Retour : %1$s – %2$s</string>
     <string name="mercantile_dispatch_label">Expédier</string>
