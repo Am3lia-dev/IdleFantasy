@@ -1825,7 +1825,7 @@
     <string name="raid_no_mercs">Нет нанятых наемников.</string>
     <string name="merc_camp_open">Нанять наемников</string>
     <string name="merc_camp_title">Лагерь наемников</string>
-    <string name="merc_camp_desc">Контракты действительны до тех пор, пока ежедневный сброс не составит 1% от стоимости контракта. Каждый день прибывает новый набор наемников.</string>
+    <string name="merc_camp_desc">Контракты действуют до ежедневного сброса в %1$s. Каждый день прибывает новый набор наемников.</string>
     <string name="merc_hire">Нанять</string>
     <string name="merc_dismiss">Уволить</string>
     <string name="merc_hired">%1$s присоединяется к вашей группе до тех пор, пока не начнется ежедневная сброс.</string>
