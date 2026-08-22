@@ -135,11 +135,11 @@
     <string name="boss_the_vault_guardian_name">Le Gardien de la Chambre Forte</string>
     <string name="boss_the_vault_guardian_desc">Un colosse d\'or vivant, éveillé par l\'embrasement de la Flamme éternelle. Seuls les mécènes du Grand Monument peuvent l\'affronter.</string>
     <string name="boss_obsidian_colossus_name">Colosse d\'Obsidienne</string>
-    <string name="boss_obsidian_colossus_desc">Une montagne animée par la colère. Aucun héros solitaire n’a jamais réussi à lui infliger plus qu’une égratignure. Venez avec un groupe.</string>
+    <string name="boss_obsidian_colossus_desc">Une montagne animée par la colère. Aucun héros solitaire n\'a jamais réussi à lui infliger plus qu\'une égratignure. Venez avec un groupe.</string>
     <string name="boss_brood_empress_name">Impératrice de la Couvée</string>
-    <string name="boss_brood_empress_desc">Mère de l’essaim parmi les étoiles. Sa couvée a anéanti des armées ; mieux vaut que la vôtre soit bien payée.</string>
+    <string name="boss_brood_empress_desc">Mère de l\'essaim parmi les étoiles. Sa couvée a anéanti des armées ; mieux vaut que la vôtre soit bien payée.</string>
     <string name="boss_the_world_ender_name">Le Destructeur de Mondes</string>
-    <string name="boss_the_world_ender_desc">Quand il s’éveille, les royaumes rédigent leur testament. Quatre noms sur le contrat, ou personne n’en revient.</string>
+    <string name="boss_the_world_ender_desc">Quand il s\'éveille, les royaumes rédigent leur testament. Quatre noms sur le contrat, ou personne n\'en revient.</string>
 
     <!-- ===== Expedition-unlocked dungeon names ===== -->
     <string name="dungeon_collapsed_mine_name">Mine Effondrée</string>

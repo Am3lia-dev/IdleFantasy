@@ -1201,7 +1201,7 @@
     <string name="house_item_tabledecor_silver_jug">Carafe en Argent</string>
     <string name="house_item_tabledecor_silver_narrow_pitcher">Cruche Étroite en Argent</string>
     <string name="house_item_tabledecor_silver_plate">Assiette en Argent</string>
-    <string name="house_item_tabledecor_silver_plates">Pile d’Assiettes en Argent</string>
+    <string name="house_item_tabledecor_silver_plates">Pile d\'Assiettes en Argent</string>
     <string name="house_item_tabledecor_silver_tall_pitcher">Grande Cruche en Argent</string>
     <string name="house_item_tabledecor_silver_wide_pitcher">Large Cruche en Argent</string>
     <string name="house_item_table_default_small">Petite Table</string>
@@ -1250,7 +1250,7 @@
     <string name="house_item_questboard_3">Tableau de Quête III</string>
     <string name="house_sub_other">Autre</string>
     <string name="house_item_gold_chest">Coffre doré</string>
-    <string name="house_item_gold_nugget">Pépites d’or</string>
+    <string name="house_item_gold_nugget">Pépites d\'or</string>
     <string name="house_item_gold_pile">Trésor enterré</string>
     <string name="house_item_gold_pile_gems">Trésor de joyaux</string>
     <string name="house_item_wall_art_default_sunshine_grass">Prairie ensoleillée</string>
@@ -1330,7 +1330,7 @@
     <!-- Prestige achievements -->
     <string name="achievement_prestige_first_name">Première réinitialisation</string>
     <string name="achievement_prestige_first_desc">Atteignez le niveau Prestige pour la première fois avec n\'importe quelle aptitude</string>
-    <string name="achievement_prestige_node_first_name">S’étendre dans de nouvelles directions</string>
+    <string name="achievement_prestige_node_first_name">S\'étendre dans de nouvelles directions</string>
     <string name="achievement_prestige_node_first_desc">Achetez votre première amélioration dans l\'arbre de prestige</string>
     <string name="achievement_prestige_path_complete_name">Fin de la ligne</string>
     <string name="achievement_prestige_path_complete_desc">Achetez chaque amélioration d\'un chemin de prestige</string>
@@ -1805,7 +1805,7 @@
     <!-- ===== Infinite Tower ===== -->
     <!-- Raids and mercenaries -->
     <string name="raid_section_title">Incursions</string>
-    <string name="raid_section_desc">Des boss qu’aucun héros solitaire ne peut vaincre. Engagez d’abord un groupe de mercenaires.</string>
+    <string name="raid_section_desc">Des boss qu\'aucun héros solitaire ne peut vaincre. Engagez d\'abord un groupe de mercenaires.</string>
     <string name="raid_party_status">Mercenaires : %1$d/%2$d engagés</string>
     <string name="raid_party_title">Groupe d\'Incursion</string>
     <string name="raid_solo_warning">Les boss d\'incursions ne peuvent pas être vaincus seul, même avec le meilleur équipement. Engagez des mercenaires avant d\'essayer.</string>
@@ -1828,7 +1828,7 @@
     <string name="merc_tier_elite">Champion</string>
     <string name="merc_stats">Atq %1$d  For %2$d  Déf %3$d  PV %4$d</string>
     <string name="merc_cost_per_day">%1$s pièces par jour</string>
-    <string name="merc_bran_the_sellsword_name">Bran l’Épée-à-Louer</string>
+    <string name="merc_bran_the_sellsword_name">Bran l\'Épée-à-Louer</string>
     <string name="merc_wren_the_stray_name">Wren le Vagabond</string>
     <string name="merc_tam_the_grey_name">Tam le Gris</string>
     <string name="merc_nix_the_cutpurse_name">Nix le Vide-Gousset</string>
@@ -1838,7 +1838,7 @@
     <string name="merc_fenna_swiftarrow_name">Fenna Flèche-Vive</string>
     <string name="merc_grimjaw_the_colossus_name">Grimjaw le Colosse</string>
     <string name="merc_sylvara_trueshot_name">Sylvara Tir-Précis</string>
-    <string name="merc_vex_the_undying_name">Vex l’Immortel</string>
+    <string name="merc_vex_the_undying_name">Vex l\'Immortel</string>
     <string name="merc_thane_dawnbringer_name">Thane Porte-Aube</string>
 
     <string name="tower_title">Tour de l\'Infini</string>
@@ -2186,7 +2186,7 @@
     <string name="prestige_requires_99">Atteignez le niveau 99 pour obtenir le prestige (actuellement %1$d).</string>
     <string name="prestige_maxed_cap">Prestige maximum atteint. Vous avez obtenu tous les points que cette aptitude peut rapporter.</string>
     <!-- Translator note: %1$s = skill name, %2$d = points awarded -->
-    <string name="prestige_confirm_message_points">Votre niveau %1$s sera réinitialisé à 1 et vous gagnerez %2$d points de prestige à dépenser dans l’arbre d\'aptitude correspondant. L’équipement qui ne répondra plus aux prérequis sera remplacé, et la progression non récupérée des quêtes quotidiennes de %1$s sera réinitialisée. Vous bénéficierez également de 2× l’XP de %1$s pendant 48 heures pour accélérer votre remontée en niveau.</string>
+    <string name="prestige_confirm_message_points">Votre niveau %1$s sera réinitialisé à 1 et vous gagnerez %2$d points de prestige à dépenser dans l\'arbre d\'aptitude correspondant. L\'équipement qui ne répondra plus aux prérequis sera remplacé, et la progression non récupérée des quêtes quotidiennes de %1$s sera réinitialisée. Vous bénéficierez également de 2× l\'XP de %1$s pendant 48 heures pour accélérer votre remontée en niveau.</string>
     <string name="prestige_respec">Réinitialiser les points</string>
     <!-- Translator note: %1$s = formatted remaining cooldown -->
     <string name="prestige_respec_available_in">Réinitialisation disponible dans %1$s</string>
@@ -2221,9 +2221,9 @@
     <string name="prestige_effect_xp_pct">+%1$d%% d\'XP dans cette aptitude.</string>
     <string name="prestige_effect_yield_pct">+%1$d%% d\'objets dans les sessions de cette aptitude.</string>
     <!-- Translator note: %1$s = yield percent per interval (may be fractional) -->
-    <string name="prestige_effect_flow_rate">État de concentration : +%1$s %% de rendement par intervalle d’activité continue, jusqu’à +100 %</string>
+    <string name="prestige_effect_flow_rate">État de concentration : +%1$s%% de rendement par intervalle d\'activité continue, jusqu\'à +100%%.</string>
     <!-- Translator note: %1$d = minutes removed from the flow interval -->
-    <string name="prestige_effect_flow_interval">L’intervalle de l\'état de concentration réduit de %1$d minutes.</string>
+    <string name="prestige_effect_flow_interval">L\'intervalle de l\'état de concentration réduit de %1$d minutes.</string>
     <string name="prestige_effect_combat_stat">+%1$d niveaux effectifs en combat.</string>
     <!-- Translator note: %1$s = minutes (may be fractional) -->
     <string name="prestige_effect_session_floor">Sessions sont jusqu\'à %1$s minutes plus courtes au niveau 99</string>
@@ -2232,22 +2232,22 @@
     <string name="prestige_effect_coin_pct">+%1$d%% de pièces depuis cette aptitude.</string>
     <string name="prestige_effect_crop_rotation">+%1$d%% de rendement quand une plante différente est plantée de la dernière récolte.</string>
     <string name="prestige_effect_crop_rotation_always">Le bonus de rotation s\'applique sur chaque culture, pas de rotation requise.</string>
-    <string name="prestige_effect_tool_eff">+%1$d%% d’efficacité d\'outil.</string>
+    <string name="prestige_effect_tool_eff">+%1$d%% d\'efficacité d\'outil.</string>
     <string name="prestige_effect_per_level">+%1$s tool or combat bonus per level of this skill.</string> <!-- untranslated -->
     <string name="prestige_effect_success_chance">+%1$d%% chance de succès du vol à la tire.</string>
     <string name="prestige_effect_reclaim">+%1$d%% chance de récupérer les flèches consommées et les runes après le combat.</string>
     <string name="prestige_effect_heal">La nourriture soigne +%1$d%% plus durant le combat.</string>
     <string name="prestige_effect_death_keep">Garde %1$d%% d\'XP et de butin en plus quand vaincu.</string>
-    <string name="prestige_effect_queue_slot">+%1$d emplacement dans la file d’attente des sessions</string>
+    <string name="prestige_effect_queue_slot">+%1$d emplacement dans la file d\'attente des sessions</string>
     <string name="prestige_effect_pet_boost">Les bonus de familiers pour cette aptitude sont %1$d%% plus forts.</string>
-    <string name="prestige_effect_blessing_duration">Les bénédictions de l’Église durent %1$d%% plus longtemps.</string>
-    <string name="prestige_effect_blessing_cost">Les bénédictions de l’Église coûtent %1$d%% os de moins.</string>
+    <string name="prestige_effect_blessing_duration">Les bénédictions de l\'Église durent %1$d%% plus longtemps.</string>
+    <string name="prestige_effect_blessing_cost">Les bénédictions de l\'Église coûtent %1$d%% os de moins.</string>
     <string name="prestige_effect_potion_bonus">Les potions de combat donnent +%1$d plus à leurs stats.</string>
     <string name="prestige_effect_input_save">%1$d%% des matériaux de fabrication sont remboursés.</string>
     <string name="prestige_effect_builder_discount">Les coûts d\'améliorations de la ville coûtent %1$d%% en moins.</string>
     <string name="prestige_effect_sell_price">Prix de vente aux boutiques de +%1$d%%.</string>
     <string name="prestige_effect_slayer_points">Les tâches du Mentor donnent +%1$d%% de points.</string>
-    <string name="prestige_effect_double_hit">%1$d%% chance d’infliger une seconde attaque au corps à corps.</string>
+    <string name="prestige_effect_double_hit">%1$d%% chance d\'infliger une seconde attaque au corps à corps.</string>
     <string name="prestige_effect_second_chance">Les attaques au corps à corps manquées sont relancées une fois.</string>
     <string name="prestige_effect_foretell_slots">+%1$d emplacements de tâches de tueur anticipées.</string>
     <string name="prestige_effect_multi_task">Les éliminations en donjon comptent également pour la validation des tâches prédites correspondantes.</string>
@@ -2307,7 +2307,7 @@
     <string name="prestige_path_construction_race_halfling">Bâtisseur Chaleureux</string>
     <string name="prestige_path_fishing_race_gnome">Leurres Ingénieux</string>
     <string name="prestige_path_fletching_race_gnome">Toucher du Bricoleur</string>
-    <string name="prestige_path_firemaking_race_gnome">Faiseur d’Étincelles</string>
+    <string name="prestige_path_firemaking_race_gnome">Faiseur d\'Étincelles</string>
     <string name="prestige_path_construction_race_gnome">Atelier à Gadgets</string>
     <string name="prestige_path_prayer_race_gnome">Faveur du Farceur</string>
     <string name="prestige_path_hitpoints_race_orc">Peau Dure</string>
