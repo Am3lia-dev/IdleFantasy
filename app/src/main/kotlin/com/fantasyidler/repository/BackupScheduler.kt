@@ -76,6 +76,7 @@ class BackupScheduler @Inject constructor(
         val flags = playerRepo.getFlags()
         if (flags.backupFolderUri.isEmpty()) return false
         var tempUri: Uri? = null
+        var oldDocsDeleted = false
         var failureMsg = ""
         val ok = try {
             val sessions = buildList {
@@ -116,23 +117,33 @@ class BackupScheduler @Inject constructor(
                 throw IllegalStateException("temp document bytes differ from exported save")
             }
 
-            childDocuments(cr, treeUri, treeDocId)
-                .filter { it.second == LEGACY_DISPLAY_NAME || it.second == FINAL_DISPLAY_NAME }
-                .forEach { (docId, _) ->
-                    DocumentsContract.deleteDocument(cr, DocumentsContract.buildDocumentUriUsingTree(treeUri, docId))
+            val currentTempId = DocumentsContract.getDocumentId(created)
+            val doomedIds = childDocuments(cr, treeUri, treeDocId)
+                .filter { (docId, name) ->
+                    docId != currentTempId &&
+                        (name.startsWith(TEMP_DISPLAY_NAME) || name.startsWith(FINAL_DISPLAY_NAME))
                 }
+                .map { it.first }
+            oldDocsDeleted = true
+            doomedIds.forEach { docId ->
+                DocumentsContract.deleteDocument(cr, DocumentsContract.buildDocumentUriUsingTree(treeUri, docId))
+            }
 
             DocumentsContract.renameDocument(cr, created, FINAL_DISPLAY_NAME)
-
-            val swappedIn = childDocuments(cr, treeUri, treeDocId).any { it.second == FINAL_DISPLAY_NAME }
-            if (!swappedIn) throw IllegalStateException("backup provider failed to rename temp document into place")
-
-            // Schedule the next occurrence. setExactAndAllowWhileIdle is one-shot so
-            // each firing must manually reschedule the next alarm.
-            val effectiveFreq = frequency.ifEmpty { flags.backupFrequency }
-            if (effectiveFreq.isNotEmpty()) reschedule(effectiveFreq)
-
             tempUri = null
+
+            try {
+                val swappedIn = childDocuments(cr, treeUri, treeDocId)
+                    .any { it.second.startsWith(FINAL_DISPLAY_NAME) && !it.second.startsWith(TEMP_DISPLAY_NAME) }
+                if (!swappedIn) {
+                    Log.w(TAG, "Renamed backup document not found after swap")
+                }
+                val effectiveFreq = frequency.ifEmpty { flags.backupFrequency }
+                if (effectiveFreq.isNotEmpty()) reschedule(effectiveFreq)
+            } catch (e: Exception) {
+                Log.w(TAG, "Post-swap backup steps failed", e)
+            }
+
             true
         } catch (e: Exception) {
             Log.w(TAG, "Auto-backup failed", e)
@@ -140,7 +151,7 @@ class BackupScheduler @Inject constructor(
             false
         }
 
-        if (!ok) {
+        if (!ok && !oldDocsDeleted) {
             tempUri?.let { temp ->
                 try { DocumentsContract.deleteDocument(context.contentResolver, temp) } catch (_: Exception) {}
             }
@@ -196,7 +207,6 @@ class BackupScheduler @Inject constructor(
         private const val TAG = "BackupScheduler"
         private const val TEMP_DISPLAY_NAME = "fantasyidler_auto.tmp"
         private const val FINAL_DISPLAY_NAME = "fantasyidler_auto"
-        private const val LEGACY_DISPLAY_NAME = "fantasyidler_auto.json"
         private const val REQUEST_CODE = 9001
         const val EXTRA_FREQUENCY = "backup_frequency"
     }

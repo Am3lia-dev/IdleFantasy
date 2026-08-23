@@ -159,18 +159,51 @@ class BackupSchedulerTest {
     }
 
     @Test
-    fun `rename failure deletes temp and keeps old backup`() = runBlocking {
+    fun `failure after delete pass preserves verified temp file`() = runBlocking {
         docs.renameFails = true
 
         val ok = scheduler.performBackup(playerRepo)
 
         assertFalse(ok)
-        assertTrue(docs.deletedDocIds.contains(DocumentsContract.getDocumentId(docs.createdUris.single())))
+        val tempId = DocumentsContract.getDocumentId(docs.createdUris.single())
+        assertFalse(docs.deletedDocIds.contains(tempId))
         assertTrue(docs.deletedDocIds.contains(OLD_DOC_ID))
-        assertFalse(docs.children.values.contains(FINAL_BACKUP_NAME))
-        assertTrue(docs.renamedFrom.isEmpty())
+        assertEquals("fantasyidler_auto.tmp", docs.children[tempId])
         val flags = playerRepo.getFlags()
         assertFalse(flags.lastBackupOk)
+        assertTrue(flags.lastBackupError.isNotEmpty())
+    }
+
+    @Test
+    fun `stale temp documents are swept during the swap`() = runBlocking {
+        docs.seed("doc_stale_tmp", "fantasyidler_auto.tmp")
+
+        val ok = scheduler.performBackup(playerRepo)
+
+        assertTrue(ok)
+        assertTrue(docs.deletedDocIds.contains("doc_stale_tmp"))
+        assertTrue(docs.deletedDocIds.contains(OLD_DOC_ID))
+        val tempId = DocumentsContract.getDocumentId(docs.createdUris.single())
+        assertFalse(docs.deletedDocIds.contains(tempId))
+        assertEquals("fantasyidler_auto", docs.children[tempId])
+        assertFalse(docs.children.containsKey("doc_stale_tmp"))
+    }
+
+    @Test
+    fun `post-rename failure keeps success status and swapped-in document`() = runBlocking {
+        docs.queryThrowsAfterDelete = true
+
+        val ok = scheduler.performBackup(playerRepo)
+
+        assertTrue(ok)
+        val flags = playerRepo.getFlags()
+        assertTrue(flags.lastBackupOk)
+        assertEquals("", flags.lastBackupError)
+        assertNotEquals(0L, flags.lastBackupAt)
+        val tempId = DocumentsContract.getDocumentId(docs.createdUris.single())
+        assertFalse(docs.deletedDocIds.contains(tempId))
+        assertEquals("fantasyidler_auto", docs.children[tempId])
+        assertTrue(docs.deletedDocIds.contains(OLD_DOC_ID))
     }
 
     @Test
@@ -210,6 +243,7 @@ private class FakeDocsProvider(private val authority: String) : ContentProvider(
     var writeThrows = false
     var readbackOverride: ByteArray? = null
     var renameFails = false
+    var queryThrowsAfterDelete = false
 
     private val buffers = HashMap<Uri, ByteArray>()
     private var nextDocNum = 0
@@ -270,6 +304,9 @@ private class FakeDocsProvider(private val authority: String) : ContentProvider(
         selectionArgs: Array<out String>?,
         sortOrder: String?,
     ): Cursor? {
+        if (queryThrowsAfterDelete && deletedDocIds.isNotEmpty()) {
+            throw RuntimeException("simulated provider query failure after deletion")
+        }
         val cols = projection?.toList()
             ?: listOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID, DocumentsContract.Document.COLUMN_DISPLAY_NAME)
         val cursor = MatrixCursor(cols.toTypedArray())
