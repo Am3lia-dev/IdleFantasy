@@ -438,8 +438,22 @@ class PlayerRepository @Inject constructor(
     private suspend fun enqueueActionUnlocked(action: QueuedAction): Boolean {
         val flags = getFlags()
         if (flags.sessionQueue.size >= maxQueueSize(flags)) return false
-        updateFlagsUnlocked(flags.copy(sessionQueue = flags.sessionQueue + action))
+        updateFlagsUnlocked(flags.copy(
+            sessionQueue = flags.sessionQueue + action.copy(levelAtQueue = queueLevelFor(action))))
         return true
+    }
+
+    /**
+     * Relevant level for a queued action's prestige-void floor. Mirrors the levelAtStart
+     * mapping in the queue starters so a prestige between queueing and collection is caught.
+     */
+    private suspend fun queueLevelFor(action: QueuedAction): Int {
+        val levels = getSkillLevels()
+        return when (action.skillName) {
+            "boss", "combat", "tower" -> com.fantasyidler.ui.viewmodel.combatLevelFrom(levels)
+            "expedition" -> gameData.skillingDungeons[action.activityKey]?.skill?.let { levels[it] } ?: 1
+            else -> levels[action.skillName] ?: 1
+        }
     }
 
     /** Creates and enqueues a combat (dungeon) session for a Slayer task's auto-advance. Returns false if queue is full. */
@@ -500,7 +514,8 @@ class PlayerRepository @Inject constructor(
         val flags = getFlags()
         val worker = flags.workerForSlot(slot) ?: return false
         if (worker.sessionQueue.size >= 1) return false
-        updateFlagsUnlocked(flags.withWorkerForSlot(slot, worker.copy(sessionQueue = worker.sessionQueue + action)))
+        updateFlagsUnlocked(flags.withWorkerForSlot(slot, worker.copy(
+            sessionQueue = worker.sessionQueue + action.copy(levelAtQueue = queueLevelFor(action)))))
         return true
     }
 
@@ -631,6 +646,8 @@ class PlayerRepository @Inject constructor(
             playerDao.upsert(player.copy(flags = json.encode<PlayerFlags>(flags.copy(characterRace = race))))
             return@withLock PrestigeActionResult.SUCCESS
         }
+        if (System.currentTimeMillis() - flags.raceLastChangedAt < RACE_CHANGE_COOLDOWN_MS)
+            return@withLock PrestigeActionResult.COOLDOWN
         if (flags.ironman) {
             if (flags.ironmanRaceLocked) return@withLock PrestigeActionResult.LOCKED
             val updated = applyRaceChange(flags, race, System.currentTimeMillis())
@@ -853,7 +870,7 @@ class PlayerRepository @Inject constructor(
     data class FlatXpBreakdown(
         val baseXp: Long,
         val finalXp: Long,
-        val boostActive: Boolean,
+        val boostFactor: Long,
         val blessingMult: Float,
         val prestigeXpPct: Int,
     )
@@ -868,11 +885,11 @@ class PlayerRepository @Inject constructor(
         val player = getOrCreatePlayer()
         val flags: PlayerFlags = json.decodeFromString(player.flags)
         val capeMult = prayerCapeMult(player, flags)
-        val boostActive = boostRepo.xpBoostActive(skillName, flags)
+        val boostFactor = boostRepo.xpBoostFactor(skillName, flags)
         val blessingMult = if (flags.ironman) 1.0f else ChurchRepository.xpMultiplier(flags, capeMult)
         val prestigeXpPct = boostRepo.prestigeXpPct(skillName, flags)
         val finalXp = (baseXp * boostRepo.xpMultiplier(skillName, flags, capeMult)).toLong()
-        return FlatXpBreakdown(baseXp, finalXp, boostActive, blessingMult, prestigeXpPct)
+        return FlatXpBreakdown(baseXp, finalXp, boostFactor, blessingMult, prestigeXpPct)
     }
 
     /**
@@ -1131,6 +1148,7 @@ class PlayerRepository @Inject constructor(
         const val PRESTIGE_RESPEC_COOLDOWN_MS = 24 * 3_600_000L
         const val RACE_CHANGE_TOKEN_ITEM = "race_change_token"
         const val RACE_CHANGE_COST_COINS = 10_000_000L
+        const val RACE_CHANGE_COOLDOWN_MS = 24L * 60L * 60L * 1000L
 
         /** HMAC key for save-file signatures. Public by nature (open source), deterrence only. */
         private const val SAVE_SIG_KEY = "ekEhdMIDo9B63HQSU80U7hvuqVd1HYcciv5Na5d7gEKdaudR4Voa8jkF"

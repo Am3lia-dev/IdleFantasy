@@ -287,6 +287,10 @@ data class PlayerFlags(
     @SerialName("ironman") val ironman: Boolean = false,
     /** Player housing: rooms, placed furnishings, and stored (built but unplaced) furnishings. */
     @SerialName("house") val house: HouseData? = null,
+    /** Unpurchased editor draft of the house, or null when the editor is clean. */
+    @SerialName("house_draft") val houseDraft: HouseDraft? = null,
+    /** Saved house layouts, at most one per slot (slots 0..2). */
+    @SerialName("house_blueprints") val houseBlueprints: List<HouseBlueprint> = emptyList(),
 )
 
 /** The player's house: a set of room rectangles on one shared cell grid. */
@@ -303,6 +307,25 @@ data class HouseData(
      * 2 = half-cell placement. Migrated up on load; never written back down.
      */
     @SerialName("coord_scale") val coordScale: Int = 1,
+)
+
+/**
+ * Speculative house layout being drafted in the editor. Nothing is paid until the player
+ * purchases the build, at which point the layout replaces [PlayerFlags.house] wholesale.
+ */
+@Serializable
+data class HouseDraft(
+    @SerialName("layout") val layout: HouseData,
+    /** Parallel to layout.rooms: index of the built room each draft room came from, null = new. */
+    @SerialName("built_room_index") val builtRoomIndex: List<Int?> = emptyList(),
+)
+
+/** A saved house layout snapshot, loadable back into the editor draft. */
+@Serializable
+data class HouseBlueprint(
+    @SerialName("slot") val slot: Int,
+    @SerialName("name") val name: String,
+    @SerialName("layout") val layout: HouseData,
 )
 
 /** One rectangular room, in house-grid cells. Rooms never overlap and attach edge-to-edge. */
@@ -376,6 +399,12 @@ data class QueuedAction(
     @SerialName("output_qty") val outputQty: Int = 0,
     /** Estimated XP this session will grant. 0 = unknown (combat, boss, expedition). */
     @SerialName("estimated_xp_gain") val estimatedXpGain: Long = 0L,
+    /**
+     * Relevant level when the action was queued (0 = legacy entry). Carried into the
+     * session's levelAtStart floor so a prestige between queueing and collection still
+     * voids the pre-prestige XP instead of paying it out at level 1.
+     */
+    @SerialName("level_at_queue") val levelAtQueue: Int = 0,
     /** Pre-computed session duration in ms, used to display accurate queue end time. */
     @SerialName("estimated_duration_ms") val estimatedDurationMs: Long = 0L,
     /** Coins to refund if this action is cancelled (mercantile trade route cost). */

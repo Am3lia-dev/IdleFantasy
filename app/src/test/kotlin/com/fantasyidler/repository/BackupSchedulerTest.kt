@@ -54,7 +54,7 @@ class BackupSchedulerTest {
             .allowMainThreadQueries()
             .build()
         val gameData = GameDataRepository(context, json)
-        sessionRepo = SessionRepository(db.skillSessionDao(), context, json, gameData)
+        sessionRepo = SessionRepository(db.skillSessionDao(), context, json, gameData, db.playerDao())
         playerRepo = PlayerRepository(
             db.playerDao(),
             db.questProgressDao(),
@@ -65,6 +65,7 @@ class BackupSchedulerTest {
             BuffNotificationScheduler(context),
             gameData,
             BoostRepository(gameData),
+            db,
         )
         scheduler = BackupScheduler(context, sessionRepo)
 
