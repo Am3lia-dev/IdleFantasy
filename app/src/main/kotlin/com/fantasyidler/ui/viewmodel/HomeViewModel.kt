@@ -482,7 +482,7 @@ class HomeViewModel @Inject constructor(
           try {
             // If the latest session timed out but its alarm hasn't fired yet, mark it completed now.
             val latest = sessionRepo.getActiveSession()
-            if (latest != null && !latest.completed && System.currentTimeMillis() >= latest.endsAt) {
+            if (latest != null && !latest.completed && System.currentTimeMillis() >= latest.endsAt && sessionRepo.hasTrustedClock(latest)) {
                 sessionRepo.markCompleted(latest.sessionId)
             }
 
@@ -1038,7 +1038,7 @@ class HomeViewModel @Inject constructor(
     fun onSessionExpiredLocally(sessionId: String) {
         viewModelScope.launch {
             val session = sessionRepo.getSession(sessionId) ?: return@launch
-            if (!session.completed) {
+            if (!session.completed && sessionRepo.hasTrustedClock(session)) {
                 sessionRepo.markCompleted(sessionId)
                 queuedSessionStarter.startNextQueued()
             }
@@ -1195,7 +1195,7 @@ class HomeViewModel @Inject constructor(
     fun onWorkerSessionExpiredLocally(sessionId: String) {
         viewModelScope.launch {
             val session = sessionRepo.getSession(sessionId) ?: return@launch
-            if (!session.completed) {
+            if (!session.completed && sessionRepo.hasTrustedClock(session)) {
                 sessionRepo.markCompleted(sessionId)
                 workerStarter.startNextQueued(session.workerSlot.coerceAtLeast(1))
             }
@@ -1207,7 +1207,7 @@ class HomeViewModel @Inject constructor(
             sessionRepo.markAllExpiredWorkerSessions()
             for (slot in 1..2) {
                 val latest = sessionRepo.getActiveWorkerSession(slot)
-                if (latest != null && !latest.completed && System.currentTimeMillis() >= latest.endsAt) {
+                if (latest != null && !latest.completed && System.currentTimeMillis() >= latest.endsAt && sessionRepo.hasTrustedClock(latest)) {
                     sessionRepo.markCompleted(latest.sessionId)
                 }
             }
