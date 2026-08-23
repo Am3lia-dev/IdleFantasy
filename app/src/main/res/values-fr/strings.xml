@@ -1320,7 +1320,7 @@
 
     <!-- Prestige system -->
     <string name="prestige">Prestige</string>
-    <string name="prestige_skill_tree">Skill Tree</string> <!-- untranslated -->
+    <string name="prestige_skill_tree">Arbre de compétences</string>
     <string name="prestige_max">Prestige max</string>
     <string name="prestige_confirm_title" formatted="false">Prestige %s ?</string>
     <string name="prestige_confirm_message_xp">Votre niveau %1$s sera réinitialisé à 1, mais vous gagnerez un bonus permanent de +%2$d%% XP pour cette aptitude.</string>
@@ -2328,4 +2328,7 @@
     <string name="race_proficiency_label">Arbre d\'aptitude de race : %1$s</string>
     <string name="race_proficiency_human">Bonus de race: un palier de maîtrise exclusif d\'XP pour chaque aptitude.</string>
     <string name="race_change_confirm_message">Votre race donne des améliorations de prestige uniques. Changer de race rembourse tous les points dépensés dans les branches des autres races, et vous pouvez uniquement changer de race toute les 24 heures.</string>
+    <string name="settings_backup_status">Dernière sauvegarde</string>
+    <string name="settings_backup_never">Jamais sauvegardé</string>
+    <string name="settings_backup_failed_with">A échoué: %1$s</string>
 </resources>
