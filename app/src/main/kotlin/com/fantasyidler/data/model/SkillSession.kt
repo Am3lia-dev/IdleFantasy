@@ -70,4 +70,7 @@ data class SkillSession(
      */
     @ColumnInfo(name = "level_at_start", defaultValue = "0")
     val levelAtStart: Int = 0,
+
+    @ColumnInfo(name = "start_elapsed_ms")
+    val startElapsedMs: Long? = null,
 )
