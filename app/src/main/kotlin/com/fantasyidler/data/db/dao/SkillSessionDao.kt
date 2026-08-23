@@ -63,8 +63,12 @@ interface SkillSessionDao {
     @Query("UPDATE skill_sessions SET completed = 1 WHERE session_id = :sessionId")
     suspend fun markCompleted(sessionId: String)
 
-    @Query("UPDATE skill_sessions SET completed = 1 WHERE user_id = 1 AND worker_slot > 0 AND completed = 0 AND ends_at <= :now")
-    suspend fun markAllExpiredWorkerSessions(now: Long)
+    @Query(
+        "UPDATE skill_sessions SET completed = 1 WHERE user_id = 1 AND worker_slot > 0 AND completed = 0 " +
+            "AND ends_at <= :now " +
+            "AND (start_elapsed_ms IS NULL OR start_elapsed_ms > :nowElapsed OR (:now - started_at) <= (:nowElapsed - start_elapsed_ms) + :toleranceMs)"
+    )
+    suspend fun markAllExpiredWorkerSessions(now: Long, nowElapsed: Long, toleranceMs: Long)
 
     @Query("DELETE FROM skill_sessions WHERE session_id = :sessionId")
     suspend fun delete(sessionId: String)

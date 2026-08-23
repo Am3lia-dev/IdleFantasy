@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import com.fantasyidler.data.db.dao.SkillSessionDao
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
@@ -81,6 +82,7 @@ class SessionRepository @Inject constructor(
             catalystKey  = catalystKey,
             catalystQty  = catalystQty,
             levelAtStart = levelAtStart,
+            startElapsedMs = if (insertAsCompleted) null else SystemClock.elapsedRealtime() - backdateMs,
         )
         sessionDao.insert(session)
         if (!insertAsCompleted) {
@@ -112,6 +114,7 @@ class SessionRepository @Inject constructor(
             efficiencyMultiplier = efficiencyMultiplier,
             workerSlot           = workerSlot,
             levelAtStart         = levelAtStart,
+            startElapsedMs       = SystemClock.elapsedRealtime(),
         )
         sessionDao.insert(session)
         scheduleAlarm(session.sessionId, session.endsAt, skillDisplayName)
@@ -135,6 +138,13 @@ class SessionRepository @Inject constructor(
         if (offset != null) minOf(session.endsAt, session.startedAt + offset) else session.endsAt
     } catch (_: Exception) { session.endsAt }
 
+    fun hasTrustedClock(session: SkillSession): Boolean {
+        val anchor = session.startElapsedMs ?: return true
+        val elapsedSinceStart = SystemClock.elapsedRealtime() - anchor
+        if (elapsedSinceStart < 0L) return true
+        return System.currentTimeMillis() - session.startedAt <= elapsedSinceStart + CLOCK_SKEW_TOLERANCE_MS
+    }
+
     private val watchdogMutex = Mutex()
 
     /**
@@ -152,7 +162,7 @@ class SessionRepository @Inject constructor(
         val session = getActiveSession()
         if (session != null && !session.completed) {
             val endMs = if (session.skillName == "boss") bossFightEndMs(session) else session.endsAt
-            if (now >= endMs) {
+            if (now >= endMs && hasTrustedClock(session)) {
                 markCompleted(session.sessionId)
                 var catchUpMs = now - endMs
                 while (catchUpMs > 0) {
@@ -171,7 +181,7 @@ class SessionRepository @Inject constructor(
         if (workerStarter != null) {
             for (slot in 1..2) {
                 val ws = getActiveWorkerSession(slot)
-                if (ws != null && !ws.completed && now >= ws.endsAt) {
+                if (ws != null && !ws.completed && now >= ws.endsAt && hasTrustedClock(ws)) {
                     markCompleted(ws.sessionId)
                     try { workerStarter.startNextQueued(slot) } catch (_: Exception) {}
                 }
@@ -180,7 +190,11 @@ class SessionRepository @Inject constructor(
     }
 
     suspend fun markAllExpiredWorkerSessions() {
-        sessionDao.markAllExpiredWorkerSessions(System.currentTimeMillis())
+        sessionDao.markAllExpiredWorkerSessions(
+            System.currentTimeMillis(),
+            SystemClock.elapsedRealtime(),
+            CLOCK_SKEW_TOLERANCE_MS,
+        )
     }
 
     /**
@@ -195,6 +209,7 @@ class SessionRepository @Inject constructor(
             return
         }
         if (session.completed) {
+            if (!hasTrustedClock(session)) return
             val endMs = if (session.skillName == "boss") bossFightEndMs(session) else session.endsAt
             var catchUpMs = maxOf(0L, System.currentTimeMillis() - endMs)
             while (catchUpMs > 0) {
@@ -210,7 +225,7 @@ class SessionRepository @Inject constructor(
         // never on endsAt.
         if (session.skillName == "boss") {
             val fightEndMs = bossFightEndMs(session)
-            if (System.currentTimeMillis() >= fightEndMs) {
+            if (System.currentTimeMillis() >= fightEndMs && hasTrustedClock(session)) {
                 markCompleted(session.sessionId)
                 // Fast-forward the offline window like the generic path below, or a repeat
                 // chain (x100 boss runs) advances only one fight per app launch when the OS
@@ -229,7 +244,7 @@ class SessionRepository @Inject constructor(
         }
         val now = System.currentTimeMillis()
         try {
-            if (now >= session.endsAt) {
+            if (now >= session.endsAt && hasTrustedClock(session)) {
                 markCompleted(session.sessionId)
                 var catchUpMs = now - session.endsAt
                 while (catchUpMs > 0) {
@@ -257,7 +272,7 @@ class SessionRepository @Inject constructor(
         }
         val now = System.currentTimeMillis()
         try {
-            if (now >= session.endsAt) {
+            if (now >= session.endsAt && hasTrustedClock(session)) {
                 markCompleted(session.sessionId)
                 workerStarter.startNextQueued(slot)
             } else {
@@ -340,5 +355,6 @@ class SessionRepository @Inject constructor(
 
     companion object {
         const val SESSION_DURATION_MS = 60L * 60L * 1_000L  // 1 hour
+        const val CLOCK_SKEW_TOLERANCE_MS = 120_000L
     }
 }
