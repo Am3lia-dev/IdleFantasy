@@ -10,6 +10,7 @@ import com.fantasyidler.data.model.PlayerExport
 import com.fantasyidler.data.model.PlayerFlags
 import com.fantasyidler.data.model.QuestProgress
 import com.fantasyidler.data.model.SkillSession
+import com.fantasyidler.data.model.SkillSessionExport
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -17,6 +18,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -36,6 +38,7 @@ class SaveSlotSwitchTest {
     private lateinit var sessionRepo: SessionRepository
     private lateinit var saveSlotRepo: SaveSlotRepository
     private lateinit var globalStateRepo: GlobalStateRepository
+    private lateinit var starter: QueuedSessionStarter
 
     @Before
     fun setup() {
@@ -69,6 +72,7 @@ class SaveSlotSwitchTest {
         val queuedSessionStarter = QueuedSessionStarter(
             boostRepo, context, playerRepo, sessionRepo, townRepo, gameData, mercRepo, json,
         )
+        starter = queuedSessionStarter
         val workerStarter = WorkerQueuedSessionStarter(boostRepo, playerRepo, sessionRepo, gameData, json)
         val seasonalEventRepo = SeasonalEventRepository(playerRepo, gameData, dailyQuestRepo, context)
         val farmingRepo = FarmingRepository(
@@ -184,6 +188,37 @@ class SaveSlotSwitchTest {
         assertEquals(listOf("a_completed"), completed.map { it.sessionId })
 
         assertTrue(File(context.filesDir, "save_slots/slot_2.json").exists())
+    }
+
+    @Test
+    fun `imported incomplete session anchors monotonic clock so post-import clock jump cannot complete it`() = runBlocking {
+        globalStateRepo.setActiveSaveSlot(1)
+        seedCharacterA(System.currentTimeMillis())
+        saveSlotRepo.switchTo(2)
+        val snapshot = File(context.filesDir, "save_slots/slot_1.json").readText()
+
+        saveSlotRepo.importFullSave(snapshot)
+
+        val imported = sessionRepo.getActiveSession()!!
+        assertEquals("a_active", imported.sessionId)
+        assertFalse(imported.completed)
+        assertNotNull(imported.startElapsedMs)
+        assertTrue(imported.endsAt > System.currentTimeMillis())
+        assertNull(
+            sessionRepo.getAllCompletedSessions()
+                .single { it.sessionId == "a_completed" }.startElapsedMs,
+        )
+
+        val jumpMs = 8L * 3_600_000L
+        db.skillSessionDao().update(
+            imported.copy(startedAt = imported.startedAt - jumpMs, endsAt = imported.endsAt - jumpMs),
+        )
+
+        sessionRepo.recoverActiveSession(starter)
+
+        val after = sessionRepo.getSession("a_active")!!
+        assertFalse(after.completed)
+        assertEquals(1, sessionRepo.getAllCompletedSessions().size)
     }
 
     @Test
