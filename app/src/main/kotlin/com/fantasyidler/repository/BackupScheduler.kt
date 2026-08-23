@@ -130,14 +130,15 @@ class BackupScheduler @Inject constructor(
             }
 
             DocumentsContract.renameDocument(cr, created, FINAL_DISPLAY_NAME)
+                ?: throw IllegalStateException("backup provider failed to swap temp document to final name")
             tempUri = null
 
+            val swappedIn = childDocuments(cr, treeUri, treeDocId)
+                .any { it.second.startsWith(FINAL_DISPLAY_NAME) && !it.second.startsWith(TEMP_DISPLAY_NAME) }
+            if (!swappedIn) {
+                throw IllegalStateException("renamed backup document not found after swap")
+            }
             try {
-                val swappedIn = childDocuments(cr, treeUri, treeDocId)
-                    .any { it.second.startsWith(FINAL_DISPLAY_NAME) && !it.second.startsWith(TEMP_DISPLAY_NAME) }
-                if (!swappedIn) {
-                    Log.w(TAG, "Renamed backup document not found after swap")
-                }
                 val effectiveFreq = frequency.ifEmpty { flags.backupFrequency }
                 if (effectiveFreq.isNotEmpty()) reschedule(effectiveFreq)
             } catch (e: Exception) {

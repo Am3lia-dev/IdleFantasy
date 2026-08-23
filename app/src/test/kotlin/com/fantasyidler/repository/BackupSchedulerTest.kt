@@ -65,7 +65,6 @@ class BackupSchedulerTest {
             BuffNotificationScheduler(context),
             gameData,
             BoostRepository(gameData),
-            db,
         )
         scheduler = BackupScheduler(context, sessionRepo)
 
@@ -190,19 +189,35 @@ class BackupSchedulerTest {
     }
 
     @Test
-    fun `post-rename failure keeps success status and swapped-in document`() = runBlocking {
+    fun `unverifiable post-rename swap fails backup and preserves renamed document`() = runBlocking {
         docs.queryThrowsAfterDelete = true
 
         val ok = scheduler.performBackup(playerRepo)
 
-        assertTrue(ok)
+        assertFalse(ok)
         val flags = playerRepo.getFlags()
-        assertTrue(flags.lastBackupOk)
-        assertEquals("", flags.lastBackupError)
+        assertFalse(flags.lastBackupOk)
+        assertTrue(flags.lastBackupError.isNotEmpty())
         assertNotEquals(0L, flags.lastBackupAt)
         val tempId = DocumentsContract.getDocumentId(docs.createdUris.single())
         assertFalse(docs.deletedDocIds.contains(tempId))
         assertEquals("fantasyidler_auto", docs.children[tempId])
+        assertTrue(docs.deletedDocIds.contains(OLD_DOC_ID))
+    }
+
+    @Test
+    fun `rename returning null fails backup and preserves verified temp`() = runBlocking {
+        docs.renameReturnsNull = true
+
+        val ok = scheduler.performBackup(playerRepo)
+
+        assertFalse(ok)
+        val flags = playerRepo.getFlags()
+        assertFalse(flags.lastBackupOk)
+        assertTrue(flags.lastBackupError.isNotEmpty())
+        val tempId = DocumentsContract.getDocumentId(docs.createdUris.single())
+        assertFalse(docs.deletedDocIds.contains(tempId))
+        assertEquals("fantasyidler_auto.tmp", docs.children[tempId])
         assertTrue(docs.deletedDocIds.contains(OLD_DOC_ID))
     }
 
@@ -243,6 +258,7 @@ private class FakeDocsProvider(private val authority: String) : ContentProvider(
     var writeThrows = false
     var readbackOverride: ByteArray? = null
     var renameFails = false
+    var renameReturnsNull = false
     var queryThrowsAfterDelete = false
 
     private val buffers = HashMap<Uri, ByteArray>()
@@ -286,6 +302,10 @@ private class FakeDocsProvider(private val authority: String) : ContentProvider(
                 if (renameFails) {
                     events += "rename-failed"
                     throw IllegalStateException("simulated provider rename failure")
+                }
+                if (renameReturnsNull) {
+                    events += "rename-failed"
+                    return null
                 }
                 events += "rename"
                 val src = extras!!.getParcelable<Uri>(KEY_URI)!!
