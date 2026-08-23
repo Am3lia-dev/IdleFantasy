@@ -1011,11 +1011,11 @@
     <string name="mercantile_level_label">Уровень %1$d Торговли</string>
     <string name="mercantile_xp_label">Опыт: %1$s</string>
     <string name="mercantile_coins_label">Монеты: %1$s</string>
-    <string name="mercantile_perks_title">Perks</string> <!-- untranslated -->
-    <string name="mercantile_perk_trading_locked">Shop trading: cheaper buying and better sell prices from level %1$d.</string> <!-- untranslated -->
-    <string name="mercantile_perk_trading">Shop trading: buy prices -%1$d%%, sell prices +%2$d%%.</string> <!-- untranslated -->
-    <string name="mercantile_perk_trading_next">Next boost at level %1$d.</string> <!-- untranslated -->
-    <string name="mercantile_perk_guild">Merchant\'s Guild: exclusive shop goods unlock from level %1$d.</string> <!-- untranslated -->
+    <string name="mercantile_perks_title">Перки</string>
+    <string name="mercantile_perk_trading_locked">Торговля в магазине: более дешевые покупки и лучшие цены на продажу от уровня %1$d.</string>
+    <string name="mercantile_perk_trading">Торговля в магазине: цены на покупку -%1$d%%, цены на продажу +%2$d%%.</string>
+    <string name="mercantile_perk_trading_next">Следующее повышение на уровне %1$d.</string>
+    <string name="mercantile_perk_guild">Гильдия торговцев: эксклюзивные товары из магазина открываются с уровня %1$d.</string>
     <string name="mercantile_cost_label">Стоимость: %1$s</string>
     <string name="mercantile_return_range">Доход: %1$s – %2$s</string>
     <string name="mercantile_dispatch_label">Отправить</string>
@@ -1171,7 +1171,7 @@
     <string name="house_remove_banner">Снять знамя</string>
     <string name="house_move_hint">Перетащите по сетке, чтобы переместить в другое место.</string>
     <string name="house_rotate_item">Повернуть</string>
-    <string name="house_nudge_item">Move with arrows</string> <!-- untranslated -->
+    <string name="house_nudge_item">Двигайте по стрелкам</string>
     <string name="house_outside_title">Снаружи</string>
     <string name="house_outside_hint">Выберите, как выглядит земля вокруг вашего дома.</string>
     <string name="house_move_room">Переместить комнату</string>
@@ -1335,7 +1335,7 @@
 
     <!-- Prestige system -->
     <string name="prestige">Престиж</string>
-    <string name="prestige_skill_tree">Skill Tree</string> <!-- untranslated -->
+    <string name="prestige_skill_tree">Дерево навыков</string>
     <string name="prestige_max">Макс. престиж</string>
     <string name="prestige_confirm_title" formatted="false">Престиж %s?</string>
     <string name="prestige_confirm_message_xp">Ваш уровень %1$s сбросится до 1, но вы получите постоянный бонус +%2$d%% опыта для этого навыка.</string>
@@ -2219,11 +2219,11 @@
     <!-- Translator note: %1$d = node cost in points -->
     <string name="prestige_node_cost">Стоимость: %1$d очков</string>
     <string name="prestige_node_owned">Приобретено</string>
-    <string name="prestige_path_auto_label">Earned by prestiging</string> <!-- untranslated -->
-    <string name="prestige_node_auto_earned">Earned at prestige %1$d.</string> <!-- untranslated -->
-    <string name="prestige_node_auto_pending">Unlocks automatically at prestige %1$d.</string> <!-- untranslated -->
-    <string name="prestige_button_xp_only">Prestige now for the next XP tier</string> <!-- untranslated -->
-    <string name="prestige_confirm_message_xp_only">Your %1$s level will reset to 1 and you\'ll unlock the next automatic XP tier. Equipment that no longer meets its requirements will be swapped out, and unclaimed %1$s daily quest progress resets. You\'ll also gain 2x %1$s XP for 48 hours to speed the climb back up.</string> <!-- untranslated -->
+    <string name="prestige_path_auto_label">Заработано престижем</string>
+    <string name="prestige_node_auto_earned">Заработано престижем %1$d.</string>
+    <string name="prestige_node_auto_pending">Автоматически разблокируется с престижем %1$d.</string>
+    <string name="prestige_button_xp_only">Получить престиж для следующего уровня опыта</string>
+    <string name="prestige_confirm_message_xp_only">Ваш уровень %1$s будет сброшен до 1, и вы автоматически получите следующий уровень опыта. Снаряжение, которое больше не соответствует предъявляемым требованиям, будет заменено, а невостребованный ежедневный прогресс %1$s будет сброшен. Вы также получите 2x %1$s опыта в течение 48 часов, чтобы ускорить набор опыта.</string>
     <!-- Translator note: %1$s = list of race names -->
     <string name="prestige_node_race_only">%1$s только</string>
     <!-- Translator note: %1$s = list of race names -->
@@ -2251,9 +2251,9 @@
     <string name="prestige_effect_bonus_roll">+%1$d%% шанс найти драгоценный камень во время добычи руды.</string>
     <string name="prestige_effect_coin_pct">+%1$d%% монет за этот навык.</string>
     <string name="prestige_effect_crop_rotation">+%1$d%% урожайность при посадке культуры, отличной от предыдущего урожая.</string>
-    <string name="prestige_effect_crop_rotation_always">The rotation bonus applies to every crop, no rotation needed.</string> <!-- untranslated -->
+    <string name="prestige_effect_crop_rotation_always">Бонус за севооборот распространяется на все культуры, при этом севооборот не требуется.</string>
     <string name="prestige_effect_tool_eff">Эффективность инструмента +%1$d%%.</string>
-    <string name="prestige_effect_per_level">+%1$s tool or combat bonus per level of this skill.</string> <!-- untranslated -->
+    <string name="prestige_effect_per_level">+%1$s инструментов или боевой бонус за каждый уровень этого навыка.</string>
     <string name="prestige_effect_success_chance">Шанс успешной кражи +%1$d%%.</string>
     <string name="prestige_effect_reclaim">+%1$d%% шанс восстановить потраченные стрелы и руны после боя.</string>
     <string name="prestige_effect_heal">Еда лечит на +%1$d%% больше в бою.</string>
@@ -2317,7 +2317,7 @@
     <string name="prestige_path_mercantile_coin">Торгующийся</string>
 
     <!-- Prestige race branch names -->
-    <string name="prestige_path_race_human">Resourceful</string> <!-- untranslated -->
+    <string name="prestige_path_race_human">Находчивый</string>
     <string name="prestige_path_thieving_race_elf">Теневой шаг</string>
     <string name="prestige_path_firemaking_race_dwarf">Тлеющее сердце</string>
     <string name="prestige_path_fishing_race_halfling">Терпеливый рыболов</string>
@@ -2347,4 +2347,7 @@
     <string name="race_proficiency_label">Деревья расовых навыков: %1$s</string>
     <string name="race_proficiency_human">Расовый бонус: эксклюзивный опыт мастерства каждого навыка</string>
     <string name="race_change_confirm_message">Ваша раса получает расовые улучшения престижа. При смене расы все очки, потраченные в ветвях других рас, возвращаются, и вы можете менять расу только раз в 24 часа.</string>
+    <string name="settings_backup_status">Последняя резервная копия</string>
+    <string name="settings_backup_never">Никогда не было резервных копий</string>
+    <string name="settings_backup_failed_with">Неудача: %1$s</string>
 </resources>
