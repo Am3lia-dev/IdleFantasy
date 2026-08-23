@@ -51,6 +51,7 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
 val MIGRATION_6_7 = object : Migration(6, 7) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE skill_sessions ADD COLUMN start_elapsed_ms INTEGER")
+        db.execSQL("ALTER TABLE skill_sessions ADD COLUMN start_boot_count INTEGER")
     }
 }
 

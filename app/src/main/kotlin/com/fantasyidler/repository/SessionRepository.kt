@@ -5,7 +5,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
+import android.provider.Settings
+import com.fantasyidler.data.db.dao.PlayerDao
 import com.fantasyidler.data.db.dao.SkillSessionDao
+import com.fantasyidler.data.model.PlayerFlags
 import com.fantasyidler.data.model.SessionFrame
 import com.fantasyidler.data.model.SkillSession
 import com.fantasyidler.receiver.SessionAlarmReceiver
@@ -25,6 +28,7 @@ class SessionRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val json: Json,
     private val gameData: GameDataRepository,
+    private val playerDao: PlayerDao,
 ) {
     val activeSessionFlow: Flow<SkillSession?> = sessionDao.observeActiveSession()
     val completedCountFlow: Flow<Int> = sessionDao.observeCompletedCount()
@@ -83,6 +87,7 @@ class SessionRepository @Inject constructor(
             catalystQty  = catalystQty,
             levelAtStart = levelAtStart,
             startElapsedMs = if (insertAsCompleted) null else SystemClock.elapsedRealtime() - backdateMs,
+            startBootCount = if (insertAsCompleted) null else currentBootCount(),
         )
         sessionDao.insert(session)
         if (!insertAsCompleted) {
@@ -115,6 +120,7 @@ class SessionRepository @Inject constructor(
             workerSlot           = workerSlot,
             levelAtStart         = levelAtStart,
             startElapsedMs       = SystemClock.elapsedRealtime(),
+            startBootCount       = currentBootCount(),
         )
         sessionDao.insert(session)
         scheduleAlarm(session.sessionId, session.endsAt, skillDisplayName)
@@ -138,12 +144,30 @@ class SessionRepository @Inject constructor(
         if (offset != null) minOf(session.endsAt, session.startedAt + offset) else session.endsAt
     } catch (_: Exception) { session.endsAt }
 
-    fun hasTrustedClock(session: SkillSession): Boolean {
+    /**
+     * True when [session]'s completion time is consistent with its monotonic anchor.
+     * Enforced for ironman characters only — normal characters always pass; anchors are
+     * still stamped for everyone so enforcement decisions stay possible later. Fails open
+     * when the anchor or boot count is missing, or when the device rebooted since the
+     * session started (elapsedRealtime restarts at boot, making the anchor meaningless).
+     */
+    suspend fun hasTrustedClock(session: SkillSession): Boolean {
         val anchor = session.startElapsedMs ?: return true
+        if (!isIronman()) return true
+        val bootCount = currentBootCount()
+        if (session.startBootCount == null || bootCount == null || bootCount != session.startBootCount) return true
         val elapsedSinceStart = SystemClock.elapsedRealtime() - anchor
         if (elapsedSinceStart < 0L) return true
         return System.currentTimeMillis() - session.startedAt <= elapsedSinceStart + CLOCK_SKEW_TOLERANCE_MS
     }
+
+    private suspend fun isIronman(): Boolean = try {
+        playerDao.getPlayer()?.let { json.decodeFromString<PlayerFlags>(it.flags).ironman } ?: false
+    } catch (_: Exception) { false }
+
+    internal fun currentBootCount(): Int? = try {
+        Settings.Global.getInt(context.contentResolver, Settings.Global.BOOT_COUNT)
+    } catch (_: Exception) { null }
 
     private val watchdogMutex = Mutex()
 
@@ -194,6 +218,9 @@ class SessionRepository @Inject constructor(
             System.currentTimeMillis(),
             SystemClock.elapsedRealtime(),
             CLOCK_SKEW_TOLERANCE_MS,
+            enforceClock = isIronman(),
+            // -1 never matches a stored boot count, so an unreadable setting fails open.
+            bootCount = currentBootCount() ?: -1,
         )
     }
 

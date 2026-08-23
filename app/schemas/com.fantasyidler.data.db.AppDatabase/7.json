@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "5f13a1137574f00a3df12d52fa7e4adb",
+    "identityHash": "77e145b91e4b2390924f36c251e62318",
     "entities": [
       {
         "tableName": "players",
@@ -68,7 +68,7 @@
       },
       {
         "tableName": "skill_sessions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`session_id` TEXT NOT NULL, `user_id` INTEGER NOT NULL, `skill_name` TEXT NOT NULL, `started_at` INTEGER NOT NULL, `ends_at` INTEGER NOT NULL, `data` TEXT NOT NULL, `completed` INTEGER NOT NULL, `activity_key` TEXT NOT NULL, `is_worker_session` INTEGER NOT NULL DEFAULT 0, `efficiency_multiplier` REAL NOT NULL DEFAULT 1.0, `worker_slot` INTEGER NOT NULL DEFAULT 0, `catalyst_key` TEXT, `catalyst_qty` INTEGER NOT NULL DEFAULT 0, `level_at_start` INTEGER NOT NULL DEFAULT 0, `start_elapsed_ms` INTEGER, PRIMARY KEY(`session_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`session_id` TEXT NOT NULL, `user_id` INTEGER NOT NULL, `skill_name` TEXT NOT NULL, `started_at` INTEGER NOT NULL, `ends_at` INTEGER NOT NULL, `data` TEXT NOT NULL, `completed` INTEGER NOT NULL, `activity_key` TEXT NOT NULL, `is_worker_session` INTEGER NOT NULL DEFAULT 0, `efficiency_multiplier` REAL NOT NULL DEFAULT 1.0, `worker_slot` INTEGER NOT NULL DEFAULT 0, `catalyst_key` TEXT, `catalyst_qty` INTEGER NOT NULL DEFAULT 0, `level_at_start` INTEGER NOT NULL DEFAULT 0, `start_elapsed_ms` INTEGER, `start_boot_count` INTEGER, PRIMARY KEY(`session_id`))",
         "fields": [
           {
             "fieldPath": "sessionId",
@@ -162,6 +162,12 @@
           {
             "fieldPath": "startElapsedMs",
             "columnName": "start_elapsed_ms",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startBootCount",
+            "columnName": "start_boot_count",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -369,7 +375,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5f13a1137574f00a3df12d52fa7e4adb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '77e145b91e4b2390924f36c251e62318')"
     ]
   }
 }

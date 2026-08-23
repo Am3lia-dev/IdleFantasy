@@ -117,6 +117,7 @@ class SaveSlotRepository @Inject constructor(
             }
             val session = if (s.completed) restored else restored.copy(
                 startElapsedMs = SystemClock.elapsedRealtime() - (System.currentTimeMillis() - s.startedAt),
+                startBootCount = sessionRepo.currentBootCount(),
             )
             try {
                 sessionRepo.insertSession(session)
