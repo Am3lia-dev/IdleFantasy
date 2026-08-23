@@ -257,7 +257,7 @@ class SessionRepository @Inject constructor(
                 scheduleAlarm(session.sessionId, session.endsAt, session.skillName)
             }
         } catch (_: Exception) {
-            markCompleted(session.sessionId)
+            if (hasTrustedClock(session)) markCompleted(session.sessionId)
         }
     }
 
@@ -279,7 +279,7 @@ class SessionRepository @Inject constructor(
                 scheduleAlarm(session.sessionId, session.endsAt, session.skillName)
             }
         } catch (_: Exception) {
-            markCompleted(session.sessionId)
+            if (hasTrustedClock(session)) markCompleted(session.sessionId)
         }
     }
 
