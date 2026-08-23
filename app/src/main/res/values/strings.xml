@@ -488,6 +488,9 @@
     <string name="settings_backup_weekly">Weekly</string>
     <string name="settings_backup_at_5am">at 5:00 AM</string>
     <string name="settings_backup_now">Back Up Now</string>
+    <string name="settings_backup_status">Last Backup</string>
+    <string name="settings_backup_never">Never backed up</string>
+    <string name="settings_backup_failed_with">Failed: %1$s</string>
     <string name="settings_backup_success">Backup saved.</string>
     <string name="settings_backup_failed">Backup failed.</string>
     <string name="settings_backup_folder_set">Backup folder set.</string>
