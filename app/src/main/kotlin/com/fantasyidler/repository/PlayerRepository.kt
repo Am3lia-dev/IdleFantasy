@@ -1,6 +1,8 @@
 package com.fantasyidler.repository
 
+import androidx.room.withTransaction
 import com.fantasyidler.BuildConfig
+import com.fantasyidler.data.db.AppDatabase
 import com.fantasyidler.data.db.dao.FarmingPatchDao
 import com.fantasyidler.data.db.dao.PlayerDao
 import com.fantasyidler.data.db.dao.QuestProgressDao
@@ -51,6 +53,7 @@ class PlayerRepository @Inject constructor(
     private val buffNotifScheduler: BuffNotificationScheduler,
     private val gameData: GameDataRepository,
     private val boostRepo: BoostRepository,
+    private val appDatabase: AppDatabase,
 ) {
     val playerMutex = kotlinx.coroutines.sync.Mutex()
 
@@ -1285,7 +1288,7 @@ class PlayerRepository @Inject constructor(
      * An ironman save whose signature is missing or does not match its core fields was edited
      * outside the game; it still imports, but as a regular (non-ironman) character.
      */
-    suspend fun importSave(jsonString: String): ImportedSave {
+    suspend fun importSave(jsonString: String): ImportedSave = playerMutex.withLock {
         var export = json.decodeFromString<PlayerExport>(stripJsonGarbage(jsonString))
         var ironmanDemoted = false
         val importedFlags = try { json.decodeFromString<PlayerFlags>(export.flags) } catch (_: Exception) { null }
@@ -1293,23 +1296,25 @@ class PlayerRepository @Inject constructor(
             export = export.copy(flags = json.encode<PlayerFlags>(importedFlags.copy(ironman = false)))
             ironmanDemoted = true
         }
-        val player = getOrCreatePlayer()
-        playerDao.upsert(
-            player.copy(
-                skillLevels = export.skillLevels,
-                skillXp     = export.skillXp,
-                inventory   = export.inventory,
-                equipped    = export.equipped,
-                flags       = export.flags,
-                pets        = export.pets,
-                coins       = export.coins,
+        appDatabase.withTransaction {
+            val player = getOrCreatePlayer()
+            playerDao.upsert(
+                player.copy(
+                    skillLevels = export.skillLevels,
+                    skillXp     = export.skillXp,
+                    inventory   = export.inventory,
+                    equipped    = export.equipped,
+                    flags       = export.flags,
+                    pets        = export.pets,
+                    coins       = export.coins,
+                )
             )
-        )
-        questProgressDao.deleteAll()
-        export.questProgress.forEach { questProgressDao.upsert(it) }
-        farmingPatchDao.clearAll()
-        export.farmingPatches.forEach { farmingPatchDao.upsert(it) }
-        return ImportedSave(export, ironmanDemoted)
+            questProgressDao.deleteAll()
+            export.questProgress.forEach { questProgressDao.upsert(it) }
+            farmingPatchDao.clearAll()
+            export.farmingPatches.forEach { farmingPatchDao.upsert(it) }
+        }
+        ImportedSave(export, ironmanDemoted)
     }
 
     /**
