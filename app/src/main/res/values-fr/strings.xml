@@ -1496,7 +1496,7 @@
     <string name="town_upgrade_next_label">Prochaine amélioration</string>
     <string name="town_upgrade_constr_req">Construction Niv. %1$d requis</string>
     <string name="town_upgrade_cost">Coût : %1$s pièces</string>
-    <string name="town_builder_discount">Promotion du constructeur : /%1$d%% en moins</string>
+    <string name="town_builder_discount">Promotion du constructeur : %1$d%% en moins</string>
     <string name="town_upgrade_materials_header">Matériaux :</string>
     <string name="town_upgrade_btn">Améliorer</string>
     <string name="town_upgrade_success">Bâtiment amélioré !</string>
