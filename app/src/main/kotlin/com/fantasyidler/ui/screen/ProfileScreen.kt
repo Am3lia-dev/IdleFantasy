@@ -87,7 +87,7 @@ import com.fantasyidler.BuildConfig
 import com.fantasyidler.R
 import com.fantasyidler.data.json.PetData
 import com.fantasyidler.data.json.SkillingDungeonData
-import com.fantasyidler.ui.component.PlayerStatsBar
+import com.fantasyidler.ui.components.PlayerStatsBar
 import com.fantasyidler.ui.theme.ScaledSheetContent
 import com.fantasyidler.ui.viewmodel.Achievement
 import com.fantasyidler.ui.viewmodel.AchievementsViewModel
