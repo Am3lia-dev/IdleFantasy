@@ -11,12 +11,16 @@ import com.fantasyidler.data.model.Skills
 import com.fantasyidler.data.model.SlayerTask
 import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.repository.BoostRepository
+import com.fantasyidler.repository.DailyQuestRepository
 import com.fantasyidler.repository.ForetelResult
 import com.fantasyidler.repository.GameDataRepository
+import com.fantasyidler.repository.GuildRepository
 import com.fantasyidler.repository.PlayerRepository
+import com.fantasyidler.repository.QuestRepository
 import com.fantasyidler.repository.QueuedSessionStarter
 import com.fantasyidler.repository.SlayerRepository
 import com.fantasyidler.repository.TownRepository
+import com.fantasyidler.repository.WeeklyQuestRepository
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatXp
 import com.fantasyidler.util.withAppLocale
@@ -71,6 +75,8 @@ data class SlayerUiState(
     val nextForetelCostUnits: Int = 10,
     /** Foretell queue capacity: base 3, extended by Foresight prestige nodes. */
     val maxForetellSlots: Int = 3,
+    /** Guild daily / daily / weekly quests tied to the Slayer guild, for the "Quests" button. */
+    val slayerQuests: List<SheetQuestSummary> = emptyList(),
 )
 
 @HiltViewModel
@@ -82,6 +88,10 @@ class SlayerViewModel @Inject constructor(
     private val queuedSessionStarter: QueuedSessionStarter,
     @ApplicationContext private val context: Context,
     private val townRepo: TownRepository,
+    private val questRepo: QuestRepository,
+    private val guildRepo: GuildRepository,
+    private val dailyQuestRepo: DailyQuestRepository,
+    private val weeklyQuestRepo: WeeklyQuestRepository,
     private val json: Json,
 ) : ViewModel() {
 
@@ -97,7 +107,8 @@ class SlayerViewModel @Inject constructor(
     val uiState: StateFlow<SlayerUiState> = combine(
         playerRepo.playerFlow,
         _extra,
-    ) { player, extra ->
+        questRepo.observeProgress(),
+    ) { player, extra, questProgress ->
         if (player == null) extra.copy(isLoading = true)
         else {
             val levels:    Map<String, Int>  = json.decodeFromString(player.skillLevels)
@@ -152,9 +163,73 @@ class SlayerViewModel @Inject constructor(
                 foretelledTasks       = flags.foretelledTasks,
                 nextForetelCostUnits  = nextForetelCost,
                 maxForetellSlots      = slayerRepo.maxForetellSlots(flags),
+                slayerQuests          = computeSlayerQuests(questProgress, flags),
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SlayerUiState())
+
+    /** Retrieve guild daily / daily / weekly quests tied to the Slayer guild, for the "Quests" button. */
+    private fun computeSlayerQuests(
+        questProgress: List<com.fantasyidler.data.model.QuestProgress>,
+        flags: PlayerFlags,
+    ): List<SheetQuestSummary> {
+        val completedIds = questProgress.filter { it.completed }.map { it.questId }.toSet()
+        val result = mutableListOf<SheetQuestSummary>()
+
+        val dailies = guildRepo.getGuildDailiesWithProgress(Skills.SLAYER, flags)
+        if (dailies.isNotEmpty()) {
+            val level = guildRepo.guildLevel(Skills.SLAYER, flags.guildDailyTierCounts, completedIds)
+            val maxed = level >= GuildRepository.DAILIES_REQUIRED_PER_TIER.size
+            result += dailies.map { daily ->
+                SheetQuestSummary(
+                    questId    = daily.template.id,
+                    questName  = daily.template.name,
+                    guild      = Skills.SLAYER,
+                    type       = daily.template.type,
+                    target     = daily.template.target,
+                    progress   = daily.progress.coerceAtMost(daily.template.amount),
+                    amount     = daily.template.amount,
+                    claimed    = daily.claimed,
+                    source     = SheetQuestSource.GUILD,
+                    guildMaxed = maxed,
+                )
+            }
+        }
+
+        for (dq in dailyQuestRepo.getActiveDailyQuests(flags)) {
+            if (dq.template.skill != Skills.SLAYER) continue
+            result += SheetQuestSummary(
+                questId     = dq.template.id,
+                questName   = dq.template.displayName,
+                guild       = Skills.SLAYER,
+                type        = dq.template.type,
+                target      = dq.template.target,
+                progress    = dq.progress.coerceAtMost(dq.template.amount),
+                amount      = dq.template.amount,
+                claimed     = dq.claimed,
+                source      = SheetQuestSource.DAILY,
+                description = dq.template.description,
+            )
+        }
+
+        for (wq in weeklyQuestRepo.getActiveWeeklyQuests(flags)) {
+            if (wq.template.skill != Skills.SLAYER) continue
+            result += SheetQuestSummary(
+                questId     = wq.template.id,
+                questName   = wq.template.displayName,
+                guild       = Skills.SLAYER,
+                type        = wq.template.type,
+                target      = wq.template.target,
+                progress    = wq.progress.coerceAtMost(wq.template.amount),
+                amount      = wq.template.amount,
+                claimed     = wq.claimed,
+                source      = SheetQuestSource.WEEKLY,
+                description = wq.template.description,
+            )
+        }
+
+        return result
+    }
 
     fun getNewTask() {
         viewModelScope.launch {
