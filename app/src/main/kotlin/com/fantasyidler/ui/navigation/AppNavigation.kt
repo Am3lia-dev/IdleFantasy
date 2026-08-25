@@ -374,6 +374,7 @@ fun AppNavigation(
             paneComposable(Screen.Slayer.route) { entry ->
                 SlayerScreen(
                     onBack = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
+                    onNavigateToPrestige = { skill -> navController.navigate(Screen.PrestigeDetail.createRoute(skill)) },
                 )
             }
             paneComposable(Screen.BoneAltar.route) { entry ->
