@@ -2,6 +2,7 @@ package com.fantasyidler.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fantasyidler.simulator.HeirloomStats
 import com.fantasyidler.R
 import com.fantasyidler.data.json.EquipmentData
 import com.fantasyidler.data.model.EquipSlot
@@ -139,8 +140,9 @@ class SlayerViewModel @Inject constructor(
                     dungeonKeys.all { it in gameData.expeditionLockedDungeons && it !in unlockedDungeons }
             } ?: false
             val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
+            val equipMap = HeirloomStats.resolveAll(gameData.equipment, levels, flags.heirloomXp)
             val equippedWeapons = EquipSlot.WEAPON_SLOTS
-                .mapNotNull { slot -> equipped[slot]?.let { key -> gameData.equipment[key]?.let { slot to it } } }
+                .mapNotNull { slot -> equipped[slot]?.let { key -> equipMap[key]?.let { slot to it } } }
                 .toMap()
             val nextForetelCost = slayerRepo.foretelCostUnits(flags.foretelledTasks.size)
             extra.copy(
@@ -340,19 +342,39 @@ class SlayerViewModel @Inject constructor(
             val state = uiState.value
             val dungeonName = GameStrings.dungeonName(context, dungeonKey)
             val player   = playerRepo.getOrCreatePlayer()
-            val agility  = (json.decodeFromString<Map<String, Int>>(player.skillLevels))[Skills.AGILITY] ?: 1
+            val levels: Map<String, Int>       = json.decodeFromString(player.skillLevels)
+            val agility  = levels[Skills.AGILITY] ?: 1
             val flags: PlayerFlags             = json.decodeFromString(player.flags)
             val equipped: Map<String, String?> = json.decodeFromString(player.equipped)
+            val inventory: Map<String, Int>    = json.decodeFromString(player.inventory)
             val resolvedWeaponSlot = weaponSlot
                 ?: flags.activeWeaponSlot
                 ?: EquipSlot.WEAPON_SLOTS.firstOrNull { equipped[it] != null }
                 ?: EquipSlot.WEAPON_ATK
+            val rememberedSpell  = flags.activeSpell?.let { gameData.spells[it] }
+            val rememberedPotion = flags.activePotionKey?.takeIf { (inventory[it] ?: 0) > 0 }
+            val previewXp = estimateDungeonPreviewXp(
+                gameData      = gameData,
+                boostRepo     = boostRepo,
+                townRepo      = townRepo,
+                json          = json,
+                dungeonKey    = dungeonKey,
+                weaponSlot    = resolvedWeaponSlot,
+                equipped      = equipped,
+                inventory     = inventory,
+                levels        = levels,
+                flags         = flags,
+                selectedSpell = rememberedSpell,
+                potionKey     = rememberedPotion,
+                petsJson      = player.pets,
+            )
             val enqueued = playerRepo.enqueueAction(
                 QueuedAction(
                     skillName           = "combat",
                     activityKey         = dungeonKey,
                     skillDisplayName    = dungeonName,
                     estimatedDurationMs = SkillSimulator.sessionDurationMs(agility, boostRepo.sessionFloorReductionMin(flags), townRepo.playerSessionDurationMultiplier(flags)),
+                    estimatedXpGain     = previewXp,
                     equippedSnapshot    = player.equipped,
                     arrowsKey           = flags.equippedArrows,
                     spellName           = flags.activeSpell,

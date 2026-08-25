@@ -318,8 +318,9 @@ fun ProfileScreen(
             ScaledSheetContent {
             EquipPickerSheet(
                 slot      = slot,
-                candidates = state.candidatesFor(slot, viewModel.allEquipment),
+                candidates = state.candidatesFor(slot, state.resolvedEquipment(viewModel.allEquipment)),
                 context   = context,
+                heirloomXp = state.heirloomXp,
                 onEquip   = { itemKey -> viewModel.equip(itemKey, slot) },
                 onDismiss = viewModel::dismissSlotPicker,
             )

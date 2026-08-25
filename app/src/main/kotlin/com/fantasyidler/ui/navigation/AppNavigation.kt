@@ -292,7 +292,11 @@ fun AppNavigation(
                 SaveSlotsScreen(
                     onBack     = { if (navController.currentBackStackEntry == entry) navController.popBackStack() },
                     onSwitched = {
-                        // Rebuild the whole back stack on the new character.
+                        // Rebuild the whole back stack on the new character. Also drop every
+                        // tab's saved sub-screen stack (and its ViewModels): without this the
+                        // Skills tab restores the previous character's remembered screen, e.g.
+                        // the bone altar with their session tallies (issue #1550).
+                        Screen.bottomNavItems.forEach { navController.clearBackStack(it.route) }
                         navController.navigate(Screen.Home.route) {
                             popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
                         }
