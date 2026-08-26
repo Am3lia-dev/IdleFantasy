@@ -12,6 +12,7 @@ class SimpleWarnType(Enum):
     SKILL_NAME = "skill_name"
     ITEM_NAME = "item_name"
     ITEM_DESC = "item_desc"
+    HOUSE_ITEM_NAME = "house_item_name"
     ENEMY_NAME = "enemy_name"
     GUILD_NAME = "guild_name"
     AGILITY_COURSE_NAME = "agility_course_name"
@@ -81,6 +82,7 @@ class WikiLogger:
             SimpleWarnType.SEASONAL_REWARD_DESC: default_warning("seasonal reward", missing_element="description"),
             SimpleWarnType.SEASONAL_MARKET_NAME: default_warning("seasonal market offer"),
             SimpleWarnType.PRESTIGE_EFFECT_DESC: default_warning("prestige effect", missing_element="description"),
+            SimpleWarnType.HOUSE_ITEM_NAME: default_warning("house item"),
         }
         for value in SimpleWarnType:
             if value not in self._warned_values:

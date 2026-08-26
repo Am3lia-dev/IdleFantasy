@@ -243,6 +243,10 @@ def item_name(item: str) -> str:
     return item_title
 
 
+def house_item_name(item: str) -> str:
+    return _standard_string_resolution(item, "house_item_{}", SimpleWarnType.HOUSE_ITEM_NAME)
+
+
 def item_desc(item: str) -> str:
     # Find item description
     item_description = None

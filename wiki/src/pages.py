@@ -16,10 +16,10 @@ from pathlib import Path
 from typing import Callable
 
 from wiki.src import ASSETS, SPRITES, TEMPLATES, RESOURCES, REPO_ROOT, GITHUB_REPO
-from wiki.src.game_data import STRINGS, load, title, item_name, skill_name, enemy_name, guild_name, trade_route_name, \
-    thieving_npc_name, quest_name, agility_course_name, town_building_name, quest_desc, title_name, pet_name, boss_name, \
-    boss_desc, trade_route_desc, pet_desc, item_desc, dungeon_name, dungeon_desc, expedition_name, expedition_desc, \
-    seasonal_event_name, seasonal_reward_desc, prestige_effect_desc
+from wiki.src.game_data import STRINGS, load, title, item_name, house_item_name, skill_name, enemy_name, guild_name, \
+    trade_route_name, thieving_npc_name, quest_name, agility_course_name, town_building_name, quest_desc, title_name, \
+    pet_name, boss_name, boss_desc, trade_route_desc, pet_desc, item_desc, dungeon_name, dungeon_desc, expedition_name, \
+    expedition_desc, seasonal_event_name, seasonal_reward_desc, prestige_effect_desc
 from wiki.src.page_hierarchy import PageHierarchy
 from wiki.src.wiki_logs import LOGGER, SimpleWarnType
 
@@ -1973,7 +1973,7 @@ def gen_housing() -> str:
     furniture_rows = sorted(
         (
             [
-                item_name(item.get("name_key") or item_id),
+                house_item_name(item.get("name_key") or item_id),
                 item.get("category", "").replace("_", " ").title(),
                 item["level_required"],
                 fmt_amount(item["coin_cost"]),
