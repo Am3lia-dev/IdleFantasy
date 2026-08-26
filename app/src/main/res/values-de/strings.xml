@@ -1847,7 +1847,7 @@
     <string name="raid_no_mercs">No mercenaries under contract.</string> <!-- untranslated -->
     <string name="merc_camp_open">Söldner anheuern</string>
     <string name="merc_camp_title">Söldnerlager</string>
-    <string name="merc_camp_desc">Verträge gelten bis zum täglichen Reset um %1$s. Jeden Tag trifft eine neue Gruppe von Söldnern ein.</string>
+    <string name="merc_camp_desc">Contracts last for 24 hours after hiring. Jeden Tag trifft eine neue Gruppe von Söldnern ein.</string> <!-- untranslated -->
     <string name="merc_hire">Anheuern</string>
     <string name="merc_dismiss">Abbrechen</string>
     <string name="merc_hired">%1$s schließt sich deiner Gruppe bis zum täglichen Reset an.</string>
@@ -1856,13 +1856,13 @@
     <string name="merc_not_enough_coins">Nicht genügend Münzen, um %1$s anzuheuern.</string>
     <string name="merc_not_available">%1$s ist heute nicht verfügbar.</string>
     <string name="merc_contract_remaining">Vertrag: Noch %1$s übrig</string>
-    <string name="combat_log_ally_hit">Deine Söldner haben %1$s für %2$d getroffen</string>
+    <string name="combat_log_ally_hit">→ Your mercenaries hit %1$s: %2$d dmg</string> <!-- untranslated -->
     <string name="raid_allies_down">Söldern am Boden: %1$d</string>
     <string name="merc_tier_cheap">Söldner</string>
     <string name="merc_tier_seasoned">Veteran</string> <!-- untranslated -->
     <string name="merc_tier_elite">Champion</string> <!-- untranslated -->
     <string name="merc_stats">Ang %1$d Stä %2$d Ver %3$d LP %4$d</string>
-    <string name="merc_cost_per_day">%1$s Münzen pro Tag</string>
+    <string name="merc_cost_per_day">%1$s coins</string> <!-- untranslated -->
     <string name="merc_bran_the_sellsword_name">Bran der Söldner</string>
     <string name="merc_wren_the_stray_name">Wren die Verirrte</string>
     <string name="merc_tam_the_grey_name">Tam der Graue</string>

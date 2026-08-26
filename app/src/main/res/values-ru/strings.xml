@@ -1869,7 +1869,7 @@
     <string name="raid_no_mercs">Нет нанятых наемников.</string>
     <string name="merc_camp_open">Нанять наемников</string>
     <string name="merc_camp_title">Лагерь наемников</string>
-    <string name="merc_camp_desc">Контракты действуют до ежедневного сброса в %1$s. Каждый день прибывает новый набор наемников.</string>
+    <string name="merc_camp_desc">Contracts last for 24 hours after hiring. Каждый день прибывает новый набор наемников.</string> <!-- untranslated -->
     <string name="merc_hire">Нанять</string>
     <string name="merc_dismiss">Уволить</string>
     <string name="merc_hired">%1$s присоединяется к вашей группе до тех пор, пока не начнется ежедневная сброс.</string>
@@ -1878,13 +1878,13 @@
     <string name="merc_not_enough_coins">Не хватает монет, чтобы нанять %1$s.</string>
     <string name="merc_not_available">%1$s сегодня он недоступен.</string>
     <string name="merc_contract_remaining">Контракты: %1$s осталось</string>
-    <string name="combat_log_ally_hit">Ваши наемники нанесли удар %1$s по %2$d</string>
+    <string name="combat_log_ally_hit">→ Your mercenaries hit %1$s: %2$d dmg</string> <!-- untranslated -->
     <string name="raid_allies_down">Наемники повержены: %1$d</string>
     <string name="merc_tier_cheap">Наемник</string>
     <string name="merc_tier_seasoned">Ветеран</string>
     <string name="merc_tier_elite">Чемпион</string>
     <string name="merc_stats">Атк %1$d  Сил %2$d  Защ %3$d  HP %4$d</string>
-    <string name="merc_cost_per_day">%1$s монет в день</string>
+    <string name="merc_cost_per_day">%1$s coins</string> <!-- untranslated -->
     <string name="merc_bran_the_sellsword_name">Бран Наёмник</string>
     <string name="merc_wren_the_stray_name">Рен Бродяга</string>
     <string name="merc_tam_the_grey_name">Тэм Серый</string>

@@ -1847,7 +1847,7 @@
     <string name="raid_no_mercs">Nessun mercenario assunto.</string>
     <string name="merc_camp_open">Assumi Mercenari</string>
     <string name="merc_camp_title">Campo dei mercenari</string>
-    <string name="merc_camp_desc">Il contratto è valido fino all\'orario di ripristino (%1$s). Un nuovo gruppo di mercenari arriverà ogni giorno.</string>
+    <string name="merc_camp_desc">Contracts last for 24 hours after hiring. Un nuovo gruppo di mercenari arriverà ogni giorno.</string> <!-- untranslated -->
     <string name="merc_hire">Assumi</string>
     <string name="merc_dismiss">Congeda</string>
     <string name="merc_hired">%1$s si unisce alla tua squadra fino all\'orario di ripristino.</string>
@@ -1856,13 +1856,13 @@
     <string name="merc_not_enough_coins">Non hai abbastanza monete per assumere %1$s.</string>
     <string name="merc_not_available">%1$s non è disponibile oggi.</string>
     <string name="merc_contract_remaining">Contratti: %1$s rimasti</string>
-    <string name="combat_log_ally_hit">I mercenari colpiscono %1$s per %2$d danni</string>
+    <string name="combat_log_ally_hit">→ Your mercenaries hit %1$s: %2$d dmg</string> <!-- untranslated -->
     <string name="raid_allies_down">Mercenari sconfitti: %1$d</string>
     <string name="merc_tier_cheap">Novizio</string>
     <string name="merc_tier_seasoned">Veterano</string>
     <string name="merc_tier_elite">Campione</string>
     <string name="merc_stats">Att %1$d  Frz %2$d  Dif %3$d  PS %4$d</string>
-    <string name="merc_cost_per_day">%1$s monete al giorno</string>
+    <string name="merc_cost_per_day">%1$s coins</string> <!-- untranslated -->
     <string name="merc_bran_the_sellsword_name">Bran il Cercadenaro</string>
     <string name="merc_wren_the_stray_name">Wren della landa</string>
     <string name="merc_tam_the_grey_name">Tam il Grigio</string>
