@@ -22,7 +22,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 /**
- * H1 regression guard (issues.md): every whole-row PlayerEntity mutator must serialize on
+ * Every whole-row PlayerEntity mutator must serialize on
  * [PlayerRepository.playerMutex], and none may re-enter that mutex internally --
  * kotlinx Mutex is non-reentrant, so nested acquisition hangs forever.
  */

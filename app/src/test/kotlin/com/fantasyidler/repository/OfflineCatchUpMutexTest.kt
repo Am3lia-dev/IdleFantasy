@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 /**
- * H2 regression guard (issues.md): offline queue fast-forward must hold playerMutex
+ * Offline queue fast-forward must hold playerMutex
  * around its internal mutex, matching startNextQueued()'s lock hierarchy
  * (playerMutex -> QueuedSessionStarter.mutex), and must not re-enter playerMutex.
  */
