@@ -374,6 +374,17 @@ def seasonal_market_name(offer: str) -> str:
     return _standard_string_resolution(offer, "seasonal_market_{}_name", SimpleWarnType.SEASONAL_MARKET_NAME)
 
 
+def prestige_effect_desc(effect: str, value: float, unlock: str | None = None) -> str:
+    key = f"prestige_effect_{effect}"
+    if key not in STRINGS:
+        LOGGER.simple_warn(SimpleWarnType.PRESTIGE_EFFECT_DESC, effect)
+        return ""
+    if effect == "unlock_recipe":
+        return STRINGS.get_string(key, item_name(unlock))
+    formatted = int(value) if value == int(value) else value
+    return STRINGS.get_string(key, formatted)
+
+
 # ---------------------------------------------------------------------------
 # Miscellaneous
 # ---------------------------------------------------------------------------
