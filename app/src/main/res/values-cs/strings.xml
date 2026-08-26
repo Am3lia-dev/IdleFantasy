@@ -1851,7 +1851,7 @@
     <string name="raid_no_mercs">No mercenaries under contract.</string> <!-- untranslated -->
     <string name="merc_camp_open">Hire Mercenaries</string> <!-- untranslated -->
     <string name="merc_camp_title">Mercenary Camp</string> <!-- untranslated -->
-    <string name="merc_camp_desc">Contracts last until the daily reset at %1$s. A new pool of mercenaries arrives each day.</string> <!-- untranslated -->
+    <string name="merc_camp_desc">Contracts last for 24 hours after hiring. A new pool of mercenaries arrives each day.</string> <!-- untranslated -->
     <string name="merc_hire">Hire</string> <!-- untranslated -->
     <string name="merc_dismiss">Dismiss</string> <!-- untranslated -->
     <string name="merc_hired">%1$s joins your party until the daily reset.</string> <!-- untranslated -->
@@ -1860,13 +1860,13 @@
     <string name="merc_not_enough_coins">Not enough coins to hire %1$s.</string> <!-- untranslated -->
     <string name="merc_not_available">%1$s is not available today.</string> <!-- untranslated -->
     <string name="merc_contract_remaining">Contract: %1$s left</string> <!-- untranslated -->
-    <string name="combat_log_ally_hit">Your mercenaries hit %1$s for %2$d</string> <!-- untranslated -->
+    <string name="combat_log_ally_hit">→ Your mercenaries hit %1$s: %2$d dmg</string> <!-- untranslated -->
     <string name="raid_allies_down">Mercenaries down: %1$d</string> <!-- untranslated -->
     <string name="merc_tier_cheap">Sellsword</string> <!-- untranslated -->
     <string name="merc_tier_seasoned">Veteran</string> <!-- untranslated -->
     <string name="merc_tier_elite">Champion</string> <!-- untranslated -->
     <string name="merc_stats">Atk %1$d  Str %2$d  Def %3$d  HP %4$d</string> <!-- untranslated -->
-    <string name="merc_cost_per_day">%1$s coins per day</string> <!-- untranslated -->
+    <string name="merc_cost_per_day">%1$s coins</string> <!-- untranslated -->
     <string name="merc_bran_the_sellsword_name">Bran the Sellsword</string> <!-- untranslated -->
     <string name="merc_wren_the_stray_name">Wren the Stray</string> <!-- untranslated -->
     <string name="merc_tam_the_grey_name">Tam the Grey</string> <!-- untranslated -->
