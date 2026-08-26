@@ -707,7 +707,7 @@ class PlayerRepository @Inject constructor(
         PrestigeActionResult.SUCCESS
     }
 
-    suspend fun debugChangeRaceFree(race: String) {
+    suspend fun debugChangeRaceFree(race: String) = playerMutex.withLock {
         val player = getOrCreatePlayer()
         val flags: PlayerFlags = json.decodeFromString(player.flags)
         playerDao.upsert(player.copy(flags = json.encode<PlayerFlags>(flags.copy(characterRace = race))))

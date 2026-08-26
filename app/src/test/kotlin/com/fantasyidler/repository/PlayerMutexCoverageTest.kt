@@ -101,5 +101,6 @@ class PlayerMutexCoverageTest {
         probe("sellItem") { playerRepo.sellItem("probe_item", 1, 1) }
         probe("activateXpBoost") { playerRepo.activateXpBoost(1_000L, 0L) }
         probe("grantXpBoost") { playerRepo.grantXpBoost(1_000L) }
+        probe("debugChangeRaceFree") { playerRepo.debugChangeRaceFree("human") }
     }
 }
