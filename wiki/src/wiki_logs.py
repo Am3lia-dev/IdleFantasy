@@ -37,7 +37,7 @@ class SimpleWarnType(Enum):
     SEASONAL_MINIGAME_NAME = "seasonal_minigame_name"
     SEASONAL_REWARD_DESC = "seasonal_reward_desc"
     SEASONAL_MARKET_NAME = "seasonal_market_name"
-
+    PRESTIGE_EFFECT_DESC = "prestige_effect_desc"
 
 
 class WikiLogger:
@@ -80,6 +80,7 @@ class WikiLogger:
             SimpleWarnType.SEASONAL_MINIGAME_NAME: default_warning("seasonal minigame"),
             SimpleWarnType.SEASONAL_REWARD_DESC: default_warning("seasonal reward", missing_element="description"),
             SimpleWarnType.SEASONAL_MARKET_NAME: default_warning("seasonal market offer"),
+            SimpleWarnType.PRESTIGE_EFFECT_DESC: default_warning("prestige effect", missing_element="description"),
         }
         for value in SimpleWarnType:
             if value not in self._warned_values:
