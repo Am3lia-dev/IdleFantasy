@@ -152,7 +152,7 @@ def add_boss_pages():
     bosses = load("raid_bosses.json")
     assert isinstance(bosses, dict)
     boss_pages = {
-        boss_id: PageInfo(boss_name(boss_id), f"{boss_id}.md", lambda x=bosses[boss_id]: gen_boss(x))
+        boss_id: PageInfo(boss_name(boss_id), f"{boss_id}.md", lambda x=bosses[boss_id]: gen_boss(x), boss_sprite(boss_id))
         for boss_id in bosses.keys()
     }
     PAGE_DIRECTORY.update(boss_pages)
@@ -421,10 +421,15 @@ def skill_icon_path(skill: str) -> Path:
     return icon_path(f"skill_{skill.lower()}")
 
 
+def boss_sprite(boss_id: str) -> Path | None:
+    boss_sprite_path = SPRITES / "bosses" / f"{boss_id}.png"
+    return boss_sprite_path if boss_sprite_path.is_file() else None
+
+
 def boss_icon(boss_id: str, fallback: str, width: int | None = None) -> str:
     """Boss art image, falling back to the emoji for bosses without a sprite."""
-    sprite = SPRITES / "bosses" / f"{boss_id}.png"
-    if sprite.is_file():
+    sprite = boss_sprite(boss_id)
+    if sprite:
         return html_image(sprite, boss_name(boss_id), width=width)
     return fallback
 
