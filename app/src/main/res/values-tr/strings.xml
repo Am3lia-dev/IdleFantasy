@@ -67,7 +67,9 @@
     <string name="bestiary_not_encountered">Henüz karşılaşılmadı</string>
     <string name="bestiary_qty_header">Qty</string> <!-- untranslated -->
     <string name="bestiary_chance_header">Chance</string> <!-- untranslated -->
-    <string name="bestiary_encountered_progress">%1$d / %2$d encountered</string> <!-- untranslated -->
+    <string name="label_completion_progress">%1$d / %2$d %3$s</string>
+    <string name="achievements_progress_bar">edinildi</string>
+    <string name="bestiary_progress_bar">%1$d / %2$d encountered</string> <!-- untranslated -->
     <string name="bestiary_always_drops">Her zaman düşer</string>
     <string name="bestiary_rare_drops">Nadir düşüşler</string>
     <string name="bestiary_common_loot">Yaygın ganimet</string>

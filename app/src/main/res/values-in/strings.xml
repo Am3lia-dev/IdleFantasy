@@ -67,7 +67,9 @@
     <string name="bestiary_not_encountered">Belum pernah ditemui</string>
     <string name="bestiary_qty_header">Qty</string>
     <string name="bestiary_chance_header">Peluang</string>
-    <string name="bestiary_encountered_progress">%1$d / %2$d ditemui</string>
+    <string name="label_completion_progress">%1$d / %2$d %3$s</string>
+    <string name="achievements_progress_bar">obtained</string>
+    <string name="bestiary_progress_bar">ditemui</string>
     <string name="bestiary_always_drops">Jatuhan Selalu</string>
     <string name="bestiary_rare_drops">Jatuhan Langka</string>
     <string name="bestiary_common_loot">Jarahan Biasa</string>

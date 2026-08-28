@@ -67,7 +67,9 @@
     <string name="bestiary_not_encountered">未遭遇</string>
     <string name="bestiary_qty_header">Qty</string> <!-- untranslated -->
     <string name="bestiary_chance_header">Chance</string> <!-- untranslated -->
-    <string name="bestiary_encountered_progress">%1$d / %2$d encountered</string> <!-- untranslated -->
+    <string name="label_completion_progress">%3$s %1$d / %2$d</string>
+    <string name="achievements_progress_bar">獲得済み</string>
+    <string name="bestiary_progress_bar">encountered</string> <!-- untranslated -->
     <string name="bestiary_always_drops">確定ドロップ</string>
     <string name="bestiary_rare_drops">レアドロップ</string>
     <string name="bestiary_common_loot">通常ドロップ</string>
