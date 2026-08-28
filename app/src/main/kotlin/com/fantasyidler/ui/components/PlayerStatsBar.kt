@@ -2,20 +2,9 @@ package com.fantasyidler.ui.components
 
 import android.content.Context
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.Icon
@@ -35,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import com.fantasyidler.R
 import com.fantasyidler.data.json.BlessingType
 import com.fantasyidler.repository.ChurchRepository
-import kotlin.math.roundToInt
 import com.fantasyidler.ui.screen.StatInline
 import com.fantasyidler.util.GameStrings
 import com.fantasyidler.util.formatCoins
 import com.fantasyidler.util.formatDurationMs
+import kotlin.math.roundToInt
 
 private const val MAX_VISIBLE_BOOST_LINES = 3
 
