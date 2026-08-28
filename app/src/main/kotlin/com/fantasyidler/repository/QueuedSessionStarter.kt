@@ -22,6 +22,7 @@ import com.fantasyidler.simulator.SkillSimulator
 import com.fantasyidler.simulator.ThievingSimulator
 import com.fantasyidler.simulator.TowerScaling
 import com.fantasyidler.simulator.XpTable
+import com.fantasyidler.ui.screen.UNLOCK_TOLERANCE
 import com.fantasyidler.ui.viewmodel.combatLevelFrom
 import com.fantasyidler.util.toolEfficiency
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -35,6 +36,39 @@ import javax.inject.Singleton
 
 /** Thrown when a Tower floor can't start yet because an earlier floor is pending collection. */
 private class TowerPendingCollectionException : Exception()
+
+/** Thrown when the player no longer meets a queued activity's level gate (post-prestige). */
+internal class ActionNoLongerQualifiesException : Exception()
+
+/**
+ * The level the player must currently have to start [action]'s activity manually, or null
+ * when the activity has no known level gate (callers then keep the stricter legacy
+ * XP-zeroing rule). Mirrors the manual-start gates: dungeons allow [UNLOCK_TOLERANCE] under
+ * their recommended level, lore-unlocked dungeons and raid bosses have no level gate
+ * (issue #1542), and Tower floors gate on contiguity, not level.
+ */
+internal fun queuedActionRequiredLevel(action: QueuedAction, gameData: GameDataRepository): Int? = when (action.skillName) {
+    "boss"             -> gameData.bosses[action.activityKey]?.takeIf { !it.raid }?.combatLevelRequired ?: 0
+    "combat"           -> gameData.dungeons[action.activityKey]?.takeIf { !it.loreUnlockOnly }?.let { it.recommendedLevel - UNLOCK_TOLERANCE } ?: 0
+    "tower"            -> 0
+    "expedition"       -> gameData.skillingDungeons[action.activityKey]?.levelRequired ?: 0
+    Skills.MINING      -> gameData.ores[action.activityKey]?.levelRequired
+    Skills.WOODCUTTING -> gameData.trees[action.activityKey]?.levelRequired
+    Skills.FISHING     -> gameData.fish[action.activityKey]?.levelRequired
+    Skills.AGILITY     -> gameData.agilityCourses[action.activityKey]?.levelRequired
+    Skills.THIEVING    -> gameData.thievingNpcs[action.activityKey]?.levelRequired
+    Skills.FIREMAKING  -> gameData.logs[action.activityKey]?.levelRequired
+    Skills.RUNECRAFTING -> gameData.runes[action.activityKey]?.levelRequired
+    Skills.PRAYER      -> 0
+    Skills.SMITHING    -> gameData.smithingRecipes[action.activityKey]?.levelRequired
+    Skills.COOKING     -> gameData.cookingRecipes[action.activityKey]?.levelRequired
+    Skills.FLETCHING   -> gameData.fletchingRecipes[action.activityKey]?.levelRequired
+    Skills.CRAFTING    -> gameData.craftingRecipes[action.activityKey]?.levelRequired
+    Skills.CONSTRUCTION -> gameData.constructionRecipes[action.activityKey]?.levelRequired
+    Skills.HERBLORE    -> gameData.herbloreRecipes[action.activityKey]?.levelRequired
+    Skills.MERCANTILE  -> gameData.tradeRoutes.firstOrNull { it.id == action.activityKey }?.levelRequired
+    else               -> null
+}
 
 /**
  * Starts the next queued session using current player state.
@@ -125,6 +159,7 @@ class QueuedSessionStarter @Inject constructor(
                 val originalQueue = playerRepo.getFlagsUnlocked().sessionQueue
                 var remaining = originalQueue
                 val skippedTowerActions = mutableListOf<QueuedAction>()
+                var droppedAny = false
                 var maxAttempts = originalQueue.size
                 while (maxAttempts-- >= 0) {
                     val next = remaining.firstOrNull() ?: break
@@ -138,11 +173,19 @@ class QueuedSessionStarter @Inject constructor(
                         return@withLock true
                     } catch (_: TowerPendingCollectionException) {
                         skippedTowerActions += next
+                    } catch (_: ActionNoLongerQualifiesException) {
+                        // The player no longer meets the activity's level gate (a prestige
+                        // dropped their level): discard the action and move on (issue #1605).
+                        droppedAny = true
                     } catch (_: Exception) {
                         // Nothing was ever written to the DB, so the queue is still exactly
                         // originalQueue -- no requeue needed.
                         return@withLock false
                     }
+                }
+                if (droppedAny) {
+                    playerRepo.updateFlagsUnlocked(playerRepo.getFlagsUnlocked().copy(
+                        sessionQueue = skippedTowerActions + remaining))
                 }
                 false
             }
@@ -249,6 +292,7 @@ class QueuedSessionStarter @Inject constructor(
                 val originalQueue = flags.sessionQueue
                 var remaining = originalQueue
                 val skippedTowerActions = mutableListOf<QueuedAction>()
+                var droppedAny = false
                 var maxAttempts = originalQueue.size
                 while (maxAttempts-- >= 0) {
                     val next = remaining.firstOrNull() ?: break
@@ -267,11 +311,20 @@ class QueuedSessionStarter @Inject constructor(
                         return@withLock duration
                     } catch (_: TowerPendingCollectionException) {
                         skippedTowerActions += next
+                    } catch (_: ActionNoLongerQualifiesException) {
+                        // Same as startNextQueued(): the player no longer meets the activity's
+                        // level gate (a prestige dropped their level) — discard and move on
+                        // (issue #1605).
+                        droppedAny = true
                     } catch (_: Exception) {
                         // Nothing was ever written to the DB, so the queue is still exactly
                         // originalQueue -- no requeue needed.
                         return@withLock 0L
                     }
+                }
+                if (droppedAny) {
+                    playerRepo.updateFlagsUnlocked(playerRepo.getFlagsUnlocked().copy(
+                        sessionQueue = skippedTowerActions + remaining))
                 }
                 0L
             }
@@ -298,16 +351,22 @@ class QueuedSessionStarter @Inject constructor(
         val prayerCapeMult   = resolveCapeMultiplier("prayer", equippedCapeData, inventory.keys, flags.townBuildingTiers, boostRepo.capeScalingBySkill(flags), gameData.equipment, flags.ironman)
         // Recorded on the session so collection can detect a mid-session prestige reset
         // (isSkillSessionStillEligible) instead of gating on an unrelated difficulty formula.
-        // Floored at the queue-time level: a prestige after queueing must not launder the
-        // pre-prestige plan into level-1 sessions that pay out untouched.
-        val levelAtStart = maxOf(
-            when (action.skillName) {
-                "boss", "combat", "tower" -> combatLevelFrom(levels)
-                "expedition" -> gameData.skillingDungeons[action.activityKey]?.skill?.let { levels[it] } ?: 1
-                else -> levels[action.skillName] ?: 1
-            },
-            action.levelAtQueue,
-        )
+        // A prestige between queueing and starting is gated like a manual start (issue #1605):
+        // still qualifying at the current level means the session runs and pays out at that
+        // level (it simulates with post-prestige stats, so nothing is laundered); no longer
+        // qualifying drops the action. Activities without a known level gate keep the
+        // queue-time floor, so their pre-prestige plans still pay out with XP zeroed.
+        val currentLevel = when (action.skillName) {
+            "boss", "combat", "tower" -> combatLevelFrom(levels)
+            "expedition" -> gameData.skillingDungeons[action.activityKey]?.skill?.let { levels[it] } ?: 1
+            else -> levels[action.skillName] ?: 1
+        }
+        val requiredLevel = queuedActionRequiredLevel(action, gameData)
+        val levelAtStart = when {
+            requiredLevel == null        -> maxOf(currentLevel, action.levelAtQueue)
+            currentLevel < requiredLevel -> throw ActionNoLongerQualifiesException()
+            else                         -> currentLevel
+        }
 
         when (action.skillName) {
             Skills.MINING -> {

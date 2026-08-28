@@ -743,14 +743,16 @@ class PlayerRepository @Inject constructor(
         val currentEquipped: Map<String, String?> = json.decodeFromString(player.equipped)
         val newEquipped = currentEquipped.toMutableMap()
 
+        // If this style's own weapon is two-handed, SHIELD must come off. Clearing it (not
+        // just skipping the restore) matters: the previous style's shield is still in
+        // newEquipped, so it would show equipped alongside the 2H weapon and the snapshot
+        // below would record it into this style's loadout (issue #1601).
+        val weaponSlotForStyle = EquipSlot.WEAPON_SLOTS.firstOrNull { EquipSlot.combatStyleForSlot(it) == style }
+        val twoHanded = equipment[currentEquipped[weaponSlotForStyle]]?.twoHanded == true
+        if (twoHanded) newEquipped[EquipSlot.SHIELD] = null
+
         val loadout = flags.armorLoadouts[style]
         if (!loadout.isNullOrEmpty()) {
-            // If this style's own weapon is two-handed, SHIELD must stay off -- mirrors the existing
-            // two-handed/shield exclusivity rule in InventoryViewModel.equip(), which never fires here
-            // since applying a loadout never touches a weapon slot.
-            val weaponSlotForStyle = EquipSlot.WEAPON_SLOTS.firstOrNull { EquipSlot.combatStyleForSlot(it) == style }
-            val twoHanded = equipment[currentEquipped[weaponSlotForStyle]]?.twoHanded == true
-
             for (slot in EquipSlot.ARMOR_SLOTS) {
                 if (!loadout.containsKey(slot)) continue
                 if (slot == EquipSlot.SHIELD && twoHanded) continue

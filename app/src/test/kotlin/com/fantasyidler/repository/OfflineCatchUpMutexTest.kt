@@ -60,7 +60,7 @@ class OfflineCatchUpMutexTest {
         val sessionRepo = SessionRepository(db.skillSessionDao(), context, json, gameData, db.playerDao())
         val questRepo = QuestRepository(db.questProgressDao(), gameData)
         val townRepo = TownRepository(gameData, playerRepo, questRepo, boostRepo)
-        val mercRepo = MercenaryRepository(playerRepo, gameData, dailyQuestRepo)
+        val mercRepo = MercenaryRepository(playerRepo, gameData)
         starter = QueuedSessionStarter(
             boostRepo, context, playerRepo, sessionRepo, townRepo, gameData, mercRepo, json,
         )

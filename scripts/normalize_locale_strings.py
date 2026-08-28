@@ -17,7 +17,13 @@ import re
 RES = Path(__file__).parents[1] / "app" / "src" / "main" / "res"
 MARKER = "<!-- untranslated -->"
 
-STRING_FILENAMES = list(x.name for x in (RES / "values").glob("strings*"))
+# strings.xml first, then alphabetical: scan and emission order decide which file wins
+# when a key appears in several, so the order must be deterministic across machines
+# (glob order is OS-dependent) with the canonical main file trumping the rest.
+STRING_FILENAMES = sorted(
+    (x.name for x in (RES / "values").glob("strings*.xml")),
+    key=lambda name: (name != "strings.xml", name),
+)
 
 EN_ENTRY = re.compile(
     r'[ \t]*<(string(?:-array)?|plurals)\s[^>]*name="([^"]+)".*?</\1>', re.DOTALL)
@@ -52,8 +58,8 @@ def main():
         # strays, and freshly-submitted values trump stale duplicates).
         loc = {}
         scan_order = [f for f in STRING_FILENAMES if (lang_dir / f).exists()] + sorted(
-            f for f in lang_dir.iterdir()
-            if f.name.startswith("strings") and f.name.endswith(".xml") and f not in STRING_FILENAMES
+            f.name for f in lang_dir.iterdir()
+            if f.name.startswith("strings") and f.name.endswith(".xml") and f.name not in STRING_FILENAMES
         )
         for filename in scan_order:
             content = open(lang_dir / filename, encoding="utf-8").read()
