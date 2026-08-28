@@ -507,9 +507,9 @@
     <string name="guild_progress_dailies_and_quest">Complete %1$d/%2$d daily requests &amp; quests to advance</string> <!-- untranslated -->
     <string name="guild_progress_dailies_only">Complete %1$d/%2$d daily requests to advance</string> <!-- untranslated -->
     <string name="home_died_message">Öldün ve kazanımlarının çoğunu kaybettin.</string>
-    <string name="home_xp_boost_was_active">2× XP Takviyesi aktifti</string>
-    <string name="home_xp_boost_active">2x XP Takviyesi aktif — %1$s kaldı</string>
-    <string name="home_prestige_xp_boost_active">2× %1$s XP Boost - %2$s remaining</string> <!-- untranslated -->
+    <string name="home_xp_boost_was_active">Tüm beceriler XP 2× artışı etkindi</string>
+    <string name="home_xp_boost_active">2× XP tüm beceriler — %1$s</string>
+    <string name="home_prestige_xp_boost_active">2× XP %1$s — %2$s</string> <!-- untranslated -->
     <string name="boosts_show_more">+%1$d more boosts (tap to show)</string> <!-- untranslated -->
     <string name="boosts_show_less">Show less</string> <!-- untranslated -->
     <string name="home_loot">Ganimet</string>

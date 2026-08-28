@@ -14,7 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.MilitaryTech
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.fantasyidler.R
@@ -39,7 +43,7 @@ import com.fantasyidler.util.formatDurationMs
 
 private const val MAX_VISIBLE_BOOST_LINES = 3
 
-private data class BoostLine(val tint: Color, val text: String)
+private data class BoostLine(val icon: ImageVector, val tint: Color, val text: String)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -79,6 +83,7 @@ fun PlayerStatsBar(
             )
         }
         val primaryTint = MaterialTheme.colorScheme.primary
+        val secondaryTint = MaterialTheme.colorScheme.secondary
         val tertiaryTint = MaterialTheme.colorScheme.tertiary
         val boostLines = buildList {
             if (blessingActive) {
@@ -90,20 +95,27 @@ fun PlayerStatsBar(
                 val boostDesc = blessingData?.let { b ->
                     val eff = ChurchRepository.effectiveMagnitude(b, prayerCapeMult)
                     when (b.type) {
-                        BlessingType.XP      -> "${(eff * 100).roundToInt() / 100f}x XP"
+                        BlessingType.XP      -> "${(eff * 100).roundToInt() / 100f}× XP"
                         BlessingType.DEFENSE -> "+${eff.toInt()} DEF"
                         BlessingType.COINS   -> "+${(eff * 100).roundToInt()}% coins"
                     }
                 }
                 val timeLeft = activeBlessingRemainingMs.formatDurationMs(context)
-                val blessingText = if (boostDesc != null) "$blessingName ($boostDesc) - $timeLeft"
+                val blessingText = if (boostDesc != null) "$boostDesc - $blessingName - $timeLeft"
                                   else "$blessingName - $timeLeft"
-                add(BoostLine(tint = primaryTint, text = blessingText))
+                add(
+                    BoostLine(
+                        icon = Icons.Filled.Star,
+                        tint = primaryTint,
+                        text = blessingText
+                    )
+                )
             }
             if (boostActive) {
                 add(
                     BoostLine(
-                        tint = tertiaryTint,
+                        icon = Icons.Filled.Bolt,
+                        tint = secondaryTint,
                         text = stringResource(R.string.home_xp_boost_active, xpBoostRemainingMs.formatDurationMs(context)),
                     )
                 )
@@ -111,6 +123,7 @@ fun PlayerStatsBar(
             prestigeBoostsRemainingMs.entries.sortedBy { it.key }.forEach { (skill, remainingMs) ->
                 add(
                     BoostLine(
+                        icon = Icons.Filled.WorkspacePremium,
                         tint = tertiaryTint,
                         text = stringResource(
                             R.string.home_prestige_xp_boost_active,
@@ -137,7 +150,7 @@ fun PlayerStatsBar(
                 visibleLines.forEach { line ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            imageVector        = Icons.Filled.Star,
+                            imageVector        = line.icon,
                             contentDescription = null,
                             tint               = line.tint,
                             modifier           = Modifier.size(12.dp),
