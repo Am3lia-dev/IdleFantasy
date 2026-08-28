@@ -108,6 +108,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import kotlinx.coroutines.delay
 import kotlinx.serialization.decodeFromString
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -287,11 +288,19 @@ internal fun HomeSessionCard(
             Spacer(Modifier.height(8.dp))
 
             if (!isDone) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = onRepeat) {
+                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(
+                        onClick = onRepeat,
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Text(stringResource(R.string.btn_repeat_action))
                     }
-                    OutlinedButton(onClick = { showAbandonConfirm = true }) {
+                    Spacer(Modifier.width(12.dp))
+                    OutlinedButton(
+                        onClick = { showAbandonConfirm = true },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                    ) {
                         Text(stringResource(R.string.btn_abandon))
                     }
 
@@ -312,7 +321,9 @@ internal fun HomeSessionCard(
                             },
                         )
                     }
-                    if (BuildConfig.DEBUG) {
+                }
+                if (BuildConfig.DEBUG) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         TextButton(onClick = onDebugFinish) {
                             Text("[Debug] Finish Now")
                         }
@@ -805,7 +816,10 @@ internal fun WorkerSessionCard(
                 // Hidden while a finished session awaits collection: dismissing there
                 // abandons the uncollected rewards on a single confirm (issue #1202).
                 if (!isDone) {
-                    OutlinedButton(onClick = { showDismissConfirm = true }) {
+                    OutlinedButton(
+                        onClick = { showDismissConfirm = true },
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                    ) {
                         Text(stringResource(R.string.worker_dismiss_btn))
                     }
                 }
