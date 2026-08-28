@@ -84,7 +84,7 @@ fun PlayerStatsBar(
                 val boostDesc = blessingData?.let { b ->
                     val eff = ChurchRepository.effectiveMagnitude(b, prayerCapeMult)
                     when (b.type) {
-                        BlessingType.XP      -> "${(eff * 100).roundToInt() / 100f}× XP"
+                        BlessingType.XP      -> "${(eff * 100).roundToInt() / 100f}× All skills XP"
                         BlessingType.DEFENSE -> "+${eff.toInt()} DEF"
                         BlessingType.COINS   -> "+${(eff * 100).roundToInt()}% coins"
                     }
@@ -133,7 +133,7 @@ fun PlayerStatsBar(
             val collapsible = boostLines.size > MAX_VISIBLE_BOOST_LINES
             val visibleLines = if (collapsible && !expanded) boostLines.take(MAX_VISIBLE_BOOST_LINES) else boostLines
             Column(
-                modifier = if (collapsible) Modifier.clickable { expanded = !expanded } else Modifier,
+                modifier = if (collapsible) Modifier.fillMaxWidth().clickable { expanded = !expanded } else Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 visibleLines.forEach { line ->
